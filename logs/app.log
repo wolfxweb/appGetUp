@@ -3302,3 +3302,899 @@
 2025-03-30 20:17:43,545 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
 2025-03-30 20:17:43,546 - app.routes.basic_data - INFO - Criando novo registro
 2025-03-30 20:17:43,549 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:21:50,256 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 2
+2025-03-30 20:21:50,272 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:21:50,282 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:21:50,549 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 2
+2025-03-30 20:21:50,550 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:21:50,550 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:21:53,770 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:21:53,771 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:21:53,782 - app.routes.basic_data - INFO - Registro existente encontrado para 11/2025
+2025-03-30 20:21:53,788 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 0,03 para R$ 33,03
+2025-03-30 20:21:53,788 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:21:53,789 - app.routes.basic_data - INFO - Alterações detectadas: ['Gastos com Vendas alterado de R$ 0,03 para R$ 33,03', 'É o Atual alterado de Não para Sim']
+2025-03-30 20:21:53,790 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 0,03 para R$ 33,03
+2025-03-30 20:21:53,791 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:21:53,791 - app.routes.basic_data - INFO - Campo clients_served atualizado para 3
+2025-03-30 20:21:53,791 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:21:53,792 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 33.03
+2025-03-30 20:21:53,792 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 20:21:53,792 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:21:53,792 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:21:53,792 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 3
+2025-03-30 20:21:53,792 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:21:53,793 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:21:53,793 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:21:53,793 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:21:53,793 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:21:53,804 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:21:55,868 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:21:55,871 - app.routes.basic_data - INFO - Logs encontrados: 1
+2025-03-30 20:21:55,871 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:21:55,873 - app.routes.basic_data - INFO - Total de logs: 1, Páginas: 1
+2025-03-30 20:21:56,087 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:21:56,089 - app.routes.basic_data - INFO - Logs encontrados: 1
+2025-03-30 20:21:56,089 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:21:56,089 - app.routes.basic_data - INFO - Total de logs: 1, Páginas: 1
+2025-03-30 20:21:59,966 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:21:59,966 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:21:59,967 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Não para Sim']
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo clients_served atualizado para 33
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 0.03
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 3
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:21:59,968 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:21:59,970 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:22:01,838 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:22:01,839 - app.routes.basic_data - INFO - Logs encontrados: 2
+2025-03-30 20:22:01,839 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:22:01,839 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:22:01,841 - app.routes.basic_data - INFO - Total de logs: 2, Páginas: 1
+2025-03-30 20:22:02,029 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:22:02,030 - app.routes.basic_data - INFO - Logs encontrados: 2
+2025-03-30 20:22:02,030 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:22:02,030 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:22:02,030 - app.routes.basic_data - INFO - Total de logs: 2, Páginas: 1
+2025-03-30 20:22:08,231 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:22:08,234 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:22:08,234 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Sim para Não
+2025-03-30 20:22:08,234 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Sim para Não']
+2025-03-30 20:22:08,234 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Sim para Não
+2025-03-30 20:22:08,234 - app.routes.basic_data - INFO - Campo clients_served atualizado para 33
+2025-03-30 20:22:08,234 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:22:08,234 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 0.03
+2025-03-30 20:22:08,234 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 20:22:08,235 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:22:08,235 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:22:08,235 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 3
+2025-03-30 20:22:08,235 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:22:08,235 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:22:08,235 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:22:08,235 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:22:08,235 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-03-30 20:22:08,237 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:22:11,827 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 2
+2025-03-30 20:22:11,828 - app.routes.basic_data - INFO - Logs encontrados: 2
+2025-03-30 20:22:11,829 - app.routes.basic_data - INFO - Log ID: 3, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:22:11,829 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Vendas alterado de R$ 0,03 para R$ 33,03
+2025-03-30 20:22:11,830 - app.routes.basic_data - INFO - Total de logs: 2, Páginas: 1
+2025-03-30 20:22:12,102 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 2
+2025-03-30 20:22:12,103 - app.routes.basic_data - INFO - Logs encontrados: 2
+2025-03-30 20:22:12,103 - app.routes.basic_data - INFO - Log ID: 3, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:22:12,104 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Vendas alterado de R$ 0,03 para R$ 33,03
+2025-03-30 20:22:12,104 - app.routes.basic_data - INFO - Total de logs: 2, Páginas: 1
+2025-03-30 20:22:15,294 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:22:15,295 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:22:15,297 - app.routes.basic_data - INFO - Registro existente encontrado para 11/2025
+2025-03-30 20:22:15,297 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:22:15,297 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Não para Sim']
+2025-03-30 20:22:15,297 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:22:15,297 - app.routes.basic_data - INFO - Campo clients_served atualizado para 3
+2025-03-30 20:22:15,297 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:22:15,297 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 33.03
+2025-03-30 20:22:15,297 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 20:22:15,297 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:22:15,297 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:22:15,298 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 3
+2025-03-30 20:22:15,298 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:22:15,298 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:22:15,298 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:22:15,298 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:22:15,298 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:22:15,299 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:22:26,814 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:22:26,815 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:22:26,818 - app.routes.basic_data - INFO - Criando novo registro
+2025-03-30 20:22:26,821 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:22:41,830 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:22:41,830 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:22:41,833 - app.routes.basic_data - INFO - Criando novo registro
+2025-03-30 20:22:41,835 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:22:44,474 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:22:44,475 - app.routes.basic_data - INFO - Logs encontrados: 3
+2025-03-30 20:22:44,475 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:22:44,475 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:22:44,475 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:22:44,477 - app.routes.basic_data - INFO - Total de logs: 3, Páginas: 1
+2025-03-30 20:22:44,639 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:22:44,639 - app.routes.basic_data - INFO - Logs encontrados: 3
+2025-03-30 20:22:44,639 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:22:44,639 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:22:44,639 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:22:44,640 - app.routes.basic_data - INFO - Total de logs: 3, Páginas: 1
+2025-03-30 20:22:47,152 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:22:47,153 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:22:47,155 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:22:47,155 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:22:47,155 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Não para Sim']
+2025-03-30 20:22:47,155 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:22:47,155 - app.routes.basic_data - INFO - Campo clients_served atualizado para 33
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 0.03
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 3
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:22:47,156 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:22:47,157 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:22:57,004 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:22:57,006 - app.routes.basic_data - INFO - Logs encontrados: 4
+2025-03-30 20:22:57,006 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:22:57,006 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:22:57,006 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:22:57,007 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:22:57,008 - app.routes.basic_data - INFO - Total de logs: 4, Páginas: 1
+2025-03-30 20:22:57,169 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:22:57,170 - app.routes.basic_data - INFO - Logs encontrados: 4
+2025-03-30 20:22:57,170 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:22:57,170 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:22:57,170 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:22:57,170 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:22:57,170 - app.routes.basic_data - INFO - Total de logs: 4, Páginas: 1
+2025-03-30 20:23:55,117 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:23:55,118 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:23:55,120 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:23:55,120 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:23:55,120 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Não para Sim']
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo clients_served atualizado para 33
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 0.03
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 3
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:23:55,121 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:23:55,125 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:23:59,998 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:23:59,999 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:24:00,000 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:24:00,431 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:24:00,432 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:24:00,433 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:24:36,010 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:24:36,014 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:24:36,016 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:24:36,664 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:24:36,665 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:24:36,666 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:26:08,348 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:26:08,356 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:26:08,363 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:26:08,535 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:26:08,538 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:26:08,539 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:26:12,538 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1090cf610>
+2025-03-30 20:26:12,538 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:26:12,805 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1090ce0e0>
+2025-03-30 20:26:12,805 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:26:15,658 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:26:15,660 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:26:15,660 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:26:15,660 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:26:15,660 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:26:15,660 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:26:15,660 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:26:15,661 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:26:19,942 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 2
+2025-03-30 20:26:19,943 - app.routes.basic_data - INFO - Logs encontrados: 3
+2025-03-30 20:26:19,943 - app.routes.basic_data - INFO - Log ID: 6, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:26:19,943 - app.routes.basic_data - INFO - Log ID: 3, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:26:19,943 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Vendas alterado de R$ 0,03 para R$ 33,03
+2025-03-30 20:26:19,945 - app.routes.basic_data - INFO - Total de logs: 3, Páginas: 1
+2025-03-30 20:27:48,824 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:27:48,827 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:27:48,829 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:27:48,921 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:27:48,922 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:27:48,924 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:27:53,925 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:27:53,927 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:27:53,927 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:27:53,927 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:27:53,927 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:27:53,928 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:27:53,928 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:27:53,929 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:27:54,037 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:27:54,037 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:27:54,038 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:27:54,038 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:27:54,038 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:27:54,038 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:27:54,038 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:27:54,039 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:29:21,183 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:29:21,186 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:29:21,187 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:29:21,187 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:29:21,187 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:29:21,187 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:29:21,187 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:29:21,190 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:29:21,612 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:29:21,613 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:29:21,613 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:29:21,613 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:29:21,613 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:29:21,613 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:29:21,613 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:29:21,614 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:30:34,483 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:30:34,484 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:30:34,484 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:34,484 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:34,484 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:30:34,484 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:34,485 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:30:34,485 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:30:34,794 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:30:34,796 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:30:34,796 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:34,796 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:34,796 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:30:34,796 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:34,796 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:30:34,797 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:30:36,084 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:30:36,085 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:30:36,085 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:36,085 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:36,085 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:30:36,085 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:36,085 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:30:36,086 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:30:36,220 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:30:36,221 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:30:36,221 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:36,221 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:36,221 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:30:36,221 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:30:36,221 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:30:36,221 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:30:39,707 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:30:39,708 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:30:39,710 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:30:39,845 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:30:39,846 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:30:39,846 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:31:03,656 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:31:03,659 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:31:03,662 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:31:04,010 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:31:04,010 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:31:04,011 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:33:01,671 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:33:01,676 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:33:01,680 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:33:02,136 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:33:02,136 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:33:02,137 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:33:09,490 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:33:09,493 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:33:09,496 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:33:10,031 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:33:10,049 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:33:10,051 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:33:22,083 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:33:22,086 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:33:22,088 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:33:22,514 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:33:22,515 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:33:22,518 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:33:46,800 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:33:46,804 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:33:46,807 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:33:47,365 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:33:47,367 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:33:47,368 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:33:52,292 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:33:52,294 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:33:52,294 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:33:52,294 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:33:52,295 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:33:52,295 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:33:52,295 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:33:52,296 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:33:52,393 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:33:52,393 - app.routes.basic_data - INFO - Logs encontrados: 5
+2025-03-30 20:33:52,393 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:33:52,393 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:33:52,393 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:33:52,393 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:33:52,393 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:33:52,394 - app.routes.basic_data - INFO - Total de logs: 5, Páginas: 1
+2025-03-30 20:34:04,480 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:34:04,481 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:34:04,505 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:34:04,508 - app.routes.basic_data - INFO - Alteração detectada: Capacidade de Atendimento de 3 para 322
+2025-03-30 20:34:04,508 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:34:04,508 - app.routes.basic_data - INFO - Alterações detectadas: ['Capacidade de Atendimento alterado de 3 para 322', 'É o Atual alterado de Não para Sim']
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Log adicionado: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo clients_served atualizado para 33
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 0.03
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 322
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:34:04,509 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:34:04,517 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:34:06,653 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:34:06,654 - app.routes.basic_data - INFO - Logs encontrados: 7
+2025-03-30 20:34:06,654 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:06,654 - app.routes.basic_data - INFO - Log ID: 9, Descrição: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:06,654 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:06,654 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:06,654 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:34:06,655 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:06,655 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:34:06,658 - app.routes.basic_data - INFO - Total de logs: 7, Páginas: 1
+2025-03-30 20:34:06,747 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:34:06,748 - app.routes.basic_data - INFO - Logs encontrados: 7
+2025-03-30 20:34:06,748 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:06,748 - app.routes.basic_data - INFO - Log ID: 9, Descrição: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:06,748 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:06,748 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:06,748 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:34:06,748 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:06,748 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:34:06,749 - app.routes.basic_data - INFO - Total de logs: 7, Páginas: 1
+2025-03-30 20:34:11,112 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:34:11,113 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:34:11,115 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:34:11,116 - app.routes.basic_data - INFO - Alteração detectada: Capacidade de Atendimento de 322 para 322222
+2025-03-30 20:34:11,116 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:34:11,116 - app.routes.basic_data - INFO - Alterações detectadas: ['Capacidade de Atendimento alterado de 322 para 322222', 'É o Atual alterado de Não para Sim']
+2025-03-30 20:34:11,116 - app.routes.basic_data - INFO - Log adicionado: Capacidade de Atendimento alterado de 322 para 322222
+2025-03-30 20:34:11,116 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:34:11,116 - app.routes.basic_data - INFO - Campo clients_served atualizado para 33
+2025-03-30 20:34:11,116 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:34:11,116 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 0.03
+2025-03-30 20:34:11,116 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 20:34:11,116 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:34:11,117 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:34:11,117 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 322222
+2025-03-30 20:34:11,117 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:34:11,117 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:34:11,117 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:34:11,117 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:34:11,117 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:34:11,120 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:34:12,705 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:34:12,707 - app.routes.basic_data - INFO - Logs encontrados: 9
+2025-03-30 20:34:12,707 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:12,707 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 322 para 322222
+2025-03-30 20:34:12,707 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:12,707 - app.routes.basic_data - INFO - Log ID: 9, Descrição: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:12,707 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:12,707 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:12,707 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:34:12,708 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:12,708 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:34:12,709 - app.routes.basic_data - INFO - Total de logs: 9, Páginas: 1
+2025-03-30 20:34:12,818 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:34:12,819 - app.routes.basic_data - INFO - Logs encontrados: 9
+2025-03-30 20:34:12,819 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:12,819 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 322 para 322222
+2025-03-30 20:34:12,819 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:12,819 - app.routes.basic_data - INFO - Log ID: 9, Descrição: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:12,819 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:12,820 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:12,820 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:34:12,820 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:12,820 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Quantidade de Clientes Atendidos alterado de 3 para 33
+2025-03-30 20:34:12,821 - app.routes.basic_data - INFO - Total de logs: 9, Páginas: 1
+2025-03-30 20:34:16,140 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:34:16,140 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:34:16,143 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:34:16,143 - app.routes.basic_data - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 33 para 3322
+2025-03-30 20:34:16,143 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:34:16,143 - app.routes.basic_data - INFO - Alterações detectadas: ['Quantidade de Clientes Atendidos alterado de 33 para 3322', 'É o Atual alterado de Não para Sim']
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Log adicionado: Quantidade de Clientes Atendidos alterado de 33 para 3322
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Campo clients_served atualizado para 3322
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 0.03
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 322222
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:34:16,144 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:34:16,145 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:34:16,145 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:34:16,150 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:34:17,534 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:34:17,536 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:34:17,536 - app.routes.basic_data - INFO - Log ID: 14, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,536 - app.routes.basic_data - INFO - Log ID: 13, Descrição: Quantidade de Clientes Atendidos alterado de 33 para 3322
+2025-03-30 20:34:17,536 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,536 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 322 para 322222
+2025-03-30 20:34:17,536 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,536 - app.routes.basic_data - INFO - Log ID: 9, Descrição: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:17,537 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,537 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,537 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:34:17,537 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,539 - app.routes.basic_data - INFO - Total de logs: 11, Páginas: 2
+2025-03-30 20:34:17,665 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:34:17,665 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:34:17,665 - app.routes.basic_data - INFO - Log ID: 14, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,665 - app.routes.basic_data - INFO - Log ID: 13, Descrição: Quantidade de Clientes Atendidos alterado de 33 para 3322
+2025-03-30 20:34:17,665 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,665 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 322 para 322222
+2025-03-30 20:34:17,665 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,665 - app.routes.basic_data - INFO - Log ID: 9, Descrição: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:17,666 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,666 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,666 - app.routes.basic_data - INFO - Log ID: 5, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:34:17,666 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:17,666 - app.routes.basic_data - INFO - Total de logs: 11, Páginas: 2
+2025-03-30 20:34:23,718 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:34:23,718 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:34:23,720 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:34:23,720 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 0,03 para R$ 23123,01
+2025-03-30 20:34:23,720 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:34:23,721 - app.routes.basic_data - INFO - Alterações detectadas: ['Gastos com Insumos e Produtos alterado de R$ 0,03 para R$ 23123,01', 'É o Atual alterado de Não para Sim']
+2025-03-30 20:34:23,721 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 0,03 para R$ 23123,01
+2025-03-30 20:34:23,721 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:34:23,721 - app.routes.basic_data - INFO - Campo clients_served atualizado para 3322
+2025-03-30 20:34:23,721 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:34:23,721 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 0.03
+2025-03-30 20:34:23,721 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 23123.01
+2025-03-30 20:34:23,721 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:34:23,721 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:34:23,721 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 322222
+2025-03-30 20:34:23,722 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:34:23,722 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:34:23,722 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:34:23,722 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:34:23,722 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:34:23,727 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:34:25,316 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:34:25,317 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:34:25,318 - app.routes.basic_data - INFO - Log ID: 16, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,318 - app.routes.basic_data - INFO - Log ID: 15, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,03 para R$ 23123,01
+2025-03-30 20:34:25,318 - app.routes.basic_data - INFO - Log ID: 14, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,318 - app.routes.basic_data - INFO - Log ID: 13, Descrição: Quantidade de Clientes Atendidos alterado de 33 para 3322
+2025-03-30 20:34:25,318 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,318 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 322 para 322222
+2025-03-30 20:34:25,318 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,318 - app.routes.basic_data - INFO - Log ID: 9, Descrição: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:25,318 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,319 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,320 - app.routes.basic_data - INFO - Total de logs: 13, Páginas: 2
+2025-03-30 20:34:25,423 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:34:25,424 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:34:25,424 - app.routes.basic_data - INFO - Log ID: 16, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,424 - app.routes.basic_data - INFO - Log ID: 15, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,03 para R$ 23123,01
+2025-03-30 20:34:25,425 - app.routes.basic_data - INFO - Log ID: 14, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,425 - app.routes.basic_data - INFO - Log ID: 13, Descrição: Quantidade de Clientes Atendidos alterado de 33 para 3322
+2025-03-30 20:34:25,425 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,425 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 322 para 322222
+2025-03-30 20:34:25,425 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,425 - app.routes.basic_data - INFO - Log ID: 9, Descrição: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:25,425 - app.routes.basic_data - INFO - Log ID: 8, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,425 - app.routes.basic_data - INFO - Log ID: 7, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:25,426 - app.routes.basic_data - INFO - Total de logs: 13, Páginas: 2
+2025-03-30 20:34:32,406 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:34:32,407 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:34:32,409 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:34:32,409 - app.routes.basic_data - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 3322 para 1231
+2025-03-30 20:34:32,409 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:34:32,409 - app.routes.basic_data - INFO - Alterações detectadas: ['Quantidade de Clientes Atendidos alterado de 3322 para 1231', 'É o Atual alterado de Não para Sim']
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Log adicionado: Quantidade de Clientes Atendidos alterado de 3322 para 1231
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo clients_served atualizado para 1231
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 0.03
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 23123.01
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 322222
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:34:32,410 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:34:32,411 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:34:32,414 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:34:34,978 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:34:34,979 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:34:34,979 - app.routes.basic_data - INFO - Log ID: 18, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:34,979 - app.routes.basic_data - INFO - Log ID: 17, Descrição: Quantidade de Clientes Atendidos alterado de 3322 para 1231
+2025-03-30 20:34:34,979 - app.routes.basic_data - INFO - Log ID: 16, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:34,979 - app.routes.basic_data - INFO - Log ID: 15, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,03 para R$ 23123,01
+2025-03-30 20:34:34,979 - app.routes.basic_data - INFO - Log ID: 14, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:34,980 - app.routes.basic_data - INFO - Log ID: 13, Descrição: Quantidade de Clientes Atendidos alterado de 33 para 3322
+2025-03-30 20:34:34,980 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:34,980 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 322 para 322222
+2025-03-30 20:34:34,980 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:34,980 - app.routes.basic_data - INFO - Log ID: 9, Descrição: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:34,980 - app.routes.basic_data - INFO - Total de logs: 15, Páginas: 2
+2025-03-30 20:34:35,079 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:34:35,081 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:34:35,082 - app.routes.basic_data - INFO - Log ID: 18, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:35,082 - app.routes.basic_data - INFO - Log ID: 17, Descrição: Quantidade de Clientes Atendidos alterado de 3322 para 1231
+2025-03-30 20:34:35,083 - app.routes.basic_data - INFO - Log ID: 16, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:35,083 - app.routes.basic_data - INFO - Log ID: 15, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,03 para R$ 23123,01
+2025-03-30 20:34:35,084 - app.routes.basic_data - INFO - Log ID: 14, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:35,085 - app.routes.basic_data - INFO - Log ID: 13, Descrição: Quantidade de Clientes Atendidos alterado de 33 para 3322
+2025-03-30 20:34:35,085 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:35,085 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 322 para 322222
+2025-03-30 20:34:35,085 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:35,086 - app.routes.basic_data - INFO - Log ID: 9, Descrição: Capacidade de Atendimento alterado de 3 para 322
+2025-03-30 20:34:35,087 - app.routes.basic_data - INFO - Total de logs: 15, Páginas: 2
+2025-03-30 20:34:42,979 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:34:42,981 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:34:42,981 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Sim para Não
+2025-03-30 20:34:42,981 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Sim para Não']
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Sim para Não
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Campo clients_served atualizado para 1231
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 0.03
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 23123.01
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 322222
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:34:42,982 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:34:42,983 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:34:42,983 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-03-30 20:34:42,987 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:34:44,908 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 2
+2025-03-30 20:34:44,910 - app.routes.basic_data - INFO - Logs encontrados: 3
+2025-03-30 20:34:44,910 - app.routes.basic_data - INFO - Log ID: 6, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:44,910 - app.routes.basic_data - INFO - Log ID: 3, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:44,910 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Vendas alterado de R$ 0,03 para R$ 33,03
+2025-03-30 20:34:44,911 - app.routes.basic_data - INFO - Total de logs: 3, Páginas: 1
+2025-03-30 20:34:45,008 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 2
+2025-03-30 20:34:45,009 - app.routes.basic_data - INFO - Logs encontrados: 3
+2025-03-30 20:34:45,009 - app.routes.basic_data - INFO - Log ID: 6, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:45,009 - app.routes.basic_data - INFO - Log ID: 3, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:34:45,009 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Vendas alterado de R$ 0,03 para R$ 33,03
+2025-03-30 20:34:45,010 - app.routes.basic_data - INFO - Total de logs: 3, Páginas: 1
+2025-03-30 20:34:47,772 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:34:47,773 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:34:47,773 - app.routes.basic_data - INFO - Registro existente encontrado para 11/2025
+2025-03-30 20:34:47,773 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Não para Sim']
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo clients_served atualizado para 3
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 33.03
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 0.03
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 3.0
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 3
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:34:47,774 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:34:47,777 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:35:12,141 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:35:12,143 - app.routes.basic_data - INFO - Criando novo registro
+2025-03-30 20:35:12,148 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:35:13,793 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:35:13,793 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:35:13,794 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:35:14,022 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:35:14,024 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:35:14,024 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:35:16,290 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:35:16,291 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:35:16,292 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:35:16,292 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:16,292 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 1,00 para R$ 0,10
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Alteração detectada: Custos Fixos de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Alterações detectadas: ['Gastos com Vendas alterado de R$ 101,00 para R$ 10,10', 'Gastos com Insumos e Produtos alterado de R$ 1,00 para R$ 0,10', 'Custos Fixos alterado de R$ 101,00 para R$ 10,10', 'É o Atual alterado de Não para Sim']
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 1,00 para R$ 0,10
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Log adicionado: Custos Fixos alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Campo clients_served atualizado para 1010
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.01
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 10.1
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.1
+2025-03-30 20:35:16,293 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 10.1
+2025-03-30 20:35:16,294 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 1.0
+2025-03-30 20:35:16,294 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 010101
+2025-03-30 20:35:16,294 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:35:16,294 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:35:16,294 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:35:16,294 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:35:16,294 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:35:16,298 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:35:18,090 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:35:18,092 - app.routes.basic_data - INFO - Logs encontrados: 4
+2025-03-30 20:35:18,092 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:18,092 - app.routes.basic_data - INFO - Log ID: 3, Descrição: Custos Fixos alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:18,092 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Insumos e Produtos alterado de R$ 1,00 para R$ 0,10
+2025-03-30 20:35:18,092 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Gastos com Vendas alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:18,093 - app.routes.basic_data - INFO - Total de logs: 4, Páginas: 1
+2025-03-30 20:35:18,405 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:35:18,406 - app.routes.basic_data - INFO - Logs encontrados: 4
+2025-03-30 20:35:18,406 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:18,406 - app.routes.basic_data - INFO - Log ID: 3, Descrição: Custos Fixos alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:18,407 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Insumos e Produtos alterado de R$ 1,00 para R$ 0,10
+2025-03-30 20:35:18,407 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Gastos com Vendas alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:18,408 - app.routes.basic_data - INFO - Total de logs: 4, Páginas: 1
+2025-03-30 20:35:28,515 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:35:28,516 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:35:28,518 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:35:28,518 - app.routes.basic_data - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 1010 para 10
+2025-03-30 20:35:28,518 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:28,518 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 0,10 para R$ 0,01
+2025-03-30 20:35:28,518 - app.routes.basic_data - INFO - Alteração detectada: Custos Fixos de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:28,519 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:35:28,519 - app.routes.basic_data - INFO - Alterações detectadas: ['Quantidade de Clientes Atendidos alterado de 1010 para 10', 'Gastos com Vendas alterado de R$ 10,10 para R$ 1,01', 'Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01', 'Custos Fixos alterado de R$ 10,10 para R$ 1,01', 'É o Atual alterado de Não para Sim']
+2025-03-30 20:35:28,519 - app.routes.basic_data - INFO - Log adicionado: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:35:28,519 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:28,519 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:35:28,519 - app.routes.basic_data - INFO - Log adicionado: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:28,519 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:35:28,519 - app.routes.basic_data - INFO - Campo clients_served atualizado para 10
+2025-03-30 20:35:28,519 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.01
+2025-03-30 20:35:28,519 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 1.01
+2025-03-30 20:35:28,520 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.01
+2025-03-30 20:35:28,520 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 1.01
+2025-03-30 20:35:28,520 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 1.0
+2025-03-30 20:35:28,520 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 010101
+2025-03-30 20:35:28,520 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:35:28,520 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:35:28,520 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:35:28,520 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:35:28,520 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:35:28,524 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:35:30,429 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:35:30,430 - app.routes.basic_data - INFO - Logs encontrados: 9
+2025-03-30 20:35:30,430 - app.routes.basic_data - INFO - Log ID: 9, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:30,431 - app.routes.basic_data - INFO - Log ID: 8, Descrição: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:30,431 - app.routes.basic_data - INFO - Log ID: 7, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:35:30,431 - app.routes.basic_data - INFO - Log ID: 6, Descrição: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:30,431 - app.routes.basic_data - INFO - Log ID: 5, Descrição: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:35:30,431 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:30,431 - app.routes.basic_data - INFO - Log ID: 3, Descrição: Custos Fixos alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:30,431 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Insumos e Produtos alterado de R$ 1,00 para R$ 0,10
+2025-03-30 20:35:30,431 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Gastos com Vendas alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:30,432 - app.routes.basic_data - INFO - Total de logs: 9, Páginas: 1
+2025-03-30 20:35:30,617 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:35:30,620 - app.routes.basic_data - INFO - Logs encontrados: 9
+2025-03-30 20:35:30,621 - app.routes.basic_data - INFO - Log ID: 9, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:30,621 - app.routes.basic_data - INFO - Log ID: 8, Descrição: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:30,621 - app.routes.basic_data - INFO - Log ID: 7, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:35:30,621 - app.routes.basic_data - INFO - Log ID: 6, Descrição: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:30,621 - app.routes.basic_data - INFO - Log ID: 5, Descrição: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:35:30,621 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:30,621 - app.routes.basic_data - INFO - Log ID: 3, Descrição: Custos Fixos alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:30,621 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Insumos e Produtos alterado de R$ 1,00 para R$ 0,10
+2025-03-30 20:35:30,621 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Gastos com Vendas alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:30,622 - app.routes.basic_data - INFO - Total de logs: 9, Páginas: 1
+2025-03-30 20:35:37,256 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:35:37,257 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:35:37,260 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:35:37,260 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:35:37,260 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Não para Sim']
+2025-03-30 20:35:37,260 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:35:37,260 - app.routes.basic_data - INFO - Campo clients_served atualizado para 10
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.01
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 1.01
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.01
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 1.01
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 1.0
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 010101
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:35:37,261 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:35:37,264 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:35:38,766 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:35:38,767 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:35:38,767 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:38,768 - app.routes.basic_data - INFO - Log ID: 9, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:38,768 - app.routes.basic_data - INFO - Log ID: 8, Descrição: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:38,768 - app.routes.basic_data - INFO - Log ID: 7, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:35:38,768 - app.routes.basic_data - INFO - Log ID: 6, Descrição: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:38,768 - app.routes.basic_data - INFO - Log ID: 5, Descrição: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:35:38,768 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:38,768 - app.routes.basic_data - INFO - Log ID: 3, Descrição: Custos Fixos alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:38,768 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Insumos e Produtos alterado de R$ 1,00 para R$ 0,10
+2025-03-30 20:35:38,768 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Gastos com Vendas alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:38,770 - app.routes.basic_data - INFO - Total de logs: 10, Páginas: 1
+2025-03-30 20:35:38,904 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:35:38,906 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:35:38,906 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:38,907 - app.routes.basic_data - INFO - Log ID: 9, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:38,907 - app.routes.basic_data - INFO - Log ID: 8, Descrição: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:38,907 - app.routes.basic_data - INFO - Log ID: 7, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:35:38,907 - app.routes.basic_data - INFO - Log ID: 6, Descrição: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:38,907 - app.routes.basic_data - INFO - Log ID: 5, Descrição: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:35:38,907 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:38,907 - app.routes.basic_data - INFO - Log ID: 3, Descrição: Custos Fixos alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:38,907 - app.routes.basic_data - INFO - Log ID: 2, Descrição: Gastos com Insumos e Produtos alterado de R$ 1,00 para R$ 0,10
+2025-03-30 20:35:38,908 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Gastos com Vendas alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:38,908 - app.routes.basic_data - INFO - Total de logs: 10, Páginas: 1
+2025-03-30 20:35:44,932 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:35:44,933 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:35:44,934 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:35:44,934 - app.routes.basic_data - INFO - Alteração detectada: Capacidade de Atendimento de 010101 para 1
+2025-03-30 20:35:44,934 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:35:44,934 - app.routes.basic_data - INFO - Alterações detectadas: ['Capacidade de Atendimento alterado de 010101 para 1', 'É o Atual alterado de Não para Sim']
+2025-03-30 20:35:44,934 - app.routes.basic_data - INFO - Log adicionado: Capacidade de Atendimento alterado de 010101 para 1
+2025-03-30 20:35:44,934 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:35:44,934 - app.routes.basic_data - INFO - Campo clients_served atualizado para 10
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.01
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 1.01
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.01
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 1.01
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 1.0
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 1
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:35:44,935 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:35:44,936 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:35:46,416 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:35:46,417 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:35:46,417 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:46,417 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 010101 para 1
+2025-03-30 20:35:46,418 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:46,418 - app.routes.basic_data - INFO - Log ID: 9, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:46,418 - app.routes.basic_data - INFO - Log ID: 8, Descrição: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:46,418 - app.routes.basic_data - INFO - Log ID: 7, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:35:46,418 - app.routes.basic_data - INFO - Log ID: 6, Descrição: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:46,418 - app.routes.basic_data - INFO - Log ID: 5, Descrição: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:35:46,418 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:46,418 - app.routes.basic_data - INFO - Log ID: 3, Descrição: Custos Fixos alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:46,419 - app.routes.basic_data - INFO - Total de logs: 12, Páginas: 2
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 010101 para 1
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Log ID: 9, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Log ID: 8, Descrição: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Log ID: 7, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Log ID: 6, Descrição: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Log ID: 5, Descrição: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:35:46,526 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:35:46,527 - app.routes.basic_data - INFO - Log ID: 3, Descrição: Custos Fixos alterado de R$ 101,00 para R$ 10,10
+2025-03-30 20:35:46,527 - app.routes.basic_data - INFO - Total de logs: 12, Páginas: 2
+2025-03-30 20:36:00,108 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:36:00,110 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:36:00,110 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Sim para Não
+2025-03-30 20:36:00,110 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Sim para Não']
+2025-03-30 20:36:00,110 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Sim para Não
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo clients_served atualizado para 10
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.01
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 1.01
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.01
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 1.01
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 1.0
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 1
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:36:00,111 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-03-30 20:36:00,113 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:36:02,005 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:36:02,006 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:36:02,007 - app.routes.basic_data - INFO - Log ID: 13, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:36:02,007 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:02,007 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 010101 para 1
+2025-03-30 20:36:02,007 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:02,007 - app.routes.basic_data - INFO - Log ID: 9, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:02,007 - app.routes.basic_data - INFO - Log ID: 8, Descrição: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:36:02,007 - app.routes.basic_data - INFO - Log ID: 7, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:36:02,007 - app.routes.basic_data - INFO - Log ID: 6, Descrição: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:36:02,007 - app.routes.basic_data - INFO - Log ID: 5, Descrição: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:36:02,007 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:02,008 - app.routes.basic_data - INFO - Total de logs: 13, Páginas: 2
+2025-03-30 20:36:02,303 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:36:02,304 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:36:02,305 - app.routes.basic_data - INFO - Log ID: 13, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:36:02,305 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:02,305 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 010101 para 1
+2025-03-30 20:36:02,305 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:02,305 - app.routes.basic_data - INFO - Log ID: 9, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:02,305 - app.routes.basic_data - INFO - Log ID: 8, Descrição: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:36:02,305 - app.routes.basic_data - INFO - Log ID: 7, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:36:02,305 - app.routes.basic_data - INFO - Log ID: 6, Descrição: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:36:02,305 - app.routes.basic_data - INFO - Log ID: 5, Descrição: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:36:02,305 - app.routes.basic_data - INFO - Log ID: 4, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:02,306 - app.routes.basic_data - INFO - Total de logs: 13, Páginas: 2
+2025-03-30 20:36:08,847 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:36:08,849 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:36:08,849 - app.routes.basic_data - INFO - Alteração detectada: Capacidade de Atendimento de 1 para 10
+2025-03-30 20:36:08,849 - app.routes.basic_data - INFO - Alterações detectadas: ['Capacidade de Atendimento alterado de 1 para 10']
+2025-03-30 20:36:08,849 - app.routes.basic_data - INFO - Log adicionado: Capacidade de Atendimento alterado de 1 para 10
+2025-03-30 20:36:08,849 - app.routes.basic_data - INFO - Campo clients_served atualizado para 10
+2025-03-30 20:36:08,849 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.01
+2025-03-30 20:36:08,850 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 1.01
+2025-03-30 20:36:08,850 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.01
+2025-03-30 20:36:08,850 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 1.01
+2025-03-30 20:36:08,850 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 1.0
+2025-03-30 20:36:08,850 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 10
+2025-03-30 20:36:08,850 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:36:08,850 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:36:08,850 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:36:08,850 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:36:08,850 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-03-30 20:36:08,854 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:36:10,550 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:36:10,551 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:36:10,551 - app.routes.basic_data - INFO - Log ID: 14, Descrição: Capacidade de Atendimento alterado de 1 para 10
+2025-03-30 20:36:10,551 - app.routes.basic_data - INFO - Log ID: 13, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:36:10,551 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:10,551 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 010101 para 1
+2025-03-30 20:36:10,552 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:10,552 - app.routes.basic_data - INFO - Log ID: 9, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:10,552 - app.routes.basic_data - INFO - Log ID: 8, Descrição: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:36:10,552 - app.routes.basic_data - INFO - Log ID: 7, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:36:10,552 - app.routes.basic_data - INFO - Log ID: 6, Descrição: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:36:10,552 - app.routes.basic_data - INFO - Log ID: 5, Descrição: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:36:10,552 - app.routes.basic_data - INFO - Total de logs: 14, Páginas: 2
+2025-03-30 20:36:10,761 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Logs encontrados: 10
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Log ID: 14, Descrição: Capacidade de Atendimento alterado de 1 para 10
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Log ID: 13, Descrição: É o Atual alterado de Sim para Não
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Log ID: 12, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Log ID: 11, Descrição: Capacidade de Atendimento alterado de 010101 para 1
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Log ID: 10, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Log ID: 9, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Log ID: 8, Descrição: Custos Fixos alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Log ID: 7, Descrição: Gastos com Insumos e Produtos alterado de R$ 0,10 para R$ 0,01
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Log ID: 6, Descrição: Gastos com Vendas alterado de R$ 10,10 para R$ 1,01
+2025-03-30 20:36:10,762 - app.routes.basic_data - INFO - Log ID: 5, Descrição: Quantidade de Clientes Atendidos alterado de 1010 para 10
+2025-03-30 20:36:10,763 - app.routes.basic_data - INFO - Total de logs: 14, Páginas: 2

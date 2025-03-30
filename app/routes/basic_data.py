@@ -238,6 +238,14 @@ async def save_basic_data(
         is_current_bool = is_current.lower() == 'true'
         logger.info(f"Processando dados básicos para usuário {current_user.id}")
 
+        # Se is_current for True, desmarcar todos os outros registros
+        if is_current_bool:
+            logger.info("Atualizando registros existentes para is_current = False")
+            db.query(BasicData).filter(
+                BasicData.user_id == current_user.id,
+                BasicData.is_current == True
+            ).update({"is_current": False}, synchronize_session=False)
+
         # Buscar dados básicos existentes
         existing_data = db.query(BasicData).filter(
             BasicData.user_id == current_user.id,
