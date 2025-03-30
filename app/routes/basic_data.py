@@ -113,7 +113,14 @@ def compare_and_log_changes(db: Session, old_data_dict: dict, new_data: dict) ->
         old_value = old_data_dict[field]
 
         # Comparar valores
-        if isinstance(old_value, float) and isinstance(new_value, float):
+        if field == 'is_current':
+            # Formatar valores booleanos como Sim/Não
+            if old_value != new_value:
+                old_formatted = "Sim" if old_value else "Não"
+                new_formatted = "Sim" if new_value else "Não"
+                changes.append(f"{field_names[field]} alterado de {old_formatted} para {new_formatted}")
+                logger.info(f"Alteração detectada: {field_names[field]} de {old_formatted} para {new_formatted}")
+        elif isinstance(old_value, float) and isinstance(new_value, float):
             # Se os valores são iguais, continue para a próxima iteração
             if abs(old_value - new_value) < 1e-9:
                 continue
