@@ -5,8 +5,39 @@
 {% block content %}
 <!-- Navbar com largura total (igual ao dashboard) -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 w-100 position-absolute start-0">
-    <!-- Mesmo conteúdo da navbar do dashboard -->
-    <!-- ... -->
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">Sistema</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">Dashboard</a>
+                </li>
+                {% if user.access_level == "Administrador" %}
+                <li class="nav-item">
+                    <a class="nav-link active" href="/admin/users">Gerenciar Usuários</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">Perfil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Configurações</a>
+                </li>
+            </ul>
+            <div class="d-flex">
+                <span class="navbar-text me-3">
+                    Bem-vindo, {{ user.email }} 
+                    {% if user.access_level == "Administrador" %}
+                    <span class="badge bg-warning text-dark">Admin</span>
+                    {% endif %}
+                </span>
+                <a href="/logout" class="btn btn-outline-light">Sair</a>
+            </div>
+        </div>
+    </div>
 </nav>
 
 <!-- Espaçador para a navbar -->
@@ -23,6 +54,35 @@
                     </button>
                 </div>
                 <div class="card-body">
+                    <!-- Formulário de Busca -->
+                    <form class="mb-4" method="get" action="/admin/users">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <input type="text" class="form-control" name="search_email" placeholder="Buscar por email" value="{{ request.query_params.get('search_email', '') }}">
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" name="status_filter">
+                                    <option value="">Status</option>
+                                    <option value="Ativo" {% if request.query_params.get('status_filter') == 'Ativo' %}selected{% endif %}>Ativo</option>
+                                    <option value="Inativo" {% if request.query_params.get('status_filter') == 'Inativo' %}selected{% endif %}>Inativo</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-select" name="activity_filter">
+                                    <option value="">Tipo de Atividade</option>
+                                    <option value="Serviços" {% if request.query_params.get('activity_filter') == 'Serviços' %}selected{% endif %}>Serviços</option>
+                                    <option value="Comércio" {% if request.query_params.get('activity_filter') == 'Comércio' %}selected{% endif %}>Comércio</option>
+                                    <option value="Indústria" {% if request.query_params.get('activity_filter') == 'Indústria' %}selected{% endif %}>Indústria</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="bi bi-search"></i> Buscar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
                     {% if success_message %}
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ success_message }}
@@ -98,6 +158,35 @@
                             </tbody>
                         </table>
                     </div>
+
+                    <!-- Paginação -->
+                    <nav aria-label="Navegação de páginas" class="mt-4">
+                        <ul class="pagination justify-content-center">
+                            {% if page > 1 %}
+                            <li class="page-item">
+                                <a class="page-link" href="/admin/users?page={{ page-1 }}{% if search_email %}&search_email={{ search_email }}{% endif %}{% if status_filter %}&status_filter={{ status_filter }}{% endif %}{% if activity_filter %}&activity_filter={{ activity_filter }}{% endif %}">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            {% endif %}
+
+                            {% for p in range(1, total_pages + 1) %}
+                            <li class="page-item {% if p == page %}active{% endif %}">
+                                <a class="page-link" href="/admin/users?page={{ p }}{% if search_email %}&search_email={{ search_email }}{% endif %}{% if status_filter %}&status_filter={{ status_filter }}{% endif %}{% if activity_filter %}&activity_filter={{ activity_filter }}{% endif %}">
+                                    {{ p }}
+                                </a>
+                            </li>
+                            {% endfor %}
+
+                            {% if page < total_pages %}
+                            <li class="page-item">
+                                <a class="page-link" href="/admin/users?page={{ page+1 }}{% if search_email %}&search_email={{ search_email }}{% endif %}{% if status_filter %}&status_filter={{ status_filter }}{% endif %}{% if activity_filter %}&activity_filter={{ activity_filter }}{% endif %}">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>
@@ -235,6 +324,17 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos adicionais para garantir visibilidade da navbar */
+    .navbar {
+        z-index: 1000;
+        display: flex !important;
+        visibility: visible !important;
+    }
+</style>
 {% endblock %}
 
 {% block extra_js %}

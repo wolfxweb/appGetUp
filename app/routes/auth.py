@@ -15,6 +15,39 @@ router = APIRouter()
 
 templates = Jinja2Templates(directory="app/templates")
 
+# Dependência para obter o usuário atual
+async def get_current_user(request: Request, db: Session = Depends(get_db)):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Não autorizado",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
+    token = request.cookies.get("access_token")
+    if not token:
+        return None
+    
+    try:
+        token_type, token_value = token.split()
+        if token_type.lower() != "bearer":
+            return None
+        
+        payload = jwt.decode(token_value, SECRET_KEY, algorithms=[ALGORITHM])
+        email: str = payload.get("sub")
+        
+        if email is None:
+            return None
+        
+    except (JWTError, ValueError):
+        return None
+    
+    # Use the provided database session
+    user = db.query(User).filter(User.email == email).first()
+    if user is None:
+        return None
+    
+    return user
+
 @router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
     return templates.TemplateResponse("register.html", {"request": request, "now": datetime.now()})

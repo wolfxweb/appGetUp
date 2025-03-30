@@ -1,12 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
+from datetime import datetime
 
 from app.database.db import get_db
 from app.models.user import User
-from app.utils.auth import SECRET_KEY, ALGORITHM
+from app.models.license import License
+from app.routes.auth import get_current_user
+from app.utils.auth import SECRET_KEY, ALGORITHM, verify_password, get_password_hash
 
 router = APIRouter()
 
@@ -45,11 +48,68 @@ async def get_current_user(request: Request, db: Session = Depends(get_db)):
     return user
 
 @router.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(request: Request, current_user = Depends(get_current_user)):
-    if not current_user:
-        return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
-    
+async def dashboard_page(
+    request: Request,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Se o usuário não tiver uma chave de ativação, mostrar apenas a mensagem de ativação
+    if not current_user.activation_key:
+        return templates.TemplateResponse(
+            "dashboard.html",
+            {
+                "request": request,
+                "user": current_user
+            }
+        )
+
+    # Para usuários com licença ativa, mostrar as estatísticas
+    total_users = db.query(User).count()
+    active_licenses = db.query(License).filter(License.status == "Utilizada").count()
+    available_licenses = db.query(License).filter(License.status == "Disponível").count()
+
     return templates.TemplateResponse(
-        "dashboard.html", 
-        {"request": request, "user": current_user}
-    ) 
+        "dashboard.html",
+        {
+            "request": request,
+            "user": current_user,
+            "total_users": total_users,
+            "active_licenses": active_licenses,
+            "available_licenses": available_licenses
+        }
+    )
+
+@router.post("/activate-license")
+async def activate_license(
+    request: Request,
+    activation_key: str = Form(...),
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    # Verificar se a chave existe e está disponível
+    license = db.query(License).filter(
+        License.activation_key == activation_key,
+        License.status == "Disponível"
+    ).first()
+
+    if not license:
+        return templates.TemplateResponse(
+            "dashboard.html",
+            {
+                "request": request,
+                "user": current_user,
+                "error_message": "Chave de ativação inválida ou já utilizada"
+            }
+        )
+
+    # Atualizar a licença
+    license.status = "Utilizada"
+    license.user_email = current_user.email
+    license.activation_date = datetime.now()
+
+    # Atualizar o usuário
+    current_user.activation_key = activation_key
+
+    db.commit()
+
+    return RedirectResponse(url="/dashboard", status_code=status.HTTP_303_SEE_OTHER) 

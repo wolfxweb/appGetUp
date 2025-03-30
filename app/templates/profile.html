@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Perfil do Usuário{% endblock %}
+{% block title %}Meu Perfil{% endblock %}
 
 {% block content %}
-<!-- Navbar com largura total (igual ao dashboard) -->
+<!-- Navbar com largura total -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 w-100 position-absolute start-0">
     <div class="container-fluid">
         <a class="navbar-brand" href="/dashboard">Sistema</a>
@@ -18,6 +18,9 @@
                 {% if user.access_level == "Administrador" %}
                 <li class="nav-item">
                     <a class="nav-link" href="/admin/users">Gerenciar Usuários</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/licenses">Gerenciar Licenças</a>
                 </li>
                 {% endif %}
                 <li class="nav-item">
@@ -44,176 +47,93 @@
 <div style="height: 70px;"></div>
 
 <div class="container">
-    <!-- Mensagens de alerta -->
-    {% if success_message %}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ success_message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-    </div>
-    {% endif %}
-
-    {% if error_message %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ error_message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-    </div>
-    {% endif %}
-
     <div class="row">
-        <!-- Card de Informações do Usuário -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
+        <div class="col-md-8 mx-auto">
+            {% if not user.activation_key %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <h4 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Atenção!</h4>
+                <p>Para acessar o sistema, você precisa ativar sua licença. Por favor, insira sua chave de ativação abaixo.</p>
+                <hr>
+                <p class="mb-0">Se você não possui uma chave de ativação, entre em contato com o administrador do sistema.</p>
+            </div>
+            {% endif %}
+
+            <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0"><i class="bi bi-person-circle"></i> Informações do Usuário</h5>
+                    <h5 class="card-title mb-0"><i class="bi bi-person-circle"></i> Meu Perfil</h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Email: {{ user.email }}</li>
-                        <li class="list-group-item">WhatsApp: {{ user.whatsapp }}</li>
-                        <li class="list-group-item">Tipo de Atividade: {{ user.activity_type }}</li>
-                        <li class="list-group-item">Status: 
-                            {% if user.status == "Ativo" %}
-                            <span class="badge bg-success">{{ user.status }}</span>
-                            {% else %}
-                            <span class="badge bg-danger">{{ user.status }}</span>
-                            {% endif %}
-                        </li>
-                        <li class="list-group-item">Nível de Acesso:
-                            {% if user.access_level == "Administrador" %}
-                            <span class="badge bg-warning text-dark">{{ user.access_level }}</span>
-                            {% else %}
-                            <span class="badge bg-secondary">{{ user.access_level }}</span>
-                            {% endif %}
-                        </li>
-                        <li class="list-group-item">Data de Cadastro: {{ user.registration_date.strftime('%d/%m/%Y') }}</li>
-                    </ul>
-                </div>
-                <div class="card-footer">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                        <i class="bi bi-pencil"></i> Editar Perfil
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Card de Ações Rápidas -->
-        <div class="col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0"><i class="bi bi-gear-fill"></i> Ações Rápidas</h5>
-                </div>
-                <div class="card-body">
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
-                            <i class="bi bi-key"></i> Alterar Senha
-                        </button>
-                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                            <i class="bi bi-pencil"></i> Atualizar Dados
-                        </button>
-                        <a href="#" class="btn btn-outline-primary">
-                            <i class="bi bi-question-circle"></i> Suporte
-                        </a>
+                    {% if success_message %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ success_message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                    {% endif %}
 
-<!-- Modal para Editar Perfil -->
-<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProfileModalLabel">Editar Perfil</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/profile/edit" method="post" id="editProfileForm">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                    {% if error_message %}
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ error_message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
                     </div>
-                    <div class="mb-3">
-                        <label for="whatsapp" class="form-label">WhatsApp</label>
-                        <input type="text" class="form-control" id="whatsapp" name="whatsapp" value="{{ user.whatsapp }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="activity_type" class="form-label">Tipo de Atividade</label>
-                        <select class="form-select" id="activity_type" name="activity_type" required>
-                            <option value="Serviços" {% if user.activity_type == "Serviços" %}selected{% endif %}>Serviços</option>
-                            <option value="Comércio" {% if user.activity_type == "Comércio" %}selected{% endif %}>Comércio</option>
-                            <option value="Indústria" {% if user.activity_type == "Indústria" %}selected{% endif %}>Indústria</option>
-                        </select>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" form="editProfileForm" class="btn btn-primary">Salvar Alterações</button>
-            </div>
-        </div>
-    </div>
-</div>
+                    {% endif %}
 
-<!-- Modal para Alterar Senha -->
-<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="changePasswordModalLabel">Alterar Senha</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/profile/password" method="post" id="changePasswordForm">
-                    <div class="mb-3">
-                        <label for="current_password" class="form-label">Senha Atual</label>
-                        <input type="password" class="form-control" id="current_password" name="current_password" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="new_password" class="form-label">Nova Senha</label>
-                        <input type="password" class="form-control" id="new_password" name="new_password" required minlength="6">
-                    </div>
-                    <div class="mb-3">
-                        <label for="confirm_password" class="form-label">Confirmar Nova Senha</label>
-                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" required minlength="6">
-                        <div class="invalid-feedback">As senhas não coincidem</div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" form="changePasswordForm" class="btn btn-primary">Alterar Senha</button>
+                    <form method="post" action="/profile/update">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" value="{{ user.email }}" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="whatsapp" class="form-label">WhatsApp</label>
+                            <input type="text" class="form-control" id="whatsapp" name="whatsapp" value="{{ user.whatsapp }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="activity_type" class="form-label">Tipo de Atividade</label>
+                            <select class="form-select" id="activity_type" name="activity_type" required>
+                                <option value="Serviços" {% if user.activity_type == 'Serviços' %}selected{% endif %}>Serviços</option>
+                                <option value="Comércio" {% if user.activity_type == 'Comércio' %}selected{% endif %}>Comércio</option>
+                                <option value="Indústria" {% if user.activity_type == 'Indústria' %}selected{% endif %}>Indústria</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="registration_date" class="form-label">Data de Cadastro</label>
+                            <input type="text" class="form-control" id="registration_date" value="{{ user.registration_date.strftime('%d/%m/%Y %H:%M') }}" disabled>
+                        </div>
+                        <div class="mb-3">
+                            <label for="activation_key" class="form-label">Chave de Ativação</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="activation_key" name="activation_key" value="{{ user.activation_key }}" {% if user.activation_key %}readonly{% endif %}>
+                                {% if not user.activation_key %}
+                                <button type="submit" name="action" value="activate" class="btn btn-success">
+                                    <i class="bi bi-check-circle"></i> Ativar
+                                </button>
+                                {% endif %}
+                            </div>
+                            {% if user.activation_key %}
+                            <div class="form-text text-success">
+                                <i class="bi bi-check-circle-fill"></i> Licença ativada
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" name="action" value="update" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Salvar Alterações
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
 
-{% block extra_js %}
-<script>
-    // Validação do formulário de alteração de senha
-    document.getElementById('confirm_password')?.addEventListener('input', function() {
-        const newPassword = document.getElementById('new_password').value;
-        const confirmPassword = this.value;
-        
-        if (newPassword !== confirmPassword) {
-            this.classList.add('is-invalid');
-            this.classList.remove('is-valid');
-        } else {
-            this.classList.remove('is-invalid');
-            this.classList.add('is-valid');
-        }
-    });
-    
-    document.getElementById('changePasswordForm')?.addEventListener('submit', function(e) {
-        const newPassword = document.getElementById('new_password').value;
-        const confirmPassword = document.getElementById('confirm_password').value;
-        
-        if (newPassword !== confirmPassword) {
-            e.preventDefault();
-            document.getElementById('confirm_password').classList.add('is-invalid');
-        }
-    });
-</script>
+{% block extra_css %}
+<style>
+    /* Estilos adicionais para garantir visibilidade da navbar */
+    .navbar {
+        z-index: 1000;
+        display: flex !important;
+        visibility: visible !important;
+    }
+</style>
 {% endblock %} 
