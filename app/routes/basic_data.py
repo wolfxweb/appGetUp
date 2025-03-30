@@ -12,6 +12,7 @@ import os
 from app.database.db import get_db
 from app.models.user import User
 from app.models.basic_data import BasicData
+from app.models.basic_data_log import BasicDataLog
 from app.routes.auth import get_current_user
 
 router = APIRouter(prefix="/basic-data")
@@ -70,6 +71,36 @@ class BasicDataInput(BaseModel):
             except ValueError:
                 raise ValueError('Valor inválido para número decimal')
         return v
+
+def compare_and_log_changes(db: Session, old_data: BasicData, new_data: dict) -> list:
+    """Compara os dados antigos com os novos e retorna uma lista de alterações"""
+    changes = []
+    
+    # Mapeamento de campos para seus nomes amigáveis
+    field_names = {
+        'clients_served': 'Quantidade de Clientes Atendidos',
+        'sales_revenue': 'Faturamento com Vendas',
+        'sales_expenses': 'Gastos com Vendas',
+        'input_product_expenses': 'Gastos com Insumos e Produtos',
+        'fixed_costs': 'Custos Fixos',
+        'ideal_profit_margin': 'Margem de Lucro Ideal',
+        'service_capacity': 'Capacidade de Atendimento',
+        'pro_labore': 'Pró-labore',
+        'work_hours_per_week': 'Horas de Trabalho por Semana',
+        'other_fixed_costs': 'Demais Custos Fixos',
+        'ideal_service_profit_margin': 'Margem de Lucro Ideal (Serviços)',
+        'is_current': 'É o Atual'
+    }
+    
+    for field, new_value in new_data.items():
+        old_value = getattr(old_data, field)
+        
+        # Se os valores são diferentes, registra a mudança
+        if old_value != new_value:
+            changes.append(f"{field_names[field]} alterado de {old_value} para {new_value}")
+            logger.info(f"Alteração detectada: {field_names[field]} de {old_value} para {new_value}")
+    
+    return changes
 
 @router.get("/", response_class=HTMLResponse)
 async def basic_data_page(
@@ -155,135 +186,86 @@ async def save_basic_data(
     other_fixed_costs: str = Form(None),
     ideal_service_profit_margin: float = Form(None),
     is_current: str = Form(False),
-    confirm_update: bool = Form(False)
+    edit_mode: bool = Form(False)
 ):
     try:
-        # Converter is_current de string para booleano
         is_current_bool = is_current.lower() == 'true'
-        
-        # Log do valor recebido para debug
-        logger.info(f"Valor de is_current recebido do formulário: {is_current}, convertido para: {is_current_bool}")
-        
-        # Se o novo registro vai ser marcado como atual, atualizar todos os registros do usuário antes
-        if is_current_bool:
-            logger.info(f"Definindo is_current=False para todos os registros do usuário {current_user.id}")
-            db.query(BasicData).filter(
-                BasicData.user_id == current_user.id
-            ).update({"is_current": False})
-        
-        # Criar o modelo Pydantic com os dados recebidos
-        data = BasicDataInput(
-            month=month,
-            year=year,
-            clients_served=clients_served,
-            sales_revenue=sales_revenue,
-            sales_expenses=sales_expenses,
-            input_product_expenses=input_product_expenses,
-            fixed_costs=fixed_costs,
-            ideal_profit_margin=ideal_profit_margin,
-            service_capacity=service_capacity,
-            pro_labore=pro_labore,
-            work_hours_per_week=work_hours_per_week,
-            other_fixed_costs=other_fixed_costs,
-            ideal_service_profit_margin=ideal_service_profit_margin,
-            is_current=is_current_bool
-        )
+        logger.info(f"Processando dados básicos para usuário {current_user.id}")
 
-        # Verificar se já existe um registro para o mês/ano
         existing_data = db.query(BasicData).filter(
             BasicData.user_id == current_user.id,
-            BasicData.month == data.month,
-            BasicData.year == data.year
+            BasicData.month == month,
+            BasicData.year == year
         ).first()
 
+        # Preparar os novos dados
+        new_data = {
+            'clients_served': clients_served,
+            'sales_revenue': sales_revenue,
+            'sales_expenses': sales_expenses,
+            'input_product_expenses': input_product_expenses,
+            'fixed_costs': fixed_costs,
+            'ideal_profit_margin': ideal_profit_margin,
+            'service_capacity': service_capacity,
+            'pro_labore': pro_labore,
+            'work_hours_per_week': work_hours_per_week,
+            'other_fixed_costs': other_fixed_costs,
+            'ideal_service_profit_margin': ideal_service_profit_margin,
+            'is_current': is_current_bool
+        }
+
         if existing_data:
-            # Atualizar registro existente
-            basic_data = existing_data
+            logger.info(f"Registro existente encontrado para {month}/{year}")
+            
+            # Comparar e registrar alterações
+            changes = compare_and_log_changes(db, existing_data, new_data)
+            
+            if changes:  # Se houver alterações
+                logger.info(f"Alterações detectadas: {changes}")
+                
+                # Registrar cada alteração no log
+                for change in changes:
+                    log_entry = BasicDataLog(
+                        basic_data_id=existing_data.id,
+                        change_description=change
+                    )
+                    db.add(log_entry)
+                    logger.info(f"Log adicionado: {change}")
+
+                # Atualizar dados existentes
+                for field, value in new_data.items():
+                    setattr(existing_data, field, value)
+                    logger.info(f"Campo {field} atualizado para {value}")
+            else:
+                logger.info("Nenhuma alteração detectada")
+
         else:
-            # Criar novo registro
+            logger.info("Criando novo registro")
             basic_data = BasicData(
                 user_id=current_user.id,
-                month=data.month,
-                year=data.year,
-                activity_type=current_user.activity_type
+                month=month,
+                year=year,
+                activity_type=current_user.activity_type,
+                **new_data
             )
             db.add(basic_data)
 
-        # Atualizar campos comuns
-        basic_data.clients_served = data.clients_served
-        basic_data.sales_revenue = data.sales_revenue
-        basic_data.sales_expenses = data.sales_expenses
-        basic_data.input_product_expenses = data.input_product_expenses
-        basic_data.is_current = data.is_current
+        db.commit()
+        logger.info("Dados salvos com sucesso")
+        return RedirectResponse(url="/basic-data", status_code=status.HTTP_303_SEE_OTHER)
 
-        # Atualizar campos específicos baseados no tipo de atividade
-        if current_user.activity_type in ["Comércio", "Indústria"]:
-            basic_data.fixed_costs = data.fixed_costs
-            basic_data.ideal_profit_margin = data.ideal_profit_margin
-            basic_data.service_capacity = data.service_capacity
-        elif current_user.activity_type == "Serviços":
-            basic_data.pro_labore = data.pro_labore
-            basic_data.work_hours_per_week = data.work_hours_per_week
-            basic_data.other_fixed_costs = data.other_fixed_costs
-            basic_data.ideal_service_profit_margin = data.ideal_service_profit_margin
-
-        try:
-            # Comitar as alterações
-            db.commit()
-            logger.info(f"Dados salvos com sucesso. Registro {basic_data.id} (mês {basic_data.month}/{basic_data.year}) está marcado como atual: {basic_data.is_current}")
-            return RedirectResponse(
-                url="/basic-data", 
-                status_code=status.HTTP_303_SEE_OTHER
-            )
-        except Exception as e:
-            db.rollback()
-            logger.error(f"Erro ao salvar dados: {str(e)}")
-            return templates.TemplateResponse(
-                "basic_data_form.html",
-                {
-                    "request": request,
-                    "user": current_user,
-                    "error_message": f"Erro ao salvar dados: {str(e)}",
-                    "month": data.month,
-                    "year": data.year,
-                    "clients_served": data.clients_served,
-                    "sales_revenue": data.sales_revenue,
-                    "sales_expenses": data.sales_expenses,
-                    "input_product_expenses": data.input_product_expenses,
-                    "fixed_costs": data.fixed_costs,
-                    "ideal_profit_margin": data.ideal_profit_margin,
-                    "service_capacity": data.service_capacity,
-                    "pro_labore": data.pro_labore,
-                    "work_hours_per_week": data.work_hours_per_week,
-                    "other_fixed_costs": data.other_fixed_costs,
-                    "ideal_service_profit_margin": data.ideal_service_profit_margin,
-                    "is_current": is_current,
-                    "current_month": data.month,
-                    "current_year": data.year
-                }
-            )
-    except ValidationError as e:
-        logger.error(f"Erro de validação: {str(e)}")
+    except Exception as e:
+        db.rollback()
+        logger.error(f"Erro ao salvar: {str(e)}")
         return templates.TemplateResponse(
             "basic_data_form.html",
             {
                 "request": request,
+                "error_message": f"Erro ao salvar: {str(e)}",
                 "user": current_user,
-                "error_message": "Erro de validação nos dados. Por favor, verifique os valores informados.",
                 "month": month,
                 "year": year,
-                "clients_served": clients_served,
-                "sales_revenue": sales_revenue,
-                "sales_expenses": sales_expenses,
-                "input_product_expenses": input_product_expenses,
-                "fixed_costs": fixed_costs,
-                "ideal_profit_margin": ideal_profit_margin,
-                "service_capacity": service_capacity,
-                "pro_labore": pro_labore,
-                "work_hours_per_week": work_hours_per_week,
-                "other_fixed_costs": other_fixed_costs,
-                "ideal_service_profit_margin": ideal_service_profit_margin,
-                "is_current": is_current,
+                **new_data,
                 "current_month": month,
                 "current_year": year
             }
@@ -305,19 +287,12 @@ async def edit_basic_data_page(
     if not basic_data:
         raise HTTPException(status_code=404, detail="Registro não encontrado")
 
-    # Obter o mês e ano atual
-    now = datetime.now()
-    current_month = now.month
-    current_year = now.year
-
     return templates.TemplateResponse(
         "basic_data_form.html",
         {
             "request": request,
             "user": current_user,
             "basic_data": basic_data,
-            "current_month": current_month,
-            "current_year": current_year,
             "edit_mode": True
         }
     )

@@ -1,99 +1,42 @@
-2025-03-30 16:01:25,452 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:01:25,452 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:01:25,454 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":6,"year":2025,"clients_served":3213,"sales_revenue":3.02,"sales_expenses":3.02,"input_product_expenses":2.03,"fixed_costs":2.03,"ideal_profit_margin":32.0,"service_capacity":"32","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:01:25,454 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 6/2025
-2025-03-30 16:01:25,455 - app.routes.basic_data - ERROR - Erro ao salvar dados: 'is_current' is an invalid keyword argument for BasicData
-2025-03-30 16:02:23,765 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:02:23,765 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:02:23,767 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":6,"year":2025,"clients_served":3213,"sales_revenue":3.02,"sales_expenses":3.02,"input_product_expenses":2.03,"fixed_costs":2.03,"ideal_profit_margin":32.0,"service_capacity":"32","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:02:23,770 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 6/2025
-2025-03-30 16:02:23,770 - app.routes.basic_data - ERROR - Erro ao salvar dados: 'is_current' is an invalid keyword argument for BasicData
-2025-03-30 16:02:40,508 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:02:40,509 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:02:40,509 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":7,"year":2025,"clients_served":23,"sales_revenue":2.03,"sales_expenses":3.02,"input_product_expenses":2.03,"fixed_costs":3.02,"ideal_profit_margin":32.0,"service_capacity":"23","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:02:40,511 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 7/2025
-2025-03-30 16:02:40,512 - app.routes.basic_data - ERROR - Erro ao salvar dados: 'is_current' is an invalid keyword argument for BasicData
-2025-03-30 16:04:35,713 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:04:35,715 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:04:35,718 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":7,"year":2025,"clients_served":23,"sales_revenue":2.03,"sales_expenses":3.02,"input_product_expenses":2.03,"fixed_costs":3.02,"ideal_profit_margin":32.0,"service_capacity":"23","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:04:35,721 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 7/2025
-2025-03-30 16:04:35,722 - app.routes.basic_data - ERROR - Erro ao salvar dados: 'is_current' is an invalid keyword argument for BasicData
-2025-03-30 16:05:49,244 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:05:49,244 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:05:49,245 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":7,"year":2025,"clients_served":23,"sales_revenue":2.03,"sales_expenses":3.02,"input_product_expenses":2.03,"fixed_costs":3.02,"ideal_profit_margin":32.0,"service_capacity":"23","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:05:49,246 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 7/2025
-2025-03-30 16:05:49,246 - app.routes.basic_data - ERROR - Erro ao salvar dados: 'is_current' is an invalid keyword argument for BasicData
-2025-03-30 16:06:04,584 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:06:04,584 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:06:04,585 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":12,"year":2025,"clients_served":123,"sales_revenue":1.02,"sales_expenses":2.01,"input_product_expenses":1.02,"fixed_costs":1.02,"ideal_profit_margin":12.0,"service_capacity":"32","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:06:04,586 - app.routes.basic_data - INFO - Atualizando registro existente para mês/ano 12/2025
-2025-03-30 16:06:04,586 - app.routes.basic_data - INFO - Valor sendo salvo no banco: True
-2025-03-30 16:06:04,600 - app.routes.basic_data - INFO - Dados salvos com sucesso!
-2025-03-30 16:06:25,442 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:06:25,442 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:06:25,442 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":12,"year":2025,"clients_served":123,"sales_revenue":3.12,"sales_expenses":21.03,"input_product_expenses":3.12,"fixed_costs":21.03,"ideal_profit_margin":12.0,"service_capacity":"23","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:06:25,443 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 12/2025
-2025-03-30 16:06:25,443 - app.routes.basic_data - ERROR - Erro ao salvar dados: 'is_current' is an invalid keyword argument for BasicData
-2025-03-30 16:07:57,312 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:07:57,313 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:07:57,314 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":12,"year":2025,"clients_served":3213,"sales_revenue":0.21,"sales_expenses":31.02,"input_product_expenses":21.03,"fixed_costs":2.03,"ideal_profit_margin":12.0,"service_capacity":"32","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:07:57,315 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 12/2025
-2025-03-30 16:07:57,315 - app.routes.basic_data - ERROR - Erro ao salvar dados: 'is_current' is an invalid keyword argument for BasicData
-2025-03-30 16:09:26,118 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:09:26,120 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:09:26,121 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":12,"year":2025,"clients_served":23,"sales_revenue":1.02,"sales_expenses":21.03,"input_product_expenses":2.01,"fixed_costs":21.03,"ideal_profit_margin":2.0,"service_capacity":"312","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:09:26,122 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 12/2025
-2025-03-30 16:09:26,122 - app.routes.basic_data - INFO - Valor sendo salvo no banco: True
-2025-03-30 16:09:26,129 - app.routes.basic_data - INFO - Dados salvos com sucesso!
-2025-03-30 16:12:48,367 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:12:48,367 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:12:48,368 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":12,"year":2025,"clients_served":3123,"sales_revenue":12.03,"sales_expenses":12.03,"input_product_expenses":12.03,"fixed_costs":12.03,"ideal_profit_margin":15.0,"service_capacity":"123","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:12:48,369 - app.routes.basic_data - INFO - Atualizando registro existente para mês/ano 12/2025
-2025-03-30 16:12:48,369 - app.routes.basic_data - INFO - Valor sendo salvo no banco: True
-2025-03-30 16:12:48,373 - app.routes.basic_data - INFO - Dados salvos com sucesso!
-2025-03-30 16:13:04,141 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:13:04,141 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:13:04,141 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":10,"year":2025,"clients_served":23,"sales_revenue":2.03,"sales_expenses":3.02,"input_product_expenses":3.02,"fixed_costs":3.02,"ideal_profit_margin":32.0,"service_capacity":"32","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:13:04,142 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 10/2025
-2025-03-30 16:13:04,143 - app.routes.basic_data - INFO - Valor sendo salvo no banco: True
-2025-03-30 16:13:04,145 - app.routes.basic_data - INFO - Dados salvos com sucesso!
-2025-03-30 16:14:38,129 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:14:38,129 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:14:38,130 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":8,"year":2025,"clients_served":312,"sales_revenue":21.03,"sales_expenses":1.02,"input_product_expenses":1.02,"fixed_costs":1.02,"ideal_profit_margin":12.0,"service_capacity":"21","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:14:38,130 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 8/2025
-2025-03-30 16:14:38,131 - app.routes.basic_data - INFO - Valor sendo salvo no banco: True
-2025-03-30 16:14:38,133 - app.routes.basic_data - INFO - Dados salvos com sucesso!
-2025-03-30 16:17:41,463 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
-2025-03-30 16:17:41,463 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
-2025-03-30 16:17:41,464 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":3,"year":2025,"clients_served":321,"sales_revenue":2.03,"sales_expenses":21.03,"input_product_expenses":21.03,"fixed_costs":12.03,"ideal_profit_margin":2.0,"service_capacity":"321","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
-2025-03-30 16:17:41,464 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 3/2025
-2025-03-30 16:17:41,464 - app.routes.basic_data - INFO - Valor sendo salvo no banco: True
-2025-03-30 16:17:41,466 - app.routes.basic_data - INFO - Dados salvos com sucesso!
-2025-03-30 16:18:09,941 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
-2025-03-30 16:18:09,942 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
-2025-03-30 16:18:09,955 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
-2025-03-30 16:37:51,193 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
-2025-03-30 16:37:51,194 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
-2025-03-30 16:37:51,210 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
-2025-03-30 16:42:22,598 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
-2025-03-30 16:42:22,599 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
-2025-03-30 16:42:22,605 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 2 (mês 10/2025) está marcado como atual: True
-2025-03-30 16:42:32,954 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
-2025-03-30 16:42:32,955 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
-2025-03-30 16:42:32,961 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 3 (mês 8/2025) está marcado como atual: True
-2025-03-30 16:55:58,952 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
-2025-03-30 16:55:58,952 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
-2025-03-30 16:55:58,964 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
-2025-03-30 16:56:09,925 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
-2025-03-30 16:56:09,926 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
-2025-03-30 16:56:09,935 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
-2025-03-30 17:04:21,205 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
-2025-03-30 17:04:21,205 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
-2025-03-30 17:04:21,214 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
-2025-03-30 17:12:02,201 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: false, convertido para: False
-2025-03-30 17:12:02,217 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 4 (mês 3/2025) está marcado como atual: False
-2025-03-30 17:14:42,711 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
-2025-03-30 17:14:42,712 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
-2025-03-30 17:14:42,724 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
-2025-03-30 17:15:00,324 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: false, convertido para: False
-2025-03-30 17:15:00,326 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 2 (mês 10/2025) está marcado como atual: False
+2025-03-30 17:41:04,004 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: false, convertido para: False
+2025-03-30 17:41:04,009 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 5 (mês 5/2025) está marcado como atual: False
+2025-03-30 17:41:09,527 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
+2025-03-30 17:41:09,527 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
+2025-03-30 17:41:09,534 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 4 (mês 3/2025) está marcado como atual: True
+2025-03-30 17:41:22,345 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: false, convertido para: False
+2025-03-30 17:41:22,351 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 5 (mês 5/2025) está marcado como atual: False
+2025-03-30 17:45:01,079 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
+2025-03-30 17:45:01,080 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
+2025-03-30 17:45:01,092 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 4 (mês 3/2025) está marcado como atual: True
+2025-03-30 17:51:36,619 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
+2025-03-30 17:51:36,620 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
+2025-03-30 17:51:36,628 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
+2025-03-30 17:54:42,278 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
+2025-03-30 17:54:42,279 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
+2025-03-30 17:54:42,293 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 5 (mês 5/2025) está marcado como atual: True
+2025-03-30 17:54:48,289 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: false, convertido para: False
+2025-03-30 17:54:48,292 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 4 (mês 3/2025) está marcado como atual: False
+2025-03-30 17:59:02,623 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 17:59:02,626 - app.routes.basic_data - INFO - Registro existente encontrado para 3/2025
+2025-03-30 17:59:02,627 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de 2.03 para 2.03
+2025-03-30 17:59:02,627 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de 21.03 para 21.03
+2025-03-30 17:59:02,627 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de 21.03 para 21.03
+2025-03-30 17:59:02,627 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de False para True
+2025-03-30 17:59:02,627 - app.routes.basic_data - INFO - Alterações detectadas: ['Faturamento com Vendas alterado de 2.03 para 2.03', 'Gastos com Vendas alterado de 21.03 para 21.03', 'Gastos com Insumos e Produtos alterado de 21.03 para 21.03', 'É o Atual alterado de False para True']
+2025-03-30 17:59:02,627 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de 2.03 para 2.03
+2025-03-30 17:59:02,627 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de 21.03 para 21.03
+2025-03-30 17:59:02,627 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de 21.03 para 21.03
+2025-03-30 17:59:02,627 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de False para True
+2025-03-30 17:59:02,627 - app.routes.basic_data - INFO - Campo clients_served atualizado para 321
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 2.03
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 21.03
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 21.03
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 12312
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 17:59:02,635 - app.routes.basic_data - INFO - Dados salvos com sucesso

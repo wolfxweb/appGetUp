@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime, Boo
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database.db import Base
+from app.models.basic_data_log import BasicDataLog
 
 class BasicData(Base):
     __tablename__ = "basic_data"
@@ -38,6 +39,7 @@ class BasicData(Base):
     
     # Relacionamento
     user = relationship("User", back_populates="basic_data")
+    logs = relationship("BasicDataLog", back_populates="basic_data", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<BasicData(user_id={self.user_id}, month={self.month}, year={self.year}, activity_type={self.activity_type})>" 
