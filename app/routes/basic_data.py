@@ -8,6 +8,7 @@ from pydantic import BaseModel, validator, ValidationError
 from typing import Optional
 import logging
 import os
+import locale
 
 from app.database.db import get_db
 from app.models.user import User
@@ -72,7 +73,7 @@ class BasicDataInput(BaseModel):
                 raise ValueError('Valor inválido para número decimal')
         return v
 
-def compare_and_log_changes(db: Session, old_data: BasicData, new_data: dict) -> list:
+def compare_and_log_changes(db: Session, old_data_dict: dict, new_data: dict) -> list:
     """Compara os dados antigos com os novos e retorna uma lista de alterações"""
     changes = []
     
@@ -93,12 +94,25 @@ def compare_and_log_changes(db: Session, old_data: BasicData, new_data: dict) ->
     }
     
     for field, new_value in new_data.items():
-        old_value = getattr(old_data, field)
-        
-        # Se os valores são diferentes, registra a mudança
-        if old_value != new_value:
+        if field not in old_data_dict:
+            continue
+            
+        old_value = old_data_dict[field]  # Acessando através do índice do dicionário
+
+        # Comparar valores
+        if isinstance(old_value, float) and isinstance(new_value, float):
+            # Se os valores são iguais, continue para a próxima iteração
+            if abs(old_value - new_value) < 1e-9:  # Tolerância para flutuantes
+                continue
+            
+            # Se os valores são diferentes, registra a mudança
             changes.append(f"{field_names[field]} alterado de {old_value} para {new_value}")
             logger.info(f"Alteração detectada: {field_names[field]} de {old_value} para {new_value}")
+        else:
+            # Comparar outros tipos
+            if old_value != new_value:
+                changes.append(f"{field_names[field]} alterado de {old_value} para {new_value}")
+                logger.info(f"Alteração detectada: {field_names[field]} de {old_value} para {new_value}")
     
     return changes
 
@@ -192,19 +206,20 @@ async def save_basic_data(
         is_current_bool = is_current.lower() == 'true'
         logger.info(f"Processando dados básicos para usuário {current_user.id}")
 
+        # Buscar dados básicos existentes
         existing_data = db.query(BasicData).filter(
             BasicData.user_id == current_user.id,
             BasicData.month == month,
             BasicData.year == year
         ).first()
 
-        # Preparar os novos dados
+        # Preparar os novos dados com conversão de tipos
         new_data = {
             'clients_served': clients_served,
-            'sales_revenue': sales_revenue,
-            'sales_expenses': sales_expenses,
-            'input_product_expenses': input_product_expenses,
-            'fixed_costs': fixed_costs,
+            'sales_revenue': float(sales_revenue.replace(',', '.')) if sales_revenue else None,
+            'sales_expenses': float(sales_expenses.replace(',', '.')) if sales_expenses else None,
+            'input_product_expenses': float(input_product_expenses.replace(',', '.')) if input_product_expenses else None,
+            'fixed_costs': float(fixed_costs.replace(',', '.')) if fixed_costs else None,
             'ideal_profit_margin': ideal_profit_margin,
             'service_capacity': service_capacity,
             'pro_labore': pro_labore,
@@ -216,13 +231,29 @@ async def save_basic_data(
 
         if existing_data:
             logger.info(f"Registro existente encontrado para {month}/{year}")
-            
-            # Comparar e registrar alterações
-            changes = compare_and_log_changes(db, existing_data, new_data)
-            
+
+            # Converter existing_data para um dicionário
+            existing_data_dict = {
+                'clients_served': existing_data.clients_served,
+                'sales_revenue': existing_data.sales_revenue,
+                'sales_expenses': existing_data.sales_expenses,
+                'input_product_expenses': existing_data.input_product_expenses,
+                'fixed_costs': existing_data.fixed_costs,
+                'ideal_profit_margin': existing_data.ideal_profit_margin,
+                'service_capacity': existing_data.service_capacity,
+                'pro_labore': existing_data.pro_labore,
+                'work_hours_per_week': existing_data.work_hours_per_week,
+                'other_fixed_costs': existing_data.other_fixed_costs,
+                'ideal_service_profit_margin': existing_data.ideal_service_profit_margin,
+                'is_current': existing_data.is_current
+            }
+
+            # Passar o dicionário em vez do objeto
+            changes = compare_and_log_changes(db, existing_data_dict, new_data)
+
             if changes:  # Se houver alterações
                 logger.info(f"Alterações detectadas: {changes}")
-                
+
                 # Registrar cada alteração no log
                 for change in changes:
                     log_entry = BasicDataLog(
