@@ -234,7 +234,7 @@
 </div>
 
 <!-- Modal de Confirmação -->
-<div class="modal fade" id="confirmReplaceModal" tabindex="-1">
+<div class="modal fade" id="confirmReplaceModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -459,6 +459,14 @@ document.addEventListener('DOMContentLoaded', function() {
         return value.replace(/\D/g, '');
     }
 
+    function convertToInternationalFormat(value) {
+        if (!value) return '';
+        // Remove todos os caracteres exceto números e vírgula
+        value = value.replace(/[^\d,]/g, '');
+        // Substitui vírgula por ponto
+        return value.replace(',', '.');
+    }
+
     const currencyInputs = [
         'sales_revenue', 
         'sales_expenses', 
@@ -516,28 +524,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmReplaceModal = document.getElementById('confirmReplaceModal');
     const confirmModal = new bootstrap.Modal(confirmReplaceModal);
     let isConfirmed = false;
+    const isEditMode = {% if edit_mode %}true{% else %}false{% endif %};
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
+        // Converte os valores monetários para formato internacional antes do envio
+        currencyInputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            if (input && input.value) {
+                // Converte para formato internacional (com ponto decimal)
+                input.value = convertToInternationalFormat(input.value);
+            }
+        });
+
         // Se já foi confirmado, permite o envio
         if (isConfirmed) {
-            // Processa os valores monetários antes do envio
-            currencyInputs.forEach(inputId => {
-                const input = document.getElementById(inputId);
-                if (input && input.value) {
-                    const value = unformatCurrency(input.value);
-                    input.value = (parseFloat(value) / 100).toFixed(2);
-                }
-            });
+            form.submit();
+            return;
+        }
 
-            // Adiciona campo hidden para confirmação
-            const confirmInput = document.createElement('input');
-            confirmInput.type = 'hidden';
-            confirmInput.name = 'confirm_update';
-            confirmInput.value = 'true';
-            form.appendChild(confirmInput);
-
+        // Se não estiver em modo de edição, envia o formulário diretamente
+        if (!isEditMode) {
             form.submit();
             return;
         }
@@ -555,13 +563,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmModal.show();
             } else {
                 // Se não existe, envia o formulário normalmente
-                currencyInputs.forEach(inputId => {
-                    const input = document.getElementById(inputId);
-                    if (input && input.value) {
-                        const value = unformatCurrency(input.value);
-                        input.value = (parseFloat(value) / 100).toFixed(2);
-                    }
-                });
                 form.submit();
             }
         } catch (error) {

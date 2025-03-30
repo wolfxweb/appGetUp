@@ -4,6 +4,8 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from datetime import datetime
 import calendar
+from pydantic import BaseModel, validator, ValidationError
+from typing import Optional
 
 from app.database.db import get_db
 from app.models.user import User
@@ -13,6 +15,37 @@ from app.routes.auth import get_current_user
 router = APIRouter(prefix="/basic-data")
 
 templates = Jinja2Templates(directory="app/templates")
+
+class BasicDataInput(BaseModel):
+    month: int
+    year: int
+    clients_served: int
+    sales_revenue: float
+    sales_expenses: float
+    input_product_expenses: float
+    fixed_costs: Optional[float] = None
+    ideal_profit_margin: Optional[float] = None
+    service_capacity: Optional[str] = None
+    pro_labore: Optional[float] = None
+    work_hours_per_week: Optional[float] = None
+    other_fixed_costs: Optional[float] = None
+    ideal_service_profit_margin: Optional[float] = None
+
+    @validator('sales_revenue', 'sales_expenses', 'input_product_expenses', 'fixed_costs', 'pro_labore', 'other_fixed_costs', pre=True)
+    def convert_string_to_float(cls, v):
+        if isinstance(v, str):
+            if not v:  # Se a string estiver vazia
+                return None
+            # Remove espaços em branco
+            v = v.strip()
+            # Substitui vírgula por ponto
+            v = v.replace(',', '.')
+            try:
+                # Converte para float
+                return float(v)
+            except ValueError:
+                raise ValueError('Valor inválido para número decimal')
+        return v
 
 @router.get("/", response_class=HTMLResponse)
 async def basic_data_page(
@@ -87,97 +120,111 @@ async def save_basic_data(
     month: int = Form(...),
     year: int = Form(...),
     clients_served: int = Form(...),
-    sales_revenue: float = Form(...),
-    sales_expenses: float = Form(...),
-    input_product_expenses: float = Form(...),
-    fixed_costs: float = Form(None),
+    sales_revenue: str = Form(...),
+    sales_expenses: str = Form(...),
+    input_product_expenses: str = Form(...),
+    fixed_costs: str = Form(None),
     ideal_profit_margin: float = Form(None),
     service_capacity: str = Form(None),
-    pro_labore: float = Form(None),
+    pro_labore: str = Form(None),
     work_hours_per_week: float = Form(None),
-    other_fixed_costs: float = Form(None),
+    other_fixed_costs: str = Form(None),
     ideal_service_profit_margin: float = Form(None),
     confirm_update: bool = Form(False)
 ):
-    # Verificar se já existe um registro para o mês
-    existing_data = db.query(BasicData).filter(
-        BasicData.user_id == current_user.id,
-        BasicData.month == month,
-        BasicData.year == year
-    ).first()
-
-    # Se já existir um registro e não houver confirmação, solicitar confirmação
-    if existing_data and not confirm_update:
-        return templates.TemplateResponse(
-            "basic_data_form.html",
-            {
-                "request": request,
-                "user": current_user,
-                "warning_message": "Já existe um registro para este mês. Deseja substituir?",
-                "month": month,
-                "year": year,
-                "clients_served": clients_served,
-                "sales_revenue": sales_revenue,
-                "sales_expenses": sales_expenses,
-                "input_product_expenses": input_product_expenses,
-                "fixed_costs": fixed_costs,
-                "ideal_profit_margin": ideal_profit_margin,
-                "service_capacity": service_capacity,
-                "pro_labore": pro_labore,
-                "work_hours_per_week": work_hours_per_week,
-                "other_fixed_costs": other_fixed_costs,
-                "ideal_service_profit_margin": ideal_service_profit_margin,
-                "show_confirm": True,
-                "current_month": month,
-                "current_year": year
-            }
-        )
-
-    # Criar ou atualizar o registro
-    if existing_data:
-        # Atualizar registro existente
-        basic_data = existing_data
-    else:
-        # Criar novo registro
-        basic_data = BasicData(
-            user_id=current_user.id,
+    try:
+        # Criar o modelo Pydantic com os dados recebidos
+        data = BasicDataInput(
             month=month,
             year=year,
-            activity_type=current_user.activity_type
+            clients_served=clients_served,
+            sales_revenue=sales_revenue,
+            sales_expenses=sales_expenses,
+            input_product_expenses=input_product_expenses,
+            fixed_costs=fixed_costs,
+            ideal_profit_margin=ideal_profit_margin,
+            service_capacity=service_capacity,
+            pro_labore=pro_labore,
+            work_hours_per_week=work_hours_per_week,
+            other_fixed_costs=other_fixed_costs,
+            ideal_service_profit_margin=ideal_service_profit_margin
         )
-        db.add(basic_data)
 
-    # Atualizar campos comuns
-    basic_data.clients_served = clients_served
-    basic_data.sales_revenue = sales_revenue
-    basic_data.sales_expenses = sales_expenses
-    basic_data.input_product_expenses = input_product_expenses
+        # Verificar se já existe um registro para o mês/ano
+        existing_data = db.query(BasicData).filter(
+            BasicData.user_id == current_user.id,
+            BasicData.month == data.month,
+            BasicData.year == data.year
+        ).first()
 
-    # Atualizar campos específicos baseados no tipo de atividade
-    if current_user.activity_type in ["Comércio", "Indústria"]:
-        basic_data.fixed_costs = fixed_costs
-        basic_data.ideal_profit_margin = ideal_profit_margin
-        basic_data.service_capacity = service_capacity
-    elif current_user.activity_type == "Serviços":
-        basic_data.pro_labore = pro_labore
-        basic_data.work_hours_per_week = work_hours_per_week
-        basic_data.other_fixed_costs = other_fixed_costs
-        basic_data.ideal_service_profit_margin = ideal_service_profit_margin
+        if existing_data:
+            # Atualizar registro existente
+            basic_data = existing_data
+        else:
+            # Criar novo registro
+            basic_data = BasicData(
+                user_id=current_user.id,
+                month=data.month,
+                year=data.year,
+                activity_type=current_user.activity_type
+            )
+            db.add(basic_data)
 
-    try:
-        db.commit()
-        return RedirectResponse(
-            url="/basic-data", 
-            status_code=status.HTTP_303_SEE_OTHER
-        )
-    except Exception as e:
-        db.rollback()
+        # Atualizar campos comuns
+        basic_data.clients_served = data.clients_served
+        basic_data.sales_revenue = data.sales_revenue
+        basic_data.sales_expenses = data.sales_expenses
+        basic_data.input_product_expenses = data.input_product_expenses
+
+        # Atualizar campos específicos baseados no tipo de atividade
+        if current_user.activity_type in ["Comércio", "Indústria"]:
+            basic_data.fixed_costs = data.fixed_costs
+            basic_data.ideal_profit_margin = data.ideal_profit_margin
+            basic_data.service_capacity = data.service_capacity
+        elif current_user.activity_type == "Serviços":
+            basic_data.pro_labore = data.pro_labore
+            basic_data.work_hours_per_week = data.work_hours_per_week
+            basic_data.other_fixed_costs = data.other_fixed_costs
+            basic_data.ideal_service_profit_margin = data.ideal_service_profit_margin
+
+        try:
+            db.commit()
+            return RedirectResponse(
+                url="/basic-data", 
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+        except Exception as e:
+            db.rollback()
+            return templates.TemplateResponse(
+                "basic_data_form.html",
+                {
+                    "request": request,
+                    "user": current_user,
+                    "error_message": f"Erro ao salvar dados: {str(e)}",
+                    "month": data.month,
+                    "year": data.year,
+                    "clients_served": data.clients_served,
+                    "sales_revenue": data.sales_revenue,
+                    "sales_expenses": data.sales_expenses,
+                    "input_product_expenses": data.input_product_expenses,
+                    "fixed_costs": data.fixed_costs,
+                    "ideal_profit_margin": data.ideal_profit_margin,
+                    "service_capacity": data.service_capacity,
+                    "pro_labore": data.pro_labore,
+                    "work_hours_per_week": data.work_hours_per_week,
+                    "other_fixed_costs": data.other_fixed_costs,
+                    "ideal_service_profit_margin": data.ideal_service_profit_margin,
+                    "current_month": data.month,
+                    "current_year": data.year
+                }
+            )
+    except ValidationError as e:
         return templates.TemplateResponse(
             "basic_data_form.html",
             {
                 "request": request,
                 "user": current_user,
-                "error_message": f"Erro ao salvar dados: {str(e)}",
+                "error_message": "Erro de validação nos dados. Por favor, verifique os valores informados.",
                 "month": month,
                 "year": year,
                 "clients_served": clients_served,
