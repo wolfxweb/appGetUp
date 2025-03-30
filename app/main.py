@@ -25,7 +25,7 @@ app.include_router(profile.router)
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return RedirectResponse(url="/login")
+    return templates.TemplateResponse("home.html", {"request": request})
 
 if __name__ == "__main__":
     import uvicorn

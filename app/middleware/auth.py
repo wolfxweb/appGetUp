@@ -6,6 +6,7 @@ from app.database.db import get_db
 async def check_license_middleware(request: Request, call_next):
     # Lista de rotas que não precisam de verificação de licença
     public_routes = [
+        "/",  # Página home pública
         "/login",
         "/register",
         "/profile",

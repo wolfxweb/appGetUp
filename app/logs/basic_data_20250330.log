@@ -4621,3 +4621,48 @@
 2025-03-30 20:37:25,686 - app.routes.basic_data - INFO - Logs encontrados: 1
 2025-03-30 20:37:25,686 - app.routes.basic_data - INFO - Log ID: 23, Descrição: Capacidade de Atendimento alterado de 2 para 222
 2025-03-30 20:37:25,688 - app.routes.basic_data - INFO - Total de logs: 1, Páginas: 1
+2025-03-30 20:50:44,947 - app.routes.basic_data - INFO - Processando dados básicos para usuário 1
+2025-03-30 20:50:44,950 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:50:44,954 - app.routes.basic_data - INFO - Criando novo registro
+2025-03-30 20:50:44,961 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:51:42,121 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:51:42,122 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:51:42,123 - app.routes.basic_data - INFO - Criando novo registro
+2025-03-30 20:51:42,130 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:51:43,468 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:51:43,470 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:51:43,472 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:51:43,576 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:51:43,577 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-30 20:51:43,580 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-30 20:51:46,273 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 20:51:46,273 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-30 20:51:46,275 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-30 20:51:46,277 - app.routes.basic_data - INFO - Alteração detectada: Margem de Lucro Ideal de 2.0 para 33.0
+2025-03-30 20:51:46,277 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-30 20:51:46,277 - app.routes.basic_data - INFO - Alterações detectadas: ['Margem de Lucro Ideal alterado de 2.0 para 33.0', 'É o Atual alterado de Não para Sim']
+2025-03-30 20:51:46,277 - app.routes.basic_data - INFO - Log adicionado: Margem de Lucro Ideal alterado de 2.0 para 33.0
+2025-03-30 20:51:46,278 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-30 20:51:46,278 - app.routes.basic_data - INFO - Campo clients_served atualizado para 23
+2025-03-30 20:51:46,278 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-30 20:51:46,278 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 21.03
+2025-03-30 20:51:46,278 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.04
+2025-03-30 20:51:46,278 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 21.03
+2025-03-30 20:51:46,278 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 33.0
+2025-03-30 20:51:46,278 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 12
+2025-03-30 20:51:46,279 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 20:51:46,279 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 20:51:46,279 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 20:51:46,279 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 20:51:46,279 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 20:51:46,291 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:51:47,620 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:51:47,621 - app.routes.basic_data - INFO - Logs encontrados: 2
+2025-03-30 20:51:47,621 - app.routes.basic_data - INFO - Log ID: 2, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:51:47,621 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Margem de Lucro Ideal alterado de 2.0 para 33.0
+2025-03-30 20:51:47,622 - app.routes.basic_data - INFO - Total de logs: 2, Páginas: 1
+2025-03-30 20:51:47,661 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:51:47,662 - app.routes.basic_data - INFO - Logs encontrados: 2
+2025-03-30 20:51:47,662 - app.routes.basic_data - INFO - Log ID: 2, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:51:47,662 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Margem de Lucro Ideal alterado de 2.0 para 33.0
+2025-03-30 20:51:47,662 - app.routes.basic_data - INFO - Total de logs: 2, Páginas: 1

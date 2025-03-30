@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}GetUp Gestão - Controle de Custos{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <!-- Hero Section -->
+    <div class="bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold">Gerencie seus custos com eficiência</h1>
+                    <p class="fs-5 my-4">Uma plataforma completa para controle financeiro do seu negócio. Tome decisões baseadas em dados reais.</p>
+                    <a href="/login" class="btn btn-light btn-lg px-4 me-md-2">Acessar sistema</a>
+                    <a href="/register" class="btn btn-outline-light btn-lg px-4">Criar conta</a>
+                </div>
+                <div class="col-lg-6">
+                    <img src="/static/images/cost-management.svg" alt="Gestão de Custos" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Recursos Principais</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-graph-up-arrow text-primary fs-1 mb-3"></i>
+                            <h5 class="card-title">Análise Financeira</h5>
+                            <p class="card-text">Acompanhe receitas, despesas e lucros com gráficos intuitivos e relatórios detalhados.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-calculator text-primary fs-1 mb-3"></i>
+                            <h5 class="card-title">Controle de Custos</h5>
+                            <p class="card-text">Registre e categorize todos os seus custos. Identifique oportunidades de economia.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-clipboard-data text-primary fs-1 mb-3"></i>
+                            <h5 class="card-title">Histórico Completo</h5>
+                            <p class="card-text">Mantenha um registro de todas as alterações e visualize a evolução do seu negócio.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Por que usar nossa plataforma?</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <img src="/static/images/financial-planning.svg" alt="Planejamento Financeiro" class="img-fluid rounded shadow">
+                </div>
+                <div class="col-lg-6">
+                    <div class="ps-lg-4">
+                        <h3 class="mb-4">Decisões mais inteligentes para seu negócio</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Aumente sua margem de lucro identificando custos desnecessários</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Planeje investimentos com base em dados concretos</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Identifique tendências e padrões no seu fluxo de caixa</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Compare desempenho entre períodos diferentes</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Otimize processos para reduzir desperdícios</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">O que dizem nossos clientes</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                            </div>
+                            <p class="card-text fst-italic">"Com esta plataforma consegui reduzir meus custos em 20% no primeiro trimestre de uso. Interface simples e muito eficiente!"</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <div class="fw-bold">Carlos Silva</div>
+                                <div class="ms-2 text-muted small">Comércio Varejista</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                            </div>
+                            <p class="card-text fst-italic">"Finalmente consigo ter uma visão clara das minhas finanças. Agora sei exatamente onde cada real está sendo investido no meu negócio."</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <div class="fw-bold">Ana Oliveira</div>
+                                <div class="ms-2 text-muted small">Serviços de Consultoria</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                            </div>
+                            <p class="card-text fst-italic">"O sistema me ajudou a identificar desperdícios que nem imaginava que tinha. O suporte é excelente e as atualizações constantes."</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <div class="fw-bold">Marcos Pereira</div>
+                                <div class="ms-2 text-muted small">Indústria de Alimentos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="py-5 bg-primary text-white text-center">
+        <div class="container">
+            <h2 class="mb-4">Comece a controlar seus custos hoje mesmo</h2>
+            <p class="lead mb-4">Junte-se a milhares de empresários que já transformaram a gestão financeira dos seus negócios</p>
+            <a href="/register" class="btn btn-light btn-lg px-4">Criar conta gratuita</a>
+        </div>
+    </div>
+</div>
+
+<footer class="py-4 bg-dark text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="mb-0">© 2023 GetUp Gestão. Todos os direitos reservados.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="#" class="text-white me-3">Termos de Uso</a>
+                <a href="#" class="text-white me-3">Privacidade</a>
+                <a href="#" class="text-white">Contato</a>
+            </div>
+        </div>
+    </div>
+</footer>
+{% endblock %} 

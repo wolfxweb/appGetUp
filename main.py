@@ -1,7 +1,9 @@
 import logging
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 from app.routes import auth, dashboard, admin, profile, basic_data
 from app.database.db import engine, Base
 from app.models.user import User
@@ -32,6 +34,9 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+# Configurar templates
+templates = Jinja2Templates(directory="app/templates")
+
 # Configurar CORS
 app.add_middleware(
     CORSMiddleware,
@@ -54,6 +59,11 @@ app.include_router(dashboard.router)
 app.include_router(admin.router)
 app.include_router(profile.router)
 app.include_router(basic_data.router)
+
+# Rota da página principal
+@app.get("/", response_class=HTMLResponse)
+async def home(request: Request):
+    return templates.TemplateResponse("home.html", {"request": request})
 
 if __name__ == "__main__":
     import uvicorn
