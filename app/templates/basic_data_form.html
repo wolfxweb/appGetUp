@@ -68,7 +68,7 @@
                                     Mês* 
                                     <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#monthHelpModal"></i>
                                 </label>
-                                <select class="form-select" id="month" name="month" required>
+                                <select class="form-select" id="month" name="month" required {% if edit_mode %}disabled{% endif %}>
                                     {% for month in range(1, 13) %}
                                     <option value="{{ month }}" 
                                         {% if basic_data and basic_data.month == month %}selected{% endif %}
@@ -77,6 +77,9 @@
                                     </option>
                                     {% endfor %}
                                 </select>
+                                {% if edit_mode %}
+                                    <input type="hidden" name="month" value="{{ basic_data.month }}">
+                                {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="year" class="form-label">
@@ -85,7 +88,10 @@
                                 </label>
                                 <input type="number" class="form-control" id="year" name="year" 
                                     value="{{ basic_data.year if basic_data else current_year }}" 
-                                    min="2020" required>
+                                    min="2020" required {% if edit_mode %}disabled{% endif %}>
+                                {% if edit_mode %}
+                                    <input type="hidden" name="year" value="{{ basic_data.year }}">
+                                {% endif %}
                             </div>
                         </div>
 
@@ -229,10 +235,15 @@
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary" id="submitButton">
-                                <i class="bi bi-check-circle"></i> 
-                                {% if edit_mode %}Atualizar{% else %}Salvar{% endif %} Dados
-                            </button>
+                            {% if edit_mode %}
+                                <button type="button" class="btn btn-primary" id="updateButton">
+                                    <i class="bi bi-check-circle"></i> Atualizar Dados
+                                </button>
+                            {% else %}
+                                <button type="submit" class="btn btn-primary" id="saveButton">
+                                    <i class="bi bi-check-circle"></i> Salvar Dados
+                                </button>
+                            {% endif %}
                         </div>
                     </form>
                 </div>
@@ -242,11 +253,11 @@
 </div>
 
 <!-- Modal de Confirmação -->
-<div class="modal fade" id="confirmReplaceModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+<div class="modal fade" id="confirmReplaceModal" tabindex="-1" data-bs-backdrop="static" aria-labelledby="confirmReplaceModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Confirmar Substituição</h5>
+                <h5 class="modal-title" id="confirmReplaceModalLabel">Confirmar Substituição</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
@@ -448,6 +459,8 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+
+
     function formatCurrency(value) {
         // Remove tudo que não é número
         let clean = value.replace(/\D/g, '');
@@ -530,7 +543,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form submission handling
     const form = document.querySelector('form');
     const confirmReplaceModal = document.getElementById('confirmReplaceModal');
-    const confirmModal = new bootstrap.Modal(confirmReplaceModal);
+    const confirmModal = new bootstrap.Modal(confirmReplaceModal, {
+        backdrop: 'static',
+        keyboard: false
+    });
     let isConfirmed = false;
     const isEditMode = {% if edit_mode %}true{% else %}false{% endif %};
 
@@ -583,12 +599,60 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('confirmReplace').addEventListener('click', function() {
         isConfirmed = true;
         confirmModal.hide();
-        form.submit();
+        
+        // Remover qualquer backdrop residual
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => {
+            backdrop.parentNode.removeChild(backdrop);
+        });
+        
+        // Remover classes que o Bootstrap adiciona ao body
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('padding-right');
+        
+        // Submeter o formulário após um breve delay
+        setTimeout(() => {
+            form.submit();
+        }, 100);
     });
 
     // Reset da confirmação quando o modal é fechado
     confirmReplaceModal.addEventListener('hidden.bs.modal', function() {
-        isConfirmed = false;
+        if (!isConfirmed) {
+            isConfirmed = false;
+        }
+        
+        // Remover qualquer backdrop residual quando o modal é fechado por qualquer razão
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => {
+            backdrop.parentNode.removeChild(backdrop);
+        });
+        
+        // Remover classes que o Bootstrap adiciona ao body
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('padding-right');
+    });
+
+    // Submissão do formulário para o botão de atualizar
+    document.getElementById('updateButton').addEventListener('click', async function(e) {
+        e.preventDefault();
+
+        // Converte os valores monetários para formato internacional antes do envio
+        currencyInputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            if (input && input.value) {
+                // Converte para formato internacional (com ponto decimal)
+                input.value = convertToInternationalFormat(input.value);
+            }
+        });
+
+        // Envia o formulário diretamente
+        form.submit();
+    });
+
+    // O botão de salvar pode submeter diretamente
+    document.getElementById('saveButton').addEventListener('click', function(e) {
+        form.submit(); // Envia o formulário diretamente
     });
 });
 </script>
