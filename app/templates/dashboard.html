@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 w-100 position-absolute start-0">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">Sistema</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/dashboard">Dashboard</a>
+                </li>
+                {% if user.access_level == "Administrador" %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/users">Gerenciar Usuários</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link" href="/profile">Perfil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Configurações</a>
+                </li>
+            </ul>
+            <div class="d-flex">
+                <span class="navbar-text me-3">
+                    Bem-vindo, {{ user.email }} 
+                    {% if user.access_level == "Administrador" %}
+                    <span class="badge bg-warning text-dark">Admin</span>
+                    {% endif %}
+                </span>
+                <a href="/logout" class="btn btn-outline-light">Sair</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div style="height: 70px;"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="card-title">Bem-vindo ao seu Dashboard!</h2>
+                    <p class="card-text">Aqui você pode gerenciar suas informações e acessar os recursos do sistema.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if user.access_level == "Administrador" %}
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Administração do Sistema</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <div class="d-grid">
+                                <a href="/admin/users" class="btn btn-lg btn-outline-primary">
+                                    <i class="bi bi-people-fill"></i> Gerenciar Usuários
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-grid">
+                                <a href="#" class="btn btn-lg btn-outline-primary">
+                                    <i class="bi bi-gear-fill"></i> Configurações do Sistema
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="d-grid">
+                                <a href="#" class="btn btn-lg btn-outline-primary">
+                                    <i class="bi bi-file-earmark-text"></i> Relatórios
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0"><i class="bi bi-bell-fill"></i> Notificações</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Você não tem novas notificações.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0"><i class="bi bi-link-45deg"></i> Acesso Rápido</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3">
+                            <a href="/profile" class="btn btn-outline-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
+                                <i class="bi bi-person-circle fs-1 mb-2"></i>
+                                <span>Meu Perfil</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="#" class="btn btn-outline-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
+                                <i class="bi bi-calendar-check fs-1 mb-2"></i>
+                                <span>Agenda</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="#" class="btn btn-outline-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
+                                <i class="bi bi-graph-up fs-1 mb-2"></i>
+                                <span>Estatísticas</span>
+                            </a>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <a href="#" class="btn btn-outline-primary btn-lg w-100 h-100 d-flex flex-column align-items-center justify-content-center py-4">
+                                <i class="bi bi-question-circle fs-1 mb-2"></i>
+                                <span>Ajuda</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Estilos adicionais para a navbar */
+    .navbar {
+        z-index: 1000;
+    }
+    
+    /* Estilo para os botões de acesso rápido */
+    .btn-outline-primary {
+        transition: all 0.3s;
+    }
+    
+    .btn-outline-primary:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %} 

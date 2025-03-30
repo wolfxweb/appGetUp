@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro de Usuário{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Cadastro de Usuário</h3>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+                
+                <form method="post" action="/register">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">
+                            Email* 
+                            <i class="bi bi-question-circle help-icon" data-bs-toggle="modal" data-bs-target="#emailHelpModal"></i>
+                        </label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="whatsapp" class="form-label">
+                            WhatsApp* 
+                            <i class="bi bi-question-circle help-icon" data-bs-toggle="modal" data-bs-target="#whatsappHelpModal"></i>
+                        </label>
+                        <input type="tel" class="form-control" id="whatsapp" name="whatsapp" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="activity_type" class="form-label">Tipo de Atividade*</label>
+                        <select class="form-select" id="activity_type" name="activity_type" required>
+                            <option value="" selected disabled>Selecione...</option>
+                            <option value="Serviços">Serviços</option>
+                            <option value="Comércio">Comércio</option>
+                            <option value="Indústria">Indústria</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Senha*</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="activation_key" class="form-label">
+                            Chave de Ativação (opcional)
+                            <i class="bi bi-question-circle help-icon" data-bs-toggle="modal" data-bs-target="#activationKeyHelpModal"></i>
+                        </label>
+                        <input type="text" class="form-control" id="activation_key" name="activation_key">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Data de Cadastro
+                            <i class="bi bi-question-circle help-icon" data-bs-toggle="modal" data-bs-target="#dateHelpModal"></i>
+                        </label>
+                        <input type="text" class="form-control" value="{{ now.strftime('%d/%m/%Y') }}" readonly disabled>
+                        <small class="text-muted">Data registrada automaticamente ao confirmar cadastro</small>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="terms_accepted" name="terms_accepted">
+                        <label class="form-check-label" for="terms_accepted">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Aceito os termos e condições</a>
+                        </label>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Cadastrar</button>
+                        <a href="/login" class="btn btn-outline-secondary">Já tem uma conta? Faça login</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Termos e Condições -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Termos e Condições</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <h5>Termos de Uso do Sistema</h5>
+                <p>Ao utilizar este sistema, você concorda com os seguintes termos:</p>
+                <ol>
+                    <li>Todas as informações fornecidas são verdadeiras e precisas.</li>
+                    <li>Você é responsável por manter a confidencialidade de suas credenciais de login.</li>
+                    <li>Você concorda em não usar o sistema para fins ilegais ou não autorizados.</li>
+                    <li>Seus dados pessoais serão processados de acordo com nossa política de privacidade.</li>
+                    <li>A empresa reserva o direito de modificar ou encerrar o serviço a qualquer momento.</li>
+                </ol>
+                <p>Estes termos podem ser atualizados periodicamente sem aviso prévio.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Ajuda para Email -->
+<div class="modal fade" id="emailHelpModal" tabindex="-1" aria-labelledby="emailHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="emailHelpModalLabel">Informações sobre Email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>O email será utilizado para:</p>
+                <ul>
+                    <li>Identificação no sistema</li>
+                    <li>Comunicações importantes sobre sua conta</li>
+                    <li>Recuperação de senha</li>
+                    <li>Notificações de segurança</li>
+                </ul>
+                <p class="text-info"><i class="bi bi-info-circle" style="color: var(--primary-color) !important;"></i> Certifique-se de fornecer um email válido e que você tenha acesso regular.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Ajuda para WhatsApp -->
+<div class="modal fade" id="whatsappHelpModal" tabindex="-1" aria-labelledby="whatsappHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="whatsappHelpModalLabel">Informações sobre WhatsApp</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Seu número de WhatsApp será utilizado para:</p>
+                <ul>
+                    <li>Contato rápido para assuntos urgentes</li>
+                    <li>Envio de notificações importantes sobre seu uso do sistema</li>
+                    <li>Confirmação de ações críticas na plataforma</li>
+                </ul>
+                <p class="text-info"><i class="bi bi-info-circle" style="color: var(--primary-color) !important;"></i> Formato recomendado: (XX) XXXXX-XXXX</p>
+                <p class="text-warning"><i class="bi bi-shield-lock" style="color: var(--primary-color) !important;"></i> Seu número não será compartilhado com terceiros.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Ajuda para Chave de Ativação -->
+<div class="modal fade" id="activationKeyHelpModal" tabindex="-1" aria-labelledby="activationKeyHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="activationKeyHelpModalLabel">Informações sobre Chave de Ativação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>A chave de ativação é um código opcional que pode ser utilizado para:</p>
+                <ul>
+                    <li>Desbloquear recursos premium na plataforma</li>
+                    <li>Ativar funcionalidades específicas para sua conta</li>
+                    <li>Integrar seu cadastro a um plano empresarial</li>
+                    <li>Validar sua participação em programas especiais</li>
+                </ul>
+                <p class="text-info"><i class="bi bi-info-circle" style="color: var(--primary-color) !important;"></i> Se você recebeu uma chave de ativação de um representante, insira-a neste campo.</p>
+                <p class="text-secondary">Este campo é opcional. Você pode criar sua conta e adicionar uma chave posteriormente.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Ajuda para Data de Cadastro -->
+<div class="modal fade" id="dateHelpModal" tabindex="-1" aria-labelledby="dateHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dateHelpModalLabel">Informações sobre Data de Cadastro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>A data de cadastro:</p>
+                <ul>
+                    <li>É registrada automaticamente no momento que você finaliza seu cadastro</li>
+                    <li>Será utilizada como referência para cálculos de tempo de uso da plataforma</li>
+                    <li>Pode influenciar em promoções e benefícios para usuários mais antigos</li>
+                    <li>É armazenada em nosso sistema para fins de auditoria e segurança</li>
+                </ul>
+                <p class="text-info"><i class="bi bi-info-circle" style="color: var(--primary-color) !important;"></i> Este campo não pode ser alterado manualmente.</p>
+                <p class="text-secondary">A data é registrada no formato DD/MM/AAAA conforme o fuso horário do servidor.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .help-icon {
+        cursor: pointer;
+        margin-left: 5px;
+        opacity: 0.8;
+        color: var(--primary-color);
+    }
+    
+    .help-icon:hover {
+        opacity: 1;
+    }
+</style>
+{% endblock %} 
