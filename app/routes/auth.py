@@ -73,13 +73,21 @@ async def register(
     if user_exists:
         return templates.TemplateResponse(
             "register.html", 
-            {"request": request, "error": "Email já cadastrado"}
+            {
+                "request": request, 
+                "error": "Email já cadastrado",
+                "now": datetime.now()  # Adicionar now ao contexto
+            }
         )
     
     if not terms_accepted:
         return templates.TemplateResponse(
             "register.html", 
-            {"request": request, "error": "Você deve aceitar os termos para continuar"}
+            {
+                "request": request, 
+                "error": "Você deve aceitar os termos para continuar",
+                "now": datetime.now()  # Adicionar now ao contexto
+            }
         )
     
     # Criar novo usuário

@@ -36,6 +36,7 @@ async def profile_page(
 async def update_profile(
     request: Request,
     action: str = Form(...),
+    email: str = Form(...),
     whatsapp: str = Form(...),
     activity_type: str = Form(...),
     activation_key: str = Form(None),
@@ -47,17 +48,6 @@ async def update_profile(
         current_user.registration_date = datetime.now()
 
     if action == "activate" and activation_key:
-        # Verificar se o usuário já tem uma chave ativa
-        if current_user.activation_key:
-            return templates.TemplateResponse(
-                "profile.html",
-                {
-                    "request": request,
-                    "user": current_user,
-                    "error_message": "Você já possui uma licença ativa"
-                }
-            )
-
         # Verificar se a chave existe e está disponível
         license = db.query(License).filter(
             License.activation_key == activation_key
@@ -85,7 +75,7 @@ async def update_profile(
 
         # Atualizar a licença
         license.status = "Utilizada"
-        license.user_email = current_user.email
+        license.activation_email = email
         license.activation_date = datetime.now()
 
         # Atualizar o usuário

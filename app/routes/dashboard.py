@@ -104,11 +104,19 @@ async def activate_license(
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    # Logs de depuração
+    logger.warning(f"License Activation - Current User: {current_user}")
+    logger.warning(f"License Activation - Current User Email: {current_user.email}")
+    logger.warning(f"License Activation - Activation Key: {activation_key}")
+
     # Verificar se a chave existe e está disponível
     license = db.query(License).filter(
         License.activation_key == activation_key,
         License.status == "Disponível"
     ).first()
+
+    # Logs de depuração da licença
+    logger.warning(f"License Activation - License Found: {license}")
 
     if not license:
         return templates.TemplateResponse(
@@ -122,12 +130,18 @@ async def activate_license(
 
     # Atualizar a licença
     license.status = "Utilizada"
-    license.user_email = current_user.email
+    license.activation_email = current_user.email
     license.activation_date = datetime.now()
+
+    # Logs de depuração após atualização
+    logger.warning(f"License Activation - Updated License Activation Email: {license.activation_email}")
 
     # Atualizar o usuário
     current_user.activation_key = activation_key
 
     db.commit()
+
+    # Log final
+    logger.warning(f"License Activation - Completed for User: {current_user.email}")
 
     return RedirectResponse(url="/dashboard", status_code=status.HTTP_303_SEE_OTHER) 

@@ -41,7 +41,8 @@
                     <form method="post" action="/profile/update">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" value="{{ user.email }}" disabled>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" disabled>
+                            <input type="hidden" name="email" value="{{ user.email }}">
                         </div>
                         <div class="mb-3">
                             <label for="whatsapp" class="form-label">WhatsApp</label>
@@ -59,7 +60,23 @@
                             <label for="registration_date" class="form-label">Data de Cadastro</label>
                             <input type="text" class="form-control" id="registration_date" value="{{ user.registration_date.strftime('%d/%m/%Y %H:%M') if user.registration_date else 'Não definida' }}" disabled>
                         </div>
-                        {% if not user.activation_key %}
+                        {% if user.activation_key %}
+                        <div class="mb-3">
+                            <label for="activation_key" class="form-label">Chave de Ativação</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="activation_key" name="activation_key" value="{{ user.activation_key }}" readonly>
+                                <button type="submit" name="action" value="activate" class="btn btn-warning">
+                                    <i class="bi bi-arrow-repeat"></i> Trocar Licença
+                                </button>
+                                <span class="input-group-text bg-success text-white">
+                                    <i class="bi bi-check-circle"></i> Ativada
+                                </span>
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Você pode trocar sua licença se necessário
+                            </div>
+                        </div>
+                        {% else %}
                         <div class="mb-3">
                             <label for="activation_key" class="form-label">Chave de Ativação</label>
                             <div class="input-group">
@@ -70,16 +87,6 @@
                             </div>
                             <div class="form-text">
                                 <i class="bi bi-info-circle"></i> Insira a chave de ativação fornecida pelo administrador
-                            </div>
-                        </div>
-                        {% else %}
-                        <div class="mb-3">
-                            <label for="activation_key" class="form-label">Chave de Ativação</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="activation_key" value="{{ user.activation_key }}" readonly>
-                                <span class="input-group-text bg-success text-white">
-                                    <i class="bi bi-check-circle"></i> Ativada
-                                </span>
                             </div>
                         </div>
                         {% endif %}

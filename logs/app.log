@@ -1,0 +1,14 @@
+2025-03-30 12:15:26,649 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x10a64fa00>
+2025-03-30 12:15:26,650 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 12:23:13,880 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x114e822c0>
+2025-03-30 12:23:13,880 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Administrador
+2025-03-30 12:23:13,889 - app.routes.dashboard - WARNING - Dashboard Statistics - Total Users: 4
+2025-03-30 12:23:13,889 - app.routes.dashboard - WARNING - Dashboard Statistics - Active Licenses: 4
+2025-03-30 12:23:13,889 - app.routes.dashboard - WARNING - Dashboard Statistics - Available Licenses: 6
+2025-03-30 12:25:23,443 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x106cacd00>
+2025-03-30 12:25:23,444 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Administrador
+2025-03-30 12:25:23,452 - app.routes.dashboard - WARNING - Dashboard Statistics - Total Users: 5
+2025-03-30 12:25:23,452 - app.routes.dashboard - WARNING - Dashboard Statistics - Active Licenses: 5
+2025-03-30 12:25:23,452 - app.routes.dashboard - WARNING - Dashboard Statistics - Available Licenses: 5
+2025-03-30 12:28:01,923 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x106c4d180>
+2025-03-30 12:28:01,923 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
