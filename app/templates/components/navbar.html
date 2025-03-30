@@ -1,7 +1,10 @@
 <!-- Navbar com largura total -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 w-100 position-absolute start-0">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/dashboard">Sistema</a>
+        <a class="navbar-brand" href="/dashboard">
+            <img src="/static/logo.png" alt="Logo" height="30" class="d-inline-block align-text-top">
+            AppGetUp
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -9,17 +12,34 @@
             <ul class="navbar-nav me-auto">
                 {% if user is defined %}
                 <li class="nav-item">
-                    <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="/dashboard">Dashboard</a>
+                    <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="/dashboard">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+                {% endif %}
+
+                {% if user is defined %}
+                <li class="nav-item">
+                    <a class="nav-link {% if active_page == 'profile' %}active{% endif %}" href="/profile">
+                        <i class="bi bi-person-circle"></i> Meu Perfil
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if active_page == 'basic_data' %}active{% endif %}" href="/basic-data">
+                        <i class="bi bi-graph-up"></i> Dados Básicos
+                    </a>
                 </li>
                 {% endif %}
 
                 {% if user is defined and user.access_level == "Administrador" %}
-                <li class="nav-item">
-                    <a class="nav-link {% if active_page == 'users' %}active{% endif %}" href="/admin/users">Gerenciar Usuários</a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link {% if active_page == 'licenses' %}active{% endif %}" href="/admin/licenses">Gerenciar Licenças</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {% if active_page in ['admin_licenses', 'admin_users'] %}active{% endif %}" href="#" id="navbarAdminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-shield-lock"></i> Administração
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarAdminDropdown">
+                        <li><a class="dropdown-item" href="/admin/licenses"><i class="bi bi-key"></i> Licenças</a></li>
+                        <li><a class="dropdown-item" href="/admin/users"><i class="bi bi-people"></i> Usuários</a></li>
+                    </ul>
                 </li>
                 <!--
                 <li class="nav-item">
@@ -29,9 +49,6 @@
                 {% endif %}
 
                 {% if user is defined %}
-                <li class="nav-item">
-                    <a class="nav-link {% if active_page == 'profile' %}active{% endif %}" href="/profile">Perfil</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link {% if active_page == 'settings' %}active{% endif %}" href="#">Configurações</a>
                 </li>

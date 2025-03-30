@@ -2,7 +2,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from app.routes import auth, dashboard, admin, profile
+from app.routes import auth, dashboard, admin, profile, basic_data
 from app.database.db import engine, Base
 from app.models.user import User
 from app.models.license import License
@@ -53,6 +53,7 @@ app.include_router(auth.router)
 app.include_router(dashboard.router)
 app.include_router(admin.router)
 app.include_router(profile.router)
+app.include_router(basic_data.router)
 
 if __name__ == "__main__":
     import uvicorn

@@ -60,68 +60,84 @@ async def register_page(request: Request):
 async def register(
     request: Request,
     response: Response,
+    name: str = Form(...),
     email: str = Form(...),
     whatsapp: str = Form(...),
     activity_type: str = Form(...),
     password: str = Form(...),
     activation_key: str = Form(None),
-    terms_accepted: bool = Form(False),
+    terms_accepted: bool = Form(...),
     db: Session = Depends(get_db)
 ):
-    # Verificar se o email já está em uso
-    user_exists = db.query(User).filter(User.email == email).first()
-    if user_exists:
+    try:
+        # Verificar se o email já está em uso
+        user_exists = db.query(User).filter(User.email == email).first()
+        if user_exists:
+            return templates.TemplateResponse(
+                "register.html", 
+                {
+                    "request": request, 
+                    "error": "Email já cadastrado",
+                    "now": datetime.now(),
+                    "user": None
+                }
+            )
+        
+        if not terms_accepted:
+            return templates.TemplateResponse(
+                "register.html", 
+                {
+                    "request": request, 
+                    "error": "Você deve aceitar os termos para continuar",
+                    "now": datetime.now(),
+                    "user": None
+                }
+            )
+        
+        # Criar novo usuário
+        hashed_password = get_password_hash(password)
+        new_user = User(
+            name=name,
+            email=email,
+            whatsapp=whatsapp,
+            activity_type=activity_type,
+            password=hashed_password,
+            activation_key=activation_key,
+            registration_date=datetime.now(),
+            terms_accepted=terms_accepted
+        )
+        
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+        
+        # Criar token de acesso
+        access_token = create_access_token(
+            data={"sub": email}
+        )
+        
+        # Configurar cookie com o token
+        response = RedirectResponse(url="/dashboard", status_code=status.HTTP_303_SEE_OTHER)
+        response.set_cookie(
+            key="access_token",
+            value=f"Bearer {access_token}",
+            httponly=True,
+            max_age=1800,
+            samesite="lax"
+        )
+        
+        return response
+        
+    except Exception as e:
         return templates.TemplateResponse(
-            "register.html", 
+            "register.html",
             {
-                "request": request, 
-                "error": "Email já cadastrado",
-                "now": datetime.now()  # Adicionar now ao contexto
+                "request": request,
+                "error": f"Erro ao criar conta: {str(e)}",
+                "now": datetime.now(),
+                "user": None
             }
         )
-    
-    if not terms_accepted:
-        return templates.TemplateResponse(
-            "register.html", 
-            {
-                "request": request, 
-                "error": "Você deve aceitar os termos para continuar",
-                "now": datetime.now()  # Adicionar now ao contexto
-            }
-        )
-    
-    # Criar novo usuário
-    hashed_password = get_password_hash(password)
-    new_user = User(
-        email=email,
-        whatsapp=whatsapp,
-        activity_type=activity_type,
-        password=hashed_password,
-        activation_key=activation_key,
-        registration_date=datetime.now(),
-        terms_accepted=terms_accepted
-    )
-    
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-    
-    # Criar token de acesso
-    access_token = create_access_token(
-        data={"sub": email}
-    )
-    
-    # Configurar cookie com o token
-    response = RedirectResponse(url="/dashboard", status_code=status.HTTP_303_SEE_OTHER)
-    response.set_cookie(
-        key="access_token",
-        value=f"Bearer {access_token}",
-        httponly=True,
-        max_age=1800,
-        samesite="lax"
-    )
-    
-    return response
 
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):

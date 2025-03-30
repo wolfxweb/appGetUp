@@ -16,6 +16,11 @@
                 
                 <form method="post" action="/register">
                     <div class="mb-3">
+                        <label for="name" class="form-label">Nome*</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
                         <label for="email" class="form-label">
                             Email* 
                             <i class="bi bi-question-circle help-icon" data-bs-toggle="modal" data-bs-target="#emailHelpModal"></i>
@@ -64,9 +69,9 @@
                     </div>
                     
                     <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="terms_accepted" name="terms_accepted">
+                        <input type="checkbox" class="form-check-input" id="terms_accepted" name="terms_accepted" required>
                         <label class="form-check-label" for="terms_accepted">
-                            <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Aceito os termos e condições</a>
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Aceito os termos e condições</a>*
                         </label>
                     </div>
                     
@@ -210,6 +215,85 @@
 </div>
 {% endblock %}
 
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const whatsappInput = document.getElementById('whatsapp');
+    
+    // Formatar WhatsApp
+    whatsappInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 11) {
+            if (value.length > 2) {
+                value = '(' + value.substring(0,2) + ') ' + value.substring(2);
+            }
+            if (value.length > 9) {
+                value = value.substring(0,10) + '-' + value.substring(10);
+            }
+            e.target.value = value;
+        }
+    });
+    
+    // Validação do formulário
+    form.addEventListener('submit', function(e) {
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const whatsapp = document.getElementById('whatsapp').value.trim();
+        const password = document.getElementById('password').value;
+        const terms = document.getElementById('terms_accepted').checked;
+        
+        let isValid = true;
+        let errorMessage = '';
+        
+        // Validar nome
+        if (name.length < 3) {
+            errorMessage = 'O nome deve ter pelo menos 3 caracteres.';
+            isValid = false;
+        }
+        
+        // Validar email
+        if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
+            errorMessage = 'Por favor, insira um email válido.';
+            isValid = false;
+        }
+        
+        // Validar WhatsApp
+        if (!whatsapp.match(/^\(\d{2}\) \d{5}-\d{4}$/)) {
+            errorMessage = 'Por favor, insira um número de WhatsApp válido.';
+            isValid = false;
+        }
+        
+        // Validar senha
+        if (password.length < 6) {
+            errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
+            isValid = false;
+        }
+        
+        // Validar termos
+        if (!terms) {
+            errorMessage = 'Você deve aceitar os termos e condições.';
+            isValid = false;
+        }
+        
+        if (!isValid) {
+            e.preventDefault();
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'alert alert-danger';
+            errorDiv.textContent = errorMessage;
+            
+            const existingError = form.querySelector('.alert');
+            if (existingError) {
+                existingError.remove();
+            }
+            
+            form.insertBefore(errorDiv, form.firstChild);
+        }
+    });
+});
+</script>
+{% endblock %}
+
 {% block extra_css %}
 <style>
     .help-icon {
@@ -221,6 +305,16 @@
     
     .help-icon:hover {
         opacity: 1;
+    }
+    
+    .form-label {
+        font-weight: 500;
+    }
+    
+    .required:after {
+        content: "*";
+        color: red;
+        margin-left: 3px;
     }
 </style>
 {% endblock %} 
