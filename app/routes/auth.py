@@ -10,6 +10,8 @@ from app.database.db import get_db
 from app.models.user import User
 from app.utils.auth import verify_password, get_password_hash, create_access_token, SECRET_KEY, ALGORITHM
 from app.utils.email import send_password_reset_email
+from app.models.basic_data import BasicData
+from app.models.basic_data_log import BasicDataLog
 
 router = APIRouter()
 
@@ -261,4 +263,53 @@ async def reset_password(
 async def logout():
     response = RedirectResponse(url="/login")
     response.delete_cookie("access_token")
-    return response 
+    return response
+
+@router.get("/edit/{data_id}", response_class=HTMLResponse)
+async def edit_basic_data_page(
+    request: Request,
+    data_id: int,
+    current_user = Depends(get_current_user),
+    db: Session = Depends(get_db),
+    page: int = 1,
+    per_page: int = 10
+):
+    # Buscar o registro específico
+    basic_data = db.query(BasicData).filter(
+        BasicData.id == data_id,
+        BasicData.user_id == current_user.id
+    ).first()
+
+    if not basic_data:
+        raise HTTPException(status_code=404, detail="Registro não encontrado")
+
+    # Buscar os logs com paginação
+    total_logs = db.query(BasicDataLog).filter(
+        BasicDataLog.basic_data_id == data_id
+    ).count()
+
+    logs = db.query(BasicDataLog).filter(
+        BasicDataLog.basic_data_id == data_id
+    ).order_by(
+        BasicDataLog.id.asc()
+    ).offset(
+        (page - 1) * per_page
+    ).limit(per_page).all()
+
+    # Calcular total de páginas
+    total_pages = (total_logs + per_page - 1) // per_page
+
+    return templates.TemplateResponse(
+        "basic_data_form.html",
+        {
+            "request": request,
+            "user": current_user,
+            "basic_data": basic_data,
+            "edit_mode": True,
+            "logs": logs,
+            "current_page": page,
+            "total_pages": total_pages,
+            "per_page": per_page,
+            "total_logs": total_logs
+        }
+    ) 

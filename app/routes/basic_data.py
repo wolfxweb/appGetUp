@@ -276,7 +276,9 @@ async def edit_basic_data_page(
     request: Request,
     data_id: int,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    page: int = 1,
+    per_page: int = 10
 ):
     # Buscar o registro específico
     basic_data = db.query(BasicData).filter(
@@ -287,13 +289,47 @@ async def edit_basic_data_page(
     if not basic_data:
         raise HTTPException(status_code=404, detail="Registro não encontrado")
 
+    # Log para arquivo
+    logger.info(f"Buscando logs para basic_data_id: {data_id}")
+
+    # Buscar os logs relacionados a este registro básico
+    logs = db.query(BasicDataLog).filter(
+        BasicDataLog.basic_data_id == data_id
+    ).order_by(
+        BasicDataLog.id.desc()
+    ).offset(
+        (page - 1) * per_page
+    ).limit(per_page).all()
+
+    # Log para arquivo com contagem de logs encontrados
+    logger.info(f"Logs encontrados: {len(logs)}")
+    
+    # Log detalhado de cada registro encontrado
+    for log in logs:
+        logger.info(f"Log ID: {log.id}, Descrição: {log.change_description}")
+
+    # Contar total de logs para paginação
+    total_logs = db.query(BasicDataLog).filter(
+        BasicDataLog.basic_data_id == data_id
+    ).count()
+
+    logger.info(f"Total de logs: {total_logs}, Páginas: {(total_logs + per_page - 1) // per_page}")
+
+    # Calcular total de páginas
+    total_pages = (total_logs + per_page - 1) // per_page
+
     return templates.TemplateResponse(
         "basic_data_form.html",
         {
             "request": request,
             "user": current_user,
             "basic_data": basic_data,
-            "edit_mode": True
+            "edit_mode": True,
+            "logs": logs,
+            "current_page": page,
+            "total_pages": total_pages,
+            "per_page": per_page,
+            "total_logs": total_logs
         }
     )
 
