@@ -77,6 +77,15 @@ def compare_and_log_changes(db: Session, old_data_dict: dict, new_data: dict) ->
     """Compara os dados antigos com os novos e retorna uma lista de alterações"""
     changes = []
     
+    # Configurar locale para PT-BR
+    try:
+        locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
+    except:
+        try:
+            locale.setlocale(locale.LC_ALL, 'Portuguese_Brazil.1252')
+        except:
+            pass  # Se falhar, continua sem formatação
+    
     # Mapeamento de campos para seus nomes amigáveis
     field_names = {
         'clients_served': 'Quantidade de Clientes Atendidos',
@@ -93,21 +102,37 @@ def compare_and_log_changes(db: Session, old_data_dict: dict, new_data: dict) ->
         'is_current': 'É o Atual'
     }
     
+    # Campos monetários que precisam de formatação
+    money_fields = ['sales_revenue', 'sales_expenses', 'input_product_expenses', 
+                    'fixed_costs', 'pro_labore', 'other_fixed_costs']
+    
     for field, new_value in new_data.items():
         if field not in old_data_dict:
             continue
             
-        old_value = old_data_dict[field]  # Acessando através do índice do dicionário
+        old_value = old_data_dict[field]
 
         # Comparar valores
         if isinstance(old_value, float) and isinstance(new_value, float):
             # Se os valores são iguais, continue para a próxima iteração
-            if abs(old_value - new_value) < 1e-9:  # Tolerância para flutuantes
+            if abs(old_value - new_value) < 1e-9:
                 continue
             
-            # Se os valores são diferentes, registra a mudança
-            changes.append(f"{field_names[field]} alterado de {old_value} para {new_value}")
-            logger.info(f"Alteração detectada: {field_names[field]} de {old_value} para {new_value}")
+            # Formatar valores monetários
+            if field in money_fields:
+                try:
+                    old_formatted = f"R$ {old_value:.2f}".replace('.', ',')
+                    new_formatted = f"R$ {new_value:.2f}".replace('.', ',')
+                    changes.append(f"{field_names[field]} alterado de {old_formatted} para {new_formatted}")
+                    logger.info(f"Alteração detectada: {field_names[field]} de {old_formatted} para {new_formatted}")
+                except:
+                    # Fallback caso a formatação falhe
+                    changes.append(f"{field_names[field]} alterado de {old_value} para {new_value}")
+                    logger.info(f"Alteração detectada: {field_names[field]} de {old_value} para {new_value}")
+            else:
+                # Para campos não monetários
+                changes.append(f"{field_names[field]} alterado de {old_value} para {new_value}")
+                logger.info(f"Alteração detectada: {field_names[field]} de {old_value} para {new_value}")
         else:
             # Comparar outros tipos
             if old_value != new_value:
