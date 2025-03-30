@@ -40,3 +40,57 @@
 2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
 2025-03-30 17:59:02,628 - app.routes.basic_data - INFO - Campo is_current atualizado para True
 2025-03-30 17:59:02,635 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 18:01:38,285 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 18:01:38,286 - app.routes.basic_data - INFO - Registro existente encontrado para 10/2025
+2025-03-30 18:01:38,286 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de 2.03 para 2.03
+2025-03-30 18:01:38,286 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de 2.01 para 2.01
+2025-03-30 18:01:38,286 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de 3.02 para 0.03
+2025-03-30 18:01:38,287 - app.routes.basic_data - INFO - Alteração detectada: Custos Fixos de None para 2.03
+2025-03-30 18:01:38,287 - app.routes.basic_data - INFO - Alteração detectada: Capacidade de Atendimento de ewrwqqw para 12
+2025-03-30 18:01:38,288 - app.routes.basic_data - INFO - Alterações detectadas: ['Faturamento com Vendas alterado de 2.03 para 2.03', 'Gastos com Vendas alterado de 2.01 para 2.01', 'Gastos com Insumos e Produtos alterado de 3.02 para 0.03', 'Custos Fixos alterado de None para 2.03', 'Capacidade de Atendimento alterado de ewrwqqw para 12']
+2025-03-30 18:01:38,288 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de 2.03 para 2.03
+2025-03-30 18:01:38,288 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de 2.01 para 2.01
+2025-03-30 18:01:38,288 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de 3.02 para 0.03
+2025-03-30 18:01:38,288 - app.routes.basic_data - INFO - Log adicionado: Custos Fixos alterado de None para 2.03
+2025-03-30 18:01:38,288 - app.routes.basic_data - INFO - Log adicionado: Capacidade de Atendimento alterado de ewrwqqw para 12
+2025-03-30 18:01:38,288 - app.routes.basic_data - INFO - Campo clients_served atualizado para 23
+2025-03-30 18:01:38,289 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 2.03
+2025-03-30 18:01:38,289 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 2.01
+2025-03-30 18:01:38,289 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.03
+2025-03-30 18:01:38,289 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 2.03
+2025-03-30 18:01:38,289 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 9.0
+2025-03-30 18:01:38,289 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 12
+2025-03-30 18:01:38,289 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 18:01:38,289 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 18:01:38,289 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 18:01:38,289 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 18:01:38,290 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-03-30 18:01:38,296 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 18:02:15,497 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-30 18:02:15,498 - app.routes.basic_data - INFO - Registro existente encontrado para 3/2025
+2025-03-30 18:02:15,498 - app.routes.basic_data - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 321 para 3123
+2025-03-30 18:02:15,498 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de 2.03 para 2.03
+2025-03-30 18:02:15,498 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de 21.03 para 102.03
+2025-03-30 18:02:15,499 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de 21.03 para 21.03
+2025-03-30 18:02:15,499 - app.routes.basic_data - INFO - Alteração detectada: Custos Fixos de None para 102.03
+2025-03-30 18:02:15,499 - app.routes.basic_data - INFO - Alteração detectada: Margem de Lucro Ideal de None para 312.0
+2025-03-30 18:02:15,499 - app.routes.basic_data - INFO - Alterações detectadas: ['Quantidade de Clientes Atendidos alterado de 321 para 3123', 'Faturamento com Vendas alterado de 2.03 para 2.03', 'Gastos com Vendas alterado de 21.03 para 102.03', 'Gastos com Insumos e Produtos alterado de 21.03 para 21.03', 'Custos Fixos alterado de None para 102.03', 'Margem de Lucro Ideal alterado de None para 312.0']
+2025-03-30 18:02:15,499 - app.routes.basic_data - INFO - Log adicionado: Quantidade de Clientes Atendidos alterado de 321 para 3123
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de 2.03 para 2.03
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de 21.03 para 102.03
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de 21.03 para 21.03
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Log adicionado: Custos Fixos alterado de None para 102.03
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Log adicionado: Margem de Lucro Ideal alterado de None para 312.0
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo clients_served atualizado para 3123
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 2.03
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 102.03
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 21.03
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 102.03
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 312.0
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 12312
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-30 18:02:15,500 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-30 18:02:15,509 - app.routes.basic_data - INFO - Dados salvos com sucesso
