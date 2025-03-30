@@ -3,48 +3,9 @@
 {% block title %}Meu Perfil{% endblock %}
 
 {% block content %}
-<!-- Navbar com largura total -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 w-100 position-absolute start-0">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/dashboard">Sistema</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/dashboard">Dashboard</a>
-                </li>
-                {% if user.access_level == "Administrador" %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/users">Gerenciar Usuários</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/licenses">Gerenciar Licenças</a>
-                </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link active" href="/profile">Perfil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Configurações</a>
-                </li>
-            </ul>
-            <div class="d-flex">
-                <span class="navbar-text me-3">
-                    Bem-vindo, {{ user.email }} 
-                    {% if user.access_level == "Administrador" %}
-                    <span class="badge bg-warning text-dark">Admin</span>
-                    {% endif %}
-                </span>
-                <a href="/logout" class="btn btn-outline-light">Sair</a>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<!-- Espaçador para a navbar -->
-<div style="height: 70px;"></div>
+{% with active_page='profile' %}
+{% include 'components/navbar.html' %}
+{% endwith %}
 
 <div class="container">
     <div class="row">
@@ -96,24 +57,32 @@
                         </div>
                         <div class="mb-3">
                             <label for="registration_date" class="form-label">Data de Cadastro</label>
-                            <input type="text" class="form-control" id="registration_date" value="{{ user.registration_date.strftime('%d/%m/%Y %H:%M') }}" disabled>
+                            <input type="text" class="form-control" id="registration_date" value="{{ user.registration_date.strftime('%d/%m/%Y %H:%M') if user.registration_date else 'Não definida' }}" disabled>
                         </div>
+                        {% if not user.activation_key %}
                         <div class="mb-3">
                             <label for="activation_key" class="form-label">Chave de Ativação</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" id="activation_key" name="activation_key" value="{{ user.activation_key }}" {% if user.activation_key %}readonly{% endif %}>
-                                {% if not user.activation_key %}
+                                <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" required>
                                 <button type="submit" name="action" value="activate" class="btn btn-success">
                                     <i class="bi bi-check-circle"></i> Ativar
                                 </button>
-                                {% endif %}
                             </div>
-                            {% if user.activation_key %}
-                            <div class="form-text text-success">
-                                <i class="bi bi-check-circle-fill"></i> Licença ativada
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Insira a chave de ativação fornecida pelo administrador
                             </div>
-                            {% endif %}
                         </div>
+                        {% else %}
+                        <div class="mb-3">
+                            <label for="activation_key" class="form-label">Chave de Ativação</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="activation_key" value="{{ user.activation_key }}" readonly>
+                                <span class="input-group-text bg-success text-white">
+                                    <i class="bi bi-check-circle"></i> Ativada
+                                </span>
+                            </div>
+                        </div>
+                        {% endif %}
                         <div class="d-grid">
                             <button type="submit" name="action" value="update" class="btn btn-primary">
                                 <i class="bi bi-check-circle"></i> Salvar Alterações

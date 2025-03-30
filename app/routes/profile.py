@@ -19,6 +19,11 @@ async def profile_page(
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    # Garantir que a data de registro esteja definida
+    if not current_user.registration_date:
+        current_user.registration_date = datetime.now()
+        db.commit()
+
     return templates.TemplateResponse(
         "profile.html",
         {
@@ -37,11 +42,25 @@ async def update_profile(
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    if action == "activate":
+    # Garantir que a data de registro esteja definida
+    if not current_user.registration_date:
+        current_user.registration_date = datetime.now()
+
+    if action == "activate" and activation_key:
+        # Verificar se o usuário já tem uma chave ativa
+        if current_user.activation_key:
+            return templates.TemplateResponse(
+                "profile.html",
+                {
+                    "request": request,
+                    "user": current_user,
+                    "error_message": "Você já possui uma licença ativa"
+                }
+            )
+
         # Verificar se a chave existe e está disponível
         license = db.query(License).filter(
-            License.activation_key == activation_key,
-            License.status == "Disponível"
+            License.activation_key == activation_key
         ).first()
 
         if not license:
@@ -50,7 +69,17 @@ async def update_profile(
                 {
                     "request": request,
                     "user": current_user,
-                    "error_message": "Chave de ativação inválida ou já utilizada"
+                    "error_message": "Chave de ativação não encontrada"
+                }
+            )
+
+        if license.status != "Disponível":
+            return templates.TemplateResponse(
+                "profile.html",
+                {
+                    "request": request,
+                    "user": current_user,
+                    "error_message": "Esta chave de ativação já foi utilizada"
                 }
             )
 
@@ -62,30 +91,49 @@ async def update_profile(
         # Atualizar o usuário
         current_user.activation_key = activation_key
 
-        db.commit()
-
-        return templates.TemplateResponse(
-            "profile.html",
-            {
-                "request": request,
-                "user": current_user,
-                "success_message": "Licença ativada com sucesso"
-            }
-        )
+        try:
+            db.commit()
+            return templates.TemplateResponse(
+                "profile.html",
+                {
+                    "request": request,
+                    "user": current_user,
+                    "success_message": "Licença ativada com sucesso!"
+                }
+            )
+        except Exception as e:
+            db.rollback()
+            return templates.TemplateResponse(
+                "profile.html",
+                {
+                    "request": request,
+                    "user": current_user,
+                    "error_message": "Erro ao ativar a licença. Tente novamente."
+                }
+            )
 
     elif action == "update":
         # Atualizar informações básicas
         current_user.whatsapp = whatsapp
         current_user.activity_type = activity_type
 
-        # Salvar alterações
-        db.commit()
-
-        return templates.TemplateResponse(
-            "profile.html",
-            {
-                "request": request,
-                "user": current_user,
-                "success_message": "Perfil atualizado com sucesso"
-            }
-        ) 
+        try:
+            db.commit()
+            return templates.TemplateResponse(
+                "profile.html",
+                {
+                    "request": request,
+                    "user": current_user,
+                    "success_message": "Perfil atualizado com sucesso!"
+                }
+            )
+        except Exception as e:
+            db.rollback()
+            return templates.TemplateResponse(
+                "profile.html",
+                {
+                    "request": request,
+                    "user": current_user,
+                    "error_message": "Erro ao atualizar o perfil. Tente novamente."
+                }
+            ) 

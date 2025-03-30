@@ -1,0 +1,58 @@
+<!-- Navbar com largura total -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4 w-100 position-absolute start-0">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/dashboard">Sistema</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                {% if user is defined %}
+                <li class="nav-item">
+                    <a class="nav-link {% if active_page == 'dashboard' %}active{% endif %}" href="/dashboard">Dashboard</a>
+                </li>
+                {% endif %}
+
+                {% if user is defined and user.access_level == "Administrador" %}
+                <li class="nav-item">
+                    <a class="nav-link {% if active_page == 'users' %}active{% endif %}" href="/admin/users">Gerenciar Usuários</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link {% if active_page == 'licenses' %}active{% endif %}" href="/admin/licenses">Gerenciar Licenças</a>
+                </li>
+                <!--
+                <li class="nav-item">
+                    <a class="nav-link {% if active_page == 'generate_license' %}active{% endif %}" href="/admin/generate-license">Gerar Licença</a>
+                </li>
+                -->
+                {% endif %}
+
+                {% if user is defined %}
+                <li class="nav-item">
+                    <a class="nav-link {% if active_page == 'profile' %}active{% endif %}" href="/profile">Perfil</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if active_page == 'settings' %}active{% endif %}" href="#">Configurações</a>
+                </li>
+                {% endif %}
+            </ul>
+            <div class="d-flex">
+                {% if user is defined %}
+                <span class="navbar-text me-3">
+                    Bem-vindo, {{ user.email }} 
+                    {% if user.access_level == "Administrador" %}
+                    <span class="badge bg-warning text-dark">Admin</span>
+                    {% endif %}
+                </span>
+                <a href="/logout" class="btn btn-outline-light">Sair</a>
+                {% else %}
+                <a href="/login" class="btn btn-outline-light">Entrar</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Espaçador para a navbar -->
+<div style="height: 70px;"></div> 

@@ -21,6 +21,7 @@ Este é um sistema de cadastro, login e recuperação de senha usando FastAPI, B
 2. Crie um ambiente virtual:
    ```
    python -m venv venv
+   python create_admin.py
    ```
 3. Ative o ambiente virtual:
    - Windows: `venv\Scripts\activate`

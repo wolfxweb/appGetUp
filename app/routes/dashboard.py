@@ -4,6 +4,7 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from datetime import datetime
+import logging
 
 from app.database.db import get_db
 from app.models.user import User
@@ -14,6 +15,8 @@ from app.utils.auth import SECRET_KEY, ALGORITHM, verify_password, get_password_
 router = APIRouter()
 
 templates = Jinja2Templates(directory="app/templates")
+
+logger = logging.getLogger(__name__)
 
 # Dependência para obter o usuário atual
 async def get_current_user(request: Request, db: Session = Depends(get_db)):
@@ -53,6 +56,10 @@ async def dashboard_page(
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    # Logs de depuração para verificar o usuário
+    logger.warning(f"Dashboard Access - User: {current_user}")
+    logger.warning(f"Dashboard Access - User Access Level: {current_user.access_level}")
+
     # Se o usuário não tiver uma chave de ativação, mostrar apenas a mensagem de ativação
     if not current_user.activation_key:
         return templates.TemplateResponse(
@@ -63,20 +70,31 @@ async def dashboard_page(
             }
         )
 
-    # Para usuários com licença ativa, mostrar as estatísticas
-    total_users = db.query(User).count()
-    active_licenses = db.query(License).filter(License.status == "Utilizada").count()
-    available_licenses = db.query(License).filter(License.status == "Disponível").count()
+    # Para administradores, mostrar as estatísticas
+    template_context = {
+        "request": request,
+        "user": current_user
+    }
 
-    return templates.TemplateResponse(
-        "dashboard.html",
-        {
-            "request": request,
-            "user": current_user,
+    if current_user.access_level in ["Administrador", "Administrador"]:
+        total_users = db.query(User).count()
+        active_licenses = db.query(License).filter(License.status == "Utilizada").count()
+        available_licenses = db.query(License).filter(License.status == "Disponível").count()
+
+        # Logs de depuração
+        logger.warning(f"Dashboard Statistics - Total Users: {total_users}")
+        logger.warning(f"Dashboard Statistics - Active Licenses: {active_licenses}")
+        logger.warning(f"Dashboard Statistics - Available Licenses: {available_licenses}")
+
+        template_context.update({
             "total_users": total_users,
             "active_licenses": active_licenses,
             "available_licenses": available_licenses
-        }
+        })
+
+    return templates.TemplateResponse(
+        "dashboard.html",
+        template_context
     )
 
 @router.post("/activate-license")

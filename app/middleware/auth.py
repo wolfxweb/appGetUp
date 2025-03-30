@@ -31,7 +31,11 @@ async def check_license_middleware(request: Request, call_next):
         if not current_user:
             return RedirectResponse(url="/login", status_code=status.HTTP_303_SEE_OTHER)
 
-        # Verificar se o usuário tem uma chave de ativação
+        # Se o usuário for admin, permitir acesso sem verificar chave de ativação
+        if current_user.access_level == "Administrador":
+            return await call_next(request)
+
+        # Para usuários não-admin, verificar se tem chave de ativação
         if not current_user.activation_key:
             return RedirectResponse(url="/profile", status_code=status.HTTP_303_SEE_OTHER)
 

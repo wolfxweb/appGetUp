@@ -50,7 +50,11 @@ async def get_current_user(request: Request, db: Session = Depends(get_db)):
 
 @router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
-    return templates.TemplateResponse("register.html", {"request": request, "now": datetime.now()})
+    return templates.TemplateResponse("register.html", {
+        "request": request,
+        "user": None,  # Explicitamente passar None para o usuário
+        "now": datetime.now()
+    })
 
 @router.post("/register")
 async def register(
@@ -113,7 +117,10 @@ async def register(
 
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
-    return templates.TemplateResponse("login.html", {"request": request})
+    return templates.TemplateResponse("login.html", {
+        "request": request,
+        "user": None  # Explicitamente passar None para o usuário
+    })
 
 @router.post("/login")
 async def login(

@@ -1,3 +1,4 @@
+import logging
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -6,6 +7,12 @@ from app.database.db import engine, Base
 from app.models.user import User
 from app.models.license import License
 from app.middleware.auth import check_license_middleware
+
+# Configurar logging
+logging.basicConfig(
+    level=logging.WARNING,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 # Criar as tabelas no banco de dados
 Base.metadata.create_all(bind=engine)
