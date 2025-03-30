@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status, Form
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 from datetime import datetime
@@ -20,19 +20,35 @@ async def basic_data_page(
     current_user = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    # Buscar dados básicos do usuário
-    basic_data = db.query(BasicData).filter(
-        BasicData.user_id == current_user.id
-    ).order_by(BasicData.year.desc(), BasicData.month.desc()).all()
+    try:
+        # Buscar dados básicos do usuário com ordenação correta
+        basic_data = db.query(BasicData).filter(
+            BasicData.user_id == current_user.id
+        ).order_by(
+            BasicData.year.desc(),
+            BasicData.month.desc()
+        ).all()
 
-    return templates.TemplateResponse(
-        "basic_data.html",
-        {
-            "request": request,
-            "user": current_user,
-            "basic_data": basic_data
-        }
-    )
+        return templates.TemplateResponse(
+            "basic_data.html",
+            {
+                "request": request,
+                "user": current_user,
+                "basic_data": basic_data
+            }
+        )
+    except Exception as e:
+        # Log do erro para debug
+        print(f"Erro ao buscar dados básicos: {str(e)}")
+        return templates.TemplateResponse(
+            "basic_data.html",
+            {
+                "request": request,
+                "user": current_user,
+                "basic_data": [],
+                "error_message": "Erro ao carregar os dados básicos"
+            }
+        )
 
 @router.get("/new", response_class=HTMLResponse)
 async def new_basic_data_page(
@@ -79,26 +95,10 @@ async def save_basic_data(
     service_capacity: str = Form(None),
     pro_labore: float = Form(None),
     work_hours_per_week: float = Form(None),
+    other_fixed_costs: float = Form(None),
+    ideal_service_profit_margin: float = Form(None),
     confirm_update: bool = Form(False)
 ):
-    # Verificar o mês e ano
-    now = datetime.now()
-    current_month = now.month
-    current_year = now.year
-
-    # Verificar se o mês selecionado é válido
-    if month > current_month or year > current_year:
-        return templates.TemplateResponse(
-            "basic_data_form.html",
-            {
-                "request": request,
-                "user": current_user,
-                "error_message": "Não é possível cadastrar dados para meses futuros.",
-                "current_month": current_month,
-                "current_year": current_year
-            }
-        )
-
     # Verificar se já existe um registro para o mês
     existing_data = db.query(BasicData).filter(
         BasicData.user_id == current_user.id,
@@ -125,9 +125,11 @@ async def save_basic_data(
                 "service_capacity": service_capacity,
                 "pro_labore": pro_labore,
                 "work_hours_per_week": work_hours_per_week,
+                "other_fixed_costs": other_fixed_costs,
+                "ideal_service_profit_margin": ideal_service_profit_margin,
                 "show_confirm": True,
-                "current_month": current_month,
-                "current_year": current_year
+                "current_month": month,
+                "current_year": year
             }
         )
 
@@ -159,6 +161,8 @@ async def save_basic_data(
     elif current_user.activity_type == "Serviços":
         basic_data.pro_labore = pro_labore
         basic_data.work_hours_per_week = work_hours_per_week
+        basic_data.other_fixed_costs = other_fixed_costs
+        basic_data.ideal_service_profit_margin = ideal_service_profit_margin
 
     try:
         db.commit()
@@ -174,8 +178,21 @@ async def save_basic_data(
                 "request": request,
                 "user": current_user,
                 "error_message": f"Erro ao salvar dados: {str(e)}",
-                "current_month": current_month,
-                "current_year": current_year
+                "month": month,
+                "year": year,
+                "clients_served": clients_served,
+                "sales_revenue": sales_revenue,
+                "sales_expenses": sales_expenses,
+                "input_product_expenses": input_product_expenses,
+                "fixed_costs": fixed_costs,
+                "ideal_profit_margin": ideal_profit_margin,
+                "service_capacity": service_capacity,
+                "pro_labore": pro_labore,
+                "work_hours_per_week": work_hours_per_week,
+                "other_fixed_costs": other_fixed_costs,
+                "ideal_service_profit_margin": ideal_service_profit_margin,
+                "current_month": month,
+                "current_year": year
             }
         )
 
@@ -240,4 +257,20 @@ async def delete_basic_data(
         return RedirectResponse(
             url="/basic-data?error_message=Erro ao excluir registro", 
             status_code=status.HTTP_303_SEE_OTHER
-        ) 
+        )
+
+@router.get("/check/{year}/{month}")
+async def check_basic_data_exists(
+    year: int,
+    month: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """Verifica se já existem dados básicos para o mês e ano especificados"""
+    existing_data = db.query(BasicData).filter(
+        BasicData.user_id == current_user.id,
+        BasicData.year == year,
+        BasicData.month == month
+    ).first()
+    
+    return {"exists": existing_data is not None} 

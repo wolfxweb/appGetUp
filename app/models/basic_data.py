@@ -25,6 +25,10 @@ class BasicData(Base):
     pro_labore = Column(Float, nullable=True)
     work_hours_per_week = Column(Float, nullable=True)
     
+    # Novos campos para Serviços
+    other_fixed_costs = Column(Float, nullable=True)
+    ideal_service_profit_margin = Column(Float, nullable=True)
+    
     # Campos de controle
     created_at = Column(DateTime, default=datetime.now)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)

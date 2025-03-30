@@ -43,6 +43,14 @@
                                     <th>Clientes Atendidos</th>
                                     <th>Faturamento</th>
                                     <th>Gastos com Vendas</th>
+                                    {% if user.activity_type == 'Serviços' %}
+                                    <th>Pró-labore</th>
+                                    <th>Demais Custos Fixos</th>
+                                    <th>Margem de Lucro Ideal</th>
+                                    {% elif user.activity_type in ['Comércio', 'Indústria'] %}
+                                    <th>Custos Fixos</th>
+                                    <th>Margem de Lucro Ideal</th>
+                                    {% endif %}
                                     <th>Ações</th>
                                 </tr>
                             </thead>
@@ -56,6 +64,14 @@
                                     <td>{{ data.clients_served }}</td>
                                     <td>R$ {{ "{:,.2f}".format(data.sales_revenue) }}</td>
                                     <td>R$ {{ "{:,.2f}".format(data.sales_expenses) }}</td>
+                                    {% if user.activity_type == 'Serviços' %}
+                                    <td>R$ {{ "{:,.2f}".format(data.pro_labore) if data.pro_labore is not none else 'N/A' }}</td>
+                                    <td>R$ {{ "{:,.2f}".format(data.other_fixed_costs) if data.other_fixed_costs is not none else 'N/A' }}</td>
+                                    <td>{{ "{:.2f}%".format(data.ideal_service_profit_margin) if data.ideal_service_profit_margin is not none else 'N/A' }}</td>
+                                    {% elif user.activity_type in ['Comércio', 'Indústria'] %}
+                                    <td>R$ {{ "{:,.2f}".format(data.fixed_costs) if data.fixed_costs is not none else 'N/A' }}</td>
+                                    <td>{{ "{:.2f}%".format(data.ideal_profit_margin) if data.ideal_profit_margin is not none else 'N/A' }}</td>
+                                    {% endif %}
                                     <td>
                                         <div class="btn-group" role="group">
                                             <a href="/basic-data/edit/{{ data.id }}" class="btn btn-sm btn-outline-primary">
