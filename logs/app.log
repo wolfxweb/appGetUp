@@ -105,3 +105,23 @@
 2025-03-30 16:42:32,954 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
 2025-03-30 16:42:32,955 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
 2025-03-30 16:42:32,961 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 3 (mês 8/2025) está marcado como atual: True
+2025-03-30 16:55:58,952 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
+2025-03-30 16:55:58,952 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
+2025-03-30 16:55:58,964 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
+2025-03-30 16:56:09,925 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
+2025-03-30 16:56:09,926 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
+2025-03-30 16:56:09,935 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
+2025-03-30 17:04:11,249 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x105aef070>
+2025-03-30 17:04:11,249 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 17:04:11,282 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x106384220>
+2025-03-30 17:04:11,282 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 17:04:21,205 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
+2025-03-30 17:04:21,205 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
+2025-03-30 17:04:21,214 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
+2025-03-30 17:12:02,201 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: false, convertido para: False
+2025-03-30 17:12:02,217 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 4 (mês 3/2025) está marcado como atual: False
+2025-03-30 17:14:42,711 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
+2025-03-30 17:14:42,712 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
+2025-03-30 17:14:42,724 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True
+2025-03-30 17:15:00,324 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: false, convertido para: False
+2025-03-30 17:15:00,326 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 2 (mês 10/2025) está marcado como atual: False
