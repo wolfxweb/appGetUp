@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime, Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database.db import Base
@@ -28,6 +28,9 @@ class BasicData(Base):
     # Novos campos para Serviços
     other_fixed_costs = Column(Float, nullable=True)
     ideal_service_profit_margin = Column(Float, nullable=True)
+    
+    # Campo para indicar se é o registro atual
+    is_current = Column(Boolean, nullable=True)
     
     # Campos de controle
     created_at = Column(DateTime, default=datetime.now)

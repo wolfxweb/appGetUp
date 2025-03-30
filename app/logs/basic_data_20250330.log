@@ -23,10 +23,6 @@
 2025-03-30 16:05:49,245 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":7,"year":2025,"clients_served":23,"sales_revenue":2.03,"sales_expenses":3.02,"input_product_expenses":2.03,"fixed_costs":3.02,"ideal_profit_margin":32.0,"service_capacity":"23","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
 2025-03-30 16:05:49,246 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 7/2025
 2025-03-30 16:05:49,246 - app.routes.basic_data - ERROR - Erro ao salvar dados: 'is_current' is an invalid keyword argument for BasicData
-2025-03-30 16:05:51,632 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1049cada0>
-2025-03-30 16:05:51,632 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
-2025-03-30 16:05:51,668 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x10521ec20>
-2025-03-30 16:05:51,668 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
 2025-03-30 16:06:04,584 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
 2025-03-30 16:06:04,584 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
 2025-03-30 16:06:04,585 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":12,"year":2025,"clients_served":123,"sales_revenue":1.02,"sales_expenses":2.01,"input_product_expenses":1.02,"fixed_costs":1.02,"ideal_profit_margin":12.0,"service_capacity":"32","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
@@ -38,10 +34,6 @@
 2025-03-30 16:06:25,442 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":12,"year":2025,"clients_served":123,"sales_revenue":3.12,"sales_expenses":21.03,"input_product_expenses":3.12,"fixed_costs":21.03,"ideal_profit_margin":12.0,"service_capacity":"23","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
 2025-03-30 16:06:25,443 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 12/2025
 2025-03-30 16:06:25,443 - app.routes.basic_data - ERROR - Erro ao salvar dados: 'is_current' is an invalid keyword argument for BasicData
-2025-03-30 16:07:40,388 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x107f730d0>
-2025-03-30 16:07:40,389 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
-2025-03-30 16:07:40,437 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x107fff2b0>
-2025-03-30 16:07:40,437 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
 2025-03-30 16:07:57,312 - app.routes.basic_data - INFO - Iniciando o salvamento de dados básicos.
 2025-03-30 16:07:57,313 - app.routes.basic_data - INFO - Valor de is_current recebido: true, convertido para: True
 2025-03-30 16:07:57,314 - app.routes.basic_data - INFO - Dados recebidos para salvar: {"month":12,"year":2025,"clients_served":3213,"sales_revenue":0.21,"sales_expenses":31.02,"input_product_expenses":21.03,"fixed_costs":2.03,"ideal_profit_margin":12.0,"service_capacity":"32","pro_labore":null,"work_hours_per_week":null,"other_fixed_costs":null,"ideal_service_profit_margin":null,"is_current":true}
@@ -77,10 +69,6 @@
 2025-03-30 16:17:41,464 - app.routes.basic_data - INFO - Criando novo registro para mês/ano 3/2025
 2025-03-30 16:17:41,464 - app.routes.basic_data - INFO - Valor sendo salvo no banco: True
 2025-03-30 16:17:41,466 - app.routes.basic_data - INFO - Dados salvos com sucesso!
-2025-03-30 16:17:44,198 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x111219ae0>
-2025-03-30 16:17:44,199 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
-2025-03-30 16:17:44,245 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x111353dc0>
-2025-03-30 16:17:44,245 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
 2025-03-30 16:18:09,941 - app.routes.basic_data - INFO - Valor de is_current recebido do formulário: true, convertido para: True
 2025-03-30 16:18:09,942 - app.routes.basic_data - INFO - Definindo is_current=False para todos os registros do usuário 2
 2025-03-30 16:18:09,955 - app.routes.basic_data - INFO - Dados salvos com sucesso. Registro 1 (mês 12/2025) está marcado como atual: True

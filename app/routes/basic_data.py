@@ -6,6 +6,8 @@ from datetime import datetime
 import calendar
 from pydantic import BaseModel, validator, ValidationError
 from typing import Optional
+import logging
+import os
 
 from app.database.db import get_db
 from app.models.user import User
@@ -15,6 +17,28 @@ from app.routes.auth import get_current_user
 router = APIRouter(prefix="/basic-data")
 
 templates = Jinja2Templates(directory="app/templates")
+
+# Criar a pasta logs se não existir
+if not os.path.exists('app/logs'):
+    os.makedirs('app/logs')
+
+# Configuração do logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+
+# Configurar o formato do log
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+# Configurar o handler para arquivo
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
+# Configurar o handler para console
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
 
 class BasicDataInput(BaseModel):
     month: int
@@ -30,7 +54,7 @@ class BasicDataInput(BaseModel):
     work_hours_per_week: Optional[float] = None
     other_fixed_costs: Optional[float] = None
     ideal_service_profit_margin: Optional[float] = None
-
+    is_current: Optional[bool] = None
     @validator('sales_revenue', 'sales_expenses', 'input_product_expenses', 'fixed_costs', 'pro_labore', 'other_fixed_costs', pre=True)
     def convert_string_to_float(cls, v):
         if isinstance(v, str):
@@ -130,9 +154,23 @@ async def save_basic_data(
     work_hours_per_week: float = Form(None),
     other_fixed_costs: str = Form(None),
     ideal_service_profit_margin: float = Form(None),
+    is_current: str = Form(False),
     confirm_update: bool = Form(False)
 ):
     try:
+        # Converter is_current de string para booleano
+        is_current_bool = is_current.lower() == 'true'
+        
+        # Log do valor recebido para debug
+        logger.info(f"Valor de is_current recebido do formulário: {is_current}, convertido para: {is_current_bool}")
+        
+        # Se o novo registro vai ser marcado como atual, atualizar todos os registros do usuário antes
+        if is_current_bool:
+            logger.info(f"Definindo is_current=False para todos os registros do usuário {current_user.id}")
+            db.query(BasicData).filter(
+                BasicData.user_id == current_user.id
+            ).update({"is_current": False})
+        
         # Criar o modelo Pydantic com os dados recebidos
         data = BasicDataInput(
             month=month,
@@ -147,7 +185,8 @@ async def save_basic_data(
             pro_labore=pro_labore,
             work_hours_per_week=work_hours_per_week,
             other_fixed_costs=other_fixed_costs,
-            ideal_service_profit_margin=ideal_service_profit_margin
+            ideal_service_profit_margin=ideal_service_profit_margin,
+            is_current=is_current_bool
         )
 
         # Verificar se já existe um registro para o mês/ano
@@ -175,6 +214,7 @@ async def save_basic_data(
         basic_data.sales_revenue = data.sales_revenue
         basic_data.sales_expenses = data.sales_expenses
         basic_data.input_product_expenses = data.input_product_expenses
+        basic_data.is_current = data.is_current
 
         # Atualizar campos específicos baseados no tipo de atividade
         if current_user.activity_type in ["Comércio", "Indústria"]:
@@ -188,13 +228,16 @@ async def save_basic_data(
             basic_data.ideal_service_profit_margin = data.ideal_service_profit_margin
 
         try:
+            # Comitar as alterações
             db.commit()
+            logger.info(f"Dados salvos com sucesso. Registro {basic_data.id} (mês {basic_data.month}/{basic_data.year}) está marcado como atual: {basic_data.is_current}")
             return RedirectResponse(
                 url="/basic-data", 
                 status_code=status.HTTP_303_SEE_OTHER
             )
         except Exception as e:
             db.rollback()
+            logger.error(f"Erro ao salvar dados: {str(e)}")
             return templates.TemplateResponse(
                 "basic_data_form.html",
                 {
@@ -214,11 +257,13 @@ async def save_basic_data(
                     "work_hours_per_week": data.work_hours_per_week,
                     "other_fixed_costs": data.other_fixed_costs,
                     "ideal_service_profit_margin": data.ideal_service_profit_margin,
+                    "is_current": is_current,
                     "current_month": data.month,
                     "current_year": data.year
                 }
             )
     except ValidationError as e:
+        logger.error(f"Erro de validação: {str(e)}")
         return templates.TemplateResponse(
             "basic_data_form.html",
             {
@@ -238,6 +283,7 @@ async def save_basic_data(
                 "work_hours_per_week": work_hours_per_week,
                 "other_fixed_costs": other_fixed_costs,
                 "ideal_service_profit_margin": ideal_service_profit_margin,
+                "is_current": is_current,
                 "current_month": month,
                 "current_year": year
             }
