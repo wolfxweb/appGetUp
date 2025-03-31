@@ -4431,3 +4431,39 @@
 2025-03-30 20:54:34,868 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
 2025-03-30 20:54:34,871 - app.routes.basic_data - INFO - Criando novo registro
 2025-03-30 20:54:34,876 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-30 20:54:57,504 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x108129f60>
+2025-03-30 20:54:57,504 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:54:57,536 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1080e1b10>
+2025-03-30 20:54:57,536 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:55:09,903 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x10812a4a0>
+2025-03-30 20:55:09,903 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:55:09,959 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1080e3400>
+2025-03-30 20:55:09,960 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:55:11,884 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1080e10f0>
+2025-03-30 20:55:11,884 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:55:11,920 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x108128250>
+2025-03-30 20:55:11,922 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:55:15,119 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1080e3e50>
+2025-03-30 20:55:15,120 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:55:15,153 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1080e30d0>
+2025-03-30 20:55:15,153 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:55:17,297 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1080e1c00>
+2025-03-30 20:55:17,298 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:55:17,323 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1080e2f50>
+2025-03-30 20:55:17,324 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:55:47,782 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:55:47,783 - app.routes.basic_data - INFO - Logs encontrados: 3
+2025-03-30 20:55:47,783 - app.routes.basic_data - INFO - Log ID: 3, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:55:47,784 - app.routes.basic_data - INFO - Log ID: 2, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:55:47,784 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Margem de Lucro Ideal alterado de 2.0 para 33.0
+2025-03-30 20:55:47,785 - app.routes.basic_data - INFO - Total de logs: 3, Páginas: 1
+2025-03-30 20:55:47,847 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-30 20:55:47,847 - app.routes.basic_data - INFO - Logs encontrados: 3
+2025-03-30 20:55:47,847 - app.routes.basic_data - INFO - Log ID: 3, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:55:47,847 - app.routes.basic_data - INFO - Log ID: 2, Descrição: É o Atual alterado de Não para Sim
+2025-03-30 20:55:47,847 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Margem de Lucro Ideal alterado de 2.0 para 33.0
+2025-03-30 20:55:47,848 - app.routes.basic_data - INFO - Total de logs: 3, Páginas: 1
+2025-03-30 20:56:16,933 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x108128f70>
+2025-03-30 20:56:16,933 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-30 20:56:16,958 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x10812b790>
+2025-03-30 20:56:16,958 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
