@@ -27,8 +27,8 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-
-    <!-- Removendo a div container para permitir elementos de largura total -->
+    
+    <!-- Conteúdo Principal -->
     {% block content %}{% endblock %}
 
     <!-- Bootstrap 5 JS Bundle com Popper -->
@@ -36,6 +36,6 @@
     
     <!-- Script Personalizado -->
     <script src="{{ url_for('static', path='/js/script.js') }}"></script>
-    {% block extra_js %}{% endblock %}
+    {% block scripts %}{% endblock %}
 </body>
 </html> 

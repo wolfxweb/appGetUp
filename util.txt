@@ -9,3 +9,6 @@ kill -9 $(lsof -t -i:8000) 2>/dev/null || true
 
 # Então inicie a aplicação
 python app/main.py
+
+cd /Users/wolfx/Documents/appGetUp
+python -m uvicorn app.main:app --reload

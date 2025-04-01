@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+
+{% block title %}Diagnóstico - GetUp Gestão{% endblock %}
+
+{% block content %}
+    {% include "components/navbar.html" %}
+    <div class="container-fluid py-4">
+        <!-- Select Box -->
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos</label>
+                    <select class="form-select" id="basicDataSelect" >
+                        {% for data in basic_data_list %}
+                        <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
+                            {{ data.month }}/{{ data.year }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela de Dados Básicos -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Dados Básicos</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Clientes Atendidos</th>
+                                        <th>Receita de Vendas</th>
+                                        <th>Despesas de Vendas</th>
+                                        <th>Custos Fixos</th>
+                                        <th>Despesas Operacionais</th>
+                                        <th>Despesas Financeiras</th>
+                                        <th>Impostos</th>
+                                        <th>Outras Despesas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td id="clientsServed">-</td>
+                                        <td id="salesRevenue">-</td>
+                                        <td id="salesExpenses">-</td>
+                                        <td id="fixedCosts">-</td>
+                                        <td id="operationalExpenses">-</td>
+                                        <td id="financialExpenses">-</td>
+                                        <td id="taxes">-</td>
+                                        <td id="otherExpenses">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gráficos e Métricas -->
+        <div class="row">
+            <!-- Gráfico de Barras -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Custos e Faturamento</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="costsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Métricas -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Métricas Financeiras</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Margem
+                                <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="margem" readonly>
+                                <span class="input-group-text" id="margemPercentual"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Ticket Médio
+                                <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#ticketMedioModal" style="cursor: pointer;"></i>
+                            </label>
+                            <input type="text" class="form-control" id="ticketMedio" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Margem de Contribuição
+                                <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemContribuicaoModal" style="cursor: pointer;"></i>
+                            </label>
+                            <input type="text" class="form-control" id="margemContribuicao" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Produtividade
+                                <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#produtividadeModal" style="cursor: pointer;"></i>
+                            </label>
+                            <input type="text" class="form-control" id="produtividade" readonly>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Ponto de Equilíbrio
+                                <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#pontoEquilibrioModal" style="cursor: pointer;"></i>
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="pontoEquilibrio" readonly>
+                                <span class="input-group-text" id="pontoEquilibrioPercentual"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modais de Ajuste -->
+    <!-- Modal Margem -->
+    <div class="modal fade" id="margemModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajuste de Margem</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Fórmula</label>
+                        <input type="text" class="form-control" value="(Receita - Custos) / Receita" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ticket Médio -->
+    <div class="modal fade" id="ticketMedioModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajuste de Ticket Médio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Fórmula</label>
+                        <input type="text" class="form-control" value="Receita / Clientes Atendidos" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Margem de Contribuição -->
+    <div class="modal fade" id="margemContribuicaoModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajuste de Margem de Contribuição</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Fórmula</label>
+                        <input type="text" class="form-control" value="(Receita - Custos Variáveis) / Receita" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Produtividade -->
+    <div class="modal fade" id="produtividadeModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajuste de Produtividade</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Fórmula</label>
+                        <input type="text" class="form-control" value="Receita / Custos" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ponto de Equilíbrio -->
+    <div class="modal fade" id="pontoEquilibrioModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajuste de Ponto de Equilíbrio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Fórmula</label>
+                        <input type="text" class="form-control" value="Custos Fixos / (1 - Custos Variáveis/Receita)" readonly>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+document.getElementById('basicDataSelect').addEventListener('change', function() {
+    const basicDataId = this.value;
+    console.log("ID selecionado:", basicDataId);
+    
+    // URL correta com o prefixo /diagnostico/
+    fetch(`/diagnostico/api/basic-data/${basicDataId}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Dados não encontrados');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("Dados recebidos:", data);
+            // Atualizar a tabela com os dados
+            document.getElementById('clientsServed').textContent = data.clients_served;
+            document.getElementById('salesRevenue').textContent = `R$ ${data.sales_revenue.toFixed(2)}`;
+            document.getElementById('salesExpenses').textContent = `R$ ${data.sales_expenses.toFixed(2)}`;
+            document.getElementById('fixedCosts').textContent = `R$ ${data.fixed_costs.toFixed(2)}`;
+            document.getElementById('operationalExpenses').textContent = `R$ ${data.operational_expenses.toFixed(2)}`;
+            document.getElementById('financialExpenses').textContent = `R$ ${data.financial_expenses.toFixed(2)}`;
+            document.getElementById('taxes').textContent = `R$ ${data.taxes.toFixed(2)}`;
+            document.getElementById('otherExpenses').textContent = `R$ ${data.other_expenses.toFixed(2)}`;
+        })
+        .catch(error => {
+            console.error('Erro ao carregar dados:', error);
+            alert('Erro ao carregar os dados. Por favor, tente novamente.');
+        });
+});
+    
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar o gráfico
+    const ctx = document.getElementById('costsChart').getContext('2d');
+    const costsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Custos', 'Faturamento'],
+            datasets: [{
+                data: [0, 0],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+
+  
+});
+</script>
+{% endblock %} 
