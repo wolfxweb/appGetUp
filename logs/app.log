@@ -6040,3 +6040,216 @@ FROM basic_data
 WHERE basic_data.id = ? AND basic_data.user_id = ?
 2025-03-31 21:04:05,096 - sqlalchemy.engine.Engine - INFO - [cached since 8.332s ago] (5, 2)
 2025-03-31 21:04:05,097 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:30,672 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:30,673 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:07:30,673 - sqlalchemy.engine.Engine - INFO - [cached since 216s ago] (2,)
+2025-03-31 21:07:30,676 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:30,721 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:30,721 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:07:30,721 - sqlalchemy.engine.Engine - INFO - [cached since 216.1s ago] (2,)
+2025-03-31 21:07:30,722 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:30,738 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:30,738 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:07:30,738 - sqlalchemy.engine.Engine - INFO - [cached since 214s ago] (5, 2)
+2025-03-31 21:07:30,739 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:35,517 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:35,517 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:07:35,518 - sqlalchemy.engine.Engine - INFO - [cached since 218.8s ago] (4, 2)
+2025-03-31 21:07:35,519 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:39,689 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:39,691 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:07:39,691 - sqlalchemy.engine.Engine - INFO - [cached since 222.9s ago] (5, 2)
+2025-03-31 21:07:39,693 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:43,173 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:43,173 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:07:43,173 - sqlalchemy.engine.Engine - INFO - [cached since 226.4s ago] (4, 2)
+2025-03-31 21:07:43,174 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:59,033 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:59,035 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:07:59,035 - sqlalchemy.engine.Engine - INFO - [cached since 244.4s ago] (2,)
+2025-03-31 21:07:59,036 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:59,078 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:59,078 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:07:59,079 - sqlalchemy.engine.Engine - INFO - [cached since 244.4s ago] (2,)
+2025-03-31 21:07:59,079 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:59,099 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:59,099 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:07:59,100 - sqlalchemy.engine.Engine - INFO - [cached since 242.3s ago] (5, 2)
+2025-03-31 21:07:59,101 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:59,636 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:59,637 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:07:59,637 - sqlalchemy.engine.Engine - INFO - [cached since 245s ago] (2,)
+2025-03-31 21:07:59,639 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:59,662 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:59,662 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:07:59,662 - sqlalchemy.engine.Engine - INFO - [cached since 245s ago] (2,)
+2025-03-31 21:07:59,664 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:59,674 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:59,675 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:07:59,675 - sqlalchemy.engine.Engine - INFO - [cached since 242.9s ago] (5, 2)
+2025-03-31 21:07:59,677 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:59,943 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:59,944 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:07:59,944 - sqlalchemy.engine.Engine - INFO - [cached since 245.3s ago] (2,)
+2025-03-31 21:07:59,945 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:59,967 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:59,967 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:07:59,967 - sqlalchemy.engine.Engine - INFO - [cached since 245.3s ago] (2,)
+2025-03-31 21:07:59,968 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:07:59,978 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:07:59,979 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:07:59,979 - sqlalchemy.engine.Engine - INFO - [cached since 243.2s ago] (5, 2)
+2025-03-31 21:07:59,981 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:00,225 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:00,226 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:08:00,226 - sqlalchemy.engine.Engine - INFO - [cached since 245.6s ago] (2,)
+2025-03-31 21:08:00,227 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:00,246 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:00,246 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:08:00,246 - sqlalchemy.engine.Engine - INFO - [cached since 245.6s ago] (2,)
+2025-03-31 21:08:00,247 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:00,259 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:00,259 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:08:00,259 - sqlalchemy.engine.Engine - INFO - [cached since 243.5s ago] (5, 2)
+2025-03-31 21:08:00,260 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:00,518 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:00,519 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:08:00,519 - sqlalchemy.engine.Engine - INFO - [cached since 245.9s ago] (2,)
+2025-03-31 21:08:00,520 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:00,540 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:00,541 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:08:00,541 - sqlalchemy.engine.Engine - INFO - [cached since 245.9s ago] (2,)
+2025-03-31 21:08:00,542 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:00,556 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:00,557 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:08:00,557 - sqlalchemy.engine.Engine - INFO - [cached since 243.8s ago] (5, 2)
+2025-03-31 21:08:00,558 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:02,155 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:02,155 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:08:02,155 - sqlalchemy.engine.Engine - INFO - [cached since 245.4s ago] (4, 2)
+2025-03-31 21:08:02,157 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:04,081 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:04,082 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:08:04,082 - sqlalchemy.engine.Engine - INFO - [cached since 247.3s ago] (5, 2)
+2025-03-31 21:08:04,083 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:06,017 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x110d51300>
+2025-03-31 21:08:06,017 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-31 21:08:06,058 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x110d523b0>
+2025-03-31 21:08:06,058 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-31 21:08:10,580 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:10,581 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:08:10,582 - sqlalchemy.engine.Engine - INFO - [cached since 255.9s ago] (2,)
+2025-03-31 21:08:10,583 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:10,607 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:10,607 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:08:10,607 - sqlalchemy.engine.Engine - INFO - [cached since 256s ago] (2,)
+2025-03-31 21:08:10,608 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:10,617 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:10,618 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:08:10,618 - sqlalchemy.engine.Engine - INFO - [cached since 253.9s ago] (5, 2)
+2025-03-31 21:08:10,619 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:13,043 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1105b7160>
+2025-03-31 21:08:13,044 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-31 21:08:13,062 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1105b7100>
+2025-03-31 21:08:13,062 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-03-31 21:08:15,787 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-31 21:08:15,789 - app.routes.basic_data - INFO - Logs encontrados: 3
+2025-03-31 21:08:15,790 - app.routes.basic_data - INFO - Log ID: 3, Descrição: É o Atual alterado de Não para Sim
+2025-03-31 21:08:15,790 - app.routes.basic_data - INFO - Log ID: 2, Descrição: É o Atual alterado de Não para Sim
+2025-03-31 21:08:15,790 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Margem de Lucro Ideal alterado de 2.0 para 33.0
+2025-03-31 21:08:15,796 - app.routes.basic_data - INFO - Total de logs: 3, Páginas: 1
+2025-03-31 21:08:15,834 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 4
+2025-03-31 21:08:15,835 - app.routes.basic_data - INFO - Logs encontrados: 3
+2025-03-31 21:08:15,835 - app.routes.basic_data - INFO - Log ID: 3, Descrição: É o Atual alterado de Não para Sim
+2025-03-31 21:08:15,836 - app.routes.basic_data - INFO - Log ID: 2, Descrição: É o Atual alterado de Não para Sim
+2025-03-31 21:08:15,836 - app.routes.basic_data - INFO - Log ID: 1, Descrição: Margem de Lucro Ideal alterado de 2.0 para 33.0
+2025-03-31 21:08:15,836 - app.routes.basic_data - INFO - Total de logs: 3, Páginas: 1
+2025-03-31 21:08:20,049 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-31 21:08:20,049 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-03-31 21:08:20,055 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-03-31 21:08:20,058 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-03-31 21:08:20,058 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Não para Sim']
+2025-03-31 21:08:20,059 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-03-31 21:08:20,059 - app.routes.basic_data - INFO - Campo clients_served atualizado para 23
+2025-03-31 21:08:20,059 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 0.03
+2025-03-31 21:08:20,060 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 21.03
+2025-03-31 21:08:20,060 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 0.04
+2025-03-31 21:08:20,060 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 21.03
+2025-03-31 21:08:20,060 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 33.0
+2025-03-31 21:08:20,060 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 12
+2025-03-31 21:08:20,060 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-31 21:08:20,060 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-31 21:08:20,061 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-31 21:08:20,061 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-31 21:08:20,061 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-03-31 21:08:20,067 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-03-31 21:08:21,606 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:21,606 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:08:21,607 - sqlalchemy.engine.Engine - INFO - [cached since 267s ago] (2,)
+2025-03-31 21:08:21,608 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:21,631 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:21,631 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-03-31 21:08:21,631 - sqlalchemy.engine.Engine - INFO - [cached since 267s ago] (2,)
+2025-03-31 21:08:21,632 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-03-31 21:08:21,638 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-03-31 21:08:21,638 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id, basic_data.user_id, basic_data.month, basic_data.year, basic_data.activity_type, basic_data.clients_served, basic_data.sales_revenue, basic_data.sales_expenses, basic_data.input_product_expenses, basic_data.fixed_costs, basic_data.ideal_profit_margin, basic_data.service_capacity, basic_data.pro_labore, basic_data.work_hours_per_week, basic_data.other_fixed_costs, basic_data.ideal_service_profit_margin, basic_data.is_current, basic_data.created_at, basic_data.updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+2025-03-31 21:08:21,638 - sqlalchemy.engine.Engine - INFO - [cached since 264.9s ago] (4, 2)
+2025-03-31 21:08:21,639 - sqlalchemy.engine.Engine - INFO - ROLLBACK

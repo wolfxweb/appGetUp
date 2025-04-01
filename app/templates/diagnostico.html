@@ -11,7 +11,7 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos</label>
-                    <select class="form-select" id="basicDataSelect" >
+                    <select class="form-select" id="basicDataSelect">
                         {% for data in basic_data_list %}
                         <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
                             {{ data.month }}/{{ data.year }}
@@ -232,38 +232,6 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 
-document.getElementById('basicDataSelect').addEventListener('change', function() {
-    const basicDataId = this.value;
-    console.log("ID selecionado:", basicDataId);
-    
-    // URL correta com o prefixo /diagnostico/
-    fetch(`/diagnostico/api/basic-data/${basicDataId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Dados não encontrados');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("Dados recebidos:", data);
-            // Atualizar a tabela com os dados
-            document.getElementById('clientsServed').textContent = data.clients_served;
-            document.getElementById('salesRevenue').textContent = `R$ ${data.sales_revenue.toFixed(2)}`;
-            document.getElementById('salesExpenses').textContent = `R$ ${data.sales_expenses.toFixed(2)}`;
-            document.getElementById('fixedCosts').textContent = `R$ ${data.fixed_costs.toFixed(2)}`;
-            document.getElementById('operationalExpenses').textContent = `R$ ${data.operational_expenses.toFixed(2)}`;
-            document.getElementById('financialExpenses').textContent = `R$ ${data.financial_expenses.toFixed(2)}`;
-            document.getElementById('taxes').textContent = `R$ ${data.taxes.toFixed(2)}`;
-            document.getElementById('otherExpenses').textContent = `R$ ${data.other_expenses.toFixed(2)}`;
-        })
-        .catch(error => {
-            console.error('Erro ao carregar dados:', error);
-            alert('Erro ao carregar os dados. Por favor, tente novamente.');
-        });
-});
-    
-
-
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar o gráfico
     const ctx = document.getElementById('costsChart').getContext('2d');
@@ -295,8 +263,52 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-
-  
+    // Listener para o evento change
+    document.getElementById('basicDataSelect').addEventListener('change', function() {
+        const basicDataId = this.value;
+        console.log("ID selecionado:", basicDataId);
+        
+        fetch(`/diagnostico/api/basic-data/${basicDataId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Dados não encontrados');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Dados recebidos:", data);
+                // Atualizar a tabela com os dados
+                document.getElementById('clientsServed').textContent = data.clients_served;
+                document.getElementById('salesRevenue').textContent = `R$ ${data.sales_revenue.toFixed(2)}`;
+                document.getElementById('salesExpenses').textContent = `R$ ${data.sales_expenses.toFixed(2)}`;
+                document.getElementById('fixedCosts').textContent = `R$ ${data.fixed_costs.toFixed(2)}`;
+                document.getElementById('operationalExpenses').textContent = `R$ ${data.operational_expenses.toFixed(2)}`;
+                document.getElementById('financialExpenses').textContent = `R$ ${data.financial_expenses.toFixed(2)}`;
+                document.getElementById('taxes').textContent = `R$ ${data.taxes.toFixed(2)}`;
+                document.getElementById('otherExpenses').textContent = `R$ ${data.other_expenses.toFixed(2)}`;
+                
+                // Atualizar o gráfico se existir
+                if (window.costsChart) {
+                    const totalCosts = data.sales_expenses + data.fixed_costs + 
+                                     data.operational_expenses + data.financial_expenses + 
+                                     data.taxes + data.other_expenses;
+                    window.costsChart.data.datasets[0].data = [totalCosts, data.sales_revenue];
+                    window.costsChart.update();
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao carregar dados:', error);
+      
+            });
+    });
+    
+    // Disparar o evento change automaticamente quando a página carregar
+    const selectElement = document.getElementById('basicDataSelect');
+    if (selectElement && selectElement.value) {
+        selectElement.dispatchEvent(new Event('change'));
+    } else {
+        console.warn('Select não encontrado ou sem valor para carregar dados iniciais');
+    }
 });
 </script>
 {% endblock %} 
