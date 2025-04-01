@@ -660,3 +660,27 @@
 2025-03-31 22:21:45,498 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 2
 2025-03-31 22:21:45,500 - app.routes.basic_data - INFO - Logs encontrados: 0
 2025-03-31 22:21:45,501 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-31 22:51:02,796 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 2
+2025-03-31 22:51:02,797 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-31 22:51:02,799 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-31 22:51:02,822 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 2
+2025-03-31 22:51:02,824 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-03-31 22:51:02,825 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-03-31 22:51:09,342 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-03-31 22:51:09,343 - app.routes.basic_data - INFO - Registro existente encontrado para 10/2025
+2025-03-31 22:51:09,344 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Sim para Não
+2025-03-31 22:51:09,344 - app.routes.basic_data - INFO - Alterações detectadas: ['É o Atual alterado de Sim para Não']
+2025-03-31 22:51:09,344 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Sim para Não
+2025-03-31 22:51:09,344 - app.routes.basic_data - INFO - Campo clients_served atualizado para 312
+2025-03-31 22:51:09,344 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 201.03
+2025-03-31 22:51:09,344 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 3.02
+2025-03-31 22:51:09,344 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 1.02
+2025-03-31 22:51:09,344 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para 31.02
+2025-03-31 22:51:09,345 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para 21.0
+2025-03-31 22:51:09,345 - app.routes.basic_data - INFO - Campo service_capacity atualizado para 231
+2025-03-31 22:51:09,345 - app.routes.basic_data - INFO - Campo pro_labore atualizado para None
+2025-03-31 22:51:09,345 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para None
+2025-03-31 22:51:09,345 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para None
+2025-03-31 22:51:09,345 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para None
+2025-03-31 22:51:09,345 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-03-31 22:51:09,350 - app.routes.basic_data - INFO - Dados salvos com sucesso
