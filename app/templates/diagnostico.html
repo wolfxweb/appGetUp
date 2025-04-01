@@ -7,10 +7,20 @@
     <div class="container-fluid py-4">
         <!-- Select Box -->
 
+
+        <!-- Tabela de Dados Básicos -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Dados Básicos</h5>
+                    </div>
+                    <div class="card-body">
+
         <div class="row mb-4">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos</label>
+                    <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
                     <select class="form-select" id="basicDataSelect">
                         {% for data in basic_data_list %}
                         <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
@@ -21,15 +31,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Tabela de Dados Básicos -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Dados Básicos</h5>
-                    </div>
-                    <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead>
@@ -80,7 +81,7 @@
             <!-- Gráfico de Barras -->
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
-                    <div class="card-header">
+                    <div class="card-header bg-primary text-white">
                         <h5 class="card-title mb-0">Custos e Faturamento</h5>
                     </div>
                     <div class="card-body">
@@ -92,7 +93,7 @@
             <!-- Métricas -->
             <div class="col-md-6 mb-4">
                 <div class="card h-100">
-                    <div class="card-header">
+                    <div class="card-header  bg-primary text-white">
                         <h5 class="card-title mb-0">Métricas Financeiras</h5>
                     </div>
                     <div class="card-body">
@@ -139,6 +140,40 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" id="pontoEquilibrio" readonly>
                                 <span class="input-group-text" id="pontoEquilibrioPercentual"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Indicadores</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="margem" class="form-label">Margem</label>
+                                <input type="text" class="form-control" id="margem" readonly>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="ticketMedio" class="form-label">Ticket Médio</label>
+                                <input type="text" class="form-control" id="ticketMedio" readonly>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="margemContribuicao" class="form-label">Margem de Contribuição</label>
+                                <input type="text" class="form-control" id="margemContribuicao" readonly>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="produtividade" class="form-label">Produtividade</label>
+                                <input type="text" class="form-control" id="produtividade" readonly>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="pontoEquilibrio" class="form-label">Ponto de Equilíbrio</label>
+                                <input type="text" class="form-control" id="pontoEquilibrio" readonly>
                             </div>
                         </div>
                     </div>
@@ -292,16 +327,72 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Função para extrair valores numéricos dos elementos
+    function getNumericValue(elementId) {
+        const element = document.getElementById(elementId);
+        if (!element) return 0;
+        const text = element.textContent || '0';
+        return parseFloat(text.replace('R$ ', '').replace('.', '').replace(',', '.')) || 0;
+    }
+
+    // Função para atualizar os indicadores
+    function updateIndicators() {
+        console.log("Atualizando indicadores...");
+        
+        // Obter valores
+        const salesRevenue = getNumericValue('salesRevenue');
+        const salesExpenses = getNumericValue('salesExpenses');
+        const fixedCosts = {% if user.activity_type != 'Serviços' %}getNumericValue('fixedCosts'){% else %}0{% endif %};
+        const operationalExpenses = getNumericValue('operationalExpenses');
+        const financialExpenses = getNumericValue('financialExpenses');
+        const taxes = getNumericValue('taxes');
+        const otherExpenses = getNumericValue('otherExpenses');
+        const clientsServed = parseInt(document.getElementById('clientsServed').textContent) || 1;
+
+        console.log("Valores:", {
+            salesRevenue, salesExpenses, fixedCosts, operationalExpenses,
+            financialExpenses, taxes, otherExpenses, clientsServed
+        });
+
+        // Calcular a Margem
+        const totalCosts = salesExpenses + fixedCosts + operationalExpenses + financialExpenses + taxes + otherExpenses;
+        const margin = salesRevenue > 0 ? ((salesRevenue - totalCosts) / salesRevenue * 100) : 0;
+        
+        // Calcular o Ticket Médio
+        const averageTicket = salesRevenue / clientsServed;
+        
+        // Calcular a Margem de Contribuição
+        const contributionMargin = salesRevenue > 0 ? ((salesRevenue - salesExpenses) / salesRevenue * 100) : 0;
+        
+        // Calcular Produtividade
+        const fixedExpenses = fixedCosts + operationalExpenses + financialExpenses + taxes + otherExpenses;
+        const productivity = fixedExpenses > 0 ? (salesRevenue / fixedExpenses) : 0;
+        
+        // Calcular Ponto de Equilíbrio
+        const breakEvenPoint = salesRevenue > 0 ? (fixedCosts / (1 - (salesExpenses / salesRevenue))) : 0;
+
+        // Atualizar os elementos na interface
+        document.getElementById('margem').value = margin.toFixed(2) + '%';
+        document.getElementById('ticketMedio').value = 'R$ ' + averageTicket.toFixed(2);
+        document.getElementById('margemContribuicao').value = contributionMargin.toFixed(2) + '%';
+        document.getElementById('produtividade').value = productivity.toFixed(2);
+        document.getElementById('pontoEquilibrio').value = 'R$ ' + breakEvenPoint.toFixed(2);
+        
+        console.log("Indicadores calculados:", {
+            margin, averageTicket, contributionMargin, productivity, breakEvenPoint
+        });
+    }
+
     // Função para atualizar o gráfico com os valores da tabela
     function updateChart() {
-        // Obter os valores da tabela
-        const salesRevenue = parseFloat(document.getElementById('salesRevenue').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
-        const salesExpenses = parseFloat(document.getElementById('salesExpenses').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
-        const fixedCosts = parseFloat(document.getElementById('fixedCosts').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
-        const operationalExpenses = parseFloat(document.getElementById('operationalExpenses').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
-        const financialExpenses = parseFloat(document.getElementById('financialExpenses').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
-        const taxes = parseFloat(document.getElementById('taxes').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
-        const otherExpenses = parseFloat(document.getElementById('otherExpenses').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        // Obter valores
+        const salesRevenue = getNumericValue('salesRevenue');
+        const salesExpenses = getNumericValue('salesExpenses');
+        const fixedCosts = {% if user.activity_type != 'Serviços' %}getNumericValue('fixedCosts'){% else %}0{% endif %};
+        const operationalExpenses = getNumericValue('operationalExpenses');
+        const financialExpenses = getNumericValue('financialExpenses');
+        const taxes = getNumericValue('taxes');
+        const otherExpenses = getNumericValue('otherExpenses');
 
         // Calcular o total de custos
         const totalCosts = salesExpenses + fixedCosts + operationalExpenses + 
@@ -310,6 +401,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Atualizar o gráfico
         window.costsChart.data.datasets[0].data = [totalCosts, salesRevenue];
         window.costsChart.update();
+        
+        // Atualizar os indicadores
+        updateIndicators();
     }
 
     // Listener para o evento change
@@ -328,24 +422,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log("Dados recebidos:", data);
                 // Atualizar a tabela com os dados
                 document.getElementById('clientsServed').textContent = data.clients_served;
-                document.getElementById('salesRevenue').textContent = `R$ ${data.sales_revenue}`;
-                document.getElementById('salesExpenses').textContent = `R$ ${data.sales_expenses}`;
+                document.getElementById('salesRevenue').textContent = `R$ ${data.sales_revenue.toFixed(2)}`;
+                document.getElementById('salesExpenses').textContent = `R$ ${data.sales_expenses.toFixed(2)}`;
                 {% if user.activity_type != 'Serviços' %}
-                  document.getElementById('fixedCosts').textContent = `R$ ${data.fixed_costs}`;
+                document.getElementById('fixedCosts').textContent = `R$ ${data.fixed_costs.toFixed(2)}`;
                 {% endif %}
-                document.getElementById('operationalExpenses').textContent = `R$ ${data.operational_expenses}`;
-                document.getElementById('financialExpenses').textContent = `R$ ${data.financial_expenses}`;
+                document.getElementById('operationalExpenses').textContent = `R$ ${data.operational_expenses.toFixed(2)}`;
+                document.getElementById('financialExpenses').textContent = `R$ ${data.financial_expenses.toFixed(2)}`;
+                document.getElementById('taxes').textContent = `R$ ${data.taxes.toFixed(2)}`;
+                document.getElementById('otherExpenses').textContent = `R$ ${data.other_expenses.toFixed(2)}`;
                 {% if user.activity_type == 'Serviços' %}
-                document.getElementById('proLabore').textContent = `R$ ${data.pro_labore}`;
+                document.getElementById('proLabore').textContent = `R$ ${data.pro_labore.toFixed(2)}`;
                 document.getElementById('weeklyHours').textContent = `${data.weekly_hours}h`;
                 {% endif %}
-                document.getElementById('taxes').textContent = `R$ ${data.taxes}`;
-                document.getElementById('otherExpenses').textContent = `R$ ${data.other_expenses}`;
                 
-                // Atualizar o gráfico
+                // Atualizar o gráfico e os indicadores
                 updateChart();
             })
-          
+            .catch(error => {
+                console.error('Erro ao carregar dados:', error);
+                alert('Erro ao carregar os dados. Por favor, tente novamente.');
+            });
     });
     
     // Disparar o evento change automaticamente quando a página carregar
