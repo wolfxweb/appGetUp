@@ -11,90 +11,76 @@
                 <h4 class="card-title mb-0">Diagnóstico</h4>
             </div>
             <div class="card-body">
-      
-                <p>Esta tela permite que o gestor ou empreendedor:</p>
-                <ul>
-                    <li>Tenha uma visão holística da saúde financeira do negócio</li>
-                    <li>Identifique rapidamente se está operando com lucro ou prejuízo</li>
-                    <li>Entenda quais custos estão impactando mais o resultado</li>
-                    <li>Monitore se está utilizando sua capacidade de forma eficiente</li>
-                    <li>Tome decisões baseadas em métricas financeiras importantes</li>
-                    <li>Compare desempenho entre diferentes períodos</li>
-                </ul>
-                <p>A organização em cards com informações relacionadas e a disponibilidade de modais explicativos (ícones de engrenagem) para cada métrica demonstra uma preocupação em tornar dados financeiros complexos mais acessíveis e compreensíveis para o usuário.</p>
-            
-                <!-- Tabela de Dados Básicos -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="card-title mb-0">Dados Básicos</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                              <!-- Select Box -->
-                                        <div class="row mb-4">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
-                                                    <select class="form-select" id="basicDataSelect">
-                                                        {% for data in basic_data_list %}
-                                                        <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
-                                                            {{ data.month }}/{{ data.year }}
-                                                        </option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                    </div>
-                                    <table class="table table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>Quantidade de Clientes Atendidos</th>
-                                                <th>Faturamento</th>
-                                                <th>Despesas de Vendas</th>
-                                                {% if user.activity_type != 'Serviços' %}
-                                                <th>Custos Fixos</th>
-                                                {% endif %}
-                                                <th>Gastos com Insumos e Produtos</th>
-                                                <th>Gastos com Vendas</th>
-                                                {% if user.activity_type == 'Serviços' %}
-                                                <th>Pro-labore</th>
-                                                <th>Horas Trabalhadas por Semana</th>
-                                                {% endif %}
-                                                <th>Margem de Lucro Ideal</th>
-                                                <th>Capacidade de atendimento</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td id="clientsServed">-</td>
-                                                <td id="salesRevenue">-</td>
-                                                <td id="salesExpenses">-</td>
-                                                {% if user.activity_type != 'Serviços' %}
-                                                <td id="fixedCosts">-</td>
-                                                {% endif %}
-                                                <td id="operationalExpenses">-</td>
-                                                <td id="financialExpenses">-</td>
-                                                {% if user.activity_type == 'Serviços' %}
-                                                <td id="proLabore">-</td>
-                                                <td id="weeklyHours">-</td>
-                                                {% endif %}
-                                                <td id="taxes">-</td>
-                                                <td id="otherExpenses">-</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                <!-- Descrição do diagnóstico -->
+                <div class="mb-4">
+                    <p>Esta tela permite que o gestor ou empreendedor:</p>
+                    <ul>
+                        <li>Tenha uma visão holística da saúde financeira do negócio</li>
+                        <li>Identifique rapidamente se está operando com lucro ou prejuízo</li>
+                        <li>Entenda quais custos estão impactando mais o resultado</li>
+                        <li>Monitore se está utilizando sua capacidade de forma eficiente</li>
+                        <li>Tome decisões baseadas em métricas financeiras importantes</li>
+                        <li>Compare desempenho entre diferentes períodos</li>
+                    </ul>
+                    <p>A organização em cards com informações relacionadas e a disponibilidade de modais explicativos (ícones de engrenagem) para cada métrica demonstra uma preocupação em tornar dados financeiros complexos mais acessíveis e compreensíveis para o usuário.</p>
+                </div>
+
+                <!-- Dados Básicos -->
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Dados Básicos</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <!-- Select Box -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
+                                    <select class="form-select" id="basicDataSelect">
+                                        {% for data in basic_data_list %}
+                                            <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
+                                                {{ data.month }}/{{ data.year }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
                                 </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Dados Básicos em formato de texto -->
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <p><strong>Quantidade de Clientes Atendidos:</strong> <span id="clientsServed">-</span></p>
+                                <p><strong>Capacidade de Atendimento:</strong> <span id="capacidadeAtendimento">-</span></p>
+                                <p><strong>Faturamento:</strong> <span id="salesRevenue">-</span></p>
+                                <p><strong>Despesas de Vendas:</strong> <span id="salesExpenses">-</span></p>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <p><strong>Gastos com Insumos e Produtos:</strong> <span id="operationalExpenses">-</span></p>
+                                <p><strong>Gastos com Vendas:</strong> <span id="financialExpenses">-</span></p>
+                                <p><strong>Impostos:</strong> <span id="taxes">-</span></p>
+                                <p><strong>Outras Despesas:</strong> <span id="otherExpenses">-</span></p>
+                            </div>
+                            
+                            <div class="col-md-4 mb-3">
+                                <p><strong>Margem de Lucro Ideal:</strong> <span id="margemIdeial">-</span></p>
+                                {% if user.activity_type == 'Serviços' %}
+                                    <p><strong>Pro-labore:</strong> <span id="proLabore">-</span></p>
+                                    <p><strong>Horas Trabalhadas por Semana:</strong> <span id="weeklyHours">-</span></p>
+                                {% endif %}
+                                {% if user.activity_type != 'Serviços' %}
+                                    <p><strong>Custos Fixos:</strong> <span id="fixedCosts">-</span></p>
+                                {% endif %}              
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Gráficos e Métricas -->
-                <div class="row">
+                <div class="row mb-4">
                     <!-- Gráfico de Barras -->
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-6">
                         <div class="card h-100">
                             <div class="card-header bg-primary text-white">
                                 <h5 class="card-title mb-0">Custos e Faturamento</h5>
@@ -106,9 +92,9 @@
                     </div>
 
                     <!-- Métricas -->
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-6">
                         <div class="card h-100">
-                            <div class="card-header  bg-primary text-white">
+                            <div class="card-header bg-primary text-white">
                                 <h5 class="card-title mb-0">Métricas Financeiras</h5>
                             </div>
                             <div class="card-body">
@@ -162,9 +148,10 @@
                     </div>
                 </div>
 
-                <div class="row mt-4">
+                <!-- Gráficos de Pizza -->
+                <div class="row mb-4">
                     <div class="col-md-6">
-                        <div class="card shadow-sm">
+                        <div class="card h-100">
                             <div class="card-header bg-primary text-white">
                                 <h5 class="card-title mb-0">Distribuição de Despesas</h5>
                             </div>
@@ -179,7 +166,7 @@
                     </div>
                     
                     <div class="col-md-6">
-                        <div class="card shadow-sm">
+                        <div class="card h-100">
                             <div class="card-header bg-primary text-white">
                                 <h5 class="card-title mb-0">Capacidade vs Atendimento</h5>
                             </div>
