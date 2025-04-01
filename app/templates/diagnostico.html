@@ -17,20 +17,20 @@
                     </div>
                     <div class="card-body">
 
-        <div class="row mb-4">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
-                    <select class="form-select" id="basicDataSelect">
-                        {% for data in basic_data_list %}
-                        <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
-                            {{ data.month }}/{{ data.year }}
-                        </option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-        </div>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
+                                <select class="form-select" id="basicDataSelect">
+                                    {% for data in basic_data_list %}
+                                    <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
+                                        {{ data.month }}/{{ data.year }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead>
@@ -148,33 +148,29 @@
         </div>
 
         <div class="row mt-4">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">Indicadores</h5>
+                        <h5 class="card-title mb-0">Distribuição de Despesas</h5>
                     </div>
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="margem" class="form-label">Margem</label>
-                                <input type="text" class="form-control" id="margem" readonly>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="ticketMedio" class="form-label">Ticket Médio</label>
-                                <input type="text" class="form-control" id="ticketMedio" readonly>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="margemContribuicao" class="form-label">Margem de Contribuição</label>
-                                <input type="text" class="form-control" id="margemContribuicao" readonly>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="produtividade" class="form-label">Produtividade</label>
-                                <input type="text" class="form-control" id="produtividade" readonly>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="pontoEquilibrio" class="form-label">Ponto de Equilíbrio</label>
-                                <input type="text" class="form-control" id="pontoEquilibrio" readonly>
-                            </div>
+                        {% if user.activity_type != 'Serviços' %}
+                        <div style="height: 300px;">
+                            <canvas id="expensesPieChart"></canvas>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Capacidade vs Atendimento</h5>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 300px;">
+                            <canvas id="capacityChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -280,7 +276,7 @@
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Inicializar o gráfico
+    // Inicializar o gráfico de barras
     const ctx = document.getElementById('costsChart').getContext('2d');
     window.costsChart = new Chart(ctx, {
         type: 'bar',
@@ -327,6 +323,91 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    {% if user.activity_type != 'Serviços' %}
+    // Inicializar o gráfico de pizza de despesas
+    const pieCtx = document.getElementById('expensesPieChart').getContext('2d');
+    window.expensesPieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Despesas de Vendas', 'Custos Fixos', 'Gastos com Insumos e Produtos', 'Gastos com Vendas'],
+            datasets: [{
+                data: [0, 0, 0, 0],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                            return `${label}: R$ ${value.toLocaleString('pt-BR', {minimumFractionDigits: 2})} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+    {% endif %}
+
+    // Inicializar o gráfico de pizza de capacidade
+    const capacityCtx = document.getElementById('capacityChart').getContext('2d');
+    window.capacityChart = new Chart(capacityCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Clientes Atendidos', 'Capacidade Não Utilizada'],
+            datasets: [{
+                data: [0, 0],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.7)', // Verde-azulado para clientes atendidos
+                    'rgba(220, 220, 220, 0.7)' // Cinza para capacidade não utilizada
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(200, 200, 200, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                            return `${label}: ${value} clientes (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
     // Função para extrair valores numéricos dos elementos
     function getNumericValue(elementId) {
         const element = document.getElementById(elementId);
@@ -348,10 +429,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const taxes = getNumericValue('taxes');
         const otherExpenses = getNumericValue('otherExpenses');
         const clientsServed = parseInt(document.getElementById('clientsServed').textContent) || 1;
+        
+        // Obter valor da capacidade de atendimento do último campo da tabela
+        const capacityCell = document.querySelector('table tbody tr td:last-child');
+        const serviceCapacity = capacityCell ? parseInt(capacityCell.textContent) || clientsServed : clientsServed;
 
         console.log("Valores:", {
             salesRevenue, salesExpenses, fixedCosts, operationalExpenses,
-            financialExpenses, taxes, otherExpenses, clientsServed
+            financialExpenses, taxes, otherExpenses, clientsServed, serviceCapacity
         });
 
         // Calcular a Margem
@@ -380,6 +465,70 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log("Indicadores calculados:", {
             margin, averageTicket, contributionMargin, productivity, breakEvenPoint
+        });
+
+        {% if user.activity_type != 'Serviços' %}
+        // Atualizar o gráfico de pizza
+        updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses, financialExpenses);
+        {% endif %}
+
+        // Atualizar o gráfico de capacidade
+        updateCapacityChart(clientsServed, serviceCapacity);
+    }
+
+    {% if user.activity_type != 'Serviços' %}
+    // Função para atualizar o gráfico de pizza
+    function updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses, financialExpenses) {
+        // Atualizar dados do gráfico de pizza
+        window.expensesPieChart.data.datasets[0].data = [
+            salesExpenses,
+            fixedCosts,
+            operationalExpenses,
+            financialExpenses
+        ];
+        window.expensesPieChart.update();
+    }
+    {% endif %}
+
+    // Função para atualizar o gráfico de capacidade
+    function updateCapacityChart(clientsServed, serviceCapacity) {
+        // Usar o valor guardado na janela ou o valor passado como parâmetro
+        const actualCapacity = window.serviceCapacity || serviceCapacity;
+        
+        // Verificar se a capacidade é maior que os clientes atendidos
+        const capacity = Math.max(actualCapacity, clientsServed);
+        const unusedCapacity = Math.max(0, capacity - clientsServed);
+
+        // Atualizar dados do gráfico de pizza
+        window.capacityChart.data.datasets[0].data = [
+            clientsServed,
+            unusedCapacity
+        ];
+        
+        // Atualizar a legenda com os valores reais
+        window.capacityChart.data.labels = [
+            `Clientes Atendidos (${clientsServed})`, 
+            `Capacidade Não Utilizada (${unusedCapacity})`
+        ];
+        
+        // Atualizar cores com base na ocupação
+        const utilizationRatio = clientsServed / capacity;
+        let clientsColor = 'rgba(75, 192, 192, 0.7)'; // Verde por padrão
+        
+        // Se estiver próximo da capacidade máxima, mudar para amarelo ou vermelho
+        if (utilizationRatio > 0.9) {
+            clientsColor = 'rgba(255, 99, 132, 0.7)'; // Vermelho para ocupação acima de 90%
+        } else if (utilizationRatio > 0.7) {
+            clientsColor = 'rgba(255, 205, 86, 0.7)'; // Amarelo para ocupação entre 70-90%
+        }
+        
+        window.capacityChart.data.datasets[0].backgroundColor[0] = clientsColor;
+        window.capacityChart.data.datasets[0].borderColor[0] = clientsColor.replace('0.7', '1');
+        
+        window.capacityChart.update();
+        
+        console.log("Capacidade atualizada:", {
+            clientsServed, actualCapacity, unusedCapacity, utilizationRatio
         });
     }
 
@@ -435,6 +584,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('proLabore').textContent = `R$ ${data.pro_labore.toFixed(2)}`;
                 document.getElementById('weeklyHours').textContent = `${data.weekly_hours}h`;
                 {% endif %}
+                
+                // Guardar a capacidade de atendimento para uso no gráfico
+                window.serviceCapacity = data.service_capacity || data.clients_served * 1.5; // Valor padrão se não existir
                 
                 // Atualizar o gráfico e os indicadores
                 updateChart();
