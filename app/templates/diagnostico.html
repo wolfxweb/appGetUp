@@ -5,172 +5,179 @@
 {% block content %}
     {% include "components/navbar.html" %}
     <div class="container-fluid py-4">
-        <!-- Select Box -->
-
-
-        <!-- Tabela de Dados Básicos -->
-        <div class="row mb-4">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">Dados Básicos</h5>
-                    </div>
-                    <div class="card-body">
-
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
-                                <select class="form-select" id="basicDataSelect">
-                                    {% for data in basic_data_list %}
-                                    <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
-                                        {{ data.month }}/{{ data.year }}
-                                    </option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Quantidade de Clientes Atendidos</th>
-                                        <th>Faturamento</th>
-                                        <th>Despesas de Vendas</th>
-                                        {% if user.activity_type != 'Serviços' %}
-                                        <th>Custos Fixos</th>
-                                        {% endif %}
-                                        <th>Gastos com Insumos e Produtos</th>
-                                        <th>Gastos com Vendas</th>
-                                        {% if user.activity_type == 'Serviços' %}
-                                        <th>Pro-labore</th>
-                                        <th>Horas Trabalhadas por Semana</th>
-                                        {% endif %}
-                                        <th>Margem de Lucro Ideal</th>
-                                        <th>Capacidade de atendimento</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td id="clientsServed">-</td>
-                                        <td id="salesRevenue">-</td>
-                                        <td id="salesExpenses">-</td>
-                                        {% if user.activity_type != 'Serviços' %}
-                                        <td id="fixedCosts">-</td>
-                                        {% endif %}
-                                        <td id="operationalExpenses">-</td>
-                                        <td id="financialExpenses">-</td>
-                                        {% if user.activity_type == 'Serviços' %}
-                                        <td id="proLabore">-</td>
-                                        <td id="weeklyHours">-</td>
-                                        {% endif %}
-                                        <td id="taxes">-</td>
-                                        <td id="otherExpenses">-</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+        <!-- Card Principal -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">Diagnóstico</h4>
             </div>
-        </div>
+            <div class="card-body">
+      
 
-        <!-- Gráficos e Métricas -->
-        <div class="row">
-            <!-- Gráfico de Barras -->
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">Custos e Faturamento</h5>
-                    </div>
-                    <div class="card-body">
-                        <canvas id="costsChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Métricas -->
-            <div class="col-md-6 mb-4">
-                <div class="card h-100">
-                    <div class="card-header  bg-primary text-white">
-                        <h5 class="card-title mb-0">Métricas Financeiras</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label class="form-label">
-                                Margem
-                                <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
-                            </label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="margem" readonly>
-                                <span class="input-group-text" id="margemPercentual"></span>
+                <!-- Tabela de Dados Básicos -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">Dados Básicos</h5>
                             </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">
-                                Ticket Médio
-                                <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#ticketMedioModal" style="cursor: pointer;"></i>
-                            </label>
-                            <input type="text" class="form-control" id="ticketMedio" readonly>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">
-                                Margem de Contribuição
-                                <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemContribuicaoModal" style="cursor: pointer;"></i>
-                            </label>
-                            <input type="text" class="form-control" id="margemContribuicao" readonly>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">
-                                Produtividade
-                                <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#produtividadeModal" style="cursor: pointer;"></i>
-                            </label>
-                            <input type="text" class="form-control" id="produtividade" readonly>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label">
-                                Ponto de Equilíbrio
-                                <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#pontoEquilibrioModal" style="cursor: pointer;"></i>
-                            </label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="pontoEquilibrio" readonly>
-                                <span class="input-group-text" id="pontoEquilibrioPercentual"></span>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                              <!-- Select Box -->
+                                        <div class="row mb-4">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
+                                                    <select class="form-select" id="basicDataSelect">
+                                                        {% for data in basic_data_list %}
+                                                        <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
+                                                            {{ data.month }}/{{ data.year }}
+                                                        </option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Quantidade de Clientes Atendidos</th>
+                                                <th>Faturamento</th>
+                                                <th>Despesas de Vendas</th>
+                                                {% if user.activity_type != 'Serviços' %}
+                                                <th>Custos Fixos</th>
+                                                {% endif %}
+                                                <th>Gastos com Insumos e Produtos</th>
+                                                <th>Gastos com Vendas</th>
+                                                {% if user.activity_type == 'Serviços' %}
+                                                <th>Pro-labore</th>
+                                                <th>Horas Trabalhadas por Semana</th>
+                                                {% endif %}
+                                                <th>Margem de Lucro Ideal</th>
+                                                <th>Capacidade de atendimento</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td id="clientsServed">-</td>
+                                                <td id="salesRevenue">-</td>
+                                                <td id="salesExpenses">-</td>
+                                                {% if user.activity_type != 'Serviços' %}
+                                                <td id="fixedCosts">-</td>
+                                                {% endif %}
+                                                <td id="operationalExpenses">-</td>
+                                                <td id="financialExpenses">-</td>
+                                                {% if user.activity_type == 'Serviços' %}
+                                                <td id="proLabore">-</td>
+                                                <td id="weeklyHours">-</td>
+                                                {% endif %}
+                                                <td id="taxes">-</td>
+                                                <td id="otherExpenses">-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="row mt-4">
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">Distribuição de Despesas</h5>
-                    </div>
-                    <div class="card-body">
-                        {% if user.activity_type != 'Serviços' %}
-                        <div style="height: 300px;">
-                            <canvas id="expensesPieChart"></canvas>
+                <!-- Gráficos e Métricas -->
+                <div class="row">
+                    <!-- Gráfico de Barras -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">Custos e Faturamento</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="costsChart"></canvas>
+                            </div>
                         </div>
-                        {% endif %}
+                    </div>
+
+                    <!-- Métricas -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header  bg-primary text-white">
+                                <h5 class="card-title mb-0">Métricas Financeiras</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Margem
+                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="margem" readonly>
+                                        <span class="input-group-text" id="margemPercentual"></span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Ticket Médio
+                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#ticketMedioModal" style="cursor: pointer;"></i>
+                                    </label>
+                                    <input type="text" class="form-control" id="ticketMedio" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Margem de Contribuição
+                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemContribuicaoModal" style="cursor: pointer;"></i>
+                                    </label>
+                                    <input type="text" class="form-control" id="margemContribuicao" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Produtividade
+                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#produtividadeModal" style="cursor: pointer;"></i>
+                                    </label>
+                                    <input type="text" class="form-control" id="produtividade" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Ponto de Equilíbrio
+                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#pontoEquilibrioModal" style="cursor: pointer;"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="pontoEquilibrio" readonly>
+                                        <span class="input-group-text" id="pontoEquilibrioPercentual"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">Capacidade vs Atendimento</h5>
+
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">Distribuição de Despesas</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if user.activity_type != 'Serviços' %}
+                                <div style="height: 300px;">
+                                    <canvas id="expensesPieChart"></canvas>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div style="height: 300px;">
-                            <canvas id="capacityChart"></canvas>
+                    
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">Capacidade vs Atendimento</h5>
+                            </div>
+                            <div class="card-body">
+                                <div style="height: 300px;">
+                                    <canvas id="capacityChart"></canvas>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -268,7 +275,6 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
 
 {% block scripts %}
