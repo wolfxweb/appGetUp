@@ -34,14 +34,20 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Clientes Atendidos</th>
-                                        <th>Receita de Vendas</th>
+                                        <th>Quantidade de Clientes Atendidos</th>
+                                        <th>Faturamento</th>
                                         <th>Despesas de Vendas</th>
+                                        {% if user.activity_type != 'Serviços' %}
                                         <th>Custos Fixos</th>
-                                        <th>Despesas Operacionais</th>
-                                        <th>Despesas Financeiras</th>
-                                        <th>Impostos</th>
-                                        <th>Outras Despesas</th>
+                                        {% endif %}
+                                        <th>Gastos com Insumos e Produtos</th>
+                                        <th>Gastos com Vendas</th>
+                                        {% if user.activity_type == 'Serviços' %}
+                                        <th>Pro-labore</th>
+                                        <th>Horas Trabalhadas por Semana</th>
+                                        {% endif %}
+                                        <th>Margem de Lucro Ideal</th>
+                                        <th>Capacidade de atendimento</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -49,9 +55,15 @@
                                         <td id="clientsServed">-</td>
                                         <td id="salesRevenue">-</td>
                                         <td id="salesExpenses">-</td>
+                                        {% if user.activity_type != 'Serviços' %}
                                         <td id="fixedCosts">-</td>
+                                        {% endif %}
                                         <td id="operationalExpenses">-</td>
                                         <td id="financialExpenses">-</td>
+                                        {% if user.activity_type == 'Serviços' %}
+                                        <td id="proLabore">-</td>
+                                        <td id="weeklyHours">-</td>
+                                        {% endif %}
                                         <td id="taxes">-</td>
                                         <td id="otherExpenses">-</td>
                                     </tr>
@@ -235,7 +247,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar o gráfico
     const ctx = document.getElementById('costsChart').getContext('2d');
-    const costsChart = new Chart(ctx, {
+    window.costsChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Custos', 'Faturamento'],
@@ -255,13 +267,50 @@ document.addEventListener('DOMContentLoaded', function() {
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'R$ ' + context.raw.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                        }
+                    }
+                }
+            },
             scales: {
                 y: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                        }
+                    }
                 }
             }
         }
     });
+
+    // Função para atualizar o gráfico com os valores da tabela
+    function updateChart() {
+        // Obter os valores da tabela
+        const salesRevenue = parseFloat(document.getElementById('salesRevenue').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        const salesExpenses = parseFloat(document.getElementById('salesExpenses').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        const fixedCosts = parseFloat(document.getElementById('fixedCosts').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        const operationalExpenses = parseFloat(document.getElementById('operationalExpenses').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        const financialExpenses = parseFloat(document.getElementById('financialExpenses').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        const taxes = parseFloat(document.getElementById('taxes').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
+        const otherExpenses = parseFloat(document.getElementById('otherExpenses').textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
+
+        // Calcular o total de custos
+        const totalCosts = salesExpenses + fixedCosts + operationalExpenses + 
+                          financialExpenses + taxes + otherExpenses;
+
+        // Atualizar o gráfico
+        window.costsChart.data.datasets[0].data = [totalCosts, salesRevenue];
+        window.costsChart.update();
+    }
 
     // Listener para o evento change
     document.getElementById('basicDataSelect').addEventListener('change', function() {
@@ -279,27 +328,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log("Dados recebidos:", data);
                 // Atualizar a tabela com os dados
                 document.getElementById('clientsServed').textContent = data.clients_served;
-                document.getElementById('salesRevenue').textContent = `R$ ${data.sales_revenue.toFixed(2)}`;
-                document.getElementById('salesExpenses').textContent = `R$ ${data.sales_expenses.toFixed(2)}`;
-                document.getElementById('fixedCosts').textContent = `R$ ${data.fixed_costs.toFixed(2)}`;
-                document.getElementById('operationalExpenses').textContent = `R$ ${data.operational_expenses.toFixed(2)}`;
-                document.getElementById('financialExpenses').textContent = `R$ ${data.financial_expenses.toFixed(2)}`;
-                document.getElementById('taxes').textContent = `R$ ${data.taxes.toFixed(2)}`;
-                document.getElementById('otherExpenses').textContent = `R$ ${data.other_expenses.toFixed(2)}`;
+                document.getElementById('salesRevenue').textContent = `R$ ${data.sales_revenue}`;
+                document.getElementById('salesExpenses').textContent = `R$ ${data.sales_expenses}`;
+                {% if user.activity_type != 'Serviços' %}
+                  document.getElementById('fixedCosts').textContent = `R$ ${data.fixed_costs}`;
+                {% endif %}
+                document.getElementById('operationalExpenses').textContent = `R$ ${data.operational_expenses}`;
+                document.getElementById('financialExpenses').textContent = `R$ ${data.financial_expenses}`;
+                {% if user.activity_type == 'Serviços' %}
+                document.getElementById('proLabore').textContent = `R$ ${data.pro_labore}`;
+                document.getElementById('weeklyHours').textContent = `${data.weekly_hours}h`;
+                {% endif %}
+                document.getElementById('taxes').textContent = `R$ ${data.taxes}`;
+                document.getElementById('otherExpenses').textContent = `R$ ${data.other_expenses}`;
                 
-                // Atualizar o gráfico se existir
-                if (window.costsChart) {
-                    const totalCosts = data.sales_expenses + data.fixed_costs + 
-                                     data.operational_expenses + data.financial_expenses + 
-                                     data.taxes + data.other_expenses;
-                    window.costsChart.data.datasets[0].data = [totalCosts, data.sales_revenue];
-                    window.costsChart.update();
-                }
+                // Atualizar o gráfico
+                updateChart();
             })
-            .catch(error => {
-                console.error('Erro ao carregar dados:', error);
-      
-            });
+          
     });
     
     // Disparar o evento change automaticamente quando a página carregar

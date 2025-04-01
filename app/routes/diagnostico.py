@@ -37,7 +37,11 @@ async def diagnostico_page(
 
     return templates.TemplateResponse(
         "diagnostico.html",
-        {"request": request, "basic_data_list": basic_data_list}
+        {
+            "request": request,
+            "basic_data_list": basic_data_list,
+            "user": current_user
+        }
     )
 @router.get("/api/list-basic-data")
 async def list_basic_data(
@@ -99,7 +103,7 @@ async def get_basic_data(
                 return float(value)
 
             # Retornar os dados como JSON com verificação de nulos
-            return {
+            response_data = {
                 "id": basic_data.id,
                 "clients_served": basic_data.clients_served or 0,  # Garante que não é None
                 "sales_revenue": safe_float(basic_data.sales_revenue),
@@ -119,6 +123,15 @@ async def get_basic_data(
                     getattr(basic_data, 'other_fixed_costs', None)
                 )
             }
+
+            # Adicionar campos específicos de serviço se o tipo de atividade for 'servico'
+            if current_user.activity_type == 'Serviços':
+                response_data.update({
+                    "pro_labore": safe_float(getattr(basic_data, 'pro_labore', None)),
+                    "weekly_hours": safe_float(getattr(basic_data, 'work_hours_per_week', None))
+                })
+
+            return response_data
     except Exception as e:
         logger.error(f"Erro ao buscar dados básicos: {str(e)}")
         return JSONResponse(
