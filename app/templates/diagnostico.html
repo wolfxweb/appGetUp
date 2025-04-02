@@ -58,9 +58,6 @@
                             
                             <div class="col-md-4 mb-3">
                                 <p><strong>Gastos com Insumos e Produtos:</strong> <span id="operationalExpenses">-</span></p>
-                                <p><strong>Gastos com Vendas:</strong> <span id="financialExpenses">-</span></p>
-                                <p><strong>Impostos:</strong> <span id="taxes">-</span></p>
-                                <p><strong>Outras Despesas:</strong> <span id="otherExpenses">-</span></p>
                             </div>
                             
                             <div class="col-md-4 mb-3">
@@ -347,20 +344,18 @@ document.addEventListener('DOMContentLoaded', function() {
     window.expensesPieChart = new Chart(pieCtx, {
         type: 'pie',
         data: {
-            labels: ['Despesas de Vendas', 'Custos Fixos', 'Gastos com Insumos e Produtos', 'Gastos com Vendas'],
+            labels: ['Despesas de Vendas', 'Custos Fixos', 'Gastos com Insumos e Produtos'],
             datasets: [{
-                data: [0, 0, 0, 0],
+                data: [0, 0, 0],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.7)',
                     'rgba(54, 162, 235, 0.7)',
-                    'rgba(255, 206, 86, 0.7)',
-                    'rgba(75, 192, 192, 0.7)'
+                    'rgba(255, 206, 86, 0.7)'
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
                     'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)'
+                    'rgba(255, 206, 86, 1)'
                 ],
                 borderWidth: 1
             }]
@@ -434,13 +429,11 @@ document.addEventListener('DOMContentLoaded', function() {
             fixedCosts,
             operationalExpenses,
             financialExpenses,
-            taxes,
-            otherExpenses,
             clientsServed
         } = window.rawData;
         
         // Calcular a Margem
-        const totalCosts = salesExpenses + fixedCosts + operationalExpenses + financialExpenses + taxes + otherExpenses;
+        const totalCosts = salesExpenses + fixedCosts + operationalExpenses + financialExpenses;
         const margin = salesRevenue > 0 ? ((salesRevenue - totalCosts) / salesRevenue * 100) : 0;
         
         // Calcular o Ticket Médio
@@ -450,7 +443,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const contributionMargin = salesRevenue > 0 ? ((salesRevenue - salesExpenses) / salesRevenue * 100) : 0;
         
         // Calcular Produtividade
-        const fixedExpenses = fixedCosts + operationalExpenses + financialExpenses + taxes + otherExpenses;
+        const fixedExpenses = fixedCosts + operationalExpenses + financialExpenses;
         const productivity = fixedExpenses > 0 ? (salesRevenue / fixedExpenses) : 0;
         
         // Calcular Ponto de Equilíbrio
@@ -465,7 +458,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         {% if user.activity_type != 'Serviços' %}
         // Atualizar o gráfico de pizza
-        updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses, financialExpenses);
+        updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses);
         {% endif %}
 
         // Atualizar o gráfico de capacidade
@@ -474,13 +467,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     {% if user.activity_type != 'Serviços' %}
     // Função para atualizar o gráfico de pizza
-    function updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses, financialExpenses) {
+    function updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses) {
         // Atualizar dados do gráfico de pizza
         window.expensesPieChart.data.datasets[0].data = [
             salesExpenses,
             fixedCosts,
-            operationalExpenses,
-            financialExpenses
+            operationalExpenses
         ];
         window.expensesPieChart.update();
     }
@@ -537,14 +529,11 @@ document.addEventListener('DOMContentLoaded', function() {
             fixedCosts,
             operationalExpenses,
             financialExpenses,
-            taxes,
-            otherExpenses,
             clientsServed
         } = window.rawData;
 
         // Calcular o total de custos
-        const totalCosts = salesExpenses + fixedCosts + operationalExpenses + 
-                          financialExpenses + taxes + otherExpenses;
+        const totalCosts = salesExpenses + fixedCosts + operationalExpenses + financialExpenses;
 
         // Atualizar o gráfico
         window.costsChart.data.datasets[0].data = [totalCosts, salesRevenue];
@@ -569,6 +558,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log("Dados recebidos:", data);
                 console.log("Service Capacity:", data.service_capacity);
+                console.log("Ideal Profit Margin:", data.ideal_profit_margin);
                 
                 // Atualizar a tabela com os dados (formatação para exibição)
                 document.getElementById('clientsServed').textContent = data.clients_served;
@@ -580,13 +570,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('fixedCosts').textContent = formatMoney(data.fixed_costs);
                 {% endif %}
                 document.getElementById('operationalExpenses').textContent = formatMoney(data.operational_expenses);
-                document.getElementById('financialExpenses').textContent = formatMoney(data.financial_expenses);
-                document.getElementById('taxes').textContent = formatMoney(data.taxes);
-                document.getElementById('otherExpenses').textContent = formatMoney(data.other_expenses);
                 {% if user.activity_type == 'Serviços' %}
                 document.getElementById('proLabore').textContent = formatMoney(data.pro_labore);
                 document.getElementById('weeklyHours').textContent = `${data.weekly_hours}h`;
                 {% endif %}
+                
+                // Atualizar a margem de lucro ideal
+                const idealMargin = data.ideal_profit_margin !== null && data.ideal_profit_margin !== undefined ? data.ideal_profit_margin : 0;
+                console.log("Valor final da margem ideal:", idealMargin);
+                document.getElementById('margemIdeial').textContent = `${idealMargin.toFixed(2)}%`;
                 
                 // Guardar os valores numéricos originais para cálculos
                 window.rawData = {
@@ -595,8 +587,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     fixedCosts: getNumericValue(data.fixed_costs),
                     operationalExpenses: getNumericValue(data.operational_expenses),
                     financialExpenses: getNumericValue(data.financial_expenses),
-                    taxes: getNumericValue(data.taxes),
-                    otherExpenses: getNumericValue(data.other_expenses),
                     proLabore: getNumericValue(data.pro_labore),
                     clientsServed: parseInt(data.clients_served) || 0
                 };
