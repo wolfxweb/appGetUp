@@ -96,8 +96,8 @@
                                         <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
                                     </label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="margem" readonly>
-                                        <span class="input-group-text" id="margemPercentual"></span>
+                                        <input type="text" class="form-control" id="margem_reais" readonly>
+                                        <input type="text" class="form-control" id="margemPercentual" readonly>
                                     </div>
                                 </div>
 
@@ -132,7 +132,7 @@
                                     </label>
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="pontoEquilibrio" readonly>
-                                        <span class="input-group-text" id="pontoEquilibrioPercentual"></span>
+                                        <input type="text" class="form-control" id="pontoEquilibrioPercentual" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -427,29 +427,48 @@ document.addEventListener('DOMContentLoaded', function() {
             clientsServed
         } = window.rawData;
         
-        // Calcular a Margem
-        const totalCosts = salesExpenses + fixedCosts + operationalExpenses + financialExpenses;
-        const margin = salesRevenue > 0 ? ((salesRevenue - totalCosts) / salesRevenue * 100) : 0;
+        // Calcular a Margem usando a nova fórmula
+        const totalCosts = salesExpenses + operationalExpenses + fixedCosts;
+        const marginReais = salesRevenue - totalCosts;
+        const marginPercentual = salesRevenue > 0 ? (marginReais / salesRevenue) * 100 : 0;
         
         // Calcular o Ticket Médio
-        const averageTicket = salesRevenue / clientsServed;
+        const averageTicket = clientsServed > 0 ? salesRevenue / clientsServed : 0;
         
-        // Calcular a Margem de Contribuição
-        const contributionMargin = salesRevenue > 0 ? ((salesRevenue - salesExpenses) / salesRevenue * 100) : 0;
+        // Calcular a Margem de Contribuição em reais
+        const contributionMarginReais = salesRevenue - operationalExpenses - salesExpenses;
         
         // Calcular Produtividade
         const fixedExpenses = fixedCosts + operationalExpenses + financialExpenses;
         const productivity = fixedExpenses > 0 ? (salesRevenue / fixedExpenses) : 0;
         
         // Calcular Ponto de Equilíbrio
-        const breakEvenPoint = salesRevenue > 0 ? (fixedCosts / (1 - (salesExpenses / salesRevenue))) : 0;
+        // 1. Calcular custos variáveis unitários
+        const variableCostsPerClient = clientsServed > 0 ? 
+            (salesExpenses + operationalExpenses) / clientsServed : 0;
+        
+        // 2. Calcular margem de contribuição unitária
+        const unitContributionMargin = averageTicket - variableCostsPerClient;
+        
+        // 3. Calcular ponto de equilíbrio em quantidade de clientes
+        const breakEvenClients = unitContributionMargin > 0 ? 
+            fixedCosts / unitContributionMargin : 0;
+        
+        // 4. Calcular ponto de equilíbrio em reais
+        const breakEvenPoint = breakEvenClients * averageTicket;
+        
+        // 5. Calcular ponto de equilíbrio percentual
+        const breakEvenPointPercentual = salesRevenue > 0 ? 
+            (breakEvenPoint / salesRevenue) * 100 : 0;
 
         // Atualizar os elementos na interface
-        document.getElementById('margem').value = margin.toFixed(2) + '%';
+        document.getElementById('margem_reais').value = formatMoney(marginReais);
+        document.getElementById('margemPercentual').textContent = marginPercentual.toFixed(2) + '%';
         document.getElementById('ticketMedio').value = formatMoney(averageTicket);
-        document.getElementById('margemContribuicao').value = contributionMargin.toFixed(2) + '%';
+        document.getElementById('margemContribuicao').value = formatMoney(contributionMarginReais);
         document.getElementById('produtividade').value = productivity.toFixed(2);
         document.getElementById('pontoEquilibrio').value = formatMoney(breakEvenPoint);
+        document.getElementById('pontoEquilibrioPercentual').value = breakEvenPointPercentual.toFixed(2) + '%';
         
         {% if user.activity_type != 'Serviços' %}
         // Atualizar o gráfico de pizza
