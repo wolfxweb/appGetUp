@@ -121,7 +121,8 @@ async def get_basic_data(
                 ),
                 "other_expenses": safe_float(
                     getattr(basic_data, 'other_fixed_costs', None)
-                )
+                ),
+                "service_capacity": basic_data.service_capacity or "Não definido"
             }
 
             # Adicionar campos específicos de serviço se o tipo de atividade for 'servico'

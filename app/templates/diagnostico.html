@@ -279,6 +279,21 @@
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Função para formatar valores monetários (apenas para exibição)
+    function formatMoney(value) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(value);
+    }
+
+    // Função para obter valor numérico (para cálculos)
+    function getNumericValue(value) {
+        return parseFloat(value) || 0;
+    }
+
     // Inicializar o gráfico de barras
     const ctx = document.getElementById('costsChart').getContext('2d');
     window.costsChart = new Chart(ctx, {
@@ -411,37 +426,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Função para extrair valores numéricos dos elementos
-    function getNumericValue(elementId) {
-        const element = document.getElementById(elementId);
-        if (!element) return 0;
-        const text = element.textContent || '0';
-        return parseFloat(text.replace('R$ ', '').replace('.', '').replace(',', '.')) || 0;
-    }
-
     // Função para atualizar os indicadores
     function updateIndicators() {
-        console.log("Atualizando indicadores...");
+        const {
+            salesRevenue,
+            salesExpenses,
+            fixedCosts,
+            operationalExpenses,
+            financialExpenses,
+            taxes,
+            otherExpenses,
+            clientsServed
+        } = window.rawData;
         
-        // Obter valores
-        const salesRevenue = getNumericValue('salesRevenue');
-        const salesExpenses = getNumericValue('salesExpenses');
-        const fixedCosts = {% if user.activity_type != 'Serviços' %}getNumericValue('fixedCosts'){% else %}0{% endif %};
-        const operationalExpenses = getNumericValue('operationalExpenses');
-        const financialExpenses = getNumericValue('financialExpenses');
-        const taxes = getNumericValue('taxes');
-        const otherExpenses = getNumericValue('otherExpenses');
-        const clientsServed = parseInt(document.getElementById('clientsServed').textContent) || 1;
-        
-        // Obter valor da capacidade de atendimento do último campo da tabela
-        const capacityCell = document.querySelector('table tbody tr td:last-child');
-        const serviceCapacity = capacityCell ? parseInt(capacityCell.textContent) || clientsServed : clientsServed;
-
-        console.log("Valores:", {
-            salesRevenue, salesExpenses, fixedCosts, operationalExpenses,
-            financialExpenses, taxes, otherExpenses, clientsServed, serviceCapacity
-        });
-
         // Calcular a Margem
         const totalCosts = salesExpenses + fixedCosts + operationalExpenses + financialExpenses + taxes + otherExpenses;
         const margin = salesRevenue > 0 ? ((salesRevenue - totalCosts) / salesRevenue * 100) : 0;
@@ -461,22 +458,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Atualizar os elementos na interface
         document.getElementById('margem').value = margin.toFixed(2) + '%';
-        document.getElementById('ticketMedio').value = 'R$ ' + averageTicket.toFixed(2);
+        document.getElementById('ticketMedio').value = formatMoney(averageTicket);
         document.getElementById('margemContribuicao').value = contributionMargin.toFixed(2) + '%';
         document.getElementById('produtividade').value = productivity.toFixed(2);
-        document.getElementById('pontoEquilibrio').value = 'R$ ' + breakEvenPoint.toFixed(2);
+        document.getElementById('pontoEquilibrio').value = formatMoney(breakEvenPoint);
         
-        console.log("Indicadores calculados:", {
-            margin, averageTicket, contributionMargin, productivity, breakEvenPoint
-        });
-
         {% if user.activity_type != 'Serviços' %}
         // Atualizar o gráfico de pizza
         updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses, financialExpenses);
         {% endif %}
 
         // Atualizar o gráfico de capacidade
-        updateCapacityChart(clientsServed, serviceCapacity);
+        updateCapacityChart(clientsServed, window.serviceCapacity);
     }
 
     {% if user.activity_type != 'Serviços' %}
@@ -537,14 +530,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para atualizar o gráfico com os valores da tabela
     function updateChart() {
-        // Obter valores
-        const salesRevenue = getNumericValue('salesRevenue');
-        const salesExpenses = getNumericValue('salesExpenses');
-        const fixedCosts = {% if user.activity_type != 'Serviços' %}getNumericValue('fixedCosts'){% else %}0{% endif %};
-        const operationalExpenses = getNumericValue('operationalExpenses');
-        const financialExpenses = getNumericValue('financialExpenses');
-        const taxes = getNumericValue('taxes');
-        const otherExpenses = getNumericValue('otherExpenses');
+        // Usar os valores numéricos originais para cálculos
+        const {
+            salesRevenue,
+            salesExpenses,
+            fixedCosts,
+            operationalExpenses,
+            financialExpenses,
+            taxes,
+            otherExpenses,
+            clientsServed
+        } = window.rawData;
 
         // Calcular o total de custos
         const totalCosts = salesExpenses + fixedCosts + operationalExpenses + 
@@ -572,26 +568,43 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(data => {
                 console.log("Dados recebidos:", data);
-                // Atualizar a tabela com os dados
+                console.log("Service Capacity:", data.service_capacity);
+                
+                // Atualizar a tabela com os dados (formatação para exibição)
                 document.getElementById('clientsServed').textContent = data.clients_served;
-                document.getElementById('salesRevenue').textContent = `R$ ${data.sales_revenue.toFixed(2)}`;
-                document.getElementById('salesExpenses').textContent = `R$ ${data.sales_expenses.toFixed(2)}`;
+                const capacidade = data.service_capacity || 'Não definido';
+                document.getElementById('capacidadeAtendimento').textContent = `${capacidade} clientes`;
+                document.getElementById('salesRevenue').textContent = formatMoney(data.sales_revenue);
+                document.getElementById('salesExpenses').textContent = formatMoney(data.sales_expenses);
                 {% if user.activity_type != 'Serviços' %}
-                document.getElementById('fixedCosts').textContent = `R$ ${data.fixed_costs.toFixed(2)}`;
+                document.getElementById('fixedCosts').textContent = formatMoney(data.fixed_costs);
                 {% endif %}
-                document.getElementById('operationalExpenses').textContent = `R$ ${data.operational_expenses.toFixed(2)}`;
-                document.getElementById('financialExpenses').textContent = `R$ ${data.financial_expenses.toFixed(2)}`;
-                document.getElementById('taxes').textContent = `R$ ${data.taxes.toFixed(2)}`;
-                document.getElementById('otherExpenses').textContent = `R$ ${data.other_expenses.toFixed(2)}`;
+                document.getElementById('operationalExpenses').textContent = formatMoney(data.operational_expenses);
+                document.getElementById('financialExpenses').textContent = formatMoney(data.financial_expenses);
+                document.getElementById('taxes').textContent = formatMoney(data.taxes);
+                document.getElementById('otherExpenses').textContent = formatMoney(data.other_expenses);
                 {% if user.activity_type == 'Serviços' %}
-                document.getElementById('proLabore').textContent = `R$ ${data.pro_labore.toFixed(2)}`;
+                document.getElementById('proLabore').textContent = formatMoney(data.pro_labore);
                 document.getElementById('weeklyHours').textContent = `${data.weekly_hours}h`;
                 {% endif %}
                 
-                // Guardar a capacidade de atendimento para uso no gráfico
-                window.serviceCapacity = data.service_capacity || data.clients_served * 1.5; // Valor padrão se não existir
+                // Guardar os valores numéricos originais para cálculos
+                window.rawData = {
+                    salesRevenue: getNumericValue(data.sales_revenue),
+                    salesExpenses: getNumericValue(data.sales_expenses),
+                    fixedCosts: getNumericValue(data.fixed_costs),
+                    operationalExpenses: getNumericValue(data.operational_expenses),
+                    financialExpenses: getNumericValue(data.financial_expenses),
+                    taxes: getNumericValue(data.taxes),
+                    otherExpenses: getNumericValue(data.other_expenses),
+                    proLabore: getNumericValue(data.pro_labore),
+                    clientsServed: parseInt(data.clients_served) || 0
+                };
                 
-                // Atualizar o gráfico e os indicadores
+                // Guardar a capacidade de atendimento para uso no gráfico
+                window.serviceCapacity = data.service_capacity || data.clients_served * 1.5;
+                
+                // Atualizar o gráfico e os indicadores usando os valores numéricos
                 updateChart();
             })
             .catch(error => {
