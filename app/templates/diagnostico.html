@@ -49,27 +49,22 @@
                         
                         <!-- Dados Básicos em formato de texto -->
                         <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <p><strong>Quantidade de Clientes Atendidos:</strong> <span id="clientsServed">-</span></p>
-                                <p><strong>Capacidade de Atendimento:</strong> <span id="capacidadeAtendimento">-</span></p>
-                                <p><strong>Faturamento:</strong> <span id="salesRevenue">-</span></p>
-                                <p><strong>Despesas de Vendas:</strong> <span id="salesExpenses">-</span></p>
-                            </div>
-                            
-                            <div class="col-md-4 mb-3">
-                                <p><strong>Gastos com Insumos e Produtos:</strong> <span id="operationalExpenses">-</span></p>
-                            </div>
-                            
-                            <div class="col-md-4 mb-3">
-                                <p><strong>Margem de Lucro Ideal:</strong> <span id="margemIdeial">-</span></p>
-                                {% if user.activity_type == 'Serviços' %}
-                                    <p><strong>Pro-labore:</strong> <span id="proLabore">-</span></p>
-                                    <p><strong>Horas Trabalhadas por Semana:</strong> <span id="weeklyHours">-</span></p>
-                                {% endif %}
-                                {% if user.activity_type != 'Serviços' %}
+                            {% if user.activity_type != 'Serviços' %}
+                                <div class="col-md-6 mb-3">
+                                    <p><strong>Quantidade de Clientes Atendidos:</strong> <span id="clientsServed">-</span></p>
+                                    <p><strong>Capacidade de Atendimento:</strong> <span id="capacidadeAtendimento">-</span></p>
+                                    <p><strong>Faturamento:</strong> <span id="salesRevenue">-</span></p>
+                                
                                     <p><strong>Custos Fixos:</strong> <span id="fixedCosts">-</span></p>
-                                {% endif %}              
-                            </div>
+                            
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p><strong>Despesas de Vendas:</strong> <span id="salesExpenses">-</span></p>
+                                    <p><strong>Gastos com Insumos e Produtos:</strong> <span id="operationalExpenses">-</span></p>
+                                    <p><strong>Margem de Lucro Ideal:</strong> <span id="margemIdeial">-</span></p>
+                                
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

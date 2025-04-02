@@ -64,8 +64,6 @@ content %} {% with active_page='basic_data' %} {% include
 
               <tbody>
                 {% for data in basic_data %}
-
-   
                 <tr>
                   <td>
                     {{ ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio',
@@ -74,35 +72,28 @@ content %} {% with active_page='basic_data' %} {% include
                   </td>
                   <td>{{ data.clients_served }}</td>
                   <td>
-                    R$ {{ "{:,.2f}".format(data.sales_revenue).replace('.', ',')
-                    }}
+                    {{ data.sales_revenue }}
                   </td>
                   <td>
-                    R$ {{ "{:,.2f}".format(data.sales_expenses).replace('.',
-                    ',') }}
+                    {{ data.sales_expenses }}
                   </td>
                   <td>{{ 'Sim' if data.is_current else 'Não' }}</td>
                   {% if user.activity_type == 'Serviços' %}
                   <td>
-                    R$ {{ "{:,.2f}".format(data.pro_labore).replace('.', ',') if
-                    data.pro_labore is not none else 'N/A' }}
+                    {{ data.pro_labore if data.pro_labore is not none else 'N/A' }}
                   </td>
                   <td>
-                    R$ {{ "{:,.2f}".format(data.other_fixed_costs).replace('.',
-                    ',') if data.other_fixed_costs is not none else 'N/A' }}
+                    {{ data.other_fixed_costs if data.other_fixed_costs is not none else 'N/A' }}
                   </td>
                   <td>
-                    {{ "{:.2f}%".format(data.ideal_service_profit_margin) if
-                    data.ideal_service_profit_margin is not none else 'N/A' }}
+                    {{ data.ideal_service_profit_margin if data.ideal_service_profit_margin is not none else 'N/A' }}
                   </td>
                   {% elif user.activity_type in ['Comércio', 'Indústria'] %}
                   <td>
-                    R$ {{ "{:,.2f}".format(data.fixed_costs).replace('.', ',')
-                    if data.fixed_costs is not none else 'N/A' }}
+                    {{ data.fixed_costs if data.fixed_costs is not none else 'N/A' }}
                   </td>
                   <td>
-                    {{ "{:.2f}%".format(data.ideal_profit_margin) if
-                    data.ideal_profit_margin is not none else 'N/A' }}
+                    {{ data.ideal_profit_margin if data.ideal_profit_margin is not none else 'N/A' }}
                   </td>
                   {% endif %}
                   <td>
