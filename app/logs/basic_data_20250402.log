@@ -722,3 +722,9 @@
 2025-04-02 19:27:18,275 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
 2025-04-02 19:27:18,281 - app.routes.basic_data - INFO - Criando novo registro
 2025-04-02 19:27:18,288 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-02 20:21:54,731 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-04-02 20:21:54,734 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-04-02 20:21:54,747 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
+2025-04-02 20:21:54,791 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 1
+2025-04-02 20:21:54,791 - app.routes.basic_data - INFO - Logs encontrados: 0
+2025-04-02 20:21:54,792 - app.routes.basic_data - INFO - Total de logs: 0, Páginas: 0
