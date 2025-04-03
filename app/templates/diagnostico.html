@@ -153,7 +153,7 @@
                                     <div class="col-md-12">
                                         <div class="mb-3">
                                             <label class="form-label">Resultado da Análise</label>
-                                            <textarea class="form-control" id="analiseCalculo" rows="10" readonly></textarea>
+                                            <div id="analiseCalculo" class="p-3 bg-light rounded" style="white-space: pre-wrap;"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -475,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Calcular Ponto de Equilíbrio Percentual ((L24*(F11/F10))/(F11/F10))
         const pontoEquilibrioPercentual = ticketMedio > 0 ? pontoEquilibrio / ticketMedio : 0;
-
+        const variavel =" Uma vez que estas considerações se referem a mês anterior, recomendamos que em “Definição de Prioridades” você estime as variações para o corrente mês, antecipando-se assim a eventuais providências relevantes. ";
         // Definir textos das variáveis
         const variavel1 = `Você tem motivo para estar bem preocupado!
 É preciso agir rápido! Seja racional, objetivo e frio! Faça o que for preciso! Agora!
@@ -624,6 +624,8 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
             analiseResultado = variavel11;
         }
 
+        analiseResultado =  variavel + analiseResultado;
+
         // Atualizar os elementos na interface
         document.getElementById('lucro_reais').value = formatMoney(lucroReais);
         document.getElementById('lucro_percentual').value = lucroPercentual.toFixed(2) + '%';
@@ -632,7 +634,7 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
         document.getElementById('produtividade').value = produtividade.toFixed(2);
         document.getElementById('pontoEquilibrio').value = formatMoney(pontoEquilibrio);
         document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
-        document.getElementById('analiseCalculo').value = analiseResultado;
+        document.getElementById('analiseCalculo').textContent = analiseResultado;
         
         // Atualizar o gráfico de pizza
         updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses);
