@@ -31,21 +31,21 @@
                         <h5 class="card-title mb-0">Dados Básicos</h5>
                     </div>
                     <div class="card-body p-4">
-                        <!-- Select Box -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="form-group">
+    <!-- Select Box -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="form-group">
                                                         <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
-                                    <select class="form-select" id="basicDataSelect">
-                                        {% for data in basic_data_list %}
-                                        <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
-                                            {{ data.month }}/{{ data.year }}
-                                        </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                <select class="form-select" id="basicDataSelect">
+                    {% for data in basic_data_list %}
+                    <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
+                        {{ data.month }}/{{ data.year }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
 
                         <!-- Dados Básicos em formato de texto -->
                         <div class="row">
@@ -57,83 +57,98 @@
                                 
                                     <p><strong>Custos Fixos:</strong> <span id="fixedCosts">-</span></p>
                             
-                                </div>
+                </div>
                                                 <div class="col-md-6 mb-3">
                                                     <p><strong>Despesas de Vendas:</strong> <span id="salesExpenses">-</span></p>
                                                     <p><strong>Gastos com Insumos e Produtos:</strong> <span id="operationalExpenses">-</span></p>
                                                     <p><strong>Margem de Lucro Ideal:</strong> <span id="margemIdeial">-</span></p>
                                                 
-                                    </div>
-                                            {% endif %}
-                            </div>
-                        </div>
                     </div>
+                                            {% endif %}
+                            
+                            {% if user.activity_type == 'Serviços' %}
+                                <div class="col-md-6 mb-3">
+                                    <p><strong>Quantidade de Clientes Atendidos:</strong> <span id="clientsServed">-</span></p>
+                                    <p><strong>Faturamento:</strong> <span id="salesRevenue">-</span></p>
+                                    <p><strong>Gastos com Vendas:</strong> <span id="salesExpenses">-</span></p>
+                                    <p><strong>Gastos com Insumos e Produtos de Terceiros:</strong> <span id="operationalExpenses">-</span></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <p><strong>Pró-labore:</strong> <span id="proLabore">-</span></p>
+                                    <p><strong>Demais Custos Fixos:</strong> <span id="otherFixedCosts">-</span></p>
+                                    <p><strong>Margem que Considera Ideal:</strong> <span id="margemIdeial">-</span></p>
+                                    <p><strong>Horas de Trabalho em uma Semana:</strong> <span id="weeklyHours">-</span></p>
+                </div>
+                            {% endif %}
+            </div>
+        </div>
+    </div>
 
     <!-- Gráficos e Métricas -->
                 <div class="row mb-4">
                     <!-- Custos e Faturamento -->
                     <div class="col-md-4">
-                        <div class="card h-100">
+            <div class="card h-100">
                             <div class="card-header bg-primary text-white">
-                                <h5 class="card-title mb-0">Custos e Faturamento</h5>
-                            </div>
-                            <div class="card-body">
+                    <h5 class="card-title mb-0">Custos e Faturamento</h5>
+                </div>
+                <div class="card-body">
                                 <div style="height: 400px;">
-                                    <canvas id="costsChart"></canvas>
+                    <canvas id="costsChart"></canvas>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                </div>
+            </div>
+        </div>
 
                     <!-- Métricas Financeiras -->
                     <div class="col-md-4">
-                        <div class="card h-100">
+            <div class="card h-100">
                             <div class="card-header bg-primary text-white">
-                                <h5 class="card-title mb-0">Métricas Financeiras</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label class="form-label">
+                    <h5 class="card-title mb-0">Métricas Financeiras</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">
                                         Lucro
-                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
-                                    </label>
-                                    <div class="input-group">
+                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
+                        </label>
+                        <div class="input-group">
                                         <input type="text" class="form-control" id="lucro_reais" readonly>
                                         <input type="text" class="form-control" id="lucro_percentual" readonly>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Ticket Médio
-                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#ticketMedioModal" style="cursor: pointer;"></i>
-                                    </label>
-                                    <input type="text" class="form-control" id="ticketMedio" readonly>
-                                </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Ticket Médio
+                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#ticketMedioModal" style="cursor: pointer;"></i>
+                        </label>
+                        <input type="text" class="form-control" id="ticketMedio" readonly>
+                    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Margem de Contribuição
-                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemContribuicaoModal" style="cursor: pointer;"></i>
-                                    </label>
-                                    <input type="text" class="form-control" id="margemContribuicao" readonly>
-                                </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Margem de Contribuição
+                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemContribuicaoModal" style="cursor: pointer;"></i>
+                        </label>
+                        <input type="text" class="form-control" id="margemContribuicao" readonly>
+                    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Produtividade
-                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#produtividadeModal" style="cursor: pointer;"></i>
-                                    </label>
-                                    <input type="text" class="form-control" id="produtividade" readonly>
-                                </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Produtividade
+                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#produtividadeModal" style="cursor: pointer;"></i>
+                        </label>
+                        <input type="text" class="form-control" id="produtividade" readonly>
+                    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Ponto de Equilíbrio
-                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#pontoEquilibrioModal" style="cursor: pointer;"></i>
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="pontoEquilibrio" readonly>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Ponto de Equilíbrio
+                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#pontoEquilibrioModal" style="cursor: pointer;"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="pontoEquilibrio" readonly>
                                         <input type="text" class="form-control" id="pontoEquilibrioPercentual" readonly>
                                     </div>
                                 </div>
@@ -149,6 +164,11 @@
                             </div>
                             <div class="card-body">
                                 {% if user.activity_type != 'Serviços' %}
+                                <div style="height: 400px;">
+                                    <canvas id="expensesPieChart"></canvas>
+                                </div>
+                                {% endif %}
+                                {% if user.activity_type == 'Serviços' %}
                                 <div style="height: 400px;">
                                     <canvas id="expensesPieChart"></canvas>
                                 </div>
@@ -283,11 +303,12 @@ document.addEventListener('DOMContentLoaded', function() {
     {% if user.activity_type != 'Serviços' %}
     typeActivity()
     {% endif %} 
-   
+    {% if user.activity_type == 'Serviços' %}
+    typeActivityService()
+    {% endif %}  
 });
-function typeActivity() {
-   // Função para formatar valores monetários (apenas para exibição)
-   function formatMoney(value) {
+  // Função para formatar valores monetários (apenas para exibição)
+function formatMoney(value) {
     return new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
@@ -300,6 +321,247 @@ function typeActivity() {
 function getNumericValue(value) {
     return parseFloat(value) || 0;
 }
+function typeActivityService() {
+    console.log("Iniciando typeActivityService");
+    
+    // Inicializar o gráfico de barras
+    const ctx = document.getElementById('costsChart').getContext('2d');
+    window.costsChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Custos', 'Faturamento'],
+            datasets: [{
+                data: [0, 0],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'R$ ' + context.raw.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) {
+                            return 'R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Inicializar o gráfico de pizza de despesas para serviços
+    console.log("Tentando inicializar o gráfico de pizza");
+    const pieCtx = document.getElementById('expensesPieChart');
+    if (!pieCtx) {
+        console.error("Elemento expensesPieChart não encontrado!");
+        return;
+    }
+    window.expensesPieChart = new Chart(pieCtx.getContext('2d'), {
+        type: 'pie',
+        data: {
+            labels: ['Despesas de Vendas', 'Pró-labore', 'Demais Custos Fixos'],
+            datasets: [{
+                data: [0, 0, 0],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw || 0;
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                            return `${label}: R$ ${value.toLocaleString('pt-BR', {minimumFractionDigits: 2})} (${percentage}%)`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    // Listener para o evento change
+    document.getElementById('basicDataSelect').addEventListener('change', function() {
+        const basicDataId = this.value;
+        console.log("ID selecionado:", basicDataId);
+        
+        fetch(`/diagnostico/api/basic-data/${basicDataId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Dados não encontrados');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("Dados recebidos do servidor:", data);
+                console.log("Tipo de dados:", typeof data);
+                console.log("Estrutura dos dados:", Object.keys(data));
+                
+                // Atualizar campos da coluna esquerda
+                document.getElementById('clientsServed').textContent = data.clients_served || '-';
+                document.getElementById('salesRevenue').textContent = formatMoney(data.sales_revenue);
+                document.getElementById('salesExpenses').textContent = formatMoney(data.sales_expenses);
+                document.getElementById('operationalExpenses').textContent = formatMoney(data.operational_expenses);
+
+                // Atualizar campos da coluna direita
+                document.getElementById('proLabore').textContent = formatMoney(data.pro_labore);
+                document.getElementById('otherFixedCosts').textContent = formatMoney(data.other_fixed_costs);
+                document.getElementById('weeklyHours').textContent = `${data.weekly_hours || '-'}h`;
+                
+                // Atualizar margem ideal
+                const idealMargin = data.ideal_profit_margin !== null && data.ideal_profit_margin !== undefined ? 
+                    data.ideal_profit_margin : 0;
+                document.getElementById('margemIdeial').textContent = `${idealMargin.toFixed(2)}%`;
+
+                // Armazenar dados brutos para cálculos
+                window.rawData = {
+                    salesRevenue: getNumericValue(data.sales_revenue),
+                    salesExpenses: getNumericValue(data.sales_expenses),
+                    operationalExpenses: getNumericValue(data.operational_expenses),
+                    proLabore: getNumericValue(data.pro_labore),
+                    otherFixedCosts: getNumericValue(data.other_fixed_costs),
+                    weeklyHours: getNumericValue(data.weekly_hours),
+                    clientsServed: data.clients_served
+                };
+                
+                // Atualizar o gráfico e os indicadores
+                updateChart();
+            })
+            .catch(error => {
+                console.error('Erro ao carregar dados:', error);
+                alert('Erro ao carregar os dados. Por favor, tente novamente.');
+            });
+    });
+
+    // Disparar o evento change automaticamente quando a página carregar
+    const selectElement = document.getElementById('basicDataSelect');
+    if (selectElement && selectElement.value) {
+        selectElement.dispatchEvent(new Event('change'));
+    } else {
+        console.warn('Select não encontrado ou sem valor para carregar dados iniciais');
+    }
+
+    // Função para atualizar o gráfico de pizza de despesas
+    function updateExpensesPieChart(salesExpenses, proLabore, otherFixedCosts) {
+        // Atualizar dados do gráfico de pizza
+        window.expensesPieChart.data.datasets[0].data = [
+            salesExpenses,
+            proLabore,
+            otherFixedCosts
+        ];
+        window.expensesPieChart.update();
+    }
+
+    // Função para atualizar o gráfico com os valores da tabela
+    function updateChart() {
+        const {
+            salesRevenue,
+            salesExpenses,
+            proLabore,
+            otherFixedCosts
+        } = window.rawData;
+
+        // Calcular o total de custos (para serviços: despesas de vendas + pró-labore + outros custos fixos)
+        const totalCosts = salesExpenses + proLabore + otherFixedCosts;
+
+        // Atualizar o gráfico de barras
+        window.costsChart.data.datasets[0].data = [totalCosts, salesRevenue];
+        window.costsChart.update();
+        
+        // Atualizar o gráfico de pizza
+        updateExpensesPieChart(salesExpenses, proLabore, otherFixedCosts);
+        
+        // Atualizar os indicadores
+        updateIndicators();
+    }
+
+    // Função para atualizar os indicadores para serviços
+    function updateIndicators() {
+        const {
+            salesRevenue,
+            salesExpenses,
+            proLabore,
+            otherFixedCosts,
+            weeklyHours,
+            clientsServed
+        } = window.rawData;
+
+        // Calcular Lucro em Reais (Receita - (Despesas de Vendas + Pró-labore + Outros Custos Fixos))
+        const lucroReais = salesRevenue - (salesExpenses + proLabore + otherFixedCosts);
+        
+        // Calcular Lucro Percentual
+        const lucroPercentual = salesRevenue > 0 ? (lucroReais / salesRevenue) * 100 : 0;
+        
+        // Calcular Ticket Médio (Receita / Clientes Atendidos)
+        const ticketMedio = clientsServed > 0 ? salesRevenue / clientsServed : 0;
+        
+        // Calcular Margem de Contribuição por cliente ((Receita - Despesas Variáveis) / Clientes)
+        const margemContribuicao = clientsServed > 0 ? 
+            (salesRevenue - salesExpenses) / clientsServed : 0;
+        
+        // Calcular Produtividade (Receita / Horas Trabalhadas por Mês)
+        const horasPorMes = weeklyHours * 4; // considerando 4 semanas por mês
+        const produtividade = horasPorMes > 0 ? salesRevenue / horasPorMes : 0;
+        
+        // Calcular Ponto de Equilíbrio
+        const custosFixosTotais = proLabore + otherFixedCosts;
+        const custosPorHora = horasPorMes > 0 ? custosFixosTotais / horasPorMes : 0;
+        const receitaPorHora = horasPorMes > 0 ? salesRevenue / horasPorMes : 0;
+        const pontoEquilibrio = receitaPorHora > 0 ? 
+            (custosFixosTotais / (receitaPorHora - (salesExpenses / horasPorMes))) * receitaPorHora : 0;
+        
+        // Calcular Ponto de Equilíbrio Percentual
+        const pontoEquilibrioPercentual = salesRevenue > 0 ? (pontoEquilibrio / salesRevenue) * 100 : 0;
+
+        // Atualizar os elementos na interface
+        document.getElementById('lucro_reais').value = formatMoney(lucroReais);
+        document.getElementById('lucro_percentual').value = lucroPercentual.toFixed(2) + '%';
+        document.getElementById('ticketMedio').value = formatMoney(ticketMedio);
+        document.getElementById('margemContribuicao').value = formatMoney(margemContribuicao);
+        document.getElementById('produtividade').value = formatMoney(produtividade);
+        document.getElementById('pontoEquilibrio').value = formatMoney(pontoEquilibrio);
+        document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
+    }
+}
+
+function typeActivity() {
+
     // Inicializar o gráfico de barras
     const ctx = document.getElementById('costsChart').getContext('2d');
     window.costsChart = new Chart(ctx, {
