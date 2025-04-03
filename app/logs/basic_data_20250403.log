@@ -690,3 +690,11 @@
 2025-04-03 19:23:55,890 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
 2025-04-03 19:23:55,895 - app.routes.basic_data - INFO - Criando novo registro
 2025-04-03 19:23:55,900 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-03 19:28:09,739 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-03 19:28:09,740 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-04-03 19:28:09,754 - app.routes.basic_data - INFO - Criando novo registro
+2025-04-03 19:28:09,774 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-03 19:28:24,772 - app.routes.basic_data - INFO - Processando dados básicos para usuário 3
+2025-04-03 19:28:24,772 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-04-03 19:28:24,774 - app.routes.basic_data - INFO - Criando novo registro
+2025-04-03 19:28:24,775 - app.routes.basic_data - INFO - Dados salvos com sucesso

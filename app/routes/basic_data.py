@@ -45,7 +45,7 @@ logger.addHandler(console_handler)
 class BasicDataInput(BaseModel):
     month: int
     year: int
-    clients_served: int
+    clients_served: int = 0  # Definir um valor padrão de 0
     sales_revenue: float
     sales_expenses: float
     input_product_expenses: float
