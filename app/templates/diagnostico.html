@@ -31,21 +31,21 @@
                         <h5 class="card-title mb-0">Dados Básicos</h5>
                     </div>
                     <div class="card-body p-4">
-    <!-- Select Box -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="form-group">
-                                    <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
-                <select class="form-select" id="basicDataSelect">
-                    {% for data in basic_data_list %}
-                    <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
-                        {{ data.month }}/{{ data.year }}
-                    </option>
-                    {% endfor %}
-                </select>
-            </div>
-        </div>
-    </div>
+                        <!-- Select Box -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                                        <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
+                                    <select class="form-select" id="basicDataSelect">
+                                        {% for data in basic_data_list %}
+                                        <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
+                                            {{ data.month }}/{{ data.year }}
+                                        </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- Dados Básicos em formato de texto -->
                         <div class="row">
@@ -57,92 +57,109 @@
                                 
                                     <p><strong>Custos Fixos:</strong> <span id="fixedCosts">-</span></p>
                             
-                </div>
-                                <div class="col-md-6 mb-3">
-                                    <p><strong>Despesas de Vendas:</strong> <span id="salesExpenses">-</span></p>
-                                    <p><strong>Gastos com Insumos e Produtos:</strong> <span id="operationalExpenses">-</span></p>
-                                    <p><strong>Margem de Lucro Ideal:</strong> <span id="margemIdeial">-</span></p>
-                                
-                    </div>
-                            {% endif %}
-            </div>
-        </div>
-    </div>
-
-    <!-- Gráficos e Métricas -->
-                <div class="row mb-4">
-        <!-- Gráfico de Barras -->
-                    <div class="col-md-6">
-            <div class="card h-100">
-                            <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">Custos e Faturamento</h5>
-                </div>
-                <div class="card-body">
-                    <canvas id="costsChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Métricas -->
-                    <div class="col-md-6">
-            <div class="card h-100">
-                            <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0">Métricas Financeiras</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label">
-                                        Lucro
-                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                                        <input type="text" class="form-control" id="lucro_reais" readonly>
-                                        <input type="text" class="form-control" id="lucro_percentual" readonly>
+                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <p><strong>Despesas de Vendas:</strong> <span id="salesExpenses">-</span></p>
+                                                    <p><strong>Gastos com Insumos e Produtos:</strong> <span id="operationalExpenses">-</span></p>
+                                                    <p><strong>Margem de Lucro Ideal:</strong> <span id="margemIdeial">-</span></p>
+                                                
+                                    </div>
+                                            {% endif %}
+                            </div>
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">
-                            Ticket Médio
-                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#ticketMedioModal" style="cursor: pointer;"></i>
-                        </label>
-                        <input type="text" class="form-control" id="ticketMedio" readonly>
+    <!-- Gráficos e Métricas -->
+                <div class="row mb-4">
+                    <!-- Custos e Faturamento -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">Custos e Faturamento</h5>
+                            </div>
+                            <div class="card-body">
+                                <div style="height: 300px;">
+                                    <canvas id="costsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">
-                            Margem de Contribuição
-                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemContribuicaoModal" style="cursor: pointer;"></i>
-                        </label>
-                        <input type="text" class="form-control" id="margemContribuicao" readonly>
-                    </div>
+                    <!-- Métricas Financeiras -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">Métricas Financeiras</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Lucro
+                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="lucro_reais" readonly>
+                                        <input type="text" class="form-control" id="lucro_percentual" readonly>
+                                    </div>
+                                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">
-                            Produtividade
-                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#produtividadeModal" style="cursor: pointer;"></i>
-                        </label>
-                        <input type="text" class="form-control" id="produtividade" readonly>
-                    </div>
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Ticket Médio
+                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#ticketMedioModal" style="cursor: pointer;"></i>
+                                    </label>
+                                    <input type="text" class="form-control" id="ticketMedio" readonly>
+                                </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">
-                            Ponto de Equilíbrio
-                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#pontoEquilibrioModal" style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="pontoEquilibrio" readonly>
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Margem de Contribuição
+                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemContribuicaoModal" style="cursor: pointer;"></i>
+                                    </label>
+                                    <input type="text" class="form-control" id="margemContribuicao" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Produtividade
+                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#produtividadeModal" style="cursor: pointer;"></i>
+                                    </label>
+                                    <input type="text" class="form-control" id="produtividade" readonly>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">
+                                        Ponto de Equilíbrio
+                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#pontoEquilibrioModal" style="cursor: pointer;"></i>
+                                    </label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="pontoEquilibrio" readonly>
                                         <input type="text" class="form-control" id="pontoEquilibrioPercentual" readonly>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Distribuição de Despesas -->
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="card-title mb-0">Distribuição de Despesas</h5>
+                            </div>
+                            <div class="card-body">
+                                {% if user.activity_type != 'Serviços' %}
+                                <div style="height: 300px;">
+                                    <canvas id="expensesPieChart"></canvas>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Gráficos de Pizza -->
+                <!-- Análise do Cálculo -->
                 <div class="row mb-4">
-                    <!-- Análise do Cálculo -->
                     <div class="col-12">
                         <div class="card h-100">
                             <div class="card-header bg-primary text-white">
@@ -162,31 +179,20 @@
                     </div>
                 </div>
 
+                <!-- Capacidade vs Atendimento -->
                 <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="card h-100">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="card-title mb-0">Distribuição de Despesas</h5>
-                            </div>
-                            <div class="card-body">
-                                {% if user.activity_type != 'Serviços' %}
-                                <div style="height: 300px;">
-                                    <canvas id="expensesPieChart"></canvas>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6">
+                    <div class="col-12">
                         <div class="card h-100">
                             <div class="card-header bg-primary text-white">
                                 <h5 class="card-title mb-0">Capacidade vs Atendimento</h5>
                             </div>
                             <div class="card-body">
-                                <div style="height: 300px;">
+                                <div id="capacityChartContainer" style="height: 300px;">
                                     <canvas id="capacityChart"></canvas>
                                 </div>
+                                <div id="capacityExceededMessage" class="d-none p-3 bg-danger text-white rounded" style="height: 300px; display: flex; align-items: center; justify-content: center; text-align: center;">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -475,7 +481,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Calcular Ponto de Equilíbrio Percentual ((L24*(F11/F10))/(F11/F10))
         const pontoEquilibrioPercentual = ticketMedio > 0 ? pontoEquilibrio / ticketMedio : 0;
-        const variavel =" Uma vez que estas considerações se referem a mês anterior, recomendamos que em “Definição de Prioridades” você estime as variações para o corrente mês, antecipando-se assim a eventuais providências relevantes. ";
+
+        const variavel = " Uma vez que estas considerações se referem a mês anterior, recomendamos que em \"Definição de Prioridades\" você estime as variações para o corrente mês, antecipando-se assim a eventuais providências relevantes. ";
+        
         // Definir textos das variáveis
         const variavel1 = `Você tem motivo para estar bem preocupado!
 É preciso agir rápido! Seja racional, objetivo e frio! Faça o que for preciso! Agora!
@@ -624,7 +632,7 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
             analiseResultado = variavel11;
         }
 
-        analiseResultado =  variavel + analiseResultado;
+        analiseResultado = variavel + analiseResultado;
 
         // Atualizar os elementos na interface
         document.getElementById('lucro_reais').value = formatMoney(lucroReais);
@@ -636,7 +644,7 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
         document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
         document.getElementById('analiseCalculo').textContent = analiseResultado;
         
-        // Atualizar o gráfico de pizza
+        // Atualizar o gráfico de pizza de despesas
         updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses);
         {% endif %}
 
@@ -644,7 +652,6 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
         updateCapacityChart(clientsServed, window.serviceCapacity);
     }
 
-    {% if user.activity_type != 'Serviços' %}
     // Função para atualizar o gráfico de pizza
     function updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses) {
         // Atualizar dados do gráfico de pizza
@@ -655,7 +662,6 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
         ];
         window.expensesPieChart.update();
     }
-    {% endif %}
 
     // Função para atualizar o gráfico de capacidade
     function updateCapacityChart(clientsServed, serviceCapacity) {
@@ -663,46 +669,56 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
         const actualClientsServed = parseInt(clientsServed) || 0;
         const actualCapacity = parseInt(serviceCapacity) || 0;
         
-        console.log("Valores recebidos:", {
-            clientsServed,
-            serviceCapacity,
-            actualClientsServed,
-            actualCapacity
-        });
-
-        // Atualizar dados do gráfico de pizza
-        window.capacityChart.data.datasets[0].data = [
-            actualClientsServed,
-            actualCapacity
-        ];
+        // Calcular o percentual de excedência
+        const excedente = actualClientsServed > actualCapacity ? 
+            ((actualClientsServed - actualCapacity) / actualCapacity) * 100 : 0;
         
-        // Atualizar a legenda com os valores reais
-        window.capacityChart.data.labels = [
-            `Clientes Atendidos (${actualClientsServed})`, 
-            `Capacidade Total (${actualCapacity})`
-        ];
+        // Elementos do DOM
+        const chartContainer = document.getElementById('capacityChartContainer');
+        const messageContainer = document.getElementById('capacityExceededMessage');
         
-        // Atualizar cores com base na ocupação
-        const utilizationRatio = actualCapacity > 0 ? actualClientsServed / actualCapacity : 0;
-        let clientsColor = 'rgba(75, 192, 192, 0.7)'; // Verde por padrão
-        
-        // Se estiver próximo da capacidade máxima, mudar para amarelo ou vermelho
-        if (utilizationRatio > 0.9) {
-            clientsColor = 'rgba(255, 99, 132, 0.7)'; // Vermelho para ocupação acima de 90%
-        } else if (utilizationRatio > 0.7) {
-            clientsColor = 'rgba(255, 205, 86, 0.7)'; // Amarelo para ocupação entre 70-90%
+        if (excedente > 100) {
+            // Esconder o gráfico e mostrar a mensagem
+            chartContainer.classList.add('d-none');
+            messageContainer.classList.remove('d-none');
+            messageContainer.innerHTML = `
+                <div>
+                    <h4 class="mb-3">Capacidade Excedida!</h4>
+                    <p class="mb-2">A quantidade de clientes atendidos (${actualClientsServed}) está ${excedente.toFixed(1)}% acima da capacidade máxima (${actualCapacity}).</p>
+                    <p>Isso indica uma sobrecarga significativa no atendimento.</p>
+                </div>
+            `;
+        } else {
+            // Mostrar o gráfico e esconder a mensagem
+            chartContainer.classList.remove('d-none');
+            messageContainer.classList.add('d-none');
+            
+            // Atualizar dados do gráfico de pizza
+            window.capacityChart.data.datasets[0].data = [
+                actualClientsServed,
+                actualCapacity - actualClientsServed
+            ];
+            
+            // Atualizar labels
+            window.capacityChart.data.labels = [
+                `Clientes Atendidos (${actualClientsServed} - ${(actualClientsServed / actualCapacity * 100).toFixed(1)}%)`,
+                `Capacidade Não Utilizada (${actualCapacity - actualClientsServed} - ${((actualCapacity - actualClientsServed) / actualCapacity * 100).toFixed(1)}%)`
+            ];
+            
+            // Atualizar cores com base na ocupação
+            let clientsColor = 'rgba(75, 192, 192, 0.7)'; // Verde por padrão
+            
+            if (actualClientsServed / actualCapacity > 0.9) {
+                clientsColor = 'rgba(255, 99, 132, 0.7)'; // Vermelho para ocupação acima de 90%
+            } else if (actualClientsServed / actualCapacity > 0.7) {
+                clientsColor = 'rgba(255, 205, 86, 0.7)'; // Amarelo para ocupação entre 70-90%
+            }
+            
+            window.capacityChart.data.datasets[0].backgroundColor[0] = clientsColor;
+            window.capacityChart.data.datasets[0].borderColor[0] = clientsColor.replace('0.7', '1');
+            
+            window.capacityChart.update();
         }
-        
-        window.capacityChart.data.datasets[0].backgroundColor[0] = clientsColor;
-        window.capacityChart.data.datasets[0].borderColor[0] = clientsColor.replace('0.7', '1');
-        
-        window.capacityChart.update();
-        
-        console.log("Capacidade atualizada:", {
-            actualClientsServed,
-            actualCapacity,
-            utilizationRatio
-        });
     }
 
     // Função para atualizar o gráfico com os valores da tabela
@@ -720,7 +736,7 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
         // Calcular o total de custos
         const totalCosts = salesExpenses + fixedCosts + operationalExpenses + financialExpenses;
 
-        // Atualizar o gráfico
+        // Atualizar o gráfico de barras
         window.costsChart.data.datasets[0].data = [totalCosts, salesRevenue];
         window.costsChart.update();
         
