@@ -92,12 +92,12 @@
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label class="form-label">
-                                        Margem
+                                        Lucro
                                         <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
                                     </label>
                                     <div class="input-group">
-                                        <input type="text" class="form-control" id="margem_reais" readonly>
-                                        <input type="text" class="form-control" id="margemPercentual" readonly>
+                                        <input type="text" class="form-control" id="lucro_reais" readonly>
+                                        <input type="text" class="form-control" id="lucro_percentual" readonly>
                                     </div>
                                 </div>
 
@@ -423,54 +423,47 @@ document.addEventListener('DOMContentLoaded', function() {
             salesExpenses,
             fixedCosts,
             operationalExpenses,
-            financialExpenses,
             clientsServed
         } = window.rawData;
         
-        // Calcular a Margem usando a nova fórmula
-        const totalCosts = salesExpenses + operationalExpenses + fixedCosts;
-        const marginReais = salesRevenue - totalCosts;
-        const marginPercentual = salesRevenue > 0 ? (marginReais / salesRevenue) * 100 : 0;
+        {% if user.activity_type != 'Serviços' %}
+        // Calcular Lucro em Reais (F11-(F12+F13+F14))
+        const lucroReais = salesRevenue - (salesExpenses + operationalExpenses + fixedCosts);
         
-        // Calcular o Ticket Médio
-        const averageTicket = clientsServed > 0 ? salesRevenue / clientsServed : 0;
+        // Calcular Lucro Percentual (L13/F11)
+        const lucroPercentual = salesRevenue > 0 ? (lucroReais / salesRevenue) * 100 : 0;
         
-        // Calcular a Margem de Contribuição em reais
-        const contributionMarginReais = salesRevenue - operationalExpenses - salesExpenses;
+        // Calcular Ticket Médio (F11/F10)
+        const ticketMedio = clientsServed > 0 ? salesRevenue / clientsServed : 0;
         
-        // Calcular Produtividade
-        const fixedExpenses = fixedCosts + operationalExpenses + financialExpenses;
-        const productivity = fixedExpenses > 0 ? (salesRevenue / fixedExpenses) : 0;
+        // Calcular Margem de Contribuição ((F11-(F12+F13))/F10)
+        const margemContribuicao = clientsServed > 0 ? 
+            (salesRevenue - (salesExpenses + operationalExpenses)) / clientsServed : 0;
         
-        // Calcular Ponto de Equilíbrio
-        // 1. Calcular custos variáveis unitários
-        const variableCostsPerClient = clientsServed > 0 ? 
+        // Calcular Produtividade (F11/F14)
+        const produtividade = fixedCosts > 0 ? salesRevenue / fixedCosts : 0;
+        
+        // Calcular L24 (custos fixos / (ticket médio - custos variáveis por cliente))
+        const custosVariaveisPorCliente = clientsServed > 0 ? 
             (salesExpenses + operationalExpenses) / clientsServed : 0;
+        const L24 = ticketMedio > 0 ? 
+            fixedCosts / (ticketMedio - custosVariaveisPorCliente) : 0;
         
-        // 2. Calcular margem de contribuição unitária
-        const unitContributionMargin = averageTicket - variableCostsPerClient;
+        // Calcular Ponto de Equilíbrio (L24*(F11/F10))
+        const pontoEquilibrio = L24 * ticketMedio;
         
-        // 3. Calcular ponto de equilíbrio em quantidade de clientes
-        const breakEvenClients = unitContributionMargin > 0 ? 
-            fixedCosts / unitContributionMargin : 0;
-        
-        // 4. Calcular ponto de equilíbrio em reais
-        const breakEvenPoint = breakEvenClients * averageTicket;
-        
-        // 5. Calcular ponto de equilíbrio percentual
-        const breakEvenPointPercentual = salesRevenue > 0 ? 
-            (breakEvenPoint / salesRevenue) * 100 : 0;
+        // Calcular Ponto de Equilíbrio Percentual ((L24*(F11/F10))/(F11/F10))
+        const pontoEquilibrioPercentual = ticketMedio > 0 ? pontoEquilibrio / ticketMedio : 0;
 
         // Atualizar os elementos na interface
-        document.getElementById('margem_reais').value = formatMoney(marginReais);
-        document.getElementById('margemPercentual').value = marginPercentual.toFixed(2) + '%';
-        document.getElementById('ticketMedio').value = formatMoney(averageTicket);
-        document.getElementById('margemContribuicao').value = formatMoney(contributionMarginReais);
-        document.getElementById('produtividade').value = productivity.toFixed(2);
-        document.getElementById('pontoEquilibrio').value = formatMoney(breakEvenPoint);
-        document.getElementById('pontoEquilibrioPercentual').value = breakEvenPointPercentual.toFixed(2) + '%';
+        document.getElementById('lucro_reais').value = formatMoney(lucroReais);
+        document.getElementById('lucro_percentual').value = lucroPercentual.toFixed(2) + '%';
+        document.getElementById('ticketMedio').value = formatMoney(ticketMedio);
+        document.getElementById('margemContribuicao').value = formatMoney(margemContribuicao);
+        document.getElementById('produtividade').value = produtividade.toFixed(2);
+        document.getElementById('pontoEquilibrio').value = formatMoney(pontoEquilibrio);
+        document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
         
-        {% if user.activity_type != 'Serviços' %}
         // Atualizar o gráfico de pizza
         updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses);
         {% endif %}
@@ -494,27 +487,31 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para atualizar o gráfico de capacidade
     function updateCapacityChart(clientsServed, serviceCapacity) {
-        // Usar o valor guardado na janela ou o valor passado como parâmetro
-        const actualCapacity = window.serviceCapacity || serviceCapacity;
+        // Garantir que os valores sejam números
+        const actualClientsServed = parseInt(clientsServed) || 0;
+        const actualCapacity = parseInt(serviceCapacity) || 0;
         
-        // Verificar se a capacidade é maior que os clientes atendidos
-        const capacity = Math.max(actualCapacity, clientsServed);
-        const unusedCapacity = Math.max(0, capacity - clientsServed);
+        console.log("Valores recebidos:", {
+            clientsServed,
+            serviceCapacity,
+            actualClientsServed,
+            actualCapacity
+        });
 
         // Atualizar dados do gráfico de pizza
         window.capacityChart.data.datasets[0].data = [
-            clientsServed,
-            unusedCapacity
+            actualClientsServed,
+            actualCapacity
         ];
         
         // Atualizar a legenda com os valores reais
         window.capacityChart.data.labels = [
-            `Clientes Atendidos (${clientsServed})`, 
-            `Capacidade Não Utilizada (${unusedCapacity})`
+            `Clientes Atendidos (${actualClientsServed})`, 
+            `Capacidade Total (${actualCapacity})`
         ];
         
         // Atualizar cores com base na ocupação
-        const utilizationRatio = clientsServed / capacity;
+        const utilizationRatio = actualCapacity > 0 ? actualClientsServed / actualCapacity : 0;
         let clientsColor = 'rgba(75, 192, 192, 0.7)'; // Verde por padrão
         
         // Se estiver próximo da capacidade máxima, mudar para amarelo ou vermelho
@@ -530,7 +527,9 @@ document.addEventListener('DOMContentLoaded', function() {
         window.capacityChart.update();
         
         console.log("Capacidade atualizada:", {
-            clientsServed, actualCapacity, unusedCapacity, utilizationRatio
+            actualClientsServed,
+            actualCapacity,
+            utilizationRatio
         });
     }
 
@@ -572,7 +571,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log("Dados recebidos:", data);
                 console.log("Service Capacity:", data.service_capacity);
-                console.log("Ideal Profit Margin:", data.ideal_profit_margin);
+                console.log("Clients Served:", data.clients_served);
                 
                 // Atualizar a tabela com os dados (formatação para exibição)
                 document.getElementById('clientsServed').textContent = data.clients_served;
@@ -602,11 +601,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     operationalExpenses: getNumericValue(data.operational_expenses),
                     financialExpenses: getNumericValue(data.financial_expenses),
                     proLabore: getNumericValue(data.pro_labore),
-                    clientsServed: parseInt(data.clients_served) || 0
+                    clientsServed: data.clients_served
                 };
                 
                 // Guardar a capacidade de atendimento para uso no gráfico
-                window.serviceCapacity = data.service_capacity || data.clients_served * 1.5;
+                window.serviceCapacity = data.service_capacity;
                 
                 // Atualizar o gráfico e os indicadores usando os valores numéricos
                 updateChart();
