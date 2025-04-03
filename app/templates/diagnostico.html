@@ -78,7 +78,7 @@
                                 <h5 class="card-title mb-0">Custos e Faturamento</h5>
                             </div>
                             <div class="card-body">
-                                <div style="height: 300px;">
+                                <div style="height: 400px;">
                                     <canvas id="costsChart"></canvas>
                                 </div>
                             </div>
@@ -149,7 +149,7 @@
                             </div>
                             <div class="card-body">
                                 {% if user.activity_type != 'Serviços' %}
-                                <div style="height: 300px;">
+                                <div style="height: 400px;">
                                     <canvas id="expensesPieChart"></canvas>
                                 </div>
                                 {% endif %}
@@ -169,28 +169,9 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="mb-3">
-                                            <label class="form-label">Resultado da Análise</label>
                                             <div id="analiseCalculo" class="p-3 bg-light rounded" style="white-space: pre-wrap;"></div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Capacidade vs Atendimento -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card h-100">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="card-title mb-0">Capacidade vs Atendimento</h5>
-                            </div>
-                            <div class="card-body">
-                                <div id="capacityChartContainer" style="height: 300px;">
-                                    <canvas id="capacityChart"></canvas>
-                                </div>
-                                <div id="capacityExceededMessage" class="d-none p-3 bg-danger text-white rounded" style="height: 300px; display: flex; align-items: center; justify-content: center; text-align: center;">
                                 </div>
                             </div>
                         </div>
@@ -402,47 +383,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     {% endif %}
 
-    // Inicializar o gráfico de pizza de capacidade
-    const capacityCtx = document.getElementById('capacityChart').getContext('2d');
-    window.capacityChart = new Chart(capacityCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Clientes Atendidos', 'Capacidade Não Utilizada'],
-            datasets: [{
-                data: [0, 0],
-                backgroundColor: [
-                    'rgba(75, 192, 192, 0.7)', // Verde-azulado para clientes atendidos
-                    'rgba(220, 220, 220, 0.7)' // Cinza para capacidade não utilizada
-                ],
-                borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(200, 200, 200, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.raw || 0;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-                            return `${label}: ${value} clientes (${percentage}%)`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-
     // Função para atualizar os indicadores
     function updateIndicators() {
         const {
@@ -524,8 +464,8 @@ Levante a cabeça. Não demonstre que está com problemas.
 Não comente. Priorize o pagamento de dívidas pequenas. 
 Proponha acordos para as maiores, considerando que será vital cumpri-los fielmente!`;
 
-        const variavel3 = `O lucro alcançado não é aquele que você gostaria! E o negócio está sendo onerado por capacidade ociosa (vendas menores do que a capacidade de atendimento)!
-Na ferramenta "Gestão de Prioridades" aumente a quantidade de clientes atendidos até o limite de sua capacidade de atendimento (desde que exista demanda, esteja preparado para competir, disponha de capital de giro suficiente e haja disponibilidades nos fornecedores). Verifique a margem resultante.
+        const variavel3 = `O lucro alcançado não é aquele que você gostaria! E o negócio está sendo onerado por capacidade ociosa!
+Na ferramenta "Gestão de Prioridades" aumente a quantidade de clientes atendidos (desde que exista demanda, esteja preparado para competir, disponha de capital de giro suficiente e haja disponibilidades nos fornecedores). Verifique a margem resultante.
 Se não for possível vender mais, ou se não for suficiente, você ainda pode tentar estimular aumento do valor do ticket médio e verificar a possibilidade de reduzir despesas e custos.
 Utilize a "Calculadora de preços" para analisar: 
     1) a margem de cada item; 
@@ -537,7 +477,7 @@ Assim você saberá:
     d) em quais concentrar suas vendas.
 Se a margem continuar menor do que o ideal, considere a hipótese de que o negócio não permite a lucratividade que você considera ideal!`;
 
-        const variavel4 = `O lucro alcançado não é aquele que você gostaria, mesmo atendendo no limite de sua capacidade!
+        const variavel4 = `O lucro alcançado não é aquele que você gostaria!
 Comece utilizando a "Calculadora de preços" para verificar: 
     1) a margem de cada item; 
     2) seus preços em relação aos dos concorrentes.
@@ -550,7 +490,7 @@ Ainda assim a lucratividade não é a desejada?
 Na ferramenta "Gestão de Prioridades" simule uma possível redução dos custos fixos e veja o que acontece com a margem. Se isso ainda não for suficiente, verifique a possibilidade de reduzir os demais custos!
 Se a margem continuar menor do que o ideal, considere a hipótese de que o negócio não permite a lucratividade que você considera ideal!`;
 
-        const variavel5 = `O lucro alcançado não é aquele que você gostaria, mesmo vendendo mais do que a capacidade de atendimento (alto risco de estresse e mal atendimento, o que acabará prejudicando o Negócio!).
+        const variavel5 = `O lucro alcançado não é aquele que você gostaria!
 Utilize a "Calculadora de Preços" para verificar: 
     1) a margem de cada item; 
     2) seus preços em relação aos dos concorrentes.
@@ -559,80 +499,69 @@ Assim você saberá:
     b) em quais ainda existe espaço para aumentar preços; 
     c) quais terá que associar com os mais lucrativos (combos); 
     d) em quais concentrar suas vendas.
-Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos para o limite de sua capacidade de atendimento. 
+Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos. 
 Depois, para melhorar a produtividade, reduza os custos fixos. Ainda não está bom? Veja o que dá para reduzir nos demais custos.
 Se a margem continuar menor do que o ideal, considere a hipótese de que o negócio não permite a lucratividade que você considera ideal! 
 E, avalie a conveniência de investir para ampliar sua capacidade de atendimento!`;
 
-        const variavel6 = `Você deve estar satisfeito com o lucro alcançado, mesmo vendendo menos do que o possível!
+        const variavel6 = `Você deve estar satisfeito com o lucro alcançado!
 É preciso reduzir a capacidade ociosa (custos e recursos subutilizados).
 Por que não vendeu mais:
     1) Mercado não comporta? Então aumente o valor do ticket médio e/ou reduza custos fixos (utilize a ferramenta "Gestão de Prioridades" para fazer simulações);
     2) Concorrência? a) crie diferenciais e corrija seus pontos fracos; b) utilize a "Calculadora de Preços" para comparar seus preços com os dos concorrentes. Faça simulações em "Definição de Prioridades".`;
 
         const variavel7 = `Você deve estar satisfeito com o lucro alcançado!
-Suas vendas corresponderam à sua capacidade de atendimento.
 Estude o potencial do mercado em que atua! 
 Observe os indícios de alterações: aumento ou redução da demanda; mudanças tecnológicas e/ou nas preferências dos clientes; situação dos fornecedores; comportamento dos preços;ações importantes na concorrência e o impacto em sua competitividade; situações sócio econômicas, mudanças na legislação, obras públicas, etc.
 Traduza suas conclusões em percentuais de aumento ou redução (em relação aos dados atuais), na ferramenta "Definição de Prioridades" e veja como afeta sua lucratividade. Se acredita em variações nos preços dos insumos e/ou mercadorias de terceiros; ou nos preços dos concorrentes, recorra à "Calculadora de Preços"!`;
 
         const variavel8 = `Você deve estar satisfeito com o lucro alcançado!
-Mas fique atento, pois está vendendo mais do que a capacidade de atendimento (alto risco de estresse e mal atendimento, o que acabará prejudicando o Negócio!).
 Considere a viabilidade de ampliar sua capacidade de atendimento! Fora de cogitação?
-Então, na ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos para o limite de sua capacidade de atendimento.
+Então, na ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos.
 Verifique o impacto na margem! Para retomar o lucro anterior, verifique o resultado de um aumento no valor do ticket médio; também, reduza os custos fixos, (aumento da produtividade). 
 Ainda não está bom? Então utilize a "Calculadora de Preços" para comparar seus preços com os da concorrência: existe espaço para aumentos? é possível estimular a venda dos itens mais lucrativos?`;
 
-        const variavel9 = `Você deve estar muito satisfeito com o lucro alcançado, mesmo vendendo menos do que o possível.
+        const variavel9 = `Você deve estar muito satisfeito com o lucro alcançado!
 É preciso reduzir a capacidade ociosa (custos e recursos subutilizados).
 Por que não vendeu mais:
 1) Mercado não comporta? Então aumente o valor do ticket médio e/ou reduza custos fixos (utilize a ferramenta "Gestão de Prioridades" para fazer simulações);
 2) Concorrência? a) crie diferenciais e corrija seus pontos fracos; b) utilize a "Calculadora de Preços" para comparar seus preços com os dos concorrentes. Faça simulações em "Definição de Prioridades".`;
 
         const variavel10 = `Você deve estar muito satisfeito com o lucro alcançado!
-Suas vendas correspondem à sua capacidade de atendimento.
 Estude o potencial do mercado em que atua! Observe os indícios de alterações: aumento ou redução da demanda; mudanças tecnológicas e/ou nas preferências dos clientes; situação dos fornecedores; comportamento dos preços; ações importantes na concorrência e o impacto em sua competitividade; situações sócio econômicas, mudanças na legislação, obras públicas, etc.
 Traduza suas conclusões em percentuais de aumento ou redução (em relação aos dados atuais), na ferramenta "Definição de Prioridades" e veja como afeta sua lucratividade. Se acredita em variações nos preços dos insumos e/ou mercadorias de terceiros; ou nos preços dos concorrentes, recorra à "Calculadora de Preços"!`;
 
         const variavel11 = `Você deve estar muito satisfeito com o lucro alcançado!
-Mas fique atento, pois está vendendo mais do que a capacidade de atendimento (risco de estresse e mal atendimento)!
 Considere a viabilidade de ampliar sua capacidade de atendimento! Fora de cogitação?
-Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos para o limite de sua capacidade de atendimento. Isso reduzirá a margem. Então, tente melhorar a produtividade, reduzindo os custos fixos. Ainda não está bom? Veja o que dá para reduzir nos demais custos. Ainda assim a margem continua menor? O que acontece se conseguir aumentar o ticket médio? Com a ajuda da "Calculadora de Preços" identifique os produtos mais lucrativos e considere a possibilidade de aumentar o volume de vendas deles. Nas comparações com os concorrentes, veja se há espaço para aumento de preços.`;
+Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos. Isso reduzirá a margem. Então, tente melhorar a produtividade, reduzindo os custos fixos. Ainda não está bom? Veja o que dá para reduzir nos demais custos. Ainda assim a margem continua menor? O que acontece se conseguir aumentar o ticket médio? Com a ajuda da "Calculadora de Preços" identifique os produtos mais lucrativos e considere a possibilidade de aumentar o volume de vendas deles. Nas comparações com os concorrentes, veja se há espaço para aumento de preços.`;
 
         // Calcular Análise
-        let analiseResultado = "";
-        
-        // L14 = pontoEquilibrio
-        // L19 = margemContribuicao
-        // F15 = salesRevenue (capacidade de faturamento)
-        // F16 = serviceCapacity (capacidade de atendimento)
-        // F10 = clientsServed (clientes atendidos)
-        
-        if (pontoEquilibrio <= 0 && margemContribuicao <= 0) {
-            analiseResultado = variavel1;
-        } else if (pontoEquilibrio <= 0 && margemContribuicao > 0) {
-            analiseResultado = variavel2;
-        } else if (pontoEquilibrio > 0 && pontoEquilibrio < salesRevenue * 0.9 && clientsServed < window.serviceCapacity * 0.9 && margemContribuicao > 0) {
-            analiseResultado = variavel3;
-        } else if (pontoEquilibrio > 0 && pontoEquilibrio < salesRevenue * 0.9 && clientsServed > window.serviceCapacity * 0.9 && clientsServed < window.serviceCapacity * 1.05 && margemContribuicao > 0) {
-            analiseResultado = variavel4;
-        } else if (pontoEquilibrio > 0 && pontoEquilibrio < salesRevenue * 0.9 && clientsServed > window.serviceCapacity * 1.05 && margemContribuicao > 0) {
-            analiseResultado = variavel5;
-        } else if (pontoEquilibrio > salesRevenue * 0.9 && pontoEquilibrio < salesRevenue * 1.05 && clientsServed < window.serviceCapacity * 0.9 && margemContribuicao > 0) {
-            analiseResultado = variavel6;
-        } else if (pontoEquilibrio > salesRevenue * 0.9 && pontoEquilibrio < salesRevenue * 1.05 && clientsServed > window.serviceCapacity * 0.9 && clientsServed < window.serviceCapacity * 1.05 && margemContribuicao > 0) {
-            analiseResultado = variavel7;
-        } else if (pontoEquilibrio > salesRevenue * 0.9 && pontoEquilibrio < salesRevenue * 1.05 && clientsServed >= window.serviceCapacity * 1.05 && margemContribuicao > 0) {
-            analiseResultado = variavel8;
-        } else if (pontoEquilibrio > salesRevenue * 1.05 && clientsServed < window.serviceCapacity * 0.9 && margemContribuicao > 0) {
-            analiseResultado = variavel9;
-        } else if (pontoEquilibrio > salesRevenue * 1.05 && clientsServed > window.serviceCapacity * 0.9 && clientsServed < window.serviceCapacity * 1.05 && margemContribuicao > 0) {
-            analiseResultado = variavel10;
-        } else if (pontoEquilibrio > salesRevenue * 1.05 && clientsServed > window.serviceCapacity * 1.05 && margemContribuicao > 0) {
-            analiseResultado = variavel11;
+        let analiseResult = '';
+        if (pontoEquilibrio > salesRevenue) {
+            analiseResult = variavel1;
+        } else if (margemContribuicao < 0) {
+            analiseResult = variavel2;
+        } else if (margemContribuicao < 0.3) {
+            analiseResult = variavel3;
+        } else if (margemContribuicao < 0.4) {
+            analiseResult = variavel4;
+        } else if (margemContribuicao < 0.5) {
+            analiseResult = variavel5;
+        } else if (margemContribuicao < 0.6) {
+            analiseResult = variavel6;
+        } else if (margemContribuicao < 0.7) {
+            analiseResult = variavel7;
+        } else if (margemContribuicao < 0.8) {
+            analiseResult = variavel8;
+        } else if (margemContribuicao < 0.9) {
+            analiseResult = variavel9;
+        } else if (margemContribuicao < 1) {
+            analiseResult = variavel10;
+        } else {
+            analiseResult = variavel11;
         }
 
-        analiseResultado = variavel + analiseResultado;
+        analiseResult = variavel + analiseResult;
 
         // Atualizar os elementos na interface
         document.getElementById('lucro_reais').value = formatMoney(lucroReais);
@@ -642,14 +571,11 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
         document.getElementById('produtividade').value = produtividade.toFixed(2);
         document.getElementById('pontoEquilibrio').value = formatMoney(pontoEquilibrio);
         document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
-        document.getElementById('analiseCalculo').textContent = analiseResultado;
+        document.getElementById('analiseCalculo').textContent = analiseResult;
         
         // Atualizar o gráfico de pizza de despesas
         updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses);
         {% endif %}
-
-        // Atualizar o gráfico de capacidade
-        updateCapacityChart(clientsServed, window.serviceCapacity);
     }
 
     // Função para atualizar o gráfico de pizza
@@ -661,64 +587,6 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
             operationalExpenses
         ];
         window.expensesPieChart.update();
-    }
-
-    // Função para atualizar o gráfico de capacidade
-    function updateCapacityChart(clientsServed, serviceCapacity) {
-        // Garantir que os valores sejam números
-        const actualClientsServed = parseInt(clientsServed) || 0;
-        const actualCapacity = parseInt(serviceCapacity) || 0;
-        
-        // Calcular o percentual de excedência
-        const excedente = actualClientsServed > actualCapacity ? 
-            ((actualClientsServed - actualCapacity) / actualCapacity) * 100 : 0;
-        
-        // Elementos do DOM
-        const chartContainer = document.getElementById('capacityChartContainer');
-        const messageContainer = document.getElementById('capacityExceededMessage');
-        
-        if (excedente > 100) {
-            // Esconder o gráfico e mostrar a mensagem
-            chartContainer.classList.add('d-none');
-            messageContainer.classList.remove('d-none');
-            messageContainer.innerHTML = `
-                <div>
-                    <h4 class="mb-3">Capacidade Excedida!</h4>
-                    <p class="mb-2">A quantidade de clientes atendidos (${actualClientsServed}) está ${excedente.toFixed(1)}% acima da capacidade máxima (${actualCapacity}).</p>
-                    <p>Isso indica uma sobrecarga significativa no atendimento.</p>
-                </div>
-            `;
-        } else {
-            // Mostrar o gráfico e esconder a mensagem
-            chartContainer.classList.remove('d-none');
-            messageContainer.classList.add('d-none');
-            
-            // Atualizar dados do gráfico de pizza
-            window.capacityChart.data.datasets[0].data = [
-                actualClientsServed,
-                actualCapacity - actualClientsServed
-            ];
-            
-            // Atualizar labels
-            window.capacityChart.data.labels = [
-                `Clientes Atendidos (${actualClientsServed} - ${(actualClientsServed / actualCapacity * 100).toFixed(1)}%)`,
-                `Capacidade Não Utilizada (${actualCapacity - actualClientsServed} - ${((actualCapacity - actualClientsServed) / actualCapacity * 100).toFixed(1)}%)`
-            ];
-            
-            // Atualizar cores com base na ocupação
-            let clientsColor = 'rgba(75, 192, 192, 0.7)'; // Verde por padrão
-            
-            if (actualClientsServed / actualCapacity > 0.9) {
-                clientsColor = 'rgba(255, 99, 132, 0.7)'; // Vermelho para ocupação acima de 90%
-            } else if (actualClientsServed / actualCapacity > 0.7) {
-                clientsColor = 'rgba(255, 205, 86, 0.7)'; // Amarelo para ocupação entre 70-90%
-            }
-            
-            window.capacityChart.data.datasets[0].backgroundColor[0] = clientsColor;
-            window.capacityChart.data.datasets[0].borderColor[0] = clientsColor.replace('0.7', '1');
-            
-            window.capacityChart.update();
-        }
     }
 
     // Função para atualizar o gráfico com os valores da tabela
@@ -758,8 +626,6 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
             })
             .then(data => {
                 console.log("Dados recebidos:", data);
-                console.log("Service Capacity:", data.service_capacity);
-                console.log("Clients Served:", data.clients_served);
                 
                 // Atualizar a tabela com os dados (formatação para exibição)
                 document.getElementById('clientsServed').textContent = data.clients_served;
@@ -791,9 +657,6 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
                     proLabore: getNumericValue(data.pro_labore),
                     clientsServed: data.clients_served
                 };
-                
-                // Guardar a capacidade de atendimento para uso no gráfico
-                window.serviceCapacity = data.service_capacity;
                 
                 // Atualizar o gráfico e os indicadores usando os valores numéricos
                 updateChart();
