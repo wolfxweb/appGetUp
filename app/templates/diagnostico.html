@@ -455,9 +455,9 @@ function typeActivityService() {
                     salesExpenses: getNumericValue(data.sales_expenses),
                     operationalExpenses: getNumericValue(data.operational_expenses),
                     proLabore: getNumericValue(data.pro_labore),
-                    otherFixedCosts: getNumericValue(data.other_fixed_costs),
                     weeklyHours: getNumericValue(data.weekly_hours),
-                    clientsServed: data.clients_served
+                    clientsServed: data.clients_served,
+                    otherFixedCosts: getNumericValue(data.other_fixed_costs)
                 };
                 
                 // Atualizar o gráfico e os indicadores
@@ -978,7 +978,7 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
         document.getElementById('lucro_percentual').value = lucroPercentual.toFixed(2) + '%';
         document.getElementById('ticketMedio').value = formatMoney(ticketMedio);
         document.getElementById('margemContribuicao').value = formatMoney(margemContribuicao);
-        document.getElementById('produtividade').value = produtividade.toFixed(2);
+        document.getElementById('produtividade').value = formatMoney(produtividade);
         document.getElementById('pontoEquilibrio').value = formatMoney(pontoEquilibrio);
         document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
         document.getElementById('analiseCalculo').textContent = analiseResult;
@@ -1035,7 +1035,9 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
                 return response.json();
             })
             .then(data => {
-                console.log("Dados recebidos:", data);
+                console.log("Dados recebidos do servidor:", data);
+                console.log("Tipo de dados:", typeof data);
+                console.log("Estrutura dos dados:", Object.keys(data));
                 
                 // Atualizar a tabela com os dados (formatação para exibição)
                 document.getElementById('clientsServed').textContent = data.clients_served;
@@ -1065,7 +1067,8 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
                     operationalExpenses: getNumericValue(data.operational_expenses),
                     financialExpenses: getNumericValue(data.financial_expenses),
                     proLabore: getNumericValue(data.pro_labore),
-                    clientsServed: data.clients_served
+                    clientsServed: data.clients_served,
+                    otherFixedCosts: getNumericValue(data.other_fixed_costs || 0)
                 };
                 
                 // Atualizar o gráfico e os indicadores usando os valores numéricos

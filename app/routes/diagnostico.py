@@ -84,12 +84,14 @@ async def get_basic_data(
 
     try:
         async with async_session() as session:
+            # Modificando a query para selecionar explicitamente todos os campos
             query = select(BasicData).where(
                 and_(
                     BasicData.id == basic_data_id,
                     BasicData.user_id == current_user.id
                 )
             )
+            
             result = await session.execute(query)
             basic_data = result.scalar_one_or_none()
 
@@ -117,7 +119,8 @@ async def get_basic_data(
                     getattr(basic_data, 'financial_expenses', None)
                 ),
                 "service_capacity": basic_data.service_capacity or "Não definido",
-                "ideal_profit_margin": safe_float(basic_data.ideal_profit_margin)
+                "ideal_profit_margin": safe_float(basic_data.ideal_profit_margin),
+                "other_fixed_costs": safe_float(getattr(basic_data, 'other_fixed_costs', None))
             }
 
             # Adicionar campos específicos de serviço se o tipo de atividade for 'servico'
