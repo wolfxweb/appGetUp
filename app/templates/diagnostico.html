@@ -549,6 +549,147 @@ function typeActivityService() {
         // Calcular Ponto de Equilíbrio Percentual
         const pontoEquilibrioPercentual = salesRevenue > 0 ? (pontoEquilibrio / salesRevenue) * 100 : 0;
 
+        const variavel = " Uma vez que estas considerações se referem a mês anterior, recomendamos que em \"Definição de Prioridades\" você estime as variações para o corrente mês, antecipando-se assim a eventuais providências relevantes. ";
+        
+        // Definir textos das variáveis
+        const variavel1 = `Você tem motivo para estar bem preocupado!
+É preciso agir rápido! Seja racional, objetivo e frio! Faça o que for preciso! Agora!
+Com está margem de contribuição, vender mais não irá tirar o Negócio do prejuízo!
+Faça simulações na "Gestão de Prioridades", tratando de reduzir prioritariamente os gastos com vendas (consulte seu Contador para verificar seu enquadramento fiscal).
+Também será preciso reduzir, os custos dos insumos e/ou mercadorias de terceiros: 
+    a) comprando bem (preços, prazos e quantidades); 
+    b) eliminando desperdícios, retrabalhos, perdas e desvios.
+Utilize a "Calculadora de preços" para analisar:
+    1) a margem de cada item;
+    2) a comparação com os preços dos concorrentes.
+Assim você saberá: 
+    a) o que deve deixar de produzir/vender; 
+    b) em quais ainda existe espaço para aumentar preços; 
+    c) o que terá que associar com os mais lucrativos (combos); 
+    d) em quais concentrar suas vendas.
+Se o Negócio ainda continuar no prejuízo, veja o que consegue reduzir nos custos fixos (aumento da produtividade).
+O negócio é viável? Então assuma a responsabilidade e aprenda com os erros. 
+Levante a cabeça. Não demonstre que está com problemas. 
+Não comente. Priorize o pagamento de dívidas pequenas.
+Proponha acordos para as maiores, considerando que será vital cumpri-los fielmente!`;
+
+        const variavel2 = `Você tem motivo para estar bem preocupado!
+É preciso agir rápido! Seja racional, objetivo e frio! Faça o que for preciso. Agora!
+Comece utilizando a "Calculadora de preços" para verificar: 
+    1) a margem de cada item; 
+    2) seus preços em relação aos dos concorrentes.
+Assim você saberá: 
+    a) o que deve deixar de produzir/vender; 
+    b) em quais ainda existe espaço para aumentar preços;
+    c) quais terá que associar com os mais lucrativos (combos); 
+    d) em quais concentrar suas vendas.
+Melhore sua produtividade! Analise seus custos fixos e veja o que pode fazer para reduzi-los.
+É possível vender mais? (Existe demanda? Preparado para competir? Capital de giro suficiente? Fornecedores?).
+Utilize a ferramenta "Gestão de Prioridades" para simular o resultado de suas análises. 
+O negócio é viável? Então assuma a responsabilidade e aprenda com os erros.
+Levante a cabeça. Não demonstre que está com problemas. 
+Não comente. Priorize o pagamento de dívidas pequenas. 
+Proponha acordos para as maiores, considerando que será vital cumpri-los fielmente!`;
+
+        const variavel3 = `O lucro alcançado não é aquele que você gostaria! E o negócio está sendo onerado por capacidade ociosa!
+Na ferramenta "Gestão de Prioridades" aumente a quantidade de clientes atendidos (desde que exista demanda, esteja preparado para competir, disponha de capital de giro suficiente e haja disponibilidades nos fornecedores). Verifique a margem resultante.
+Se não for possível vender mais, ou se não for suficiente, você ainda pode tentar estimular aumento do valor do ticket médio e verificar a possibilidade de reduzir despesas e custos.
+Utilize a "Calculadora de preços" para analisar: 
+    1) a margem de cada item; 
+    2) a comparação com os preços dos concorrentes.
+Assim você saberá:
+    a) se deve deixar de produzir/vender algum item;
+    b) em quais ainda existe espaço para aumentar preços; 
+    c) o que terá que associar com os mais lucrativos (combos); 
+    d) em quais concentrar suas vendas.
+Se a margem continuar menor do que o ideal, considere a hipótese de que o negócio não permite a lucratividade que você considera ideal!`;
+
+        const variavel4 = `O lucro alcançado não é aquele que você gostaria!
+Comece utilizando a "Calculadora de preços" para verificar: 
+    1) a margem de cada item; 
+    2) seus preços em relação aos dos concorrentes.
+Assim você saberá: 
+    a) o que deve deixar de produzir/vender; 
+    b) em quais ainda existe espaço para aumentar preços; 
+    c) quais terá que associar com os mais lucrativos (combos); 
+    d) em quais concentrar suas vendas.
+Ainda assim a lucratividade não é a desejada?
+Na ferramenta "Gestão de Prioridades" simule uma possível redução dos custos fixos e veja o que acontece com a margem. Se isso ainda não for suficiente, verifique a possibilidade de reduzir os demais custos!
+Se a margem continuar menor do que o ideal, considere a hipótese de que o negócio não permite a lucratividade que você considera ideal!`;
+
+        const variavel5 = `O lucro alcançado não é aquele que você gostaria!
+Utilize a "Calculadora de Preços" para verificar: 
+    1) a margem de cada item; 
+    2) seus preços em relação aos dos concorrentes.
+Assim você saberá: 
+    a) o que deve deixar de produzir/vender; 
+    b) em quais ainda existe espaço para aumentar preços; 
+    c) quais terá que associar com os mais lucrativos (combos); 
+    d) em quais concentrar suas vendas.
+Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos. 
+Depois, para melhorar a produtividade, reduza os custos fixos. Ainda não está bom? Veja o que dá para reduzir nos demais custos.
+Se a margem continuar menor do que o ideal, considere a hipótese de que o negócio não permite a lucratividade que você considera ideal! 
+E, avalie a conveniência de investir para ampliar sua capacidade de atendimento!`;
+
+        const variavel6 = `Você deve estar satisfeito com o lucro alcançado!
+É preciso reduzir a capacidade ociosa (custos e recursos subutilizados).
+Por que não vendeu mais:
+    1) Mercado não comporta? Então aumente o valor do ticket médio e/ou reduza custos fixos (utilize a ferramenta "Gestão de Prioridades" para fazer simulações);
+    2) Concorrência? a) crie diferenciais e corrija seus pontos fracos; b) utilize a "Calculadora de Preços" para comparar seus preços com os dos concorrentes. Faça simulações em "Definição de Prioridades".`;
+
+        const variavel7 = `Você deve estar satisfeito com o lucro alcançado!
+Estude o potencial do mercado em que atua! 
+Observe os indícios de alterações: aumento ou redução da demanda; mudanças tecnológicas e/ou nas preferências dos clientes; situação dos fornecedores; comportamento dos preços;ações importantes na concorrência e o impacto em sua competitividade; situações sócio econômicas, mudanças na legislação, obras públicas, etc.
+Traduza suas conclusões em percentuais de aumento ou redução (em relação aos dados atuais), na ferramenta "Definição de Prioridades" e veja como afeta sua lucratividade. Se acredita em variações nos preços dos insumos e/ou mercadorias de terceiros; ou nos preços dos concorrentes, recorra à "Calculadora de Preços"!`;
+
+        const variavel8 = `Você deve estar satisfeito com o lucro alcançado!
+Considere a viabilidade de ampliar sua capacidade de atendimento! Fora de cogitação?
+Então, na ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos.
+Verifique o impacto na margem! Para retomar o lucro anterior, verifique o resultado de um aumento no valor do ticket médio; também, reduza os custos fixos, (aumento da produtividade). 
+Ainda não está bom? Então utilize a "Calculadora de Preços" para comparar seus preços com os da concorrência: existe espaço para aumentos? é possível estimular a venda dos itens mais lucrativos?`;
+
+        const variavel9 = `Você deve estar muito satisfeito com o lucro alcançado!
+É preciso reduzir a capacidade ociosa (custos e recursos subutilizados).
+Por que não vendeu mais:
+1) Mercado não comporta? Então aumente o valor do ticket médio e/ou reduza custos fixos (utilize a ferramenta "Gestão de Prioridades" para fazer simulações);
+2) Concorrência? a) crie diferenciais e corrija seus pontos fracos; b) utilize a "Calculadora de Preços" para comparar seus preços com os dos concorrentes. Faça simulações em "Definição de Prioridades".`;
+
+        const variavel10 = `Você deve estar muito satisfeito com o lucro alcançado!
+Estude o potencial do mercado em que atua! Observe os indícios de alterações: aumento ou redução da demanda; mudanças tecnológicas e/ou nas preferências dos clientes; situação dos fornecedores; comportamento dos preços; ações importantes na concorrência e o impacto em sua competitividade; situações sócio econômicas, mudanças na legislação, obras públicas, etc.
+Traduza suas conclusões em percentuais de aumento ou redução (em relação aos dados atuais), na ferramenta "Definição de Prioridades" e veja como afeta sua lucratividade. Se acredita em variações nos preços dos insumos e/ou mercadorias de terceiros; ou nos preços dos concorrentes, recorra à "Calculadora de Preços"!`;
+
+        const variavel11 = `Você deve estar muito satisfeito com o lucro alcançado!
+Considere a viabilidade de ampliar sua capacidade de atendimento! Fora de cogitação?
+Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos. Isso reduzirá a margem. Então, tente melhorar a produtividade, reduzindo os custos fixos. Ainda não está bom? Veja o que dá para reduzir nos demais custos. Ainda assim a margem continua menor? O que acontece se conseguir aumentar o ticket médio? Com a ajuda da "Calculadora de Preços" identifique os produtos mais lucrativos e considere a possibilidade de aumentar o volume de vendas deles. Nas comparações com os concorrentes, veja se há espaço para aumento de preços.`;
+
+        // Calcular Análise
+        let analiseResult = '';
+        if (pontoEquilibrio > salesRevenue) {
+            analiseResult = variavel1;
+        } else if (margemContribuicao < 0) {
+            analiseResult = variavel2;
+        } else if (margemContribuicao < 0.3) {
+            analiseResult = variavel3;
+        } else if (margemContribuicao < 0.4) {
+            analiseResult = variavel4;
+        } else if (margemContribuicao < 0.5) {
+            analiseResult = variavel5;
+        } else if (margemContribuicao < 0.6) {
+            analiseResult = variavel6;
+        } else if (margemContribuicao < 0.7) {
+            analiseResult = variavel7;
+        } else if (margemContribuicao < 0.8) {
+            analiseResult = variavel8;
+        } else if (margemContribuicao < 0.9) {
+            analiseResult = variavel9;
+        } else if (margemContribuicao < 1) {
+            analiseResult = variavel10;
+        } else {
+            analiseResult = variavel11;
+        }
+
+        analiseResult = variavel + analiseResult;
+
         // Atualizar os elementos na interface
         document.getElementById('lucro_reais').value = formatMoney(lucroReais);
         document.getElementById('lucro_percentual').value = lucroPercentual.toFixed(2) + '%';
@@ -557,6 +698,7 @@ function typeActivityService() {
         document.getElementById('produtividade').value = formatMoney(produtividade);
         document.getElementById('pontoEquilibrio').value = formatMoney(pontoEquilibrio);
         document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
+        document.getElementById('analiseCalculo').textContent = analiseResult;
     }
 }
 
