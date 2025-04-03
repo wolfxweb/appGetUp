@@ -31,22 +31,22 @@
                         <h5 class="card-title mb-0">Dados Básicos</h5>
                     </div>
                     <div class="card-body p-4">
-                        <!-- Select Box -->
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <div class="form-group">
+    <!-- Select Box -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="form-group">
                                     <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
-                                    <select class="form-select" id="basicDataSelect">
-                                        {% for data in basic_data_list %}
-                                            <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
-                                                {{ data.month }}/{{ data.year }}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
+                <select class="form-select" id="basicDataSelect">
+                    {% for data in basic_data_list %}
+                    <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
+                        {{ data.month }}/{{ data.year }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+
                         <!-- Dados Básicos em formato de texto -->
                         <div class="row">
                             {% if user.activity_type != 'Serviços' %}
@@ -57,81 +57,81 @@
                                 
                                     <p><strong>Custos Fixos:</strong> <span id="fixedCosts">-</span></p>
                             
-                                </div>
+                </div>
                                 <div class="col-md-6 mb-3">
                                     <p><strong>Despesas de Vendas:</strong> <span id="salesExpenses">-</span></p>
                                     <p><strong>Gastos com Insumos e Produtos:</strong> <span id="operationalExpenses">-</span></p>
                                     <p><strong>Margem de Lucro Ideal:</strong> <span id="margemIdeial">-</span></p>
                                 
-                                </div>
+                    </div>
                             {% endif %}
-                        </div>
-                    </div>
-                </div>
+            </div>
+        </div>
+    </div>
 
-                <!-- Gráficos e Métricas -->
+    <!-- Gráficos e Métricas -->
                 <div class="row mb-4">
-                    <!-- Gráfico de Barras -->
+        <!-- Gráfico de Barras -->
                     <div class="col-md-6">
-                        <div class="card h-100">
+            <div class="card h-100">
                             <div class="card-header bg-primary text-white">
-                                <h5 class="card-title mb-0">Custos e Faturamento</h5>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="costsChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
+                    <h5 class="card-title mb-0">Custos e Faturamento</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="costsChart"></canvas>
+                </div>
+            </div>
+        </div>
 
-                    <!-- Métricas -->
+        <!-- Métricas -->
                     <div class="col-md-6">
-                        <div class="card h-100">
+            <div class="card h-100">
                             <div class="card-header bg-primary text-white">
-                                <h5 class="card-title mb-0">Métricas Financeiras</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="mb-3">
-                                    <label class="form-label">
+                    <h5 class="card-title mb-0">Métricas Financeiras</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label">
                                         Lucro
-                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
-                                    </label>
-                                    <div class="input-group">
+                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
+                        </label>
+                        <div class="input-group">
                                         <input type="text" class="form-control" id="lucro_reais" readonly>
                                         <input type="text" class="form-control" id="lucro_percentual" readonly>
-                                    </div>
-                                </div>
+                        </div>
+                    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Ticket Médio
-                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#ticketMedioModal" style="cursor: pointer;"></i>
-                                    </label>
-                                    <input type="text" class="form-control" id="ticketMedio" readonly>
-                                </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Ticket Médio
+                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#ticketMedioModal" style="cursor: pointer;"></i>
+                        </label>
+                        <input type="text" class="form-control" id="ticketMedio" readonly>
+                    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Margem de Contribuição
-                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemContribuicaoModal" style="cursor: pointer;"></i>
-                                    </label>
-                                    <input type="text" class="form-control" id="margemContribuicao" readonly>
-                                </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Margem de Contribuição
+                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemContribuicaoModal" style="cursor: pointer;"></i>
+                        </label>
+                        <input type="text" class="form-control" id="margemContribuicao" readonly>
+                    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Produtividade
-                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#produtividadeModal" style="cursor: pointer;"></i>
-                                    </label>
-                                    <input type="text" class="form-control" id="produtividade" readonly>
-                                </div>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Produtividade
+                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#produtividadeModal" style="cursor: pointer;"></i>
+                        </label>
+                        <input type="text" class="form-control" id="produtividade" readonly>
+                    </div>
 
-                                <div class="mb-3">
-                                    <label class="form-label">
-                                        Ponto de Equilíbrio
-                                        <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#pontoEquilibrioModal" style="cursor: pointer;"></i>
-                                    </label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="pontoEquilibrio" readonly>
+                    <div class="mb-3">
+                        <label class="form-label">
+                            Ponto de Equilíbrio
+                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#pontoEquilibrioModal" style="cursor: pointer;"></i>
+                        </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="pontoEquilibrio" readonly>
                                         <input type="text" class="form-control" id="pontoEquilibrioPercentual" readonly>
                                     </div>
                                 </div>
@@ -187,104 +187,104 @@
                                 <div style="height: 300px;">
                                     <canvas id="capacityChart"></canvas>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modais de Ajuste -->
-    <!-- Modal Margem -->
-    <div class="modal fade" id="margemModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ajuste de Margem</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Fórmula</label>
-                        <input type="text" class="form-control" value="(Receita - Custos) / Receita" readonly>
-                    </div>
+<!-- Modais de Ajuste -->
+<!-- Modal Margem -->
+<div class="modal fade" id="margemModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuste de Margem</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Fórmula</label>
+                    <input type="text" class="form-control" value="(Receita - Custos) / Receita" readonly>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal Ticket Médio -->
-    <div class="modal fade" id="ticketMedioModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ajuste de Ticket Médio</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Fórmula</label>
-                        <input type="text" class="form-control" value="Receita / Clientes Atendidos" readonly>
-                    </div>
+<!-- Modal Ticket Médio -->
+<div class="modal fade" id="ticketMedioModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuste de Ticket Médio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Fórmula</label>
+                    <input type="text" class="form-control" value="Receita / Clientes Atendidos" readonly>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal Margem de Contribuição -->
-    <div class="modal fade" id="margemContribuicaoModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ajuste de Margem de Contribuição</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Fórmula</label>
-                        <input type="text" class="form-control" value="(Receita - Custos Variáveis) / Receita" readonly>
-                    </div>
+<!-- Modal Margem de Contribuição -->
+<div class="modal fade" id="margemContribuicaoModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuste de Margem de Contribuição</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Fórmula</label>
+                    <input type="text" class="form-control" value="(Receita - Custos Variáveis) / Receita" readonly>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal Produtividade -->
-    <div class="modal fade" id="produtividadeModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ajuste de Produtividade</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Fórmula</label>
-                        <input type="text" class="form-control" value="Receita / Custos" readonly>
-                    </div>
+<!-- Modal Produtividade -->
+<div class="modal fade" id="produtividadeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuste de Produtividade</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Fórmula</label>
+                    <input type="text" class="form-control" value="Receita / Custos" readonly>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Modal Ponto de Equilíbrio -->
-    <div class="modal fade" id="pontoEquilibrioModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Ajuste de Ponto de Equilíbrio</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">Fórmula</label>
-                        <input type="text" class="form-control" value="Custos Fixos / (1 - Custos Variáveis/Receita)" readonly>
-                    </div>
+<!-- Modal Ponto de Equilíbrio -->
+<div class="modal fade" id="pontoEquilibrioModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuste de Ponto de Equilíbrio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Fórmula</label>
+                    <input type="text" class="form-control" value="Custos Fixos / (1 - Custos Variáveis/Receita)" readonly>
                 </div>
             </div>
         </div>
     </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
