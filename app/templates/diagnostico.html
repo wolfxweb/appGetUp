@@ -279,21 +279,27 @@
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Função para formatar valores monetários (apenas para exibição)
-    function formatMoney(value) {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(value);
-    }
+ 
+    {% if user.activity_type != 'Serviços' %}
+    typeActivity()
+    {% endif %} 
+   
+});
+function typeActivity() {
+   // Função para formatar valores monetários (apenas para exibição)
+   function formatMoney(value) {
+    return new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    }).format(value);
+}
 
-    // Função para obter valor numérico (para cálculos)
-    function getNumericValue(value) {
-        return parseFloat(value) || 0;
-    }
-
+// Função para obter valor numérico (para cálculos)
+function getNumericValue(value) {
+    return parseFloat(value) || 0;
+}
     // Inicializar o gráfico de barras
     const ctx = document.getElementById('costsChart').getContext('2d');
     window.costsChart = new Chart(ctx, {
@@ -666,14 +672,14 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
                 alert('Erro ao carregar os dados. Por favor, tente novamente.');
             });
     });
-    
-    // Disparar o evento change automaticamente quando a página carregar
-    const selectElement = document.getElementById('basicDataSelect');
-    if (selectElement && selectElement.value) {
-        selectElement.dispatchEvent(new Event('change'));
-    } else {
-        console.warn('Select não encontrado ou sem valor para carregar dados iniciais');
-    }
-});
+     // Disparar o evento change automaticamente quando a página carregar
+     const selectElement = document.getElementById('basicDataSelect');
+     if (selectElement && selectElement.value) {
+         selectElement.dispatchEvent(new Event('change'));
+     } else {
+         console.warn('Select não encontrado ou sem valor para carregar dados iniciais');
+     }
+}
+
 </script>
 {% endblock %} 
