@@ -445,8 +445,8 @@ function typeActivityService() {
                 document.getElementById('weeklyHours').textContent = `${data.weekly_hours || '-'}h`;
                 
                 // Atualizar margem ideal
-                const idealMargin = data.ideal_profit_margin !== null && data.ideal_profit_margin !== undefined ? 
-                    data.ideal_profit_margin : 0;
+                const idealMargin = data.ideal_service_profit_margin !== null && data.ideal_service_profit_margin !== undefined ? 
+                    data.ideal_service_profit_margin : 0;
                 document.getElementById('margemIdeial').textContent = `${idealMargin.toFixed(2)}%`;
 
                 // Armazenar dados brutos para cálculos
@@ -457,7 +457,8 @@ function typeActivityService() {
                     proLabore: getNumericValue(data.pro_labore),
                     weeklyHours: getNumericValue(data.weekly_hours),
                     clientsServed: data.clients_served,
-                    otherFixedCosts: getNumericValue(data.other_fixed_costs)
+                    otherFixedCosts: getNumericValue(data.other_fixed_costs),
+                    idealServiceProfitMargin: getNumericValue(data.ideal_service_profit_margin)
                 };
                 
                 // Atualizar o gráfico e os indicadores
@@ -1055,7 +1056,7 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
                 {% endif %}
                 
                 // Atualizar a margem de lucro ideal
-                const idealMargin = data.ideal_profit_margin !== null && data.ideal_profit_margin !== undefined ? data.ideal_profit_margin : 0;
+                const idealMargin = data.ideal_service_profit_margin !== null && data.ideal_service_profit_margin !== undefined ? data.ideal_service_profit_margin : 0;
                 console.log("Valor final da margem ideal:", idealMargin);
                 document.getElementById('margemIdeial').textContent = `${idealMargin.toFixed(2)}%`;
                 

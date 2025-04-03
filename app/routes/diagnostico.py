@@ -120,7 +120,8 @@ async def get_basic_data(
                 ),
                 "service_capacity": basic_data.service_capacity or "Não definido",
                 "ideal_profit_margin": safe_float(basic_data.ideal_profit_margin),
-                "other_fixed_costs": safe_float(getattr(basic_data, 'other_fixed_costs', None))
+                "other_fixed_costs": safe_float(getattr(basic_data, 'other_fixed_costs', None)),
+                "ideal_service_profit_margin": safe_float(getattr(basic_data, 'ideal_service_profit_margin', None))
             }
 
             # Adicionar campos específicos de serviço se o tipo de atividade for 'servico'
