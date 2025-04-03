@@ -57,21 +57,6 @@ class BasicDataInput(BaseModel):
     other_fixed_costs: Optional[float] = None
     ideal_service_profit_margin: Optional[float] = None
     is_current: Optional[bool] = None
-    @validator('sales_revenue', 'sales_expenses', 'input_product_expenses', 'fixed_costs', 'pro_labore', 'other_fixed_costs', pre=True)
-    def convert_string_to_float(cls, v):
-        if isinstance(v, str):
-            if not v:  # Se a string estiver vazia
-                return None
-            # Remove espaços em branco
-            v = v.strip()
-            # Substitui vírgula por ponto
-            v = v.replace(',', '.')
-            try:
-                # Converte para float
-                return float(v)
-            except ValueError:
-                raise ValueError('Valor inválido para número decimal')
-        return v
 
 def compare_and_log_changes(db: Session, old_data_dict: dict, new_data: dict) -> list:
     """Compara os dados antigos com os novos e retorna uma lista de alterações"""
@@ -256,15 +241,15 @@ async def save_basic_data(
         # Preparar os novos dados com conversão de tipos
         new_data = {
             'clients_served': clients_served,
-            'sales_revenue': float(sales_revenue.replace(',', '.')) if sales_revenue else None,
-            'sales_expenses': float(sales_expenses.replace(',', '.')) if sales_expenses else None,
-            'input_product_expenses': float(input_product_expenses.replace(',', '.')) if input_product_expenses else None,
-            'fixed_costs': float(fixed_costs.replace(',', '.')) if fixed_costs else None,
+            'sales_revenue': float(sales_revenue) if sales_revenue else None,
+            'sales_expenses': float(sales_expenses) if sales_expenses else None,
+            'input_product_expenses': float(input_product_expenses) if input_product_expenses else None,
+            'fixed_costs': float(fixed_costs) if fixed_costs else None,
             'ideal_profit_margin': ideal_profit_margin,
             'service_capacity': service_capacity,
-            'pro_labore': pro_labore,
+            'pro_labore': float(pro_labore) if pro_labore else None,
             'work_hours_per_week': work_hours_per_week,
-            'other_fixed_costs': other_fixed_costs,
+            'other_fixed_costs': float(other_fixed_costs) if other_fixed_costs else None,
             'ideal_service_profit_margin': ideal_service_profit_margin,
             'is_current': is_current_bool
         }
@@ -362,6 +347,7 @@ async def edit_basic_data_page(
 
     # Log para arquivo
     logger.info(f"Buscando logs para basic_data_id: {data_id}")
+    logger.info(f"Valores atuais: sales_revenue={basic_data.sales_revenue}, sales_expenses={basic_data.sales_expenses}")
 
     # Buscar os logs relacionados a este registro básico
     logs = db.query(BasicDataLog).filter(
@@ -372,21 +358,11 @@ async def edit_basic_data_page(
         (page - 1) * per_page
     ).limit(per_page).all()
 
-    # Log para arquivo com contagem de logs encontrados
-    logger.info(f"Logs encontrados: {len(logs)}")
-    
-    # Log detalhado de cada registro encontrado
-    for log in logs:
-        logger.info(f"Log ID: {log.id}, Descrição: {log.change_description}")
-
     # Contar total de logs para paginação
     total_logs = db.query(BasicDataLog).filter(
         BasicDataLog.basic_data_id == data_id
     ).count()
 
-    logger.info(f"Total de logs: {total_logs}, Páginas: {(total_logs + per_page - 1) // per_page}")
-
-    # Calcular total de páginas
     total_pages = (total_logs + per_page - 1) // per_page
 
     return templates.TemplateResponse(

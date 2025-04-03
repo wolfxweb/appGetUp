@@ -477,25 +477,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-
-
-    function formatCurrency(value) {
-        return value; // Retornar o valor sem formatação
-    }
-
-    function unformatCurrency(value) {
-        // Remove tudo que não é número
-        return value.replace(/\D/g, '');
-    }
-
-    function convertToInternationalFormat(value) {
-        if (!value) return '';
-        // Remove todos os caracteres exceto números e vírgula
-        value = value.replace(/[^\d,]/g, '');
-        // Substitui vírgula por ponto
-        return value.replace(',', '.');
-    }
-
     const currencyInputs = [
         'sales_revenue', 
         'sales_expenses', 
@@ -504,49 +485,6 @@ document.addEventListener('DOMContentLoaded', function() {
         'pro_labore', 
         'other_fixed_costs'
     ];
-
-    currencyInputs.forEach(inputId => {
-        const input = document.getElementById(inputId);
-        if (!input) return;
-
-        // Formata valor inicial se existir
-        if (input.value) {
-            const initialValue = unformatCurrency(input.value);
-            if (initialValue) {
-                input.value = initialValue;
-            }
-        }
-
-        let lastValidValue = '';
-
-        input.addEventListener('input', function(e) {
-            // Guarda a posição do cursor
-            const cursorPosition = this.selectionStart;
-            
-            // Pega apenas os números do valor atual
-            const value = unformatCurrency(this.value);
-            
-            // Se estiver vazio, limpa o campo
-            if (!value) {
-                this.value = '';
-                lastValidValue = '';
-                return;
-            }
-
-            // Formata o valor
-            const formattedValue = formatCurrency(value);
-            
-            // Atualiza o campo apenas se o valor mudou
-            if (formattedValue !== lastValidValue) {
-                this.value = formattedValue;
-                lastValidValue = formattedValue;
-            }
-            
-            // Tenta manter a posição do cursor próxima à posição original
-            const newPosition = Math.max(cursorPosition, this.value.length - 3);
-            this.setSelectionRange(newPosition, newPosition);
-        });
-    });
 
     // Form submission handling
     const form = document.querySelector('form');
@@ -560,15 +498,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
-
-        // Converte os valores monetários para formato internacional antes do envio
-        currencyInputs.forEach(inputId => {
-            const input = document.getElementById(inputId);
-            if (input && input.value) {
-                // Converte para formato internacional (com ponto decimal)
-                input.value = convertToInternationalFormat(input.value);
-            }
-        });
 
         // Se já foi confirmado, permite o envio
         if (isConfirmed) {
@@ -642,25 +571,14 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Submissão do formulário para o botão de atualizar
-    document.getElementById('updateButton').addEventListener('click', async function(e) {
+    document.getElementById('updateButton')?.addEventListener('click', function(e) {
         e.preventDefault();
-
-        // Converte os valores monetários para formato internacional antes do envio
-        currencyInputs.forEach(inputId => {
-            const input = document.getElementById(inputId);
-            if (input && input.value) {
-                // Converte para formato internacional (com ponto decimal)
-                input.value = convertToInternationalFormat(input.value);
-            }
-        });
-
-        // Envia o formulário diretamente
         form.submit();
     });
 
     // O botão de salvar pode submeter diretamente
-    document.getElementById('saveButton').addEventListener('click', function(e) {
-        form.submit(); // Envia o formulário diretamente
+    document.getElementById('saveButton')?.addEventListener('click', function(e) {
+        form.submit();
     });
 });
 </script>
