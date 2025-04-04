@@ -109,8 +109,7 @@
                 <div class="card-body">
                     <div class="mb-3">
                         <label class="form-label">
-                                        Lucro
-                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
+                                        Margem                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
                         </label>
                         <div class="input-group">
                                         <input type="text" class="form-control" id="lucro_reais" readonly>
@@ -494,12 +493,13 @@ function typeActivityService() {
         const {
             salesRevenue,
             salesExpenses,
+            operationalExpenses,
             proLabore,
             otherFixedCosts
         } = window.rawData;
 
-        // Calcular o total de custos (para serviços: despesas de vendas + pró-labore + outros custos fixos)
-        const totalCosts = salesExpenses + proLabore + otherFixedCosts;
+        // Calcular o total de custos (para serviços: despesas de vendas + outros custos fixos + gastos operacionais + pró-labore)
+        const totalCosts = salesExpenses + otherFixedCosts + operationalExpenses + proLabore;
 
         // Atualizar o gráfico de barras
         window.costsChart.data.datasets[0].data = [totalCosts, salesRevenue];
@@ -517,14 +517,15 @@ function typeActivityService() {
         const {
             salesRevenue,
             salesExpenses,
+            operationalExpenses,
             proLabore,
             otherFixedCosts,
             weeklyHours,
             clientsServed
         } = window.rawData;
 
-        // Calcular Lucro em Reais (Receita - (Despesas de Vendas + Pró-labore + Outros Custos Fixos))
-        const lucroReais = salesRevenue - (salesExpenses + proLabore + otherFixedCosts);
+        // Calcular Lucro em Reais (Receita - (Despesas de Vendas + Demais Custos Fixos + Gastos Operacionais + Pró-labore))
+        const lucroReais =  (salesExpenses + otherFixedCosts + operationalExpenses + proLabore);
         
         // Calcular Lucro Percentual
         const lucroPercentual = salesRevenue > 0 ? (lucroReais / salesRevenue) * 100 : 0;
@@ -536,16 +537,11 @@ function typeActivityService() {
         const margemContribuicao = clientsServed > 0 ? 
             (salesRevenue - salesExpenses) / clientsServed : 0;
         
-        // Calcular Produtividade (Receita / Horas Trabalhadas por Mês)
-        const horasPorMes = weeklyHours * 4; // considerando 4 semanas por mês
-        const produtividade = horasPorMes > 0 ? salesRevenue / horasPorMes : 0;
+        // Calcular Produtividade (Receita / (Pró-labore + Demais Custos Fixos))
+        const produtividade = (proLabore + otherFixedCosts) > 0 ? salesRevenue / (proLabore + otherFixedCosts) : 0;
         
         // Calcular Ponto de Equilíbrio
-        const custosFixosTotais = proLabore + otherFixedCosts;
-        const custosPorHora = horasPorMes > 0 ? custosFixosTotais / horasPorMes : 0;
-        const receitaPorHora = horasPorMes > 0 ? salesRevenue / horasPorMes : 0;
-        const pontoEquilibrio = receitaPorHora > 0 ? 
-            (custosFixosTotais / (receitaPorHora - (salesExpenses / horasPorMes))) * receitaPorHora : 0;
+        const pontoEquilibrio = margemContribuicao > 0 ? (otherFixedCosts + proLabore) / margemContribuicao : 0;
         
         // Calcular Ponto de Equilíbrio Percentual
         const pontoEquilibrioPercentual = salesRevenue > 0 ? (pontoEquilibrio / salesRevenue) * 100 : 0;
@@ -696,8 +692,8 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
         document.getElementById('lucro_percentual').value = lucroPercentual.toFixed(2) + '%';
         document.getElementById('ticketMedio').value = formatMoney(ticketMedio);
         document.getElementById('margemContribuicao').value = formatMoney(margemContribuicao);
-        document.getElementById('produtividade').value = formatMoney(produtividade);
-        document.getElementById('pontoEquilibrio').value = formatMoney(pontoEquilibrio);
+        document.getElementById('produtividade').value = Math.round(produtividade);
+        document.getElementById('pontoEquilibrio').value = Math.round(pontoEquilibrio);
         document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
         document.getElementById('analiseCalculo').textContent = analiseResult;
     }
@@ -979,8 +975,8 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
         document.getElementById('lucro_percentual').value = lucroPercentual.toFixed(2) + '%';
         document.getElementById('ticketMedio').value = formatMoney(ticketMedio);
         document.getElementById('margemContribuicao').value = formatMoney(margemContribuicao);
-        document.getElementById('produtividade').value = formatMoney(produtividade);
-        document.getElementById('pontoEquilibrio').value = formatMoney(pontoEquilibrio);
+        document.getElementById('produtividade').value = Math.round(produtividade);
+        document.getElementById('pontoEquilibrio').value = Math.round(pontoEquilibrio);
         document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
         document.getElementById('analiseCalculo').textContent = analiseResult;
         
