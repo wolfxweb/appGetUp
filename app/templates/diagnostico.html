@@ -548,6 +548,8 @@ function typeActivityService() {
         // Calcular Ponto de Equilíbrio Percentual
         const pontoEquilibrioPercentual = salesRevenue > 0 ? (pontoEquilibrio / salesRevenue) * 100 : 0;
 
+        const variavel = "Uma vez que estas considerações se referem a mês anterior, recomendamos que em \"Definição de Prioridades\" você estime as variações para o corrente mês, antecipando-se assim a eventuais providências relevantes. ";
+        
         // Calcular análise de margem
         let analiseMargem = '';
         if (lucroPercentual === '') {
@@ -566,6 +568,78 @@ function typeActivityService() {
             analiseMargem = 'É como se estivesse em uma bicicleta, sem pedalar nem apoiar os pés no chão!';
         }
 
+        // Calcular análise de margem detalhada
+        let analiseMargemDetalhada = '';
+        
+        // Verificar se MARGEM IDEAL está vazia
+        if (ideal_service_profit_margin === '') {
+            analiseMargemDetalhada = '';
+        } 
+        // Verificar se FATURAMENTO está vazio
+        else if (salesRevenue === '') {
+            analiseMargemDetalhada = '';
+        }
+        // Verificar se MARGEM >= 0 e MARGEM < MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO > 0 e MARG.CONTRIBUIÇÃO/TICKET MÉDIO < 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS > 50%
+        else if (lucroPercentual >= 0 && lucroPercentual < ideal_service_profit_margin * 0.9 && 
+                 margemContribuicao > 0 && (margemContribuicao / ticketMedio) < 0.2 && 
+                 (pontoEquilibrio / clientsServed) > 0.5) {
+            analiseMargemDetalhada = 'Diminua a participação dos seus gastos com vendas, e melhore a produtividade. Você está calculando corretamente os preços dos serviços?';
+        }
+        // Verificar se MARGEM >= 0 e MARGEM < MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO > 0 e MARG.CONTRIBUIÇÃO/TICKET MÉDIO < 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS < 50%
+        else if (lucroPercentual >= 0 && lucroPercentual < ideal_service_profit_margin * 0.9 && 
+                 margemContribuicao > 0 && (margemContribuicao / ticketMedio) < 0.2 && 
+                 (pontoEquilibrio / clientsServed) < 0.5) {
+            analiseMargemDetalhada = 'Diminua a participação dos seus gastos com vendas sobre o faturamento. Atenção com o tempo para realização dos serviços e com os prazos dos recebimentos e dos pagamentos!';
+        }
+        // Verificar se MARGEM >= 0 e MARGEM < MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO/TICKET MÉDIO >= 20% e PONTO EQUILÍBRIO/QUANT.VENDAS > 50%
+        else if (lucroPercentual >= 0 && lucroPercentual < ideal_service_profit_margin * 0.9 && 
+                 (margemContribuicao / ticketMedio) >= 0.2 && 
+                 (pontoEquilibrio / clientsServed) > 0.5) {
+            analiseMargemDetalhada = 'Verifique a possibilidade de aumentar a produtividade!';
+        }
+        // Verificar se MARGEM >= 0 e MARGEM < MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO/TICKET MÉDIO >= 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS < 50%
+        else if (lucroPercentual >= 0 && lucroPercentual < ideal_service_profit_margin * 0.9 && 
+                 (margemContribuicao / ticketMedio) >= 0.2 && 
+                 (pontoEquilibrio / clientsServed) < 0.5) {
+            analiseMargemDetalhada = 'Você está calculando corretamente os preços dos serviços que realiza?';
+        }
+        // Verificar se MARGEM >= MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO > 0 e MARG.CONTRIBUIÇÃO/TICKET MÉDIO < 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS > 50%
+        else if (lucroPercentual >= ideal_service_profit_margin * 0.9 && 
+                 margemContribuicao > 0 && (margemContribuicao / ticketMedio) < 0.2 && 
+                 (pontoEquilibrio / clientsServed) > 0.5) {
+            analiseMargemDetalhada = 'Diminua a participação dos seus gastos com vendas e custos fixos sobre o faturamento, e, o tempo de execução dos serviços!';
+        }
+        // Verificar se MARGEM >= MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO > 0 e MARG.CONTRIBUIÇÃO/TICKET MÉDIO < 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS < 50%
+        else if (lucroPercentual >= ideal_service_profit_margin * 0.9 && 
+                 margemContribuicao > 0 && (margemContribuicao / ticketMedio) < 0.2 && 
+                 (pontoEquilibrio / clientsServed) < 0.5) {
+            analiseMargemDetalhada = 'Diminua seus gastos com vendas e o tempo para execução dos serviços!';
+        }
+        // Verificar se MARGEM >= MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO/TICKET MÉDIO >= 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS > 50%
+        else if (lucroPercentual >= ideal_service_profit_margin * 0.9 && 
+                 (margemContribuicao / ticketMedio) >= 0.2 && 
+                 (pontoEquilibrio / clientsServed) > 0.5) {
+            analiseMargemDetalhada = 'Verifique a possibilidade de reduzir a participação dos custos fixos sobre o faturamento!';
+        }
+        // Verificar se MARGEM >= MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO/TICKET MÉDIO >= 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS < 50%
+        else if (lucroPercentual >= ideal_service_profit_margin * 0.9 && 
+                 (margemContribuicao / ticketMedio) >= 0.2 && 
+                 (pontoEquilibrio / clientsServed) < 0.5) {
+            analiseMargemDetalhada = 'A participação dos seus gastos e custos sobre o faturamento estão bem administrados!';
+        }
+        // Verificar se MARGEM < 0 e MARG.CONTRIBUIÇÃO < 0
+        else if (lucroPercentual < 0 && margemContribuicao < 0) {
+            analiseMargemDetalhada = 'Sua prioridade mais urgente é reduzir a participação dos gastos com vendas sobre o faturamento e o tempo para execução dos serviços!';
+        }
+        // Verificar se MARGEM < 0 e MARG.CONTRIBUIÇÃO > 0
+        else if (lucroPercentual < 0 && margemContribuicao > 0) {
+            analiseMargemDetalhada = 'Após analisar os preços, priorize reduzir os custos fixos! E reveja os gastos com vendas e o tempo para execução dos serviços.';
+        }
+        // Caso padrão
+        else {
+            analiseMargemDetalhada = '';
+        }
+
         // Atualizar os elementos na interface
         document.getElementById('lucro_reais').value = formatMoney(lucroReais);
         document.getElementById('lucro_percentual').value = lucroPercentual.toFixed(2) + '%';
@@ -574,7 +648,7 @@ function typeActivityService() {
         document.getElementById('produtividade').value = Math.round(produtividade);
         document.getElementById('pontoEquilibrio').value = Math.round(pontoEquilibrio);
         document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
-        document.getElementById('analiseCalculo').textContent = analiseMargem;
+        document.getElementById('analiseCalculo').textContent = variavel + '\n' + analiseMargem + '\n' + analiseMargemDetalhada;
     }
 }
 
@@ -708,7 +782,7 @@ function typeActivity() {
         // Calcular Ponto de Equilíbrio Percentual ((L24*(F11/F10))/(F11/F10))
         const pontoEquilibrioPercentual = ticketMedio > 0 ? pontoEquilibrio / ticketMedio : 0;
 
-        const variavel = " Uma vez que estas considerações se referem a mês anterior, recomendamos que em \"Definição de Prioridades\" você estime as variações para o corrente mês, antecipando-se assim a eventuais providências relevantes. ";
+        const variavel = "Uma vez que estas considerações se referem a mês anterior, recomendamos que em \"Definição de Prioridades\" você estime as variações para o corrente mês, antecipando-se assim a eventuais providências relevantes. ";
         
         // Definir textos das variáveis
         const variavel1 = `Você tem motivo para estar bem preocupado!
@@ -750,7 +824,7 @@ Levante a cabeça. Não demonstre que está com problemas.
 Não comente. Priorize o pagamento de dívidas pequenas. 
 Proponha acordos para as maiores, considerando que será vital cumpri-los fielmente!`;
 
-        const variavel3 = `O lucro alcançado não é aquele que você gostaria! E o negócio está sendo onerado por capacidade ociosa!
+        const variavel3 = `O lucro alcançado não é aquele que você gostaria!
 Na ferramenta "Gestão de Prioridades" aumente a quantidade de clientes atendidos (desde que exista demanda, esteja preparado para competir, disponha de capital de giro suficiente e haja disponibilidades nos fornecedores). Verifique a margem resultante.
 Se não for possível vender mais, ou se não for suficiente, você ainda pode tentar estimular aumento do valor do ticket médio e verificar a possibilidade de reduzir despesas e custos.
 Utilize a "Calculadora de preços" para analisar: 
