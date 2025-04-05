@@ -40,7 +40,8 @@ async def diagnostico_page(
         {
             "request": request,
             "basic_data_list": basic_data_list,
-            "user": current_user
+            "user": current_user,
+            "active_page": "diagnostico"
         }
     )
 @router.get("/api/list-basic-data")

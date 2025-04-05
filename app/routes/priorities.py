@@ -33,7 +33,8 @@ async def priorities_page(
         {
             "request": request,
             "user": current_user,
-            "basic_data_list": basic_data_list
+            "basic_data_list": basic_data_list,
+            "active_page": "gestao_prioridades"
         }
     )
 
