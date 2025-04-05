@@ -294,6 +294,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Recalcular faturamento, margem e custos com base no novo ticket médio
                 recalculateFromTicketChange(manualValue);
+            } else if (metric === 'custosVendas') {
+                // Para custos de vendas, calcular o valor com base no percentual
+                const calculatedValue = original + (original * manualValue / 100);
+                calculatedElement.value = formatMoney(calculatedValue);
+                
+                // Recalcular margem com base nos novos custos de vendas
+                recalculateFromSalesCostsChange(manualValue);
+            } else if (metric === 'custosInsumos') {
+                // Para custos de insumos, calcular o valor com base no percentual
+                const calculatedValue = original + (original * manualValue / 100);
+                calculatedElement.value = formatMoney(calculatedValue);
+                
+                // Recalcular margem com base nos novos custos de insumos
+                recalculateFromOperationalCostsChange(manualValue);
             } else {
                 calculatedElement.value = formatMoney(manualValue);
             }
@@ -743,6 +757,137 @@ document.addEventListener('DOMContentLoaded', function() {
             custosInsumosCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro (redução de custos é positiva)
         } else {
             custosInsumosCalculadoElement.style.backgroundColor = ''; // Cor padrão
+        }
+        
+        // Calcular a nova margem
+        const novaMargem = faturamentoCalculado > 0 ? 
+            ((faturamentoCalculado - (custosVendasCalculado + custosInsumosCalculado + custosFixosOriginal)) / faturamentoCalculado) * 100 : 0;
+        
+        // Atualizar o campo margemCalculado
+        document.getElementById('margemCalculado').value = formatPercent(novaMargem);
+        
+        // Obter o valor original da margem para cálculo da variação
+        const margemOriginal = parseFloat(document.getElementById('margemOriginal').value.replace('%', '')) || 0;
+        
+        // Calcular e atualizar a variação da margem
+        const variacaoMargem = calculateVariation(margemOriginal, novaMargem);
+        document.getElementById('margemVariacao').value = formatPercent(variacaoMargem);
+        
+        // Alterar a cor de fundo da margem calculada com base na comparação
+        const margemCalculadoElement = document.getElementById('margemCalculado');
+        if (novaMargem > margemOriginal) {
+            margemCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro
+        } else if (novaMargem < margemOriginal) {
+            margemCalculadoElement.style.backgroundColor = '#f8d7da'; // Vermelho claro
+        } else {
+            margemCalculadoElement.style.backgroundColor = ''; // Cor padrão
+        }
+    }
+
+    // Função para recalcular campos com base na mudança de custos de vendas
+    function recalculateFromSalesCostsChange(percentual) {
+        // Obter valores originais
+        const custosVendasOriginal = parseFloat(document.getElementById('custosVendasOriginal').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const faturamentoCalculado = parseFloat(document.getElementById('faturamentoCalculado').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const custosInsumosOriginal = parseFloat(document.getElementById('custosInsumosOriginal').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const custosFixosOriginal = parseFloat(document.getElementById('custosFixosOriginal').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        
+        // Calcular o novo custo de vendas
+        const custosVendasCalculado = custosVendasOriginal + (custosVendasOriginal * percentual / 100);
+        
+        // Atualizar o campo custos de vendas calculado
+        document.getElementById('custosVendasCalculado').value = formatMoney(custosVendasCalculado);
+        
+        // Calcular e atualizar a variação dos custos de vendas
+        const variacaoCustosVendas = calculateVariation(custosVendasOriginal, custosVendasCalculado);
+        document.getElementById('custosVendasVariacao').value = formatPercent(variacaoCustosVendas);
+        
+        // Alterar a cor de fundo dos custos de vendas calculados com base na comparação
+        const custosVendasCalculadoElement = document.getElementById('custosVendasCalculado');
+        if (custosVendasCalculado > custosVendasOriginal) {
+            custosVendasCalculadoElement.style.backgroundColor = '#f8d7da'; // Vermelho claro (aumento de custos é negativo)
+        } else if (custosVendasCalculado < custosVendasOriginal) {
+            custosVendasCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro (redução de custos é positiva)
+        } else {
+            custosVendasCalculadoElement.style.backgroundColor = ''; // Cor padrão
+        }
+        
+        // Calcular a nova margem
+        const novaMargem = faturamentoCalculado > 0 ? 
+            ((faturamentoCalculado - (custosVendasCalculado + custosInsumosOriginal + custosFixosOriginal)) / faturamentoCalculado) * 100 : 0;
+        
+        // Atualizar o campo margemCalculado
+        document.getElementById('margemCalculado').value = formatPercent(novaMargem);
+        
+        // Obter o valor original da margem para cálculo da variação
+        const margemOriginal = parseFloat(document.getElementById('margemOriginal').value.replace('%', '')) || 0;
+        
+        // Calcular e atualizar a variação da margem
+        const variacaoMargem = calculateVariation(margemOriginal, novaMargem);
+        document.getElementById('margemVariacao').value = formatPercent(variacaoMargem);
+        
+        // Alterar a cor de fundo da margem calculada com base na comparação
+        const margemCalculadoElement = document.getElementById('margemCalculado');
+        if (novaMargem > margemOriginal) {
+            margemCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro
+        } else if (novaMargem < margemOriginal) {
+            margemCalculadoElement.style.backgroundColor = '#f8d7da'; // Vermelho claro
+        } else {
+            margemCalculadoElement.style.backgroundColor = ''; // Cor padrão
+        }
+    }
+
+    // Função para recalcular campos com base na mudança de custos de insumos
+    function recalculateFromOperationalCostsChange(percentual) {
+        // Obter valores originais
+        const custosInsumosOriginal = parseFloat(document.getElementById('custosInsumosOriginal').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const faturamentoCalculado = parseFloat(document.getElementById('faturamentoCalculado').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const custosVendasOriginal = parseFloat(document.getElementById('custosVendasOriginal').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const custosFixosOriginal = parseFloat(document.getElementById('custosFixosOriginal').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const clientesCalculado = parseInt(document.getElementById('clientesCalculado').value) || 0;
+        const clientesOriginal = parseInt(document.getElementById('clientesOriginal').value) || 1; // Evitar divisão por zero
+        
+        // Calcular o novo custo de insumos
+        const custosInsumosCalculado = custosInsumosOriginal + (custosInsumosOriginal * percentual / 100);
+        
+        // Atualizar o campo custos de insumos calculado
+        document.getElementById('custosInsumosCalculado').value = formatMoney(custosInsumosCalculado);
+        
+        // Calcular e atualizar a variação dos custos de insumos
+        const variacaoCustosInsumos = calculateVariation(custosInsumosOriginal, custosInsumosCalculado);
+        document.getElementById('custosInsumosVariacao').value = formatPercent(variacaoCustosInsumos);
+        
+        // Alterar a cor de fundo dos custos de insumos calculados com base na comparação
+        const custosInsumosCalculadoElement = document.getElementById('custosInsumosCalculado');
+        if (custosInsumosCalculado > custosInsumosOriginal) {
+            custosInsumosCalculadoElement.style.backgroundColor = '#f8d7da'; // Vermelho claro (aumento de custos é negativo)
+        } else if (custosInsumosCalculado < custosInsumosOriginal) {
+            custosInsumosCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro (redução de custos é positiva)
+        } else {
+            custosInsumosCalculadoElement.style.backgroundColor = ''; // Cor padrão
+        }
+        
+        // Calcular o fator de ajuste baseado na variação do número de clientes
+        const fatorAjuste = clientesCalculado / clientesOriginal;
+        
+        // Calcular os novos custos de vendas com base no fator de ajuste
+        const custosVendasCalculado = custosVendasOriginal * fatorAjuste;
+        
+        // Atualizar o campo custos de vendas calculado
+        document.getElementById('custosVendasCalculado').value = formatMoney(custosVendasCalculado);
+        
+        // Calcular e atualizar a variação dos custos de vendas
+        const variacaoCustosVendas = calculateVariation(custosVendasOriginal, custosVendasCalculado);
+        document.getElementById('custosVendasVariacao').value = formatPercent(variacaoCustosVendas);
+        
+        // Alterar a cor de fundo dos custos de vendas calculados com base na comparação
+        const custosVendasCalculadoElement = document.getElementById('custosVendasCalculado');
+        if (custosVendasCalculado > custosVendasOriginal) {
+            custosVendasCalculadoElement.style.backgroundColor = '#f8d7da'; // Vermelho claro (aumento de custos é negativo)
+        } else if (custosVendasCalculado < custosVendasOriginal) {
+            custosVendasCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro (redução de custos é positiva)
+        } else {
+            custosVendasCalculadoElement.style.backgroundColor = ''; // Cor padrão
         }
         
         // Calcular a nova margem
