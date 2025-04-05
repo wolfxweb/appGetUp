@@ -33,24 +33,6 @@
                     </div>
                 </div>
 
-                <!-- Input de Percentual -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="percentualInput" class="form-label">Indique um percentual</label>
-                            <div class="input-group">
-                                <input type="number" class="form-control" id="percentualInput" min="0" max="100" value="0">
-                                <button class="btn btn-outline-primary" type="button" id="increaseBtn">
-                                    <i class="bi bi-plus-lg"></i>
-                                </button>
-                                <button class="btn btn-outline-primary" type="button" id="decreaseBtn">
-                                    <i class="bi bi-dash-lg"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Campos Comparativos -->
                 <div class="row">
                     <!-- Margem -->
@@ -60,11 +42,11 @@
                             <input type="text" class="form-control" id="margemOriginal" readonly>
                             <input type="text" class="form-control" id="margemCalculado" readonly>
                             <input type="text" class="form-control" id="margemVariacao" readonly>
-                            <button class="btn btn-success" type="button" data-metric="margem" data-action="increase">
-                                <i class="bi bi-plus-circle"></i>
+                            <button class="btn btn-success text-white" type="button" data-metric="margem" data-action="increase">
+                                <i class="bi bi-plus-circle text-white"></i>
                             </button>
-                            <button class="btn btn-danger" type="button" data-metric="margem" data-action="decrease">
-                                <i class="bi bi-dash-circle"></i>
+                            <button class="btn btn-danger text-white" type="button" data-metric="margem" data-action="decrease">
+                                <i class="bi bi-dash-circle text-white"></i>
                             </button>
                         </div>
                     </div>
@@ -76,11 +58,11 @@
                             <input type="text" class="form-control" id="clientesOriginal" readonly>
                             <input type="text" class="form-control" id="clientesCalculado" readonly>
                             <input type="text" class="form-control" id="clientesVariacao" readonly>
-                            <button class="btn btn-success" type="button" data-metric="clientes" data-action="increase">
-                                <i class="bi bi-plus-circle"></i>
+                            <button class="btn btn-success text-white" type="button" data-metric="clientes" data-action="increase">
+                                <i class="bi bi-plus-circle text-white"></i>
                             </button>
-                            <button class="btn btn-danger" type="button" data-metric="clientes" data-action="decrease">
-                                <i class="bi bi-dash-circle"></i>
+                            <button class="btn btn-danger text-white" type="button" data-metric="clientes" data-action="decrease">
+                                <i class="bi bi-dash-circle text-white"></i>
                             </button>
                         </div>
                     </div>
@@ -92,11 +74,11 @@
                             <input type="text" class="form-control" id="precoMedioOriginal" readonly>
                             <input type="text" class="form-control" id="precoMedioCalculado" readonly>
                             <input type="text" class="form-control" id="precoMedioVariacao" readonly>
-                            <button class="btn btn-success" type="button" data-metric="precoMedio" data-action="increase">
-                                <i class="bi bi-plus-circle"></i>
+                            <button class="btn btn-success text-white" type="button" data-metric="precoMedio" data-action="increase">
+                                <i class="bi bi-plus-circle text-white"></i>
                             </button>
-                            <button class="btn btn-danger" type="button" data-metric="precoMedio" data-action="decrease">
-                                <i class="bi bi-dash-circle"></i>
+                            <button class="btn btn-danger text-white" type="button" data-metric="precoMedio" data-action="decrease">
+                                <i class="bi bi-dash-circle text-white"></i>
                             </button>
                         </div>
                     </div>
@@ -108,11 +90,11 @@
                             <input type="text" class="form-control" id="ticketMedioOriginal" readonly>
                             <input type="text" class="form-control" id="ticketMedioCalculado" readonly>
                             <input type="text" class="form-control" id="ticketMedioVariacao" readonly>
-                            <button class="btn btn-success" type="button" data-metric="ticketMedio" data-action="increase">
-                                <i class="bi bi-plus-circle"></i>
+                            <button class="btn btn-success text-white" type="button" data-metric="ticketMedio" data-action="increase">
+                                <i class="bi bi-plus-circle text-white"></i>
                             </button>
-                            <button class="btn btn-danger" type="button" data-metric="ticketMedio" data-action="decrease">
-                                <i class="bi bi-dash-circle"></i>
+                            <button class="btn btn-danger text-white" type="button" data-metric="ticketMedio" data-action="decrease">
+                                <i class="bi bi-dash-circle text-white"></i>
                             </button>
                         </div>
                     </div>
@@ -124,11 +106,11 @@
                             <input type="text" class="form-control" id="faturamentoOriginal" readonly>
                             <input type="text" class="form-control" id="faturamentoCalculado" readonly>
                             <input type="text" class="form-control" id="faturamentoVariacao" readonly>
-                            <button class="btn btn-success" type="button" data-metric="faturamento" data-action="increase">
-                                <i class="bi bi-plus-circle"></i>
+                            <button class="btn btn-success text-white" type="button" data-metric="faturamento" data-action="increase">
+                                <i class="bi bi-plus-circle text-white"></i>
                             </button>
-                            <button class="btn btn-danger" type="button" data-metric="faturamento" data-action="decrease">
-                                <i class="bi bi-dash-circle"></i>
+                            <button class="btn btn-danger text-white" type="button" data-metric="faturamento" data-action="decrease">
+                                <i class="bi bi-dash-circle text-white"></i>
                             </button>
                         </div>
                     </div>
@@ -140,11 +122,11 @@
                             <input type="text" class="form-control" id="custosVendasOriginal" readonly>
                             <input type="text" class="form-control" id="custosVendasCalculado" readonly>
                             <input type="text" class="form-control" id="custosVendasVariacao" readonly>
-                            <button class="btn btn-success" type="button" data-metric="custosVendas" data-action="increase">
-                                <i class="bi bi-plus-circle"></i>
+                            <button class="btn btn-success text-white" type="button" data-metric="custosVendas" data-action="increase">
+                                <i class="bi bi-plus-circle text-white"></i>
                             </button>
-                            <button class="btn btn-danger" type="button" data-metric="custosVendas" data-action="decrease">
-                                <i class="bi bi-dash-circle"></i>
+                            <button class="btn btn-danger text-white" type="button" data-metric="custosVendas" data-action="decrease">
+                                <i class="bi bi-dash-circle text-white"></i>
                             </button>
                         </div>
                     </div>
@@ -156,11 +138,11 @@
                             <input type="text" class="form-control" id="custosInsumosOriginal" readonly>
                             <input type="text" class="form-control" id="custosInsumosCalculado" readonly>
                             <input type="text" class="form-control" id="custosInsumosVariacao" readonly>
-                            <button class="btn btn-success" type="button" data-metric="custosInsumos" data-action="increase">
-                                <i class="bi bi-plus-circle"></i>
+                            <button class="btn btn-success text-white" type="button" data-metric="custosInsumos" data-action="increase">
+                                <i class="bi bi-plus-circle text-white"></i>
                             </button>
-                            <button class="btn btn-danger" type="button" data-metric="custosInsumos" data-action="decrease">
-                                <i class="bi bi-dash-circle"></i>
+                            <button class="btn btn-danger text-white" type="button" data-metric="custosInsumos" data-action="decrease">
+                                <i class="bi bi-dash-circle text-white"></i>
                             </button>
                         </div>
                     </div>
@@ -172,11 +154,11 @@
                             <input type="text" class="form-control" id="custosFixosOriginal" readonly>
                             <input type="text" class="form-control" id="custosFixosCalculado" readonly>
                             <input type="text" class="form-control" id="custosFixosVariacao" readonly>
-                            <button class="btn btn-success" type="button" data-metric="custosFixos" data-action="increase">
-                                <i class="bi bi-plus-circle"></i>
+                            <button class="btn btn-success text-white" type="button" data-metric="custosFixos" data-action="increase">
+                                <i class="bi bi-plus-circle text-white"></i>
                             </button>
-                            <button class="btn btn-danger" type="button" data-metric="custosFixos" data-action="decrease">
-                                <i class="bi bi-dash-circle"></i>
+                            <button class="btn btn-danger text-white" type="button" data-metric="custosFixos" data-action="decrease">
+                                <i class="bi bi-dash-circle text-white"></i>
                             </button>
                         </div>
                     </div>
@@ -233,35 +215,12 @@ document.addEventListener('DOMContentLoaded', function() {
         return ((calculated - original) / original) * 100;
     }
 
-    // Event listeners para os botões de aumentar/diminuir
-    document.getElementById('increaseBtn').addEventListener('click', function() {
-        const input = document.getElementById('percentualInput');
-        const currentValue = parseInt(input.value) || 0;
-        input.value = Math.min(currentValue + 1, 100);
-        updateCalculations();
-    });
-
-    document.getElementById('decreaseBtn').addEventListener('click', function() {
-        const input = document.getElementById('percentualInput');
-        const currentValue = parseInt(input.value) || 0;
-        input.value = Math.max(currentValue - 1, 0);
-        updateCalculations();
-    });
-
-    // Event listener para o input de percentual
-    document.getElementById('percentualInput').addEventListener('input', function() {
-        let value = parseInt(this.value) || 0;
-        value = Math.max(0, Math.min(value, 100));
-        this.value = value;
-        updateCalculations();
-    });
-
     // Event listeners para os botões de aplicar percentual em cada métrica
     document.querySelectorAll('button[data-metric]').forEach(button => {
         button.addEventListener('click', function() {
             const metric = this.getAttribute('data-metric');
             const action = this.getAttribute('data-action');
-            const percentual = parseInt(document.getElementById('percentualInput').value) || 0;
+            const percentual = 10; // Valor fixo de 10% para simulação
             const isIncrease = action === 'increase';
             
             // Determinar se a métrica é um percentual ou valor monetário
@@ -311,51 +270,9 @@ document.addEventListener('DOMContentLoaded', function() {
         variationElement.value = formatPercent(variation);
     }
 
-    // Função para atualizar os cálculos
-    function updateCalculations() {
-        const percentual = parseInt(document.getElementById('percentualInput').value) || 0;
-        const factor = 1 + (percentual / 100);
-
-        // Atualizar cada métrica
-        updateMetric('margem', factor, true); // true indica que é um percentual
-        updateMetric('clientes', factor, false);
-        updateMetric('precoMedio', factor, false);
-        updateMetric('ticketMedio', factor, false);
-        updateMetric('faturamento', factor, false);
-        updateMetric('custosVendas', factor, false);
-        updateMetric('custosInsumos', factor, false);
-        updateMetric('custosFixos', factor, false);
-    }
-
-    // Função para atualizar uma métrica específica
-    function updateMetric(metric, factor, isPercentage) {
-        const originalElement = document.getElementById(`${metric}Original`);
-        if (!originalElement || !originalElement.value) return;
-        
-        let original;
-        if (isPercentage) {
-            // Para percentuais, extrair o valor numérico do formato "XX.XX%"
-            original = parseFloat(originalElement.value.replace('%', '')) || 0;
-        } else {
-            // Para valores monetários, extrair o valor numérico do formato "R$ XX.XX"
-            original = parseFloat(originalElement.value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
-        }
-        
-        const calculated = original * factor;
-        const variation = calculateVariation(original, calculated);
-
-        if (isPercentage) {
-            document.getElementById(`${metric}Calculado`).value = formatPercent(calculated);
-        } else {
-            document.getElementById(`${metric}Calculado`).value = formatMoney(calculated);
-        }
-        
-        document.getElementById(`${metric}Variacao`).value = formatPercent(variation);
-    }
-
-    // Carregar dados iniciais
-    document.getElementById('basicDataSelect').addEventListener('change', function() {
-        const basicDataId = this.value;
+    // Função para carregar dados básicos
+    function loadBasicData(basicDataId) {
+        console.log("Carregando dados básicos para ID:", basicDataId);
         
         fetch(`/gestao-prioridades/api/basic-data/${basicDataId}`)
             .then(response => {
@@ -365,6 +282,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
+                console.log("Dados recebidos:", data);
+                
                 // Calcular margem
                 const margem = data.sales_revenue > 0 ? 
                     ((data.sales_revenue - (data.sales_expenses + data.operational_expenses + data.fixed_costs)) / data.sales_revenue) * 100 : 0;
@@ -381,20 +300,43 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('custosVendasOriginal').value = formatMoney(data.sales_expenses);
                 document.getElementById('custosInsumosOriginal').value = formatMoney(data.operational_expenses);
                 document.getElementById('custosFixosOriginal').value = formatMoney(data.fixed_costs);
-
-                // Atualizar cálculos
-                updateCalculations();
+                
+                // Inicializar os campos calculados com os valores originais
+                document.getElementById('margemCalculado').value = formatPercent(margem);
+                document.getElementById('clientesCalculado').value = data.clients_served;
+                document.getElementById('precoMedioCalculado').value = formatMoney(precoMedio);
+                document.getElementById('ticketMedioCalculado').value = formatMoney(precoMedio);
+                document.getElementById('faturamentoCalculado').value = formatMoney(data.sales_revenue);
+                document.getElementById('custosVendasCalculado').value = formatMoney(data.sales_expenses);
+                document.getElementById('custosInsumosCalculado').value = formatMoney(data.operational_expenses);
+                document.getElementById('custosFixosCalculado').value = formatMoney(data.fixed_costs);
+                
+                // Inicializar os campos de variação com 0%
+                document.getElementById('margemVariacao').value = formatPercent(0);
+                document.getElementById('clientesVariacao').value = formatPercent(0);
+                document.getElementById('precoMedioVariacao').value = formatPercent(0);
+                document.getElementById('ticketMedioVariacao').value = formatPercent(0);
+                document.getElementById('faturamentoVariacao').value = formatPercent(0);
+                document.getElementById('custosVendasVariacao').value = formatPercent(0);
+                document.getElementById('custosInsumosVariacao').value = formatPercent(0);
+                document.getElementById('custosFixosVariacao').value = formatPercent(0);
             })
             .catch(error => {
                 console.error('Erro ao carregar dados:', error);
                 alert('Erro ao carregar os dados. Por favor, tente novamente.');
             });
+    }
+
+    // Event listener para o select de dados básicos
+    document.getElementById('basicDataSelect').addEventListener('change', function() {
+        const basicDataId = this.value;
+        loadBasicData(basicDataId);
     });
 
-    // Disparar o evento change automaticamente quando a página carregar
+    // Carregar dados iniciais quando a página carregar
     const selectElement = document.getElementById('basicDataSelect');
     if (selectElement && selectElement.value) {
-        selectElement.dispatchEvent(new Event('change'));
+        loadBasicData(selectElement.value);
     }
 });
 </script>
