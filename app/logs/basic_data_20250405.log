@@ -31,3 +31,6 @@
 2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 25.0
 2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo is_current atualizado para True
 2025-04-05 14:22:27,935 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-05 15:01:43,677 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-05 15:01:43,679 - app.routes.basic_data - INFO - Criando novo registro
+2025-04-05 15:01:43,686 - app.routes.basic_data - INFO - Dados salvos com sucesso

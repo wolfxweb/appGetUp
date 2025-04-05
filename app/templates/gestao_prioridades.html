@@ -39,7 +39,7 @@
                         <div class="form-group">
                             <label for="percentualInput" class="form-label">Indique um percentual</label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="percentualInput" min="0" max="100">
+                                <input type="number" class="form-control" id="percentualInput" min="0" max="100" value="0">
                                 <button class="btn btn-outline-primary" type="button" id="increaseBtn">
                                     <i class="bi bi-plus-lg"></i>
                                 </button>
@@ -58,12 +58,12 @@
                         <h5>Margem</h5>
                         <div class="input-group">
                             <input type="text" class="form-control" id="margemOriginal" readonly>
-                            <input type="text" class="form-control" id="margemCalculada" readonly>
+                            <input type="text" class="form-control" id="margemCalculado" readonly>
                             <input type="text" class="form-control" id="margemVariacao" readonly>
                         </div>
                     </div>
 
-                    <!-- Clientes Atendidos -->
+                    <!-- Clientes -->
                     <div class="col-md-12 mb-4">
                         <h5>Clientes Atendidos</h5>
                         <div class="input-group">
@@ -73,9 +73,9 @@
                         </div>
                     </div>
 
-                    <!-- Preço Médio das Vendas -->
+                    <!-- Preço Médio -->
                     <div class="col-md-12 mb-4">
-                        <h5>Preço Médio das Vendas</h5>
+                        <h5>Preço Médio</h5>
                         <div class="input-group">
                             <input type="text" class="form-control" id="precoMedioOriginal" readonly>
                             <input type="text" class="form-control" id="precoMedioCalculado" readonly>
@@ -103,9 +103,9 @@
                         </div>
                     </div>
 
-                    <!-- Custo com Vendas -->
+                    <!-- Custos de Vendas -->
                     <div class="col-md-12 mb-4">
-                        <h5>Custo com Vendas</h5>
+                        <h5>Custos de Vendas</h5>
                         <div class="input-group">
                             <input type="text" class="form-control" id="custosVendasOriginal" readonly>
                             <input type="text" class="form-control" id="custosVendasCalculado" readonly>
@@ -113,9 +113,9 @@
                         </div>
                     </div>
 
-                    <!-- Custo com Insumos e Mercadoria -->
+                    <!-- Custos de Insumos -->
                     <div class="col-md-12 mb-4">
-                        <h5>Custo com Insumos e Mercadoria</h5>
+                        <h5>Custos de Insumos</h5>
                         <div class="input-group">
                             <input type="text" class="form-control" id="custosInsumosOriginal" readonly>
                             <input type="text" class="form-control" id="custosInsumosCalculado" readonly>
@@ -138,15 +138,15 @@
     </div>
 
     <!-- Modal de Ajuda -->
-    <div class="modal fade" id="helpModal" tabindex="-1">
+    <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Ajuda - Gestão de Prioridades</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <h5 class="modal-title" id="helpModalLabel">Como usar a Gestão de Prioridades</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Esta tela permite que você:</p>
+                    <p>Esta ferramenta permite que você simule diferentes cenários para o seu negócio, baseado nos dados básicos que você já cadastrou.</p>
                     <ul>
                         <li>Selecione um período de dados básicos para análise</li>
                         <li>Defina um percentual de variação para simular diferentes cenários</li>
@@ -226,7 +226,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para atualizar uma métrica específica
     function updateMetric(metric, factor) {
-        const original = parseFloat(document.getElementById(`${metric}Original`).value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const originalElement = document.getElementById(`${metric}Original`);
+        if (!originalElement || !originalElement.value) return;
+        
+        const original = parseFloat(originalElement.value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
         const calculated = original * factor;
         const variation = calculateVariation(original, calculated);
 
@@ -246,15 +249,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
+                // Calcular margem
+                const margem = data.sales_revenue > 0 ? 
+                    ((data.sales_revenue - (data.sales_expenses + data.operational_expenses + data.fixed_costs)) / data.sales_revenue) * 100 : 0;
+                
+                // Calcular preço médio
+                const precoMedio = data.clients_served > 0 ? data.sales_revenue / data.clients_served : 0;
+                
                 // Preencher os campos originais
-                document.getElementById('margemOriginal').value = formatMoney(data.margem);
-                document.getElementById('clientesOriginal').value = data.clientes_atendidos;
-                document.getElementById('precoMedioOriginal').value = formatMoney(data.preco_medio);
-                document.getElementById('ticketMedioOriginal').value = formatMoney(data.ticket_medio);
-                document.getElementById('faturamentoOriginal').value = formatMoney(data.faturamento);
-                document.getElementById('custosVendasOriginal').value = formatMoney(data.custos_vendas);
-                document.getElementById('custosInsumosOriginal').value = formatMoney(data.custos_insumos);
-                document.getElementById('custosFixosOriginal').value = formatMoney(data.custos_fixos);
+                document.getElementById('margemOriginal').value = formatPercent(margem);
+                document.getElementById('clientesOriginal').value = data.clients_served;
+                document.getElementById('precoMedioOriginal').value = formatMoney(precoMedio);
+                document.getElementById('ticketMedioOriginal').value = formatMoney(precoMedio);
+                document.getElementById('faturamentoOriginal').value = formatMoney(data.sales_revenue);
+                document.getElementById('custosVendasOriginal').value = formatMoney(data.sales_expenses);
+                document.getElementById('custosInsumosOriginal').value = formatMoney(data.operational_expenses);
+                document.getElementById('custosFixosOriginal').value = formatMoney(data.fixed_costs);
 
                 // Atualizar cálculos
                 updateCalculations();
