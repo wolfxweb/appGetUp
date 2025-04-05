@@ -320,6 +320,57 @@ document.addEventListener('DOMContentLoaded', function() {
         const custosInsumosCalculado = custosInsumosOriginal * fatorAjuste;
         // Custos fixos não variam com o número de clientes
         
+        // Atualizar o campo faturamentoCalculado
+        document.getElementById('faturamentoCalculado').value = formatMoney(faturamentoCalculado);
+        
+        // Calcular e atualizar a variação do faturamento
+        const variacaoFaturamento = calculateVariation(faturamentoOriginal, faturamentoCalculado);
+        document.getElementById('faturamentoVariacao').value = formatPercent(variacaoFaturamento);
+        
+        // Alterar a cor de fundo do faturamento calculado com base na comparação
+        const faturamentoCalculadoElement = document.getElementById('faturamentoCalculado');
+        if (faturamentoCalculado > faturamentoOriginal) {
+            faturamentoCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro
+        } else if (faturamentoCalculado < faturamentoOriginal) {
+            faturamentoCalculadoElement.style.backgroundColor = '#f8d7da'; // Vermelho claro
+        } else {
+            faturamentoCalculadoElement.style.backgroundColor = ''; // Cor padrão
+        }
+        
+        // Atualizar o campo custosVendasCalculado
+        document.getElementById('custosVendasCalculado').value = formatMoney(custosVendasCalculado);
+        
+        // Calcular e atualizar a variação dos custos de vendas
+        const variacaoCustosVendas = calculateVariation(custosVendasOriginal, custosVendasCalculado);
+        document.getElementById('custosVendasVariacao').value = formatPercent(variacaoCustosVendas);
+        
+        // Alterar a cor de fundo dos custos de vendas calculados com base na comparação
+        const custosVendasCalculadoElement = document.getElementById('custosVendasCalculado');
+        if (custosVendasCalculado > custosVendasOriginal) {
+            custosVendasCalculadoElement.style.backgroundColor = '#f8d7da'; // Vermelho claro (aumento de custos é negativo)
+        } else if (custosVendasCalculado < custosVendasOriginal) {
+            custosVendasCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro (redução de custos é positiva)
+        } else {
+            custosVendasCalculadoElement.style.backgroundColor = ''; // Cor padrão
+        }
+        
+        // Atualizar o campo custosInsumosCalculado
+        document.getElementById('custosInsumosCalculado').value = formatMoney(custosInsumosCalculado);
+        
+        // Calcular e atualizar a variação dos custos de insumos
+        const variacaoCustosInsumos = calculateVariation(custosInsumosOriginal, custosInsumosCalculado);
+        document.getElementById('custosInsumosVariacao').value = formatPercent(variacaoCustosInsumos);
+        
+        // Alterar a cor de fundo dos custos de insumos calculados com base na comparação
+        const custosInsumosCalculadoElement = document.getElementById('custosInsumosCalculado');
+        if (custosInsumosCalculado > custosInsumosOriginal) {
+            custosInsumosCalculadoElement.style.backgroundColor = '#f8d7da'; // Vermelho claro (aumento de custos é negativo)
+        } else if (custosInsumosCalculado < custosInsumosOriginal) {
+            custosInsumosCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro (redução de custos é positiva)
+        } else {
+            custosInsumosCalculadoElement.style.backgroundColor = ''; // Cor padrão
+        }
+        
         // Calcular a nova margem
         const novaMargem = faturamentoCalculado > 0 ? 
             ((faturamentoCalculado - (custosVendasCalculado + custosInsumosCalculado + custosFixosOriginal)) / faturamentoCalculado) * 100 : 0;
