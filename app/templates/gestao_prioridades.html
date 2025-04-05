@@ -1,0 +1,275 @@
+{% extends "base.html" %}
+
+{% block title %}Gestão de Prioridades - GetUp Gestão{% endblock %}
+
+{% block content %}
+    {% include "components/navbar.html" %}
+    <div class="container py-4">
+        <!-- Card Principal -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">Gestão de Prioridades</h4>
+            </div>
+            <div class="card-body">
+                <!-- Combo Box de Dados Básicos -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="basicDataSelect" class="form-label">
+                                Selecione o Período dos dados básicos
+                                <i class="bi bi-question-circle-fill ms-2" 
+                                   data-bs-toggle="modal" 
+                                   data-bs-target="#helpModal" 
+                                   style="cursor: pointer;"></i>
+                            </label>
+                            <select class="form-select" id="basicDataSelect">
+                                {% for data in basic_data_list %}
+                                <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
+                                    {{ data.month }}/{{ data.year }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input de Percentual -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="percentualInput" class="form-label">Indique um percentual</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="percentualInput" min="0" max="100">
+                                <button class="btn btn-outline-primary" type="button" id="increaseBtn">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+                                <button class="btn btn-outline-primary" type="button" id="decreaseBtn">
+                                    <i class="bi bi-dash-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campos Comparativos -->
+                <div class="row">
+                    <!-- Margem -->
+                    <div class="col-md-12 mb-4">
+                        <h5>Margem</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="margemOriginal" readonly>
+                            <input type="text" class="form-control" id="margemCalculada" readonly>
+                            <input type="text" class="form-control" id="margemVariacao" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Clientes Atendidos -->
+                    <div class="col-md-12 mb-4">
+                        <h5>Clientes Atendidos</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="clientesOriginal" readonly>
+                            <input type="text" class="form-control" id="clientesCalculado" readonly>
+                            <input type="text" class="form-control" id="clientesVariacao" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Preço Médio das Vendas -->
+                    <div class="col-md-12 mb-4">
+                        <h5>Preço Médio das Vendas</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="precoMedioOriginal" readonly>
+                            <input type="text" class="form-control" id="precoMedioCalculado" readonly>
+                            <input type="text" class="form-control" id="precoMedioVariacao" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Ticket Médio -->
+                    <div class="col-md-12 mb-4">
+                        <h5>Ticket Médio</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="ticketMedioOriginal" readonly>
+                            <input type="text" class="form-control" id="ticketMedioCalculado" readonly>
+                            <input type="text" class="form-control" id="ticketMedioVariacao" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Faturamento -->
+                    <div class="col-md-12 mb-4">
+                        <h5>Faturamento</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="faturamentoOriginal" readonly>
+                            <input type="text" class="form-control" id="faturamentoCalculado" readonly>
+                            <input type="text" class="form-control" id="faturamentoVariacao" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Custo com Vendas -->
+                    <div class="col-md-12 mb-4">
+                        <h5>Custo com Vendas</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="custosVendasOriginal" readonly>
+                            <input type="text" class="form-control" id="custosVendasCalculado" readonly>
+                            <input type="text" class="form-control" id="custosVendasVariacao" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Custo com Insumos e Mercadoria -->
+                    <div class="col-md-12 mb-4">
+                        <h5>Custo com Insumos e Mercadoria</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="custosInsumosOriginal" readonly>
+                            <input type="text" class="form-control" id="custosInsumosCalculado" readonly>
+                            <input type="text" class="form-control" id="custosInsumosVariacao" readonly>
+                        </div>
+                    </div>
+
+                    <!-- Custos Fixos -->
+                    <div class="col-md-12 mb-4">
+                        <h5>Custos Fixos</h5>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="custosFixosOriginal" readonly>
+                            <input type="text" class="form-control" id="custosFixosCalculado" readonly>
+                            <input type="text" class="form-control" id="custosFixosVariacao" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda -->
+    <div class="modal fade" id="helpModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Ajuda - Gestão de Prioridades</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Esta tela permite que você:</p>
+                    <ul>
+                        <li>Selecione um período de dados básicos para análise</li>
+                        <li>Defina um percentual de variação para simular diferentes cenários</li>
+                        <li>Visualize os impactos das variações em diferentes métricas do negócio</li>
+                        <li>Compare os valores originais com os valores calculados após as variações</li>
+                        <li>Analise as variações percentuais em cada métrica</li>
+                    </ul>
+                    <p>Use esta ferramenta para tomar decisões baseadas em diferentes cenários e planejar ações para melhorar os resultados do seu negócio.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Função para formatar valores monetários
+    function formatMoney(value) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(value);
+    }
+
+    // Função para formatar percentuais
+    function formatPercent(value) {
+        return value.toFixed(2) + '%';
+    }
+
+    // Função para calcular a variação percentual
+    function calculateVariation(original, calculated) {
+        if (original === 0) return 0;
+        return ((calculated - original) / original) * 100;
+    }
+
+    // Event listeners para os botões de aumentar/diminuir
+    document.getElementById('increaseBtn').addEventListener('click', function() {
+        const input = document.getElementById('percentualInput');
+        const currentValue = parseInt(input.value) || 0;
+        input.value = Math.min(currentValue + 1, 100);
+        updateCalculations();
+    });
+
+    document.getElementById('decreaseBtn').addEventListener('click', function() {
+        const input = document.getElementById('percentualInput');
+        const currentValue = parseInt(input.value) || 0;
+        input.value = Math.max(currentValue - 1, 0);
+        updateCalculations();
+    });
+
+    // Event listener para o input de percentual
+    document.getElementById('percentualInput').addEventListener('input', function() {
+        let value = parseInt(this.value) || 0;
+        value = Math.max(0, Math.min(value, 100));
+        this.value = value;
+        updateCalculations();
+    });
+
+    // Função para atualizar os cálculos
+    function updateCalculations() {
+        const percentual = parseInt(document.getElementById('percentualInput').value) || 0;
+        const factor = 1 + (percentual / 100);
+
+        // Atualizar cada métrica
+        updateMetric('margem', factor);
+        updateMetric('clientes', factor);
+        updateMetric('precoMedio', factor);
+        updateMetric('ticketMedio', factor);
+        updateMetric('faturamento', factor);
+        updateMetric('custosVendas', factor);
+        updateMetric('custosInsumos', factor);
+        updateMetric('custosFixos', factor);
+    }
+
+    // Função para atualizar uma métrica específica
+    function updateMetric(metric, factor) {
+        const original = parseFloat(document.getElementById(`${metric}Original`).value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const calculated = original * factor;
+        const variation = calculateVariation(original, calculated);
+
+        document.getElementById(`${metric}Calculado`).value = formatMoney(calculated);
+        document.getElementById(`${metric}Variacao`).value = formatPercent(variation);
+    }
+
+    // Carregar dados iniciais
+    document.getElementById('basicDataSelect').addEventListener('change', function() {
+        const basicDataId = this.value;
+        
+        fetch(`/gestao-prioridades/api/basic-data/${basicDataId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Dados não encontrados');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Preencher os campos originais
+                document.getElementById('margemOriginal').value = formatMoney(data.margem);
+                document.getElementById('clientesOriginal').value = data.clientes_atendidos;
+                document.getElementById('precoMedioOriginal').value = formatMoney(data.preco_medio);
+                document.getElementById('ticketMedioOriginal').value = formatMoney(data.ticket_medio);
+                document.getElementById('faturamentoOriginal').value = formatMoney(data.faturamento);
+                document.getElementById('custosVendasOriginal').value = formatMoney(data.custos_vendas);
+                document.getElementById('custosInsumosOriginal').value = formatMoney(data.custos_insumos);
+                document.getElementById('custosFixosOriginal').value = formatMoney(data.custos_fixos);
+
+                // Atualizar cálculos
+                updateCalculations();
+            })
+            .catch(error => {
+                console.error('Erro ao carregar dados:', error);
+                alert('Erro ao carregar os dados. Por favor, tente novamente.');
+            });
+    });
+
+    // Disparar o evento change automaticamente quando a página carregar
+    const selectElement = document.getElementById('basicDataSelect');
+    if (selectElement && selectElement.value) {
+        selectElement.dispatchEvent(new Event('change'));
+    }
+});
+</script>
+{% endblock %} 
