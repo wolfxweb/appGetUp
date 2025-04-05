@@ -27832,3 +27832,37 @@ WHERE calculator.user_id = ? ORDER BY calculator.created_at DESC
 2025-04-05 19:09:23,626 - sqlalchemy.engine.Engine - INFO - [cached since 194.1s ago] (2,)
 2025-04-05 19:09:23,643 - sqlalchemy.engine.Engine - INFO - ROLLBACK
 2025-04-05 19:09:23,643 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 19:11:12,807 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 19:11:12,808 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 19:11:12,808 - sqlalchemy.engine.Engine - INFO - [cached since 303.3s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 19:11:12,811 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 19:11:12,811 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-04-05 19:11:12,812 - sqlalchemy.engine.Engine - INFO - [cached since 303.3s ago] (2,)
+2025-04-05 19:11:12,812 - sqlalchemy.engine.Engine - INFO - SELECT calculator.id AS calculator_id, calculator.user_id AS calculator_user_id, calculator.basic_data_id AS calculator_basic_data_id, calculator.month AS calculator_month, calculator.year AS calculator_year, calculator.product_name AS calculator_product_name, calculator.current_price AS calculator_current_price, calculator.current_margin AS calculator_current_margin, calculator.company_margin AS calculator_company_margin, calculator.desired_margin AS calculator_desired_margin, calculator.suggested_price AS calculator_suggested_price, calculator.price_relation AS calculator_price_relation, calculator.competitor_price AS calculator_competitor_price, calculator.notes AS calculator_notes, calculator.created_at AS calculator_created_at, calculator.updated_at AS calculator_updated_at 
+FROM calculator 
+WHERE calculator.user_id = ? ORDER BY calculator.created_at DESC
+2025-04-05 19:11:12,813 - sqlalchemy.engine.Engine - INFO - [cached since 303.3s ago] (2,)
+2025-04-05 19:11:12,831 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 19:11:12,832 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 19:11:25,048 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 19:11:25,049 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 19:11:25,049 - sqlalchemy.engine.Engine - INFO - [cached since 315.5s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 19:11:25,051 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 19:11:25,051 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ?
+2025-04-05 19:11:25,051 - sqlalchemy.engine.Engine - INFO - [cached since 315.5s ago] (2,)
+2025-04-05 19:11:25,051 - sqlalchemy.engine.Engine - INFO - SELECT calculator.id AS calculator_id, calculator.user_id AS calculator_user_id, calculator.basic_data_id AS calculator_basic_data_id, calculator.month AS calculator_month, calculator.year AS calculator_year, calculator.product_name AS calculator_product_name, calculator.current_price AS calculator_current_price, calculator.current_margin AS calculator_current_margin, calculator.company_margin AS calculator_company_margin, calculator.desired_margin AS calculator_desired_margin, calculator.suggested_price AS calculator_suggested_price, calculator.price_relation AS calculator_price_relation, calculator.competitor_price AS calculator_competitor_price, calculator.notes AS calculator_notes, calculator.created_at AS calculator_created_at, calculator.updated_at AS calculator_updated_at 
+FROM calculator 
+WHERE calculator.user_id = ? ORDER BY calculator.created_at DESC
+2025-04-05 19:11:25,051 - sqlalchemy.engine.Engine - INFO - [cached since 315.5s ago] (2,)
+2025-04-05 19:11:25,064 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 19:11:25,067 - sqlalchemy.engine.Engine - INFO - ROLLBACK
