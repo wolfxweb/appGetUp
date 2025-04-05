@@ -2,6 +2,21 @@
 
 {% block title %}Calculadora de Preços{% endblock %}
 
+{% block extra_css %}
+<style>
+    /* Estilos para garantir que o conteúdo não fique atrás do menu */
+    @media (max-width: 991.98px) {
+        .container {
+            padding-top: 20px;
+        }
+        
+        .card {
+            margin-bottom: 20px;
+        }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 {% include "components/navbar.html" %}
 
@@ -324,7 +339,6 @@ document.addEventListener('DOMContentLoaded', function() {
         for (let row of rows) {
             const cells = row.getElementsByTagName('td');
             const date = cells[0].textContent;
-            const period = cells[1].textContent;
             const productName = cells[2].textContent.toLowerCase();
             const currentPrice = parseFloat(cells[3].textContent.replace('R$ ', '').replace(',', '.'));
             const desiredMargin = parseFloat(cells[5].textContent.replace('%', ''));
