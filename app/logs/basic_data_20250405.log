@@ -34,3 +34,59 @@
 2025-04-05 15:01:43,677 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
 2025-04-05 15:01:43,679 - app.routes.basic_data - INFO - Criando novo registro
 2025-04-05 15:01:43,686 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-05 15:43:43,150 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 9
+2025-04-05 15:43:43,151 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=23.0, sales_expenses=3.0
+2025-04-05 15:43:55,015 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-05 15:43:55,019 - app.routes.basic_data - INFO - Registro existente encontrado para 11/2025
+2025-04-05 15:43:55,022 - app.routes.basic_data - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 432 para 10
+2025-04-05 15:43:55,022 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 23,00 para R$ 10,00
+2025-04-05 15:43:55,023 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,023 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,023 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,023 - app.routes.basic_data - INFO - Alteração detectada: Horas de Trabalho por Semana de 32.0 para 10.0
+2025-04-05 15:43:55,023 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 2,00 para R$ 10,00
+2025-04-05 15:43:55,024 - app.routes.basic_data - INFO - Alteração detectada: Margem de Lucro Ideal (Serviços) de 23.0 para 10.0
+2025-04-05 15:43:55,024 - app.routes.basic_data - INFO - Alterações detectadas: ['Quantidade de Clientes Atendidos alterado de 432 para 10', 'Faturamento com Vendas alterado de R$ 23,00 para R$ 10,00', 'Gastos com Vendas alterado de R$ 3,00 para R$ 10,00', 'Gastos com Insumos e Produtos alterado de R$ 3,00 para R$ 10,00', 'Pró-labore alterado de R$ 3,00 para R$ 10,00', 'Horas de Trabalho por Semana alterado de 32.0 para 10.0', 'Demais Custos Fixos alterado de R$ 2,00 para R$ 10,00', 'Margem de Lucro Ideal (Serviços) alterado de 23.0 para 10.0']
+2025-04-05 15:43:55,025 - app.routes.basic_data - INFO - Log adicionado: Quantidade de Clientes Atendidos alterado de 432 para 10
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de R$ 23,00 para R$ 10,00
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Pró-labore alterado de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Horas de Trabalho por Semana alterado de 32.0 para 10.0
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Demais Custos Fixos alterado de R$ 2,00 para R$ 10,00
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Margem de Lucro Ideal (Serviços) alterado de 23.0 para 10.0
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo clients_served atualizado para 10
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 10.0
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 10.0
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 10.0
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 10.0
+2025-04-05 15:43:55,028 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 10.0
+2025-04-05 15:43:55,028 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 10.0
+2025-04-05 15:43:55,028 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 10.0
+2025-04-05 15:43:55,028 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-05 15:43:55,064 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-05 15:44:10,980 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-05 15:44:10,980 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-05 15:44:18,186 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 9
+2025-04-05 15:44:18,186 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=10.0, sales_expenses=10.0
+2025-04-05 15:44:25,633 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-05 15:44:25,636 - app.routes.basic_data - INFO - Registro existente encontrado para 11/2025
+2025-04-05 15:44:25,636 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 10,00 para R$ 1000,00
+2025-04-05 15:44:25,636 - app.routes.basic_data - INFO - Alterações detectadas: ['Faturamento com Vendas alterado de R$ 10,00 para R$ 1000,00']
+2025-04-05 15:44:25,637 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de R$ 10,00 para R$ 1000,00
+2025-04-05 15:44:25,637 - app.routes.basic_data - INFO - Campo clients_served atualizado para 10
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 1000.0
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 10.0
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 10.0
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 10.0
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 10.0
+2025-04-05 15:44:25,639 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 10.0
+2025-04-05 15:44:25,639 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 10.0
+2025-04-05 15:44:25,639 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-05 15:44:25,648 - app.routes.basic_data - INFO - Dados salvos com sucesso

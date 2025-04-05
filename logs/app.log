@@ -24095,3 +24095,558 @@ WHERE users.email = ?
  LIMIT ? OFFSET ?
 2025-04-05 15:36:56,190 - sqlalchemy.engine.Engine - INFO - [cached since 286.4s ago] ('teste@gmail.com', 1, 0)
 2025-04-05 15:36:56,199 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:37:14,715 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:37:14,717 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:37:14,717 - sqlalchemy.engine.Engine - INFO - [cached since 304.9s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:37:14,719 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:37:14,719 - sqlalchemy.engine.Engine - INFO - [cached since 304.9s ago] (2,)
+2025-04-05 15:37:14,722 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:37:14,748 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:37:14,749 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:37:14,749 - sqlalchemy.engine.Engine - INFO - [cached since 304.9s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:37:14,750 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:37:14,751 - sqlalchemy.engine.Engine - INFO - [cached since 303.4s ago] (8, 2, 1, 0)
+2025-04-05 15:37:14,760 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:37:27,149 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:37:27,150 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:37:27,150 - sqlalchemy.engine.Engine - INFO - [cached since 317.3s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:37:27,152 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:37:27,153 - sqlalchemy.engine.Engine - INFO - [cached since 317.3s ago] (2,)
+2025-04-05 15:37:27,155 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:37:27,177 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:37:27,177 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:37:27,178 - sqlalchemy.engine.Engine - INFO - [cached since 317.3s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:37:27,179 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:37:27,179 - sqlalchemy.engine.Engine - INFO - [cached since 315.8s ago] (8, 2, 1, 0)
+2025-04-05 15:37:27,182 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:37:36,137 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:37:36,138 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:37:36,138 - sqlalchemy.engine.Engine - INFO - [cached since 326.3s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:37:36,140 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:37:36,140 - sqlalchemy.engine.Engine - INFO - [cached since 326.3s ago] (2,)
+2025-04-05 15:37:36,142 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:37:36,162 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:37:36,163 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:37:36,163 - sqlalchemy.engine.Engine - INFO - [cached since 326.3s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:37:36,164 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:37:36,164 - sqlalchemy.engine.Engine - INFO - [cached since 324.8s ago] (8, 2, 1, 0)
+2025-04-05 15:37:36,165 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:39:59,033 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:39:59,035 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:39:59,036 - sqlalchemy.engine.Engine - INFO - [cached since 469.2s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:39:59,039 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:39:59,042 - sqlalchemy.engine.Engine - INFO - [cached since 469.2s ago] (2,)
+2025-04-05 15:39:59,050 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:39:59,149 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:39:59,151 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:39:59,152 - sqlalchemy.engine.Engine - INFO - [cached since 469.3s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:39:59,160 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:39:59,161 - sqlalchemy.engine.Engine - INFO - [cached since 467.8s ago] (8, 2, 1, 0)
+2025-04-05 15:39:59,165 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:42:23,186 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:42:23,189 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:42:23,191 - sqlalchemy.engine.Engine - INFO - [cached since 613.4s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:42:23,192 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:42:23,192 - sqlalchemy.engine.Engine - INFO - [cached since 613.4s ago] (2,)
+2025-04-05 15:42:23,198 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:42:23,272 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:42:23,272 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:42:23,272 - sqlalchemy.engine.Engine - INFO - [cached since 613.4s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:42:23,275 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:42:23,282 - sqlalchemy.engine.Engine - INFO - [cached since 612s ago] (8, 2, 1, 0)
+2025-04-05 15:42:23,288 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:43:14,913 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:43:14,916 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:14,917 - sqlalchemy.engine.Engine - INFO - [cached since 665.1s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:43:14,919 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:43:14,920 - sqlalchemy.engine.Engine - INFO - [cached since 665.1s ago] (2,)
+2025-04-05 15:43:14,923 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:43:15,024 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:43:15,024 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:15,025 - sqlalchemy.engine.Engine - INFO - [cached since 665.2s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:43:15,026 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:15,026 - sqlalchemy.engine.Engine - INFO - [cached since 663.7s ago] (8, 2, 1, 0)
+2025-04-05 15:43:15,029 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:43:40,016 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:43:40,017 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:40,017 - sqlalchemy.engine.Engine - INFO - [cached since 690.2s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:43:40,019 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:43:40,019 - sqlalchemy.engine.Engine - INFO - [cached since 690.2s ago] (2,)
+2025-04-05 15:43:40,027 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:43:43,147 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:43:43,148 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:43,148 - sqlalchemy.engine.Engine - INFO - [cached since 693.3s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:43:43,149 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:43,150 - sqlalchemy.engine.Engine - INFO - [cached since 691.8s ago] (9, 2, 1, 0)
+2025-04-05 15:43:43,150 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 9
+2025-04-05 15:43:43,151 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=23.0, sales_expenses=3.0
+2025-04-05 15:43:43,154 - sqlalchemy.engine.Engine - INFO - SELECT basic_data_logs.id AS basic_data_logs_id, basic_data_logs.basic_data_id AS basic_data_logs_basic_data_id, basic_data_logs.change_description AS basic_data_logs_change_description 
+FROM basic_data_logs 
+WHERE basic_data_logs.basic_data_id = ? ORDER BY basic_data_logs.id DESC
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:43,155 - sqlalchemy.engine.Engine - INFO - [generated in 0.00034s] (9, 10, 0)
+2025-04-05 15:43:43,163 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT basic_data_logs.id AS basic_data_logs_id, basic_data_logs.basic_data_id AS basic_data_logs_basic_data_id, basic_data_logs.change_description AS basic_data_logs_change_description 
+FROM basic_data_logs 
+WHERE basic_data_logs.basic_data_id = ?) AS anon_1
+2025-04-05 15:43:43,163 - sqlalchemy.engine.Engine - INFO - [generated in 0.00033s] (9,)
+2025-04-05 15:43:43,188 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:43:55,006 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:43:55,007 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:55,008 - sqlalchemy.engine.Engine - INFO - [cached since 705.2s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:43:55,015 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-05 15:43:55,018 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? AND basic_data.month = ? AND basic_data.year = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:55,018 - sqlalchemy.engine.Engine - INFO - [generated in 0.00043s] (2, 11, 2025, 1, 0)
+2025-04-05 15:43:55,019 - app.routes.basic_data - INFO - Registro existente encontrado para 11/2025
+2025-04-05 15:43:55,022 - app.routes.basic_data - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 432 para 10
+2025-04-05 15:43:55,022 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 23,00 para R$ 10,00
+2025-04-05 15:43:55,023 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,023 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,023 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,023 - app.routes.basic_data - INFO - Alteração detectada: Horas de Trabalho por Semana de 32.0 para 10.0
+2025-04-05 15:43:55,023 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 2,00 para R$ 10,00
+2025-04-05 15:43:55,024 - app.routes.basic_data - INFO - Alteração detectada: Margem de Lucro Ideal (Serviços) de 23.0 para 10.0
+2025-04-05 15:43:55,024 - app.routes.basic_data - INFO - Alterações detectadas: ['Quantidade de Clientes Atendidos alterado de 432 para 10', 'Faturamento com Vendas alterado de R$ 23,00 para R$ 10,00', 'Gastos com Vendas alterado de R$ 3,00 para R$ 10,00', 'Gastos com Insumos e Produtos alterado de R$ 3,00 para R$ 10,00', 'Pró-labore alterado de R$ 3,00 para R$ 10,00', 'Horas de Trabalho por Semana alterado de 32.0 para 10.0', 'Demais Custos Fixos alterado de R$ 2,00 para R$ 10,00', 'Margem de Lucro Ideal (Serviços) alterado de 23.0 para 10.0']
+2025-04-05 15:43:55,025 - app.routes.basic_data - INFO - Log adicionado: Quantidade de Clientes Atendidos alterado de 432 para 10
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de R$ 23,00 para R$ 10,00
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Pró-labore alterado de R$ 3,00 para R$ 10,00
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Horas de Trabalho por Semana alterado de 32.0 para 10.0
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Demais Custos Fixos alterado de R$ 2,00 para R$ 10,00
+2025-04-05 15:43:55,026 - app.routes.basic_data - INFO - Log adicionado: Margem de Lucro Ideal (Serviços) alterado de 23.0 para 10.0
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo clients_served atualizado para 10
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 10.0
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 10.0
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 10.0
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-05 15:43:55,027 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 10.0
+2025-04-05 15:43:55,028 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 10.0
+2025-04-05 15:43:55,028 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 10.0
+2025-04-05 15:43:55,028 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 10.0
+2025-04-05 15:43:55,028 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-05 15:43:55,033 - sqlalchemy.engine.Engine - INFO - UPDATE basic_data SET clients_served=?, sales_revenue=?, sales_expenses=?, input_product_expenses=?, pro_labore=?, work_hours_per_week=?, other_fixed_costs=?, ideal_service_profit_margin=?, updated_at=? WHERE basic_data.id = ?
+2025-04-05 15:43:55,033 - sqlalchemy.engine.Engine - INFO - [generated in 0.00093s] (10, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, 10.0, '2025-04-05 15:43:55.033000', 9)
+2025-04-05 15:43:55,046 - sqlalchemy.engine.Engine - INFO - INSERT INTO basic_data_logs (basic_data_id, change_description) VALUES (?, ?) RETURNING id
+2025-04-05 15:43:55,046 - sqlalchemy.engine.Engine - INFO - [generated in 0.00014s (insertmanyvalues) 1/8 (ordered; batch not supported)] (9, 'Quantidade de Clientes Atendidos alterado de 432 para 10')
+2025-04-05 15:43:55,048 - sqlalchemy.engine.Engine - INFO - INSERT INTO basic_data_logs (basic_data_id, change_description) VALUES (?, ?) RETURNING id
+2025-04-05 15:43:55,048 - sqlalchemy.engine.Engine - INFO - [insertmanyvalues 2/8 (ordered; batch not supported)] (9, 'Faturamento com Vendas alterado de R$ 23,00 para R$ 10,00')
+2025-04-05 15:43:55,049 - sqlalchemy.engine.Engine - INFO - INSERT INTO basic_data_logs (basic_data_id, change_description) VALUES (?, ?) RETURNING id
+2025-04-05 15:43:55,049 - sqlalchemy.engine.Engine - INFO - [insertmanyvalues 3/8 (ordered; batch not supported)] (9, 'Gastos com Vendas alterado de R$ 3,00 para R$ 10,00')
+2025-04-05 15:43:55,049 - sqlalchemy.engine.Engine - INFO - INSERT INTO basic_data_logs (basic_data_id, change_description) VALUES (?, ?) RETURNING id
+2025-04-05 15:43:55,049 - sqlalchemy.engine.Engine - INFO - [insertmanyvalues 4/8 (ordered; batch not supported)] (9, 'Gastos com Insumos e Produtos alterado de R$ 3,00 para R$ 10,00')
+2025-04-05 15:43:55,050 - sqlalchemy.engine.Engine - INFO - INSERT INTO basic_data_logs (basic_data_id, change_description) VALUES (?, ?) RETURNING id
+2025-04-05 15:43:55,050 - sqlalchemy.engine.Engine - INFO - [insertmanyvalues 5/8 (ordered; batch not supported)] (9, 'Pró-labore alterado de R$ 3,00 para R$ 10,00')
+2025-04-05 15:43:55,050 - sqlalchemy.engine.Engine - INFO - INSERT INTO basic_data_logs (basic_data_id, change_description) VALUES (?, ?) RETURNING id
+2025-04-05 15:43:55,050 - sqlalchemy.engine.Engine - INFO - [insertmanyvalues 6/8 (ordered; batch not supported)] (9, 'Horas de Trabalho por Semana alterado de 32.0 para 10.0')
+2025-04-05 15:43:55,054 - sqlalchemy.engine.Engine - INFO - INSERT INTO basic_data_logs (basic_data_id, change_description) VALUES (?, ?) RETURNING id
+2025-04-05 15:43:55,055 - sqlalchemy.engine.Engine - INFO - [insertmanyvalues 7/8 (ordered; batch not supported)] (9, 'Demais Custos Fixos alterado de R$ 2,00 para R$ 10,00')
+2025-04-05 15:43:55,055 - sqlalchemy.engine.Engine - INFO - INSERT INTO basic_data_logs (basic_data_id, change_description) VALUES (?, ?) RETURNING id
+2025-04-05 15:43:55,055 - sqlalchemy.engine.Engine - INFO - [insertmanyvalues 8/8 (ordered; batch not supported)] (9, 'Margem de Lucro Ideal (Serviços) alterado de 23.0 para 10.0')
+2025-04-05 15:43:55,058 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-04-05 15:43:55,064 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-05 15:43:55,080 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:43:55,080 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:55,080 - sqlalchemy.engine.Engine - INFO - [cached since 705.3s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:43:55,081 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:43:55,081 - sqlalchemy.engine.Engine - INFO - [cached since 705.3s ago] (2,)
+2025-04-05 15:43:55,082 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:43:57,083 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:43:57,085 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:57,085 - sqlalchemy.engine.Engine - INFO - [cached since 707.3s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:43:57,086 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:43:57,087 - sqlalchemy.engine.Engine - INFO - [cached since 707.3s ago] (2,)
+2025-04-05 15:43:57,099 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:43:57,170 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:43:57,171 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:57,173 - sqlalchemy.engine.Engine - INFO - [cached since 707.4s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:43:57,177 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:57,179 - sqlalchemy.engine.Engine - INFO - [cached since 705.9s ago] (8, 2, 1, 0)
+2025-04-05 15:43:57,196 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:43:59,958 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:43:59,962 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:59,962 - sqlalchemy.engine.Engine - INFO - [cached since 710.1s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:43:59,964 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:43:59,965 - sqlalchemy.engine.Engine - INFO - [cached since 708.6s ago] (9, 2, 1, 0)
+2025-04-05 15:43:59,966 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:44:09,407 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:44:09,408 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:09,408 - sqlalchemy.engine.Engine - INFO - [cached since 719.6s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:44:09,418 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:44:09,420 - sqlalchemy.engine.Engine - INFO - [cached since 719.6s ago] (2,)
+2025-04-05 15:44:09,427 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:44:10,975 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:44:10,976 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:10,977 - sqlalchemy.engine.Engine - INFO - [cached since 721.2s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:44:10,979 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:10,979 - sqlalchemy.engine.Engine - INFO - [cached since 719.7s ago] (8, 2, 1, 0)
+2025-04-05 15:44:10,980 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-05 15:44:10,980 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-05 15:44:10,981 - sqlalchemy.engine.Engine - INFO - SELECT basic_data_logs.id AS basic_data_logs_id, basic_data_logs.basic_data_id AS basic_data_logs_basic_data_id, basic_data_logs.change_description AS basic_data_logs_change_description 
+FROM basic_data_logs 
+WHERE basic_data_logs.basic_data_id = ? ORDER BY basic_data_logs.id DESC
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:10,982 - sqlalchemy.engine.Engine - INFO - [cached since 27.83s ago] (8, 10, 0)
+2025-04-05 15:44:10,984 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT basic_data_logs.id AS basic_data_logs_id, basic_data_logs.basic_data_id AS basic_data_logs_basic_data_id, basic_data_logs.change_description AS basic_data_logs_change_description 
+FROM basic_data_logs 
+WHERE basic_data_logs.basic_data_id = ?) AS anon_1
+2025-04-05 15:44:10,984 - sqlalchemy.engine.Engine - INFO - [cached since 27.82s ago] (8,)
+2025-04-05 15:44:10,991 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:44:13,753 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:44:13,754 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:13,754 - sqlalchemy.engine.Engine - INFO - [cached since 723.9s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:44:13,755 - app.routes.dashboard - WARNING - Dashboard Access - User: <app.models.user.User object at 0x1066b34f0>
+2025-04-05 15:44:13,756 - app.routes.dashboard - WARNING - Dashboard Access - User Access Level: Cliente
+2025-04-05 15:44:13,777 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:44:14,354 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:44:14,354 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:14,354 - sqlalchemy.engine.Engine - INFO - [cached since 724.5s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:44:14,356 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:44:14,356 - sqlalchemy.engine.Engine - INFO - [cached since 724.5s ago] (2,)
+2025-04-05 15:44:14,359 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:44:18,184 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:44:18,184 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:18,185 - sqlalchemy.engine.Engine - INFO - [cached since 728.4s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:44:18,186 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:18,186 - sqlalchemy.engine.Engine - INFO - [cached since 726.9s ago] (9, 2, 1, 0)
+2025-04-05 15:44:18,186 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 9
+2025-04-05 15:44:18,186 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=10.0, sales_expenses=10.0
+2025-04-05 15:44:18,188 - sqlalchemy.engine.Engine - INFO - SELECT basic_data_logs.id AS basic_data_logs_id, basic_data_logs.basic_data_id AS basic_data_logs_basic_data_id, basic_data_logs.change_description AS basic_data_logs_change_description 
+FROM basic_data_logs 
+WHERE basic_data_logs.basic_data_id = ? ORDER BY basic_data_logs.id DESC
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:18,188 - sqlalchemy.engine.Engine - INFO - [cached since 35.03s ago] (9, 10, 0)
+2025-04-05 15:44:18,191 - sqlalchemy.engine.Engine - INFO - SELECT count(*) AS count_1 
+FROM (SELECT basic_data_logs.id AS basic_data_logs_id, basic_data_logs.basic_data_id AS basic_data_logs_basic_data_id, basic_data_logs.change_description AS basic_data_logs_change_description 
+FROM basic_data_logs 
+WHERE basic_data_logs.basic_data_id = ?) AS anon_1
+2025-04-05 15:44:18,192 - sqlalchemy.engine.Engine - INFO - [cached since 35.03s ago] (9,)
+2025-04-05 15:44:18,194 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:44:25,631 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:44:25,632 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:25,632 - sqlalchemy.engine.Engine - INFO - [cached since 735.8s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:44:25,633 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-05 15:44:25,635 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? AND basic_data.month = ? AND basic_data.year = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:25,635 - sqlalchemy.engine.Engine - INFO - [cached since 30.62s ago] (2, 11, 2025, 1, 0)
+2025-04-05 15:44:25,636 - app.routes.basic_data - INFO - Registro existente encontrado para 11/2025
+2025-04-05 15:44:25,636 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 10,00 para R$ 1000,00
+2025-04-05 15:44:25,636 - app.routes.basic_data - INFO - Alterações detectadas: ['Faturamento com Vendas alterado de R$ 10,00 para R$ 1000,00']
+2025-04-05 15:44:25,637 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de R$ 10,00 para R$ 1000,00
+2025-04-05 15:44:25,637 - app.routes.basic_data - INFO - Campo clients_served atualizado para 10
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 1000.0
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 10.0
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 10.0
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 10.0
+2025-04-05 15:44:25,638 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 10.0
+2025-04-05 15:44:25,639 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 10.0
+2025-04-05 15:44:25,639 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 10.0
+2025-04-05 15:44:25,639 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-05 15:44:25,643 - sqlalchemy.engine.Engine - INFO - UPDATE basic_data SET sales_revenue=?, updated_at=? WHERE basic_data.id = ?
+2025-04-05 15:44:25,645 - sqlalchemy.engine.Engine - INFO - [generated in 0.00230s] (1000.0, '2025-04-05 15:44:25.643339', 9)
+2025-04-05 15:44:25,646 - sqlalchemy.engine.Engine - INFO - INSERT INTO basic_data_logs (basic_data_id, change_description) VALUES (?, ?)
+2025-04-05 15:44:25,647 - sqlalchemy.engine.Engine - INFO - [generated in 0.00018s] (9, 'Faturamento com Vendas alterado de R$ 10,00 para R$ 1000,00')
+2025-04-05 15:44:25,647 - sqlalchemy.engine.Engine - INFO - COMMIT
+2025-04-05 15:44:25,648 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-05 15:44:25,655 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:44:25,657 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:25,657 - sqlalchemy.engine.Engine - INFO - [cached since 735.8s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:44:25,658 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:44:25,659 - sqlalchemy.engine.Engine - INFO - [cached since 735.8s ago] (2,)
+2025-04-05 15:44:25,660 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:44:27,852 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:44:27,852 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:27,852 - sqlalchemy.engine.Engine - INFO - [cached since 738s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:44:27,854 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:44:27,854 - sqlalchemy.engine.Engine - INFO - [cached since 738s ago] (2,)
+2025-04-05 15:44:27,856 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:44:27,906 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:44:27,907 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:27,907 - sqlalchemy.engine.Engine - INFO - [cached since 738.1s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:44:27,908 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:27,908 - sqlalchemy.engine.Engine - INFO - [cached since 736.6s ago] (8, 2, 1, 0)
+2025-04-05 15:44:27,910 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:44:30,803 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:44:30,804 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:30,805 - sqlalchemy.engine.Engine - INFO - [cached since 741s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:44:30,808 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:44:30,808 - sqlalchemy.engine.Engine - INFO - [cached since 739.5s ago] (9, 2, 1, 0)
+2025-04-05 15:44:30,810 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:46:43,123 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:46:43,124 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:46:43,127 - sqlalchemy.engine.Engine - INFO - [cached since 873.3s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:46:43,127 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:46:43,128 - sqlalchemy.engine.Engine - INFO - [cached since 873.3s ago] (2,)
+2025-04-05 15:46:43,137 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:46:43,227 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:46:43,229 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:46:43,230 - sqlalchemy.engine.Engine - INFO - [cached since 873.4s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:46:43,232 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:46:43,235 - sqlalchemy.engine.Engine - INFO - [cached since 871.9s ago] (8, 2, 1, 0)
+2025-04-05 15:46:43,239 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:46:57,523 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:46:57,525 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:46:57,526 - sqlalchemy.engine.Engine - INFO - [cached since 887.7s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:46:57,528 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:46:57,528 - sqlalchemy.engine.Engine - INFO - [cached since 887.7s ago] (2,)
+2025-04-05 15:46:57,531 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:46:57,607 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:46:57,607 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:46:57,608 - sqlalchemy.engine.Engine - INFO - [cached since 887.8s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:46:57,610 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:46:57,610 - sqlalchemy.engine.Engine - INFO - [cached since 886.3s ago] (8, 2, 1, 0)
+2025-04-05 15:46:57,611 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:46:58,547 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:46:58,547 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:46:58,547 - sqlalchemy.engine.Engine - INFO - [cached since 888.7s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:46:58,548 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:46:58,548 - sqlalchemy.engine.Engine - INFO - [cached since 888.7s ago] (2,)
+2025-04-05 15:46:58,551 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:46:58,595 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:46:58,595 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:46:58,596 - sqlalchemy.engine.Engine - INFO - [cached since 888.8s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:46:58,597 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:46:58,597 - sqlalchemy.engine.Engine - INFO - [cached since 887.3s ago] (8, 2, 1, 0)
+2025-04-05 15:46:58,599 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:49:55,411 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:49:55,413 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:49:55,413 - sqlalchemy.engine.Engine - INFO - [cached since 1066s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:49:55,414 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:49:55,415 - sqlalchemy.engine.Engine - INFO - [cached since 1066s ago] (2,)
+2025-04-05 15:49:55,430 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:49:55,520 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:49:55,522 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:49:55,523 - sqlalchemy.engine.Engine - INFO - [cached since 1066s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:49:55,526 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:49:55,535 - sqlalchemy.engine.Engine - INFO - [cached since 1064s ago] (8, 2, 1, 0)
+2025-04-05 15:49:55,540 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:51:25,577 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:51:25,579 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:51:25,579 - sqlalchemy.engine.Engine - INFO - [cached since 1156s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:51:25,580 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.user_id = ? ORDER BY basic_data.year DESC, basic_data.month DESC
+2025-04-05 15:51:25,580 - sqlalchemy.engine.Engine - INFO - [cached since 1156s ago] (2,)
+2025-04-05 15:51:25,595 - sqlalchemy.engine.Engine - INFO - ROLLBACK
+2025-04-05 15:51:25,683 - sqlalchemy.engine.Engine - INFO - BEGIN (implicit)
+2025-04-05 15:51:25,683 - sqlalchemy.engine.Engine - INFO - SELECT users.id AS users_id, users.name AS users_name, users.email AS users_email, users.whatsapp AS users_whatsapp, users.activity_type AS users_activity_type, users.password AS users_password, users.activation_key AS users_activation_key, users.activation_date AS users_activation_date, users.registration_date AS users_registration_date, users.status AS users_status, users.access_level AS users_access_level, users.terms_accepted AS users_terms_accepted 
+FROM users 
+WHERE users.email = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:51:25,684 - sqlalchemy.engine.Engine - INFO - [cached since 1156s ago] ('teste@gmail.com', 1, 0)
+2025-04-05 15:51:25,692 - sqlalchemy.engine.Engine - INFO - SELECT basic_data.id AS basic_data_id, basic_data.user_id AS basic_data_user_id, basic_data.month AS basic_data_month, basic_data.year AS basic_data_year, basic_data.activity_type AS basic_data_activity_type, basic_data.clients_served AS basic_data_clients_served, basic_data.sales_revenue AS basic_data_sales_revenue, basic_data.sales_expenses AS basic_data_sales_expenses, basic_data.input_product_expenses AS basic_data_input_product_expenses, basic_data.fixed_costs AS basic_data_fixed_costs, basic_data.ideal_profit_margin AS basic_data_ideal_profit_margin, basic_data.service_capacity AS basic_data_service_capacity, basic_data.pro_labore AS basic_data_pro_labore, basic_data.work_hours_per_week AS basic_data_work_hours_per_week, basic_data.other_fixed_costs AS basic_data_other_fixed_costs, basic_data.ideal_service_profit_margin AS basic_data_ideal_service_profit_margin, basic_data.is_current AS basic_data_is_current, basic_data.created_at AS basic_data_created_at, basic_data.updated_at AS basic_data_updated_at 
+FROM basic_data 
+WHERE basic_data.id = ? AND basic_data.user_id = ?
+ LIMIT ? OFFSET ?
+2025-04-05 15:51:25,692 - sqlalchemy.engine.Engine - INFO - [cached since 1154s ago] (8, 2, 1, 0)
+2025-04-05 15:51:25,700 - sqlalchemy.engine.Engine - INFO - ROLLBACK

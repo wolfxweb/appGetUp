@@ -256,13 +256,39 @@ document.addEventListener('DOMContentLoaded', function() {
             // Obter o valor manual
             let manualValue = parseFloat(this.value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
             
-            // Apenas atualizar o campo calculado com o valor digitado
+            // Obter o valor original para cálculo da variação
+            const originalElement = document.getElementById(`${metric}Original`);
+            if (!originalElement || !originalElement.value) return;
+            
+            let original;
+            if (isPercentage) {
+                // Para percentuais, extrair o valor numérico do formato "XX.XX%"
+                original = parseFloat(originalElement.value.replace('%', '')) || 0;
+            } else {
+                // Para valores monetários, extrair o valor numérico do formato "R$ XX.XX"
+                original = parseFloat(originalElement.value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+            }
+            
+            // Atualizar o campo calculado
             const calculatedElement = document.getElementById(`${metric}Calculado`);
             if (isPercentage) {
                 calculatedElement.value = formatPercent(manualValue);
             } else {
                 calculatedElement.value = formatMoney(manualValue);
             }
+            
+            // Alterar a cor de fundo com base na comparação com o valor original
+            if (manualValue > original) {
+                calculatedElement.style.backgroundColor = '#d4edda'; // Verde claro
+            } else if (manualValue < original) {
+                calculatedElement.style.backgroundColor = '#f8d7da'; // Vermelho claro
+            } else {
+                calculatedElement.style.backgroundColor = ''; // Cor padrão
+            }
+            
+            // Calcular e atualizar a variação
+            const variation = calculateVariation(original, manualValue);
+            document.getElementById(`${metric}Variacao`).value = formatPercent(variation);
         });
     });
 
@@ -279,29 +305,48 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isPercentage) {
             // Para percentuais, extrair o valor numérico do formato "XX.XX%"
             original = parseFloat(originalElement.value.replace('%', '')) || 0;
+            console.log(`Original ${metric}: ${original}%`);
         } else {
             // Para valores monetários, extrair o valor numérico do formato "R$ XX.XX"
             original = parseFloat(originalElement.value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+            console.log(`Original ${metric}: ${original}`);
         }
+        
+        console.log(`Percentual aplicado: ${percentual}%`);
+        console.log(`Ação: ${isIncrease ? 'Aumentar' : 'Diminuir'}`);
         
         // Calcular o valor final com base na fórmula fornecida
         let calculated;
         if (isIncrease) {
             // Soma: valor_final = valor_original + (valor_original * percentual / 100)
             calculated = original + (original * percentual / 100);
+            console.log(`Cálculo: ${original} + (${original} * ${percentual} / 100) = ${calculated}`);
         } else {
             // Subtração: valor_final = valor_original - (valor_original * percentual / 100)
             calculated = original - (original * percentual / 100);
+            console.log(`Cálculo: ${original} - (${original} * ${percentual} / 100) = ${calculated}`);
         }
         
         // Calcular a variação percentual
         const variation = calculateVariation(original, calculated);
+        console.log(`Variação: ${variation}%`);
         
         // Atualizar os elementos na interface
         if (isPercentage) {
             calculatedElement.value = formatPercent(calculated);
+            console.log(`Valor calculado: ${formatPercent(calculated)}`);
         } else {
             calculatedElement.value = formatMoney(calculated);
+            console.log(`Valor calculado: ${formatMoney(calculated)}`);
+        }
+        
+        // Alterar a cor de fundo com base na comparação com o valor original
+        if (calculated > original) {
+            calculatedElement.style.backgroundColor = '#d4edda'; // Verde claro
+        } else if (calculated < original) {
+            calculatedElement.style.backgroundColor = '#f8d7da'; // Vermelho claro
+        } else {
+            calculatedElement.style.backgroundColor = ''; // Cor padrão
         }
         
         // Limpar o campo manual
