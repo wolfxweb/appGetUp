@@ -42,6 +42,7 @@
                             <input type="text" class="form-control" id="margemOriginal" readonly>
                             <input type="text" class="form-control" id="margemCalculado" readonly>
                             <input type="text" class="form-control" id="margemVariacao" readonly>
+                            <input type="text" class="form-control" id="margemManual" placeholder="Digite um valor">
                             <button class="btn btn-success text-white" type="button" data-metric="margem" data-action="increase">
                                 <i class="bi bi-plus-circle text-white"></i>
                             </button>
@@ -58,6 +59,7 @@
                             <input type="text" class="form-control" id="clientesOriginal" readonly>
                             <input type="text" class="form-control" id="clientesCalculado" readonly>
                             <input type="text" class="form-control" id="clientesVariacao" readonly>
+                            <input type="text" class="form-control" id="clientesManual" placeholder="Digite um valor">
                             <button class="btn btn-success text-white" type="button" data-metric="clientes" data-action="increase">
                                 <i class="bi bi-plus-circle text-white"></i>
                             </button>
@@ -74,6 +76,7 @@
                             <input type="text" class="form-control" id="precoMedioOriginal" readonly>
                             <input type="text" class="form-control" id="precoMedioCalculado" readonly>
                             <input type="text" class="form-control" id="precoMedioVariacao" readonly>
+                            <input type="text" class="form-control" id="precoMedioManual" placeholder="Digite um valor">
                             <button class="btn btn-success text-white" type="button" data-metric="precoMedio" data-action="increase">
                                 <i class="bi bi-plus-circle text-white"></i>
                             </button>
@@ -90,6 +93,7 @@
                             <input type="text" class="form-control" id="ticketMedioOriginal" readonly>
                             <input type="text" class="form-control" id="ticketMedioCalculado" readonly>
                             <input type="text" class="form-control" id="ticketMedioVariacao" readonly>
+                            <input type="text" class="form-control" id="ticketMedioManual" placeholder="Digite um valor">
                             <button class="btn btn-success text-white" type="button" data-metric="ticketMedio" data-action="increase">
                                 <i class="bi bi-plus-circle text-white"></i>
                             </button>
@@ -106,6 +110,7 @@
                             <input type="text" class="form-control" id="faturamentoOriginal" readonly>
                             <input type="text" class="form-control" id="faturamentoCalculado" readonly>
                             <input type="text" class="form-control" id="faturamentoVariacao" readonly>
+                            <input type="text" class="form-control" id="faturamentoManual" placeholder="Digite um valor">
                             <button class="btn btn-success text-white" type="button" data-metric="faturamento" data-action="increase">
                                 <i class="bi bi-plus-circle text-white"></i>
                             </button>
@@ -122,6 +127,7 @@
                             <input type="text" class="form-control" id="custosVendasOriginal" readonly>
                             <input type="text" class="form-control" id="custosVendasCalculado" readonly>
                             <input type="text" class="form-control" id="custosVendasVariacao" readonly>
+                            <input type="text" class="form-control" id="custosVendasManual" placeholder="Digite um valor">
                             <button class="btn btn-success text-white" type="button" data-metric="custosVendas" data-action="increase">
                                 <i class="bi bi-plus-circle text-white"></i>
                             </button>
@@ -138,6 +144,7 @@
                             <input type="text" class="form-control" id="custosInsumosOriginal" readonly>
                             <input type="text" class="form-control" id="custosInsumosCalculado" readonly>
                             <input type="text" class="form-control" id="custosInsumosVariacao" readonly>
+                            <input type="text" class="form-control" id="custosInsumosManual" placeholder="Digite um valor">
                             <button class="btn btn-success text-white" type="button" data-metric="custosInsumos" data-action="increase">
                                 <i class="bi bi-plus-circle text-white"></i>
                             </button>
@@ -154,6 +161,7 @@
                             <input type="text" class="form-control" id="custosFixosOriginal" readonly>
                             <input type="text" class="form-control" id="custosFixosCalculado" readonly>
                             <input type="text" class="form-control" id="custosFixosVariacao" readonly>
+                            <input type="text" class="form-control" id="custosFixosManual" placeholder="Digite um valor">
                             <button class="btn btn-success text-white" type="button" data-metric="custosFixos" data-action="increase">
                                 <i class="bi bi-plus-circle text-white"></i>
                             </button>
@@ -220,8 +228,17 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             const metric = this.getAttribute('data-metric');
             const action = this.getAttribute('data-action');
-            const percentual = 10; // Valor fixo de 10% para simulação
             const isIncrease = action === 'increase';
+            
+            // Obter o valor do campo manual
+            const manualElement = document.getElementById(`${metric}Manual`);
+            let percentual = parseFloat(manualElement.value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+            
+            // Se não houver valor no campo manual, usar 0
+            if (percentual === 0) {
+                alert('Por favor, digite um valor no campo antes de aplicar a mudança.');
+                return;
+            }
             
             // Determinar se a métrica é um percentual ou valor monetário
             const isPercentage = metric === 'margem';
@@ -230,11 +247,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Event listeners para os campos de entrada manual - apenas para exibição
+    document.querySelectorAll('input[id$="Manual"]').forEach(input => {
+        input.addEventListener('input', function() {
+            const metric = this.id.replace('Manual', '');
+            const isPercentage = metric === 'margem';
+            
+            // Obter o valor manual
+            let manualValue = parseFloat(this.value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+            
+            // Apenas atualizar o campo calculado com o valor digitado
+            const calculatedElement = document.getElementById(`${metric}Calculado`);
+            if (isPercentage) {
+                calculatedElement.value = formatPercent(manualValue);
+            } else {
+                calculatedElement.value = formatMoney(manualValue);
+            }
+        });
+    });
+
     // Função para aplicar a mudança percentual a uma métrica específica
     function applyMetricChange(metric, percentual, isIncrease, isPercentage) {
         const originalElement = document.getElementById(`${metric}Original`);
         const calculatedElement = document.getElementById(`${metric}Calculado`);
         const variationElement = document.getElementById(`${metric}Variacao`);
+        const manualElement = document.getElementById(`${metric}Manual`);
         
         if (!originalElement || !originalElement.value) return;
         
@@ -266,6 +303,9 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             calculatedElement.value = formatMoney(calculated);
         }
+        
+        // Limpar o campo manual
+        manualElement.value = '';
         
         variationElement.value = formatPercent(variation);
     }
@@ -320,6 +360,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('custosVendasVariacao').value = formatPercent(0);
                 document.getElementById('custosInsumosVariacao').value = formatPercent(0);
                 document.getElementById('custosFixosVariacao').value = formatPercent(0);
+                
+                // Limpar os campos manuais
+                document.getElementById('margemManual').value = '';
+                document.getElementById('clientesManual').value = '';
+                document.getElementById('precoMedioManual').value = '';
+                document.getElementById('ticketMedioManual').value = '';
+                document.getElementById('faturamentoManual').value = '';
+                document.getElementById('custosVendasManual').value = '';
+                document.getElementById('custosInsumosManual').value = '';
+                document.getElementById('custosFixosManual').value = '';
             })
             .catch(error => {
                 console.error('Erro ao carregar dados:', error);
