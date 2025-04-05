@@ -50,7 +50,7 @@ async def calculator(request: Request, current_user: User = Depends(get_current_
         "request": request,
         "active_page": "calculadora",
         "basic_data": basic_data,
-        "current_user": current_user,
+        "user": current_user,
         "calculator_records": calculator_records
     })
 
