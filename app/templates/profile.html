@@ -50,11 +50,12 @@
                         </div>
                         <div class="mb-3">
                             <label for="activity_type" class="form-label">Tipo de Atividade</label>
-                            <select class="form-select" id="activity_type" name="activity_type" required>
+                            <select class="form-select" id="activity_type" name="activity_type" required disabled>
                                 <option value="Serviços" {% if user.activity_type == 'Serviços' %}selected{% endif %}>Serviços</option>
                                 <option value="Comércio" {% if user.activity_type == 'Comércio' %}selected{% endif %}>Comércio</option>
                                 <option value="Indústria" {% if user.activity_type == 'Indústria' %}selected{% endif %}>Indústria</option>
                             </select>
+                            <small class="text-muted">O tipo de atividade não pode ser alterado após o cadastro.</small>
                         </div>
                         <div class="mb-3">
                             <label for="registration_date" class="form-label">Data de Cadastro</label>
@@ -65,15 +66,12 @@
                             <label for="activation_key" class="form-label">Chave de Ativação</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="activation_key" name="activation_key" value="{{ user.activation_key }}" readonly>
-                                <button type="submit" name="action" value="activate" class="btn btn-warning">
-                                    <i class="bi bi-arrow-repeat"></i> Trocar Licença
-                                </button>
                                 <span class="input-group-text bg-success text-white">
                                     <i class="bi bi-check-circle"></i> Ativada
                                 </span>
                             </div>
                             <div class="form-text">
-                                <i class="bi bi-info-circle"></i> Você pode trocar sua licença se necessário
+                                <i class="bi bi-info-circle"></i> Sua licença está ativa
                             </div>
                         </div>
                         {% else %}
