@@ -42,6 +42,7 @@
                             <input type="text" class="form-control" id="margemOriginal" readonly>
                             <input type="text" class="form-control" id="margemCalculado" readonly>
                             <input type="text" class="form-control" id="margemVariacao" readonly>
+                          <!--
                             <input type="text" class="form-control" id="margemManual" placeholder="Digite um valor">
                             <button class="btn btn-success text-white" type="button" data-metric="margem" data-action="increase">
                                 <i class="bi bi-plus-circle text-white" style="color: white !important;"></i>
@@ -49,6 +50,7 @@
                             <button class="btn btn-danger text-white" type="button" data-metric="margem" data-action="decrease">
                                 <i class="bi bi-dash-circle text-white" style="color: white !important;"></i>
                             </button>
+                        -->
                         </div>
                     </div>
 
@@ -232,6 +234,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Obter o valor do campo manual
             const manualElement = document.getElementById(`${metric}Manual`);
+            if (!manualElement) return; // Se o elemento não existir, não fazer nada
+            
             let percentual = parseFloat(manualElement.value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
             
             // Se não houver valor no campo manual, usar 0
@@ -447,6 +451,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const manualElement = document.getElementById(`${metric}Manual`);
         
         if (!originalElement || !originalElement.value) return;
+        if (!calculatedElement || !variationElement) return;
         
         let original;
         if (isPercentage) {
@@ -519,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Limpar o campo manual
-        manualElement.value = '';
+        if (manualElement) manualElement.value = '';
         
         variationElement.value = formatPercent(variation);
     }
@@ -582,7 +587,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('custosFixosVariacao').value = formatPercent(0);
                 
                 // Limpar os campos manuais
-                document.getElementById('margemManual').value = '';
+                const margemManualElement = document.getElementById('margemManual');
+                if (margemManualElement) margemManualElement.value = '';
+                
                 document.getElementById('clientesManual').value = '';
                 document.getElementById('precoMedioManual').value = '';
                 document.getElementById('ticketMedioManual').value = '';
