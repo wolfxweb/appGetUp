@@ -313,8 +313,35 @@ document.addEventListener('DOMContentLoaded', function() {
                 const calculatedValue = original + (original * manualValue / 100);
                 calculatedElement.value = formatMoney(calculatedValue);
                 
-                // Recalcular margem com base nos novos custos fixos
-                recalculateFromFixedCostsChange(manualValue);
+                // Obter valores necessários para o cálculo da margem
+                const faturamentoCalculado = parseFloat(document.getElementById('faturamentoCalculado').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+                const custosVendasCalculado = parseFloat(document.getElementById('custosVendasCalculado').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+                const custosInsumosCalculado = parseFloat(document.getElementById('custosInsumosCalculado').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+                
+                // Calcular a nova margem usando o valor calculado dos custos fixos
+                // Se manualValue for negativo (redução de custos), a margem deve aumentar
+                const novaMargem = faturamentoCalculado > 0 ? 
+                    ((faturamentoCalculado - (custosVendasCalculado + custosInsumosCalculado + calculatedValue)) / faturamentoCalculado) * 100 : 0;
+                
+                // Atualizar o campo margemCalculado
+                document.getElementById('margemCalculado').value = formatPercent(novaMargem);
+                
+                // Obter o valor original da margem para cálculo da variação
+                const margemOriginal = parseFloat(document.getElementById('margemOriginal').value.replace('%', '')) || 0;
+                
+                // Calcular e atualizar a variação da margem
+                const variacaoMargem = calculateVariation(margemOriginal, novaMargem);
+                document.getElementById('margemVariacao').value = formatPercent(variacaoMargem);
+                
+                // Alterar a cor de fundo da margem calculada com base na comparação
+                const margemCalculadoElement = document.getElementById('margemCalculado');
+                if (novaMargem > margemOriginal) {
+                    margemCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro
+                } else if (novaMargem < margemOriginal) {
+                    margemCalculadoElement.style.backgroundColor = '#f8d7da'; // Vermelho claro
+                } else {
+                    margemCalculadoElement.style.backgroundColor = ''; // Cor padrão
+                }
             } else {
                 calculatedElement.value = formatMoney(manualValue);
             }
@@ -982,7 +1009,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Variação dos custos fixos:', variacaoCustosFixos);
   
         
-        // Calcular a nova margem - CORRIGINDO: somando os custos fixos, não subtraindo
+        // Calcular a nova margem - CORRIGINDO: usando o custosFixosCalculado para refletir a mudança
         const novaMargem = faturamentoCalculado > 0 ? 
             ((faturamentoCalculado - (custosVendasCalculado + custosInsumosCalculado + custosFixosCalculado)) / faturamentoCalculado) * 100 : 0;
         console.log('Nova margem calculada:', novaMargem);
