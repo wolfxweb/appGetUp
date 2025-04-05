@@ -839,3 +839,7 @@
 2025-04-03 21:58:04,517 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
 2025-04-03 21:58:10,473 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
 2025-04-03 21:58:10,473 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-03 22:02:57,909 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-03 22:02:57,916 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-04-03 22:02:57,935 - app.routes.basic_data - INFO - Criando novo registro
+2025-04-03 22:02:57,939 - app.routes.basic_data - INFO - Dados salvos com sucesso

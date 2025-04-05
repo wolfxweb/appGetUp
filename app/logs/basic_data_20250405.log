@@ -1,0 +1,33 @@
+2025-04-05 14:19:38,654 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-05 14:19:38,654 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=23131.0
+2025-04-05 14:22:27,907 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-05 14:22:27,908 - app.routes.basic_data - INFO - Atualizando registros existentes para is_current = False
+2025-04-05 14:22:27,917 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-04-05 14:22:27,921 - app.routes.basic_data - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 10 para 87
+2025-04-05 14:22:27,921 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 23131,00 para R$ 5200,00
+2025-04-05 14:22:27,921 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 312,00 para R$ 27800,00
+2025-04-05 14:22:27,921 - app.routes.basic_data - INFO - Alteração detectada: Horas de Trabalho por Semana de 200.0 para 50.0
+2025-04-05 14:22:27,922 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 3500,00 para R$ 19400,00
+2025-04-05 14:22:27,922 - app.routes.basic_data - INFO - Alteração detectada: Margem de Lucro Ideal (Serviços) de 20.0 para 25.0
+2025-04-05 14:22:27,922 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Não para Sim
+2025-04-05 14:22:27,922 - app.routes.basic_data - INFO - Alterações detectadas: ['Quantidade de Clientes Atendidos alterado de 10 para 87', 'Gastos com Vendas alterado de R$ 23131,00 para R$ 5200,00', 'Gastos com Insumos e Produtos alterado de R$ 312,00 para R$ 27800,00', 'Horas de Trabalho por Semana alterado de 200.0 para 50.0', 'Demais Custos Fixos alterado de R$ 3500,00 para R$ 19400,00', 'Margem de Lucro Ideal (Serviços) alterado de 20.0 para 25.0', 'É o Atual alterado de Não para Sim']
+2025-04-05 14:22:27,922 - app.routes.basic_data - INFO - Log adicionado: Quantidade de Clientes Atendidos alterado de 10 para 87
+2025-04-05 14:22:27,922 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 23131,00 para R$ 5200,00
+2025-04-05 14:22:27,922 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 312,00 para R$ 27800,00
+2025-04-05 14:22:27,923 - app.routes.basic_data - INFO - Log adicionado: Horas de Trabalho por Semana alterado de 200.0 para 50.0
+2025-04-05 14:22:27,923 - app.routes.basic_data - INFO - Log adicionado: Demais Custos Fixos alterado de R$ 3500,00 para R$ 19400,00
+2025-04-05 14:22:27,923 - app.routes.basic_data - INFO - Log adicionado: Margem de Lucro Ideal (Serviços) alterado de 20.0 para 25.0
+2025-04-05 14:22:27,923 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Não para Sim
+2025-04-05 14:22:27,923 - app.routes.basic_data - INFO - Campo clients_served atualizado para 87
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 65000.0
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 5200.0
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 27800.0
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 5000.0
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 50.0
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 19400.0
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 25.0
+2025-04-05 14:22:27,924 - app.routes.basic_data - INFO - Campo is_current atualizado para True
+2025-04-05 14:22:27,935 - app.routes.basic_data - INFO - Dados salvos com sucesso

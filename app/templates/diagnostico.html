@@ -545,8 +545,8 @@ function typeActivityService() {
         // Calcular Ponto de Equilíbrio
         const pontoEquilibrio = margemContribuicao > 0 ? (otherFixedCosts + proLabore) / margemContribuicao : 0;
         
-        // Calcular Ponto de Equilíbrio Percentual
-        const pontoEquilibrioPercentual = salesRevenue > 0 ? (pontoEquilibrio / salesRevenue) * 100 : 0;
+        // Calcular Ponto de Equilíbrio Percentual (quantidade de clientes necessários / quantidade atual de clientes)
+        const pontoEquilibrioPercentual = clientsServed > 0 ? (pontoEquilibrio / clientsServed) * 100 : 0;
 
         const variavel = "Uma vez que estas considerações se referem a mês anterior, recomendamos que em \"Definição de Prioridades\" você estime as variações para o corrente mês, antecipando-se assim a eventuais providências relevantes. ";
         
@@ -776,7 +776,7 @@ function typeActivity() {
         const L24 = ticketMedio > 0 ? 
             fixedCosts / (ticketMedio - custosVariaveisPorCliente) : 0;
         
-        // Calcular Ponto de Equilíbrio (L24*(F11/F10))
+        // Calcular Ponto de Equilíbrio
         const pontoEquilibrio = L24 * ticketMedio;
         
         // Calcular Ponto de Equilíbrio Percentual ((L24*(F11/F10))/(F11/F10))
