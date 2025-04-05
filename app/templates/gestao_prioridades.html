@@ -32,8 +32,8 @@
                         </div>
                     </div>
                     <div class="col-md-6 d-flex align-items-end justify-content-end">
-                        <button id="resetButton" class="btn btn-secondary" onclick="window.location.reload()">
-                            <i class="bi bi-arrow-counterclockwise me-2"></i>Reiniciar
+                        <button id="resetButton" class="btn btn-primary" onclick="window.location.reload()">
+                            <i class="bi bi-arrow-counterclockwise me-2" style="color: white !important;"></i>Reiniciar
                         </button>
                     </div>
                 </div>
@@ -42,7 +42,13 @@
                 <div class="row">
                     <!-- Margem -->
                     <div class="col-md-12 mb-4">
-                        <label class="form-label">Margem</label>
+                        <label class="form-label">
+                            Margem
+                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#margemHelpModal" 
+                               style="cursor: pointer;"></i>
+                        </label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="margemOriginal" readonly>
                             <input type="text" class="form-control" id="margemCalculado" readonly>
@@ -61,7 +67,13 @@
 
                     <!-- Clientes -->
                     <div class="col-md-12 mb-4">
-                        <label class="form-label">Clientes Atendidos</label>
+                        <label class="form-label">
+                            Clientes Atendidos
+                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#clientesHelpModal" 
+                               style="cursor: pointer;"></i>
+                        </label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="clientesOriginal" readonly>
                             <input type="text" class="form-control" id="clientesCalculado" readonly>
@@ -78,7 +90,13 @@
 
                     <!-- Preço Médio -->
                     <div class="col-md-12 mb-4">
-                        <label class="form-label">Preço Médio</label>
+                        <label class="form-label">
+                            Preço Médio
+                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#precoMedioHelpModal" 
+                               style="cursor: pointer;"></i>
+                        </label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="precoMedioOriginal" readonly>
                             <input type="text" class="form-control" id="precoMedioCalculado" readonly>
@@ -95,7 +113,13 @@
 
                     <!-- Ticket Médio -->
                     <div class="col-md-12 mb-4">
-                        <label class="form-label">Ticket Médio</label>
+                        <label class="form-label">
+                            Ticket Médio
+                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#ticketMedioHelpModal" 
+                               style="cursor: pointer;"></i>
+                        </label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="ticketMedioOriginal" readonly>
                             <input type="text" class="form-control" id="ticketMedioCalculado" readonly>
@@ -112,7 +136,13 @@
 
                     <!-- Faturamento -->
                     <div class="col-md-12 mb-4">
-                        <label class="form-label">Faturamento</label>
+                        <label class="form-label">
+                            Faturamento
+                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#faturamentoHelpModal" 
+                               style="cursor: pointer;"></i>
+                        </label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="faturamentoOriginal" readonly>
                             <input type="text" class="form-control" id="faturamentoCalculado" readonly>
@@ -129,7 +159,13 @@
 
                     <!-- Custos de Vendas -->
                     <div class="col-md-12 mb-4">
-                        <label class="form-label">Custos de Vendas</label>
+                        <label class="form-label">
+                            Custos de Vendas
+                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#custosVendasHelpModal" 
+                               style="cursor: pointer;"></i>
+                        </label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="custosVendasOriginal" readonly>
                             <input type="text" class="form-control" id="custosVendasCalculado" readonly>
@@ -146,7 +182,13 @@
 
                     <!-- Custos de Insumos -->
                     <div class="col-md-12 mb-4">
-                        <label class="form-label">Custos de Insumos</label>
+                        <label class="form-label">
+                            Custos de Insumos
+                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#custosInsumosHelpModal" 
+                               style="cursor: pointer;"></i>
+                        </label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="custosInsumosOriginal" readonly>
                             <input type="text" class="form-control" id="custosInsumosCalculado" readonly>
@@ -163,7 +205,13 @@
 
                     <!-- Custos Fixos -->
                     <div class="col-md-12 mb-4">
-                        <label class="form-label">Custos Fixos</label>
+                        <label class="form-label">
+                            Custos Fixos
+                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                               data-bs-toggle="modal" 
+                               data-bs-target="#custosFixosHelpModal" 
+                               style="cursor: pointer;"></i>
+                        </label>
                         <div class="input-group">
                             <input type="text" class="form-control" id="custosFixosOriginal" readonly>
                             <input type="text" class="form-control" id="custosFixosCalculado" readonly>
@@ -200,6 +248,232 @@
                         <li>Analise as variações percentuais em cada métrica</li>
                     </ul>
                     <p>Use esta ferramenta para tomar decisões baseadas em diferentes cenários e planejar ações para melhorar os resultados do seu negócio.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda - Margem -->
+    <div class="modal fade" id="margemHelpModal" tabindex="-1" aria-labelledby="margemHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="margemHelpModalLabel">Margem</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>A <strong>Margem</strong> representa a porcentagem de lucro em relação ao faturamento total.</p>
+                    <p>Esta métrica é calculada automaticamente com base nos valores de faturamento e custos.</p>
+                    <p>Os campos exibidos são:</p>
+                    <ul>
+                        <li><strong>Original:</strong> Valor da margem conforme os dados básicos selecionados</li>
+                        <li><strong>Calculado:</strong> Valor da margem após as variações aplicadas</li>
+                        <li><strong>Variação:</strong> Percentual de alteração entre o valor original e o calculado</li>
+                    </ul>
+                    <p>A cor de fundo do campo "Calculado" muda para verde quando a margem aumenta e para vermelho quando diminui.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda - Clientes -->
+    <div class="modal fade" id="clientesHelpModal" tabindex="-1" aria-labelledby="clientesHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="clientesHelpModalLabel">Clientes Atendidos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Os <strong>Clientes Atendidos</strong> representam o número total de clientes atendidos no período.</p>
+                    <p>Para simular variações:</p>
+                    <ol>
+                        <li>Digite um percentual no campo de entrada</li>
+                        <li>Clique no botão <i class="bi bi-plus-circle text-success"></i> para aumentar o número de clientes</li>
+                        <li>Clique no botão <i class="bi bi-dash-circle text-danger"></i> para diminuir o número de clientes</li>
+                    </ol>
+                    <p>Os campos exibidos são:</p>
+                    <ul>
+                        <li><strong>Original:</strong> Número de clientes conforme os dados básicos selecionados</li>
+                        <li><strong>Calculado:</strong> Número de clientes após a variação aplicada</li>
+                        <li><strong>Variação:</strong> Percentual de alteração entre o valor original e o calculado</li>
+                        <li><strong>Manual:</strong> Campo para digitar o percentual de variação desejado</li>
+                    </ul>
+                    <p>A cor de fundo do campo "Calculado" muda para verde quando o número de clientes aumenta e para vermelho quando diminui.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda - Preço Médio -->
+    <div class="modal fade" id="precoMedioHelpModal" tabindex="-1" aria-labelledby="precoMedioHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="precoMedioHelpModalLabel">Preço Médio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>O <strong>Preço Médio</strong> representa o valor médio cobrado por cliente.</p>
+                    <p>Para simular variações:</p>
+                    <ol>
+                        <li>Digite um percentual no campo de entrada</li>
+                        <li>Clique no botão <i class="bi bi-plus-circle text-success"></i> para aumentar o preço médio</li>
+                        <li>Clique no botão <i class="bi bi-dash-circle text-danger"></i> para diminuir o preço médio</li>
+                    </ol>
+                    <p>Os campos exibidos são:</p>
+                    <ul>
+                        <li><strong>Original:</strong> Preço médio conforme os dados básicos selecionados</li>
+                        <li><strong>Calculado:</strong> Preço médio após a variação aplicada</li>
+                        <li><strong>Variação:</strong> Percentual de alteração entre o valor original e o calculado</li>
+                        <li><strong>Manual:</strong> Campo para digitar o percentual de variação desejado</li>
+                    </ul>
+                    <p>A cor de fundo do campo "Calculado" muda para verde quando o preço médio aumenta e para vermelho quando diminui.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda - Ticket Médio -->
+    <div class="modal fade" id="ticketMedioHelpModal" tabindex="-1" aria-labelledby="ticketMedioHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="ticketMedioHelpModalLabel">Ticket Médio</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>O <strong>Ticket Médio</strong> representa o valor médio gasto por cliente.</p>
+                    <p>Para simular variações:</p>
+                    <ol>
+                        <li>Digite um percentual no campo de entrada</li>
+                        <li>Clique no botão <i class="bi bi-plus-circle text-success"></i> para aumentar o ticket médio</li>
+                        <li>Clique no botão <i class="bi bi-dash-circle text-danger"></i> para diminuir o ticket médio</li>
+                    </ol>
+                    <p>Os campos exibidos são:</p>
+                    <ul>
+                        <li><strong>Original:</strong> Ticket médio conforme os dados básicos selecionados</li>
+                        <li><strong>Calculado:</strong> Ticket médio após a variação aplicada</li>
+                        <li><strong>Variação:</strong> Percentual de alteração entre o valor original e o calculado</li>
+                        <li><strong>Manual:</strong> Campo para digitar o percentual de variação desejado</li>
+                    </ul>
+                    <p>A cor de fundo do campo "Calculado" muda para verde quando o ticket médio aumenta e para vermelho quando diminui.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda - Faturamento -->
+    <div class="modal fade" id="faturamentoHelpModal" tabindex="-1" aria-labelledby="faturamentoHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="faturamentoHelpModalLabel">Faturamento</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>O <strong>Faturamento</strong> representa a receita total de vendas.</p>
+                    <p>Para simular variações:</p>
+                    <ol>
+                        <li>Digite um percentual no campo de entrada</li>
+                        <li>Clique no botão <i class="bi bi-plus-circle text-success"></i> para aumentar o faturamento</li>
+                        <li>Clique no botão <i class="bi bi-dash-circle text-danger"></i> para diminuir o faturamento</li>
+                    </ol>
+                    <p>Os campos exibidos são:</p>
+                    <ul>
+                        <li><strong>Original:</strong> Faturamento conforme os dados básicos selecionados</li>
+                        <li><strong>Calculado:</strong> Faturamento após a variação aplicada</li>
+                        <li><strong>Variação:</strong> Percentual de alteração entre o valor original e o calculado</li>
+                        <li><strong>Manual:</strong> Campo para digitar o percentual de variação desejado</li>
+                    </ul>
+                    <p>A cor de fundo do campo "Calculado" muda para verde quando o faturamento aumenta e para vermelho quando diminui.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda - Custos de Vendas -->
+    <div class="modal fade" id="custosVendasHelpModal" tabindex="-1" aria-labelledby="custosVendasHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="custosVendasHelpModalLabel">Custos de Vendas</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Os <strong>Custos de Vendas</strong> representam as despesas relacionadas às vendas, como comissões, marketing, etc.</p>
+                    <p>Para simular variações:</p>
+                    <ol>
+                        <li>Digite um percentual no campo de entrada</li>
+                        <li>Clique no botão <i class="bi bi-plus-circle text-success"></i> para aumentar os custos de vendas</li>
+                        <li>Clique no botão <i class="bi bi-dash-circle text-danger"></i> para diminuir os custos de vendas</li>
+                    </ol>
+                    <p>Os campos exibidos são:</p>
+                    <ul>
+                        <li><strong>Original:</strong> Custos de vendas conforme os dados básicos selecionados</li>
+                        <li><strong>Calculado:</strong> Custos de vendas após a variação aplicada</li>
+                        <li><strong>Variação:</strong> Percentual de alteração entre o valor original e o calculado</li>
+                        <li><strong>Manual:</strong> Campo para digitar o percentual de variação desejado</li>
+                    </ul>
+                    <p>A cor de fundo do campo "Calculado" muda para vermelho quando os custos de vendas aumentam e para verde quando diminuem.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda - Custos de Insumos -->
+    <div class="modal fade" id="custosInsumosHelpModal" tabindex="-1" aria-labelledby="custosInsumosHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="custosInsumosHelpModalLabel">Custos de Insumos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Os <strong>Custos de Insumos</strong> representam as despesas com materiais, produtos ou serviços necessários para a operação.</p>
+                    <p>Para simular variações:</p>
+                    <ol>
+                        <li>Digite um percentual no campo de entrada</li>
+                        <li>Clique no botão <i class="bi bi-plus-circle text-success"></i> para aumentar os custos de insumos</li>
+                        <li>Clique no botão <i class="bi bi-dash-circle text-danger"></i> para diminuir os custos de insumos</li>
+                    </ol>
+                    <p>Os campos exibidos são:</p>
+                    <ul>
+                        <li><strong>Original:</strong> Custos de insumos conforme os dados básicos selecionados</li>
+                        <li><strong>Calculado:</strong> Custos de insumos após a variação aplicada</li>
+                        <li><strong>Variação:</strong> Percentual de alteração entre o valor original e o calculado</li>
+                        <li><strong>Manual:</strong> Campo para digitar o percentual de variação desejado</li>
+                    </ul>
+                    <p>A cor de fundo do campo "Calculado" muda para vermelho quando os custos de insumos aumentam e para verde quando diminuem.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Ajuda - Custos Fixos -->
+    <div class="modal fade" id="custosFixosHelpModal" tabindex="-1" aria-labelledby="custosFixosHelpModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="custosFixosHelpModalLabel">Custos Fixos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Os <strong>Custos Fixos</strong> representam as despesas que não variam com o volume de vendas, como aluguel, salários administrativos, etc.</p>
+                    <p>Para simular variações:</p>
+                    <ol>
+                        <li>Digite um percentual no campo de entrada</li>
+                        <li>Clique no botão <i class="bi bi-plus-circle text-success"></i> para aumentar os custos fixos</li>
+                        <li>Clique no botão <i class="bi bi-dash-circle text-danger"></i> para diminuir os custos fixos</li>
+                    </ol>
+                    <p>Os campos exibidos são:</p>
+                    <ul>
+                        <li><strong>Original:</strong> Custos fixos conforme os dados básicos selecionados</li>
+                        <li><strong>Calculado:</strong> Custos fixos após a variação aplicada</li>
+                        <li><strong>Variação:</strong> Percentual de alteração entre o valor original e o calculado</li>
+                        <li><strong>Manual:</strong> Campo para digitar o percentual de variação desejado</li>
+                    </ul>
+                    <p>A cor de fundo do campo "Calculado" muda para vermelho quando os custos fixos aumentam e para verde quando diminuem.</p>
                 </div>
             </div>
         </div>
