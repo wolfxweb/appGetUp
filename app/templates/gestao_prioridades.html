@@ -273,6 +273,13 @@ document.addEventListener('DOMContentLoaded', function() {
             const calculatedElement = document.getElementById(`${metric}Calculado`);
             if (isPercentage) {
                 calculatedElement.value = formatPercent(manualValue);
+            } else if (metric === 'clientes') {
+                // Para clientes, calcular o valor com base no percentual
+                const calculatedValue = original + (original * manualValue / 100);
+                calculatedElement.value = Math.round(calculatedValue); // Arredondar para número inteiro
+                
+                // Recalcular a margem com base no novo número de clientes
+                recalculateMargin();
             } else {
                 calculatedElement.value = formatMoney(manualValue);
             }
@@ -291,6 +298,52 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById(`${metric}Variacao`).value = formatPercent(variation);
         });
     });
+
+    // Função para recalcular a margem com base nos novos valores
+    function recalculateMargin() {
+        // Obter os valores originais
+        const faturamentoOriginal = parseFloat(document.getElementById('faturamentoOriginal').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const custosVendasOriginal = parseFloat(document.getElementById('custosVendasOriginal').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const custosInsumosOriginal = parseFloat(document.getElementById('custosInsumosOriginal').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        const custosFixosOriginal = parseFloat(document.getElementById('custosFixosOriginal').value.replace(/[^\d,-]/g, '').replace(',', '.')) || 0;
+        
+        // Obter o novo número de clientes
+        const clientesCalculado = parseInt(document.getElementById('clientesCalculado').value) || 0;
+        const clientesOriginal = parseInt(document.getElementById('clientesOriginal').value) || 1; // Evitar divisão por zero
+        
+        // Calcular o fator de ajuste baseado na variação do número de clientes
+        const fatorAjuste = clientesCalculado / clientesOriginal;
+        
+        // Calcular os novos valores com base no fator de ajuste
+        const faturamentoCalculado = faturamentoOriginal * fatorAjuste;
+        const custosVendasCalculado = custosVendasOriginal * fatorAjuste;
+        const custosInsumosCalculado = custosInsumosOriginal * fatorAjuste;
+        // Custos fixos não variam com o número de clientes
+        
+        // Calcular a nova margem
+        const novaMargem = faturamentoCalculado > 0 ? 
+            ((faturamentoCalculado - (custosVendasCalculado + custosInsumosCalculado + custosFixosOriginal)) / faturamentoCalculado) * 100 : 0;
+        
+        // Atualizar o campo margemCalculado
+        document.getElementById('margemCalculado').value = formatPercent(novaMargem);
+        
+        // Obter o valor original da margem para cálculo da variação
+        const margemOriginal = parseFloat(document.getElementById('margemOriginal').value.replace('%', '')) || 0;
+        
+        // Calcular e atualizar a variação da margem
+        const variacaoMargem = calculateVariation(margemOriginal, novaMargem);
+        document.getElementById('margemVariacao').value = formatPercent(variacaoMargem);
+        
+        // Alterar a cor de fundo da margem calculada com base na comparação
+        const margemCalculadoElement = document.getElementById('margemCalculado');
+        if (novaMargem > margemOriginal) {
+            margemCalculadoElement.style.backgroundColor = '#d4edda'; // Verde claro
+        } else if (novaMargem < margemOriginal) {
+            margemCalculadoElement.style.backgroundColor = '#f8d7da'; // Vermelho claro
+        } else {
+            margemCalculadoElement.style.backgroundColor = ''; // Cor padrão
+        }
+    }
 
     // Função para aplicar a mudança percentual a uma métrica específica
     function applyMetricChange(metric, percentual, isIncrease, isPercentage) {
@@ -335,6 +388,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isPercentage) {
             calculatedElement.value = formatPercent(calculated);
             console.log(`Valor calculado: ${formatPercent(calculated)}`);
+        } else if (metric === 'clientes') {
+            // Para clientes, exibir como número inteiro
+            calculatedElement.value = Math.round(calculated);
+            console.log(`Valor calculado: ${Math.round(calculated)}`);
+            
+            // Recalcular a margem com base no novo número de clientes
+            recalculateMargin();
         } else {
             calculatedElement.value = formatMoney(calculated);
             console.log(`Valor calculado: ${formatMoney(calculated)}`);
@@ -369,9 +429,15 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(data => {
                 console.log("Dados recebidos:", data);
                 
+                // Verificar se fixed_costs é null ou zero e usar other_fixed_costs se necessário
+                const fixedCosts = (!data.fixed_costs || data.fixed_costs === 0) ? data.other_fixed_costs : data.fixed_costs;
+                
+                // Verificar se ideal_profit_margin é null ou zero e usar ideal_service_profit_margin se necessário
+                const idealProfitMargin = (!data.ideal_profit_margin || data.ideal_profit_margin === 0) ? data.ideal_service_profit_margin : data.ideal_profit_margin;
+                
                 // Calcular margem
                 const margem = data.sales_revenue > 0 ? 
-                    ((data.sales_revenue - (data.sales_expenses + data.operational_expenses + data.fixed_costs)) / data.sales_revenue) * 100 : 0;
+                    ((data.sales_revenue - (data.sales_expenses + data.operational_expenses + fixedCosts)) / data.sales_revenue) * 100 : 0;
                 
                 // Calcular preço médio
                 const precoMedio = data.clients_served > 0 ? data.sales_revenue / data.clients_served : 0;
@@ -384,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('faturamentoOriginal').value = formatMoney(data.sales_revenue);
                 document.getElementById('custosVendasOriginal').value = formatMoney(data.sales_expenses);
                 document.getElementById('custosInsumosOriginal').value = formatMoney(data.operational_expenses);
-                document.getElementById('custosFixosOriginal').value = formatMoney(data.fixed_costs);
+                document.getElementById('custosFixosOriginal').value = formatMoney(fixedCosts);
                 
                 // Inicializar os campos calculados com os valores originais
                 document.getElementById('margemCalculado').value = formatPercent(margem);
@@ -394,7 +460,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('faturamentoCalculado').value = formatMoney(data.sales_revenue);
                 document.getElementById('custosVendasCalculado').value = formatMoney(data.sales_expenses);
                 document.getElementById('custosInsumosCalculado').value = formatMoney(data.operational_expenses);
-                document.getElementById('custosFixosCalculado').value = formatMoney(data.fixed_costs);
+                document.getElementById('custosFixosCalculado').value = formatMoney(fixedCosts);
                 
                 // Inicializar os campos de variação com 0%
                 document.getElementById('margemVariacao').value = formatPercent(0);
