@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+
+{% block title %}Calculadora de Preços{% endblock %}
+
+{% block content %}
+{% include "components/navbar.html" %}
+
+<div class="container mt-4">
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Calculadora de Preços</h4>
+        </div>
+        <div class="card-body">
+            <form id="calculatorForm">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="basicData" class="form-label">Dados Básicos</label>
+                        <select class="form-select" id="basicData" name="basicData">
+                            <option value="">Selecione os dados básicos</option>
+                            {% for data in basic_data %}
+                            <option value="{{ data.id }}" 
+                                    data-activity-type="{{ data.activity_type }}"
+                                    data-ideal-profit-margin="{{ data.ideal_profit_margin or data.ideal_service_profit_margin or 0 }}">
+                                {{ data.month }}/{{ data.year }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="productName" class="form-label">Nome do Produto</label>
+                        <input type="text" class="form-control" id="productName" name="productName" required>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="currentPrice" class="form-label">Preço de Venda Atual</label>
+                        <div class="input-group">
+                            <span class="input-group-text">R$</span>
+                            <input type="number" class="form-control" id="currentPrice" name="currentPrice" step="0.01" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="currentMargin" class="form-label">Margem de Preço Atual</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="currentMargin" name="currentMargin" step="0.01" required>
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label for="companyMargin" class="form-label">Margem da Empresa</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="companyMargin" name="companyMargin" step="0.01" required>
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="desiredMargin" class="form-label">Margem Desejada</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="desiredMargin" name="desiredMargin" step="0.01" required>
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <label for="suggestedPrice" class="form-label">Preço Sugerido</label>
+                        <div class="input-group">
+                            <span class="input-group-text">R$</span>
+                            <input type="number" class="form-control" id="suggestedPrice" name="suggestedPrice" step="0.01" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="priceRelation" class="form-label">Relação com Preço Atual</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="priceRelation" name="priceRelation" step="0.01" readonly>
+                            <span class="input-group-text">%</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="competitorPrice" class="form-label">Preço Médio do Concorrente</label>
+                        <div class="input-group">
+                            <span class="input-group-text">R$</span>
+                            <input type="number" class="form-control" id="competitorPrice" name="competitorPrice" step="0.01" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-end">
+                    <button type="button" id="calculateBtn" class="btn btn-secondary me-2">Calcular</button>
+                    <button type="submit" class="btn btn-primary">Gravar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Card de Histórico -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Histórico</h5>
+        </div>
+        <div class="card-body">
+            <!-- Filtros -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="filterProduct">Produto</label>
+                        <input type="text" class="form-control" id="filterProduct" placeholder="Filtrar por produto">
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="filterPriceRange">Faixa de Preço</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="filterPriceMin" placeholder="Min">
+                            <span class="input-group-text">-</span>
+                            <input type="number" class="form-control" id="filterPriceMax" placeholder="Max">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="filterMarginRange">Margem Desejada</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="filterMarginMin" placeholder="Min">
+                            <span class="input-group-text">-</span>
+                            <input type="number" class="form-control" id="filterMarginMax" placeholder="Max">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="filterDate">Data</label>
+                        <input type="date" class="form-control" id="filterDate">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Registros -->
+            <div class="table-responsive">
+                <table class="table table-striped table-hover" id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Mês Dados Básicos</th>
+                            <th>Produto</th>
+                            <th>Preço Atual</th>
+                            <th>Margem Atual</th>
+                            <th>Margem Desejada</th>
+                            <th>Preço Sugerido</th>
+                            <th>Relação</th>
+                            <th>Preço Concorrente</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in calculator_records %}
+                        <tr>
+                            <td>{{ record.created_at.strftime('%d/%m/%Y') }}</td>
+                            <td>{{ record.month }}/{{ record.year }}</td>
+                            <td>{{ record.product_name }}</td>
+                            <td>R$ {{ "%.2f"|format(record.current_price) }}</td>
+                            <td>{{ "%.1f"|format(record.current_margin) }}%</td>
+                            <td>{{ "%.1f"|format(record.desired_margin) }}%</td>
+                            <td>R$ {{ "%.2f"|format(record.suggested_price) }}</td>
+                            <td>{{ "%.1f"|format(record.price_relation) }}%</td>
+                            <td>R$ {{ "%.2f"|format(record.competitor_price) }}</td>
+                            <td>
+                                <button class="btn btn-danger btn-sm delete-record" data-id="{{ record.id }}" title="Remover registro">
+                                    <i class="bi bi-trash" style="color: white !important;"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Carregar dados quando um item for selecionado no combobox
+document.getElementById('basicData').addEventListener('change', function() {
+    const selectedOption = this.options[this.selectedIndex];
+    if (selectedOption.value) {
+        // Obter a margem ideal do item selecionado
+        const idealProfitMargin = parseFloat(selectedOption.getAttribute('data-ideal-profit-margin')) || 0;
+        
+        // Preencher a margem desejada com o valor da margem ideal
+        document.getElementById('desiredMargin').value = idealProfitMargin;
+        
+        // Preencher a margem da empresa com o valor da margem ideal
+        document.getElementById('companyMargin').value = idealProfitMargin;
+    }
+});
+
+// Função para calcular o preço
+async function calculatePrice() {
+    // Get form values
+    const currentPrice = parseFloat(document.getElementById('currentPrice').value);
+    const currentMargin = parseFloat(document.getElementById('currentMargin').value);
+    const companyMargin = parseFloat(document.getElementById('companyMargin').value);
+    const desiredMargin = parseFloat(document.getElementById('desiredMargin').value);
+    const competitorPrice = parseFloat(document.getElementById('competitorPrice').value);
+    
+    try {
+        const response = await fetch('/api/calculate-price', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                current_price: currentPrice,
+                current_margin: currentMargin,
+                company_margin: companyMargin,
+                desired_margin: desiredMargin,
+                competitor_price: competitorPrice
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        const data = await response.json();
+        
+        // Update the form with calculated values
+        document.getElementById('suggestedPrice').value = data.suggestedPrice;
+        document.getElementById('priceRelation').value = data.priceRelation;
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Erro ao calcular o preço. Por favor, tente novamente.');
+    }
+}
+
+// Adicionar evento de clique ao botão Calcular
+document.getElementById('calculateBtn').addEventListener('click', calculatePrice);
+
+// Adicionar evento de submit ao formulário para gravar os dados
+document.getElementById('calculatorForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    // Primeiro calcular o preço para garantir que temos os valores calculados
+    await calculatePrice();
+    
+    // Obter todos os valores do formulário
+    const basicDataId = parseInt(document.getElementById('basicData').value);
+    const basicDataOption = document.getElementById('basicData').options[document.getElementById('basicData').selectedIndex];
+    const basicDataText = basicDataOption.text.trim();
+    const [month, year] = basicDataText.split('/');
+    
+    const productName = document.getElementById('productName').value;
+    const currentPrice = parseFloat(document.getElementById('currentPrice').value);
+    const currentMargin = parseFloat(document.getElementById('currentMargin').value);
+    const companyMargin = parseFloat(document.getElementById('companyMargin').value);
+    const desiredMargin = parseFloat(document.getElementById('desiredMargin').value);
+    const suggestedPrice = parseFloat(document.getElementById('suggestedPrice').value);
+    const priceRelation = parseFloat(document.getElementById('priceRelation').value);
+    const competitorPrice = parseFloat(document.getElementById('competitorPrice').value);
+    
+    try {
+        const response = await fetch('/api/save-calculator', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                basic_data_id: basicDataId,
+                month: parseInt(month),
+                year: parseInt(year),
+                product_name: productName,
+                current_price: currentPrice,
+                current_margin: currentMargin,
+                company_margin: companyMargin,
+                desired_margin: desiredMargin,
+                suggested_price: suggestedPrice,
+                price_relation: priceRelation,
+                competitor_price: competitorPrice
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        const data = await response.json();
+        
+        // Mostrar mensagem de sucesso
+        alert('Dados salvos com sucesso!');
+        
+        // Limpar o formulário
+        document.getElementById('calculatorForm').reset();
+        document.getElementById('suggestedPrice').value = '';
+        document.getElementById('priceRelation').value = '';
+        
+        // Recarregar a página para atualizar a tabela de histórico
+        window.location.reload();
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Erro ao salvar os dados. Por favor, tente novamente.');
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Função para filtrar os registros
+    function filterRecords() {
+        const product = document.getElementById('filterProduct').value.toLowerCase();
+        const priceMin = parseFloat(document.getElementById('filterPriceMin').value) || 0;
+        const priceMax = parseFloat(document.getElementById('filterPriceMax').value) || Infinity;
+        const marginMin = parseFloat(document.getElementById('filterMarginMin').value) || 0;
+        const marginMax = parseFloat(document.getElementById('filterMarginMax').value) || Infinity;
+        const filterDate = document.getElementById('filterDate').value;
+        
+        const rows = document.getElementById('historyTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        
+        for (let row of rows) {
+            const cells = row.getElementsByTagName('td');
+            const date = cells[0].textContent;
+            const period = cells[1].textContent;
+            const productName = cells[2].textContent.toLowerCase();
+            const currentPrice = parseFloat(cells[3].textContent.replace('R$ ', '').replace(',', '.'));
+            const desiredMargin = parseFloat(cells[5].textContent.replace('%', ''));
+            
+            const matchesProduct = productName.includes(product);
+            const matchesPrice = currentPrice >= priceMin && currentPrice <= priceMax;
+            const matchesMargin = desiredMargin >= marginMin && desiredMargin <= marginMax;
+            const matchesDate = !filterDate || date.includes(filterDate.split('-').reverse().join('/'));
+            
+            row.style.display = (matchesProduct && matchesPrice && matchesMargin && matchesDate) ? '' : 'none';
+        }
+    }
+    
+    // Adicionar eventos de filtro
+    document.getElementById('filterProduct').addEventListener('input', filterRecords);
+    document.getElementById('filterPriceMin').addEventListener('input', filterRecords);
+    document.getElementById('filterPriceMax').addEventListener('input', filterRecords);
+    document.getElementById('filterMarginMin').addEventListener('input', filterRecords);
+    document.getElementById('filterMarginMax').addEventListener('input', filterRecords);
+    document.getElementById('filterDate').addEventListener('input', filterRecords);
+    
+    // Adicionar eventos para os botões de remoção
+    document.querySelectorAll('.delete-record').forEach(button => {
+        button.addEventListener('click', async function() {
+            if (confirm('Tem certeza que deseja remover este registro?')) {
+                const recordId = this.getAttribute('data-id');
+                
+                try {
+                    const response = await fetch(`/api/delete-calculator/${recordId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    
+                    if (!response.ok) {
+                        throw new Error('Erro ao remover o registro');
+                    }
+                    
+                    // Remover a linha da tabela
+                    this.closest('tr').remove();
+                    
+                    // Mostrar mensagem de sucesso
+                    alert('Registro removido com sucesso!');
+                    
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Erro ao remover o registro. Por favor, tente novamente.');
+                }
+            }
+        });
+    });
+});
+</script>
+{% endblock %} 

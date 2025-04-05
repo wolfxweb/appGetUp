@@ -40,6 +40,7 @@ class BasicData(Base):
     # Relacionamento
     user = relationship("User", back_populates="basic_data")
     logs = relationship("BasicDataLog", back_populates="basic_data", cascade="all, delete-orphan")
+    calculator_records = relationship("Calculator", back_populates="basic_data", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<BasicData(user_id={self.user_id}, month={self.month}, year={self.year}, activity_type={self.activity_type})>" 

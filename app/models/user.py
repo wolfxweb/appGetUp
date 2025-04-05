@@ -20,4 +20,7 @@ class User(Base):
     terms_accepted = Column(Boolean, default=False)
     
     # Relacionamento com Dados Básicos
-    basic_data = relationship("BasicData", back_populates="user", cascade="all, delete-orphan") 
+    basic_data = relationship("BasicData", back_populates="user", cascade="all, delete-orphan")
+    
+    # Relacionamento com registros da Calculadora
+    calculator_records = relationship("Calculator", back_populates="user", cascade="all, delete-orphan") 

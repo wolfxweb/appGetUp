@@ -9,7 +9,7 @@ from starlette.middleware.sessions import SessionMiddleware
 import secrets
 
 from app.database.db import engine, Base
-from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
 from app.routes.auth import get_current_user
 
 # Criar diretório de logs se não existir
@@ -64,6 +64,7 @@ app.include_router(profile.router)
 app.include_router(basic_data.router)
 app.include_router(diagnostico.router)
 app.include_router(priorities.router)
+app.include_router(calculator.router)
 
 @app.get("/", response_class=HTMLResponse)
 async def home(request: Request, current_user = Depends(get_current_user)):
