@@ -111,12 +111,12 @@ content %} {% with active_page='basic_data' %} {% include
                   </td>
                   {% endif %}
                   <td>
-                    <div class="btn-group" role="group">
+                    <div class="d-flex gap-1">
                       <a
                         href="/basic-data/edit/{{ data.id }}"
-                        class="btn btn-sm btn-outline-primary"
+                        class="btn btn-sm btn-primary"
                       >
-                        <i class="bi bi-pencil"></i>
+                        <i class="bi bi-pencil" style="color: white !important;"></i>
                       </a>
                       <form
                         method="post"
@@ -126,9 +126,9 @@ content %} {% with active_page='basic_data' %} {% include
                       >
                         <button
                           type="submit"
-                          class="btn btn-sm btn-outline-danger"
+                          class="btn btn-sm btn-danger"
                         >
-                          <i class="bi bi-trash"></i>
+                          <i class="bi bi-trash" style="color: white !important;"></i>
                         </button>
                       </form>
                     </div>
