@@ -236,7 +236,7 @@ async def save_basic_data(
         else:
             is_current_bool = bool(is_current)
             
-        logger.info(f"Processando dados básicos para usuário {current_user.id}")
+        logger.info(f"Processando dados básicos para usuário {current_user.id} em modo {'edição' if edit_mode else 'criação'}")
         
         # Converter valores monetários de string para float
         sales_revenue_float = float(sales_revenue.replace('R$', '').replace('.', '').replace(',', '.').strip())
@@ -274,20 +274,20 @@ async def save_basic_data(
             'is_current': is_current_bool,
             'activity_type': current_user.activity_type
         }
-        
-        # Verificar se já existe um registro para o mesmo mês/ano
-        result = await db.execute(
-            select(BasicData)
-            .filter(
-                BasicData.user_id == current_user.id,
-                BasicData.month == month,
-                BasicData.year == year
-            )
-        )
-        existing_data = result.scalar_one_or_none()
-        
-        # Se estamos em modo de edição
+
+        # Se estiver em modo de edição, buscar o registro existente pelo mês/ano
         if edit_mode:
+            logger.info(f"Modo de edição ativado para mês {month}/{year}")
+            result = await db.execute(
+                select(BasicData)
+                .filter(
+                    BasicData.user_id == current_user.id,
+                    BasicData.month == month,
+                    BasicData.year == year
+                )
+            )
+            existing_data = result.scalar_one_or_none()
+
             if existing_data:
                 # Armazenar dados antigos para log
                 old_data_dict = {
@@ -316,16 +316,20 @@ async def save_basic_data(
                 if changes:
                     log_entry = BasicDataLog(
                         basic_data_id=existing_data.id,
-                        user_id=current_user.id,
-                        changes="\n".join(changes),
+                        change_description="\n".join(changes),
                         created_at=datetime.now()
                     )
                     db.add(log_entry)
                 
                 await db.commit()
                 await db.refresh(existing_data)
+                
+                return RedirectResponse(
+                    url="/basic-data",
+                    status_code=status.HTTP_303_SEE_OTHER
+                )
             else:
-                # Se não encontrou o registro para editar
+                logger.error(f"Registro não encontrado para edição: mês {month}/{year}")
                 return templates.TemplateResponse(
                     "basic_data_form.html",
                     {
@@ -337,9 +341,20 @@ async def save_basic_data(
                     }
                 )
         else:
-            # Se não estamos em modo de edição
+            # Se não estiver em modo de edição, verificar se já existe registro
+            logger.info(f"Verificando se já existe registro para mês {month}/{year}")
+            result = await db.execute(
+                select(BasicData)
+                .filter(
+                    BasicData.user_id == current_user.id,
+                    BasicData.month == month,
+                    BasicData.year == year
+                )
+            )
+            existing_data = result.scalar_one_or_none()
+
             if existing_data:
-                # Se já existe um registro, retornar erro
+                logger.warning(f"Já existe registro para mês {month}/{year}")
                 return templates.TemplateResponse(
                     "basic_data_form.html",
                     {
@@ -350,21 +365,21 @@ async def save_basic_data(
                         "current_year": year
                     }
                 )
-            else:
-                # Criar novo registro
-                new_basic_data = BasicData(
-                    user_id=current_user.id,
-                    **data_dict
-                )
-                db.add(new_basic_data)
-                await db.commit()
-                await db.refresh(new_basic_data)
-        
-        # Redirecionar para a lista após sucesso
-        return RedirectResponse(
-            url="/basic-data",
-            status_code=status.HTTP_303_SEE_OTHER
-        )
+
+            # Criar novo registro
+            logger.info(f"Criando novo registro para mês {month}/{year}")
+            new_basic_data = BasicData(
+                user_id=current_user.id,
+                **data_dict
+            )
+            db.add(new_basic_data)
+            await db.commit()
+            await db.refresh(new_basic_data)
+
+            return RedirectResponse(
+                url="/basic-data",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
         
     except Exception as e:
         logger.error(f"Erro ao salvar dados básicos: {str(e)}")

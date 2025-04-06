@@ -106,6 +106,8 @@
                         <input type="hidden" name="confirm_update" value="true">
                         {% endif %}
                       
+                        <input type="hidden" name="edit_mode" value="{{ 'true' if edit_mode else 'false' }}">
+                      
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="month" class="form-label">
@@ -733,7 +735,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para verificar se já existem dados para o mês/ano selecionados
     async function checkExistingData() {
-        if (isEditMode) return; // Não verificar em modo de edição
+        // Se estiver em modo de edição, não fazer a verificação
+        if (isEditMode) {
+            console.log('Modo de edição: true, não verificando dados existentes');
+            return;
+        }
         
         const month = document.getElementById('month').value;
         const year = document.getElementById('year').value;
@@ -829,6 +835,14 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
+        // Se estiver em modo de edição, enviar o formulário diretamente
+        if (isEditMode) {
+            console.log('Modo de edição: true, enviando formulário diretamente');
+            prepareFormData();
+            form.submit();
+            return;
+        }
+
         // Se já foi confirmado, permite o envio
         if (isConfirmed) {
             prepareFormData();
@@ -836,14 +850,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Se não estiver em modo de edição, envia o formulário diretamente
-        if (!isEditMode) {
-            prepareFormData();
-            form.submit();
-            return;
-        }
-
-        // Verifica se já existe registro para o mês/ano selecionado
+        // Verifica se já existe registro para o mês/ano selecionado (apenas para novo registro)
         const month = document.getElementById('month').value;
         const year = document.getElementById('year').value;
         

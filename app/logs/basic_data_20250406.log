@@ -856,3 +856,66 @@
 2025-04-06 18:12:30,982 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5
 2025-04-06 18:13:08,948 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5
 2025-04-06 18:13:22,133 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5
+2025-04-06 18:17:29,954 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5
+2025-04-06 18:17:37,955 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5 em modo criação
+2025-04-06 18:18:57,700 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5 em modo criação
+2025-04-06 18:19:27,390 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5 em modo edição
+2025-04-06 18:19:27,390 - app.routes.basic_data - INFO - Modo de edição ativado para mês 4/2025
+2025-04-06 18:19:27,398 - app.routes.basic_data - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 21 para 215
+2025-04-06 18:19:27,399 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 200,00 para R$ 20000,00
+2025-04-06 18:19:27,399 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 200,00 para R$ 20000,00
+2025-04-06 18:19:27,399 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 200,00 para R$ 20000,00
+2025-04-06 18:19:27,399 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 200,00 para R$ 20000,00
+2025-04-06 18:19:27,399 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 200,00 para R$ 20000,00
+2025-04-06 18:19:27,399 - app.routes.basic_data - ERROR - Erro ao salvar dados básicos: 'user_id' is an invalid keyword argument for BasicDataLog
+2025-04-06 18:19:57,339 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5 em modo edição
+2025-04-06 18:19:57,339 - app.routes.basic_data - INFO - Modo de edição ativado para mês 4/2025
+2025-04-06 18:19:57,342 - app.routes.basic_data - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 21 para 215
+2025-04-06 18:19:57,342 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 200,00 para R$ 20000,00
+2025-04-06 18:19:57,342 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 200,00 para R$ 20000,00
+2025-04-06 18:19:57,342 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 200,00 para R$ 20000,00
+2025-04-06 18:19:57,342 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 200,00 para R$ 20000,00
+2025-04-06 18:19:57,342 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 200,00 para R$ 20000,00
+2025-04-06 18:19:57,342 - app.routes.basic_data - ERROR - Erro ao salvar dados básicos: 'user_id' is an invalid keyword argument for BasicDataLog
+2025-04-06 18:20:07,193 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5 em modo edição
+2025-04-06 18:20:07,193 - app.routes.basic_data - INFO - Modo de edição ativado para mês 4/2025
+2025-04-06 18:20:07,197 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 200,00 para R$ 20000,00
+2025-04-06 18:20:07,197 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 200,00 para R$ 20000,00
+2025-04-06 18:20:07,197 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 200,00 para R$ 20000,00
+2025-04-06 18:20:07,197 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 200,00 para R$ 20000,00
+2025-04-06 18:20:07,197 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 200,00 para R$ 20000,00
+2025-04-06 18:20:07,198 - app.routes.basic_data - INFO - Alteração detectada: Margem de Lucro Ideal (Serviços) de 2.0 para 28.0
+2025-04-06 18:20:07,199 - app.routes.basic_data - ERROR - Erro ao salvar dados básicos: 'user_id' is an invalid keyword argument for BasicDataLog
+2025-04-06 18:20:41,756 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2 em modo edição
+2025-04-06 18:20:41,757 - app.routes.basic_data - INFO - Modo de edição ativado para mês 1/2025
+2025-04-06 18:20:41,759 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 6500,00 para R$ 650000,00
+2025-04-06 18:20:41,760 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:20:41,760 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:20:41,760 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:20:41,760 - app.routes.basic_data - INFO - Alteração detectada: Horas de Trabalho por Semana de 50.0 para 59.0
+2025-04-06 18:20:41,760 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:20:41,760 - app.routes.basic_data - ERROR - Erro ao salvar dados básicos: 'user_id' is an invalid keyword argument for BasicDataLog
+2025-04-06 18:20:56,379 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2 em modo edição
+2025-04-06 18:20:56,380 - app.routes.basic_data - INFO - Modo de edição ativado para mês 12/2025
+2025-04-06 18:20:56,382 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 65000,00 para R$ 6500000,00
+2025-04-06 18:20:56,382 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:20:56,382 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:20:56,382 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:20:56,382 - app.routes.basic_data - INFO - Alteração detectada: Horas de Trabalho por Semana de 20.0 para 203.0
+2025-04-06 18:20:56,383 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:20:56,383 - app.routes.basic_data - ERROR - Erro ao salvar dados básicos: 'user_id' is an invalid keyword argument for BasicDataLog
+2025-04-06 18:21:46,753 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2 em modo edição
+2025-04-06 18:21:46,753 - app.routes.basic_data - INFO - Modo de edição ativado para mês 12/2025
+2025-04-06 18:21:46,757 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 65000,00 para R$ 6500000,00
+2025-04-06 18:21:46,757 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:21:46,757 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:21:46,757 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:21:46,757 - app.routes.basic_data - INFO - Alteração detectada: Horas de Trabalho por Semana de 20.0 para 203.0
+2025-04-06 18:21:46,757 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:21:53,374 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2 em modo edição
+2025-04-06 18:21:53,374 - app.routes.basic_data - INFO - Modo de edição ativado para mês 12/2025
+2025-04-06 18:21:53,407 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 6500000,00 para R$ 650000000,00
+2025-04-06 18:21:53,407 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 500000,00 para R$ 5000,00
+2025-04-06 18:21:53,407 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 500000,00 para R$ 50000000,00
+2025-04-06 18:21:53,407 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 500000,00 para R$ 50000000,00
+2025-04-06 18:21:53,407 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 500000,00 para R$ 50000000,00
