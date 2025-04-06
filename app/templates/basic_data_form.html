@@ -253,36 +253,60 @@
                             {% endif %}
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    <!-- Tabela de Logs - Adicionada aqui -->
-                    {% if edit_mode %}
-                        <div class="card mt-4">
-                            <div class="card-header bg-primary text-white">
-                                <h5 class="mb-0">Histórico de Alterações</h5>
-                            </div>
-                            <div class="card-body bg-light">
-                                <table class="table table-striped">
-                                    <thead>
-                                       
-                                    </thead>
-                                    <tbody>
-                                        {% for log in logs %}
-                                        <tr>
-                                            <td>{{ log.change_description }}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                                {% if logs|length == 0 %}
-                                <p class="text-muted">Nenhuma alteração registrada.</p>
-                                {% endif %}
+    <!-- Tabela de Logs - Movida para fora do card principal -->
+    {% if edit_mode %}
+    <div class="row mt-4">
+        <div class="col-md-10 mx-auto">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Histórico de Alterações</h5>
+                </div>
+                <div class="card-body">
+                    <!-- Filtros para o histórico -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                <input type="text" class="form-control" id="logFilter" placeholder="Filtrar por descrição...">
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-calendar"></i></span>
+                                <input type="date" class="form-control" id="dateFilter">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <table class="table table-striped" id="logsTable">
+                        <thead>
+                            <tr>
+                                <th>Descrição da Alteração</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for log in logs %}
+                            <tr>
+                                <td>{{ log.change_description }}</td>
+                                <td>{{ log.created_at.strftime('%d/%m/%Y') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if logs|length == 0 %}
+                    <p class="text-muted">Nenhuma alteração registrada.</p>
                     {% endif %}
                 </div>
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
 
 <!-- Modal de Confirmação -->
@@ -748,6 +772,64 @@ document.addEventListener('DOMContentLoaded', function() {
         prepareFormData();
         form.submit();
     });
+    
+    // Implementação do filtro para a tabela de logs
+    const logFilter = document.getElementById('logFilter');
+    const dateFilter = document.getElementById('dateFilter');
+    const logsTable = document.getElementById('logsTable');
+    
+    if (logFilter && dateFilter && logsTable) {
+        // Função para filtrar a tabela
+        function filterLogsTable() {
+            const filterText = logFilter.value.toLowerCase();
+            const filterDate = dateFilter.value;
+            
+            const rows = logsTable.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const description = row.cells[0].textContent.toLowerCase();
+                const dateCell = row.cells[1].textContent;
+                
+                // Verificar se a descrição contém o texto do filtro
+                const matchesText = description.includes(filterText);
+                
+                // Verificar se a data corresponde ao filtro de data
+                let matchesDate = true;
+                if (filterDate) {
+                    // Converter a data do formato dd/mm/yyyy para yyyy-mm-dd para comparação
+                    const dateParts = dateCell.split(' ')[0].split('/');
+                    const rowDate = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`;
+                    matchesDate = rowDate === filterDate;
+                }
+                
+                // Mostrar ou esconder a linha com base nos filtros
+                if (matchesText && matchesDate) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+            
+            // Verificar se há linhas visíveis
+            const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
+            const noResultsMessage = logsTable.nextElementSibling;
+            
+            if (visibleRows.length === 0) {
+                if (!noResultsMessage || !noResultsMessage.classList.contains('text-muted')) {
+                    const message = document.createElement('p');
+                    message.className = 'text-muted mt-3';
+                    message.textContent = 'Nenhum resultado encontrado.';
+                    logsTable.parentNode.insertBefore(message, logsTable.nextSibling);
+                }
+            } else if (noResultsMessage && noResultsMessage.classList.contains('text-muted')) {
+                noResultsMessage.remove();
+            }
+        }
+        
+        // Adicionar eventos para os filtros
+        logFilter.addEventListener('input', filterLogsTable);
+        dateFilter.addEventListener('change', filterLogsTable);
+    }
 });
 </script>
 {% endblock %}
