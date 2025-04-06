@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
@@ -10,10 +10,10 @@ load_dotenv()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # Configurar a URL do banco de dados
-DATABASE_URL = f"sqlite:///{os.path.join(BASE_DIR, 'app.db')}"
+DATABASE_URL = f"sqlite+aiosqlite:///{os.path.join(BASE_DIR, 'app.db')}"
 
-# Criar o engine com as configurações corretas para SQLite
-engine = create_engine(
+# Criar o engine assíncrono
+engine = create_async_engine(
     DATABASE_URL,
     connect_args={
         "check_same_thread": False,
@@ -24,14 +24,19 @@ engine = create_engine(
     echo=True
 )
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# Criar o sessionmaker assíncrono
+async_session = sessionmaker(
+    engine,
+    class_=AsyncSession,
+    expire_on_commit=False
+)
 
 Base = declarative_base()
 
 # Função para obter uma sessão de banco de dados
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close() 
+async def get_db():
+    async with async_session() as session:
+        try:
+            yield session
+        finally:
+            await session.close() 
