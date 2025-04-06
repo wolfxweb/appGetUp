@@ -749,3 +749,27 @@
 2025-04-06 13:41:10,376 - app.routes.basic_data - INFO - Resultado da verificação: False
 2025-04-06 13:41:11,644 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 5, ano 2025
 2025-04-06 13:41:11,646 - app.routes.basic_data - INFO - Resultado da verificação: True
+2025-04-06 13:41:54,921 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 6, ano 2025
+2025-04-06 13:41:54,925 - app.routes.basic_data - INFO - Resultado da verificação: False
+2025-04-06 13:42:47,660 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 4, ano 2025
+2025-04-06 13:42:47,661 - app.routes.basic_data - INFO - Resultado da verificação: True
+2025-04-06 13:42:51,973 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 5, ano 2025
+2025-04-06 13:42:51,974 - app.routes.basic_data - INFO - Resultado da verificação: True
+2025-04-06 13:42:53,814 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 7, ano 2025
+2025-04-06 13:42:53,816 - app.routes.basic_data - INFO - Resultado da verificação: False
+2025-04-06 13:43:37,969 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 13:43:37,969 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=5000.0, sales_expenses=5000.0
+2025-04-06 13:43:40,847 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 4, ano 2025
+2025-04-06 13:43:40,848 - app.routes.basic_data - INFO - Resultado da verificação: True
+2025-04-06 13:43:48,133 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 7, ano 2025
+2025-04-06 13:43:48,134 - app.routes.basic_data - INFO - Resultado da verificação: False
+2025-04-06 13:44:20,299 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 13:44:20,299 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=5000.0, sales_expenses=5000.0
+2025-04-06 13:44:42,301 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 4, ano 2025
+2025-04-06 13:44:42,302 - app.routes.basic_data - INFO - Resultado da verificação: True
+2025-04-06 13:44:45,418 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 4, ano 2025
+2025-04-06 13:44:45,419 - app.routes.basic_data - INFO - Resultado da verificação: True
+2025-04-06 13:44:47,383 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 6, ano 2025
+2025-04-06 13:44:47,384 - app.routes.basic_data - INFO - Resultado da verificação: False
+2025-04-06 13:44:55,384 - app.routes.basic_data - INFO - Verificando dados para usuário 2, mês 4, ano 2025
+2025-04-06 13:44:55,387 - app.routes.basic_data - INFO - Resultado da verificação: True
