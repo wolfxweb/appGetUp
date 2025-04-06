@@ -65,6 +65,7 @@ content %} {% with active_page='basic_data' %} {% include
                   <th>Clientes Atendidos</th>
                   <th>Faturamento</th>
                   <th>Gastos com Vendas</th>
+                  <th>Gastos com Insumos e Produtos</th>
                   {% if user.activity_type == 'Serviços' %}
                   <th>Pró-labore</th>
                   <th>Demais Custos Fixos</th>
@@ -89,13 +90,14 @@ content %} {% with active_page='basic_data' %} {% include
                   <td>{{ data.clients_served }}</td>
                   <td>R$ {{ "{:,.2f}".format(data.sales_revenue).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
                   <td>R$ {{ "{:,.2f}".format(data.sales_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
+                  <td>R$ {{ "{:,.2f}".format(data.input_product_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
                   {% if user.activity_type == 'Serviços' %}
                   <td>
                     R$ {{ "{:,.2f}".format(data.pro_labore).replace(",", "X").replace(".", ",").replace("X", ".") if data.pro_labore is not none else 'N/A' }}
                   </td>
                   <td>R$ {{ "{:,.2f}".format(data.other_fixed_costs).replace(",", "X").replace(".", ",").replace("X", ".") if data.other_fixed_costs is not none else 'N/A' }}</td>
                   <td>
-                    {{ data.work_hours_per_week if data.work_hours_per_week is not none else 'N/A' }}
+                    {{ "%.0f"|format(data.work_hours_per_week) if data.work_hours_per_week is not none else 'N/A' }}
                   </td>
                   <td>
                     {{ "%.0f"|format(data.ideal_service_profit_margin) if data.ideal_service_profit_margin is not none else 'N/A' }}%
