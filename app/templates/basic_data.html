@@ -41,18 +41,34 @@ content %} {% with active_page='basic_data' %} {% include
 
         <div class="card-body">
           {% if basic_data %}
+          <!-- Filtros para a tabela -->
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="filterMonth" class="form-label">Mês/Ano</label>
+              <input type="text" class="form-control" id="filterMonth" placeholder="Filtrar por mês/ano">
+            </div>
+            <div class="col-md-4">
+              <label for="filterClients" class="form-label">Clientes Atendidos</label>
+              <input type="number" class="form-control" id="filterClients" placeholder="Filtrar por clientes">
+            </div>
+            <div class="col-md-4">
+              <label for="filterRevenue" class="form-label">Faturamento</label>
+              <input type="number" class="form-control" id="filterRevenue" placeholder="Filtrar por faturamento">
+            </div>
+          </div>
+          
           <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover" id="basicDataTable">
               <thead>
                 <tr>
                   <th>Mês/Ano</th>
                   <th>Clientes Atendidos</th>
                   <th>Faturamento</th>
                   <th>Gastos com Vendas</th>
-                  <th>É o Atual?</th>
                   {% if user.activity_type == 'Serviços' %}
                   <th>Pró-labore</th>
                   <th>Demais Custos Fixos</th>
+                  <th>Horas de Trabalho por Semana</th>
                   <th>Margem de Lucro Ideal</th>
                   {% elif user.activity_type in ['Comércio', 'Indústria'] %}
                   <th>Custos Fixos</th>
@@ -71,29 +87,25 @@ content %} {% with active_page='basic_data' %} {% include
                     'Novembro', 'Dezembro'][data.month - 1] }} {{ data.year }}
                   </td>
                   <td>{{ data.clients_served }}</td>
-                  <td>
-                    {{ data.sales_revenue }}
-                  </td>
-                  <td>
-                    {{ data.sales_expenses }}
-                  </td>
-                  <td>{{ 'Sim' if data.is_current else 'Não' }}</td>
+                  <td>R$ {{ "{:,.2f}".format(data.sales_revenue).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
+                  <td>R$ {{ "{:,.2f}".format(data.sales_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
                   {% if user.activity_type == 'Serviços' %}
                   <td>
-                    {{ data.pro_labore if data.pro_labore is not none else 'N/A' }}
+                    R$ {{ "{:,.2f}".format(data.pro_labore).replace(",", "X").replace(".", ",").replace("X", ".") if data.pro_labore is not none else 'N/A' }}
+                  </td>
+                  <td>R$ {{ "{:,.2f}".format(data.other_fixed_costs).replace(",", "X").replace(".", ",").replace("X", ".") if data.other_fixed_costs is not none else 'N/A' }}</td>
+                  <td>
+                    {{ data.work_hours_per_week if data.work_hours_per_week is not none else 'N/A' }}
                   </td>
                   <td>
-                    {{ data.other_fixed_costs if data.other_fixed_costs is not none else 'N/A' }}
-                  </td>
-                  <td>
-                    {{ data.ideal_service_profit_margin if data.ideal_service_profit_margin is not none else 'N/A' }}
+                    {{ "%.0f"|format(data.ideal_service_profit_margin) if data.ideal_service_profit_margin is not none else 'N/A' }}%
                   </td>
                   {% elif user.activity_type in ['Comércio', 'Indústria'] %}
                   <td>
                     {{ data.fixed_costs if data.fixed_costs is not none else 'N/A' }}
                   </td>
                   <td>
-                    {{ data.ideal_profit_margin if data.ideal_profit_margin is not none else 'N/A' }}
+                    {{ "%.0f"|format(data.ideal_profit_margin) if data.ideal_profit_margin is not none else 'N/A' }}%
                   </td>
                   {% endif %}
                   <td>
@@ -145,4 +157,37 @@ content %} {% with active_page='basic_data' %} {% include
     visibility: visible !important;
   }
 </style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Função para filtrar a tabela
+    function filterTable() {
+        const monthFilter = document.getElementById('filterMonth').value.toLowerCase();
+        const clientsFilter = document.getElementById('filterClients').value;
+        const revenueFilter = document.getElementById('filterRevenue').value;
+        
+        const rows = document.getElementById('basicDataTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        
+        for (let row of rows) {
+            const cells = row.getElementsByTagName('td');
+            const month = cells[0].textContent.toLowerCase();
+            const clients = cells[1].textContent;
+            const revenue = parseFloat(cells[2].textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
+            
+            const matchesMonth = month.includes(monthFilter);
+            const matchesClients = !clientsFilter || clients.includes(clientsFilter);
+            const matchesRevenue = !revenueFilter || revenue >= parseFloat(revenueFilter);
+            
+            row.style.display = (matchesMonth && matchesClients && matchesRevenue) ? '' : 'none';
+        }
+    }
+    
+    // Adicionar eventos de filtro
+    document.getElementById('filterMonth').addEventListener('input', filterTable);
+    document.getElementById('filterClients').addEventListener('input', filterTable);
+    document.getElementById('filterRevenue').addEventListener('input', filterTable);
+});
+</script>
 {% endblock %}
