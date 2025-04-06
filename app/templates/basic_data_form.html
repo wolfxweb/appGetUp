@@ -295,9 +295,9 @@
         </div>
     </div>
 </div>
-
+  
 <!-- Help Modals -->
-<div class="modal fade" id="monthHelpModal" tabindex="-1">
+<div class="modal fade" id="monthHelpModal" tabindex="-1" aria-labelledby="monthHelpModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -492,6 +492,23 @@ document.addEventListener('DOMContentLoaded', function() {
         'pro_labore', 
         'other_fixed_costs'
     ];
+
+    // Inicializar todas as modais de ajuda com backdrop: false para evitar que bloqueiem a interação com a página
+    document.querySelectorAll('.modal').forEach(modalElement => {
+        // Criar uma instância do modal do Bootstrap com backdrop: false
+        const modal = new bootstrap.Modal(modalElement, {
+            backdrop: false,
+            keyboard: true
+        });
+        
+        // Adicionar evento para fechar a modal quando clicar fora dela
+        modalElement.addEventListener('click', function(e) {
+            // Se o clique foi fora do conteúdo da modal
+            if (e.target === modalElement) {
+                modal.hide();
+            }
+        });
+    });
 
     // Form submission handling
     const form = document.querySelector('form');

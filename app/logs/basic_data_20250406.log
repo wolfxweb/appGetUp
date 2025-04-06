@@ -64,3 +64,35 @@
 2025-04-06 10:43:49,857 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=1000.0, sales_expenses=10.0
 2025-04-06 10:43:55,539 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 9
 2025-04-06 10:43:55,539 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=1000.0, sales_expenses=10.0
+2025-04-06 10:44:19,436 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 9
+2025-04-06 10:44:19,437 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=1000.0, sales_expenses=10.0
+2025-04-06 10:45:48,127 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 9
+2025-04-06 10:45:48,128 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=1000.0, sales_expenses=10.0
+2025-04-06 10:46:07,522 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 9
+2025-04-06 10:46:07,522 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=1000.0, sales_expenses=10.0
+2025-04-06 10:48:11,543 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:48:11,543 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:48:20,921 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:48:20,921 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:48:49,318 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:48:49,318 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:49:03,849 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:49:03,849 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:49:04,852 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:49:04,853 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:49:13,661 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:49:13,661 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:49:23,712 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:49:23,712 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:50:45,980 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:50:45,981 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:51:40,167 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:51:40,168 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:52:51,078 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:52:51,078 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:53:11,950 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:53:11,950 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:54:22,956 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:54:22,956 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 10:57:48,942 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 10:57:48,943 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
