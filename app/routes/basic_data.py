@@ -229,23 +229,6 @@ async def save_basic_data(
     is_current: str = Form(False),
     edit_mode: bool = Form(False)
 ):
-    # Inicializar new_data com valores padrão para evitar o erro de referência antes da atribuição
-    new_data = {
-        'clients_served': 0,
-        'sales_revenue': 0.0,
-        'sales_expenses': 0.0,
-        'input_product_expenses': 0.0,
-        'fixed_costs': None,
-        'ideal_profit_margin': None,
-        'service_capacity': None,
-        'pro_labore': None,
-        'work_hours_per_week': None,
-        'other_fixed_costs': None,
-        'ideal_service_profit_margin': None,
-        'is_current': False,
-        'activity_type': current_user.activity_type  # Adicionar o tipo de atividade do usuário
-    }
-    
     try:
         # Verificar se is_current é uma string ou um booleano
         if isinstance(is_current, str):
@@ -273,8 +256,8 @@ async def save_basic_data(
         if other_fixed_costs:
             other_fixed_costs_float = float(other_fixed_costs.replace('R$', '').replace('.', '').replace(',', '.').strip())
         
-        # Atualizar new_data com os valores convertidos
-        new_data.update({
+        # Preparar os dados para atualização/inserção
+        data_dict = {
             'month': month,
             'year': year,
             'clients_served': clients_served,
@@ -288,8 +271,9 @@ async def save_basic_data(
             'work_hours_per_week': work_hours_per_week,
             'other_fixed_costs': other_fixed_costs_float,
             'ideal_service_profit_margin': ideal_service_profit_margin,
-            'is_current': is_current_bool
-        })
+            'is_current': is_current_bool,
+            'activity_type': current_user.activity_type
+        }
         
         # Verificar se já existe um registro para o mesmo mês/ano
         result = await db.execute(
@@ -302,72 +286,81 @@ async def save_basic_data(
         )
         existing_data = result.scalar_one_or_none()
         
-        if existing_data and not edit_mode:
-            # Se já existe e não estamos em modo de edição, retornar erro
-            return templates.TemplateResponse(
-                "basic_data_form.html",
-                {
-                    "request": request,
-                    "user": current_user,
-                    "error_message": f"Já existe um registro para {calendar.month_name[month]}/{year}. Use a opção de edição.",
-                    "current_month": month,
-                    "current_year": year
+        # Se estamos em modo de edição
+        if edit_mode:
+            if existing_data:
+                # Armazenar dados antigos para log
+                old_data_dict = {
+                    'clients_served': existing_data.clients_served,
+                    'sales_revenue': existing_data.sales_revenue,
+                    'sales_expenses': existing_data.sales_expenses,
+                    'input_product_expenses': existing_data.input_product_expenses,
+                    'fixed_costs': existing_data.fixed_costs,
+                    'ideal_profit_margin': existing_data.ideal_profit_margin,
+                    'service_capacity': existing_data.service_capacity,
+                    'pro_labore': existing_data.pro_labore,
+                    'work_hours_per_week': existing_data.work_hours_per_week,
+                    'other_fixed_costs': existing_data.other_fixed_costs,
+                    'ideal_service_profit_margin': existing_data.ideal_service_profit_margin,
+                    'is_current': existing_data.is_current
                 }
-            )
-        
-        # Se estamos em modo de edição, atualizar o registro existente
-        if edit_mode and existing_data:
-            # Armazenar dados antigos para log
-            old_data_dict = {
-                'clients_served': existing_data.clients_served,
-                'sales_revenue': existing_data.sales_revenue,
-                'sales_expenses': existing_data.sales_expenses,
-                'input_product_expenses': existing_data.input_product_expenses,
-                'fixed_costs': existing_data.fixed_costs,
-                'ideal_profit_margin': existing_data.ideal_profit_margin,
-                'service_capacity': existing_data.service_capacity,
-                'pro_labore': existing_data.pro_labore,
-                'work_hours_per_week': existing_data.work_hours_per_week,
-                'other_fixed_costs': existing_data.other_fixed_costs,
-                'ideal_service_profit_margin': existing_data.ideal_service_profit_margin,
-                'is_current': existing_data.is_current
-            }
-            
-            # Atualizar os campos
-            for key, value in new_data.items():
-                setattr(existing_data, key, value)
-            
-            # Registrar as alterações
-            changes = compare_and_log_changes(db, old_data_dict, new_data)
-            
-            # Criar log de alterações
-            if changes:
-                log_entry = BasicDataLog(
-                    basic_data_id=existing_data.id,
-                    user_id=current_user.id,
-                    changes="\n".join(changes),
-                    created_at=datetime.now()
+                
+                # Atualizar os campos
+                for key, value in data_dict.items():
+                    setattr(existing_data, key, value)
+                
+                # Registrar as alterações
+                changes = compare_and_log_changes(db, old_data_dict, data_dict)
+                
+                # Criar log de alterações
+                if changes:
+                    log_entry = BasicDataLog(
+                        basic_data_id=existing_data.id,
+                        user_id=current_user.id,
+                        changes="\n".join(changes),
+                        created_at=datetime.now()
+                    )
+                    db.add(log_entry)
+                
+                await db.commit()
+                await db.refresh(existing_data)
+            else:
+                # Se não encontrou o registro para editar
+                return templates.TemplateResponse(
+                    "basic_data_form.html",
+                    {
+                        "request": request,
+                        "user": current_user,
+                        "error_message": "Registro não encontrado para edição.",
+                        "current_month": month,
+                        "current_year": year
+                    }
                 )
-                db.add(log_entry)
-            
-            await db.commit()
-            await db.refresh(existing_data)
-            
-            return RedirectResponse(
-                url="/basic-data",
-                status_code=status.HTTP_303_SEE_OTHER
-            )
+        else:
+            # Se não estamos em modo de edição
+            if existing_data:
+                # Se já existe um registro, retornar erro
+                return templates.TemplateResponse(
+                    "basic_data_form.html",
+                    {
+                        "request": request,
+                        "user": current_user,
+                        "error_message": f"Já existe um registro para {calendar.month_name[month]}/{year}. Use a opção de edição.",
+                        "current_month": month,
+                        "current_year": year
+                    }
+                )
+            else:
+                # Criar novo registro
+                new_basic_data = BasicData(
+                    user_id=current_user.id,
+                    **data_dict
+                )
+                db.add(new_basic_data)
+                await db.commit()
+                await db.refresh(new_basic_data)
         
-        # Se não estamos em modo de edição, criar um novo registro
-        new_basic_data = BasicData(
-            user_id=current_user.id,
-            **new_data
-        )
-        
-        db.add(new_basic_data)
-        await db.commit()
-        await db.refresh(new_basic_data)
-        
+        # Redirecionar para a lista após sucesso
         return RedirectResponse(
             url="/basic-data",
             status_code=status.HTTP_303_SEE_OTHER
