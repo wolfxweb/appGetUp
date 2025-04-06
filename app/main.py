@@ -12,6 +12,9 @@ from app.database.db import engine, Base
 from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
 from app.routes.auth import get_current_user
 
+# Adicionar o Mangum como adaptador para a Vercel
+from mangum import Mangum
+
 # Criar diretório de logs se não existir
 log_dir = "logs"
 os.makedirs(log_dir, exist_ok=True)
@@ -72,6 +75,9 @@ async def home(request: Request, current_user = Depends(get_current_user)):
         "request": request,
         "current_user": current_user
     })
+
+# Criar o handler para a Vercel
+handler = Mangum(app)
 
 if __name__ == "__main__":
     import uvicorn
