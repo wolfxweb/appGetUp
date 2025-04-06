@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 
 from app.database.db import get_db
 from app.models.basic_data import BasicData
@@ -15,18 +16,18 @@ templates = Jinja2Templates(directory="app/templates")
 async def priorities_page(
     request: Request,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     if not current_user:
         return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
     
     # Buscar dados básicos do usuário
-    basic_data_list = db.query(BasicData).filter(
-        BasicData.user_id == current_user.id
-    ).order_by(
-        BasicData.year.desc(),
-        BasicData.month.desc()
-    ).all()
+    result = await db.execute(
+        select(BasicData)
+        .filter(BasicData.user_id == current_user.id)
+        .order_by(BasicData.year.desc(), BasicData.month.desc())
+    )
+    basic_data_list = result.scalars().all()
 
     return templates.TemplateResponse(
         "gestao_prioridades.html",
@@ -43,17 +44,21 @@ async def get_basic_data(
     basic_data_id: int,
     request: Request,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     if not current_user:
         return JSONResponse({"error": "Unauthorized"}, status_code=401)
 
     try:
         # Buscar o registro específico
-        basic_data = db.query(BasicData).filter(
-            BasicData.id == basic_data_id,
-            BasicData.user_id == current_user.id
-        ).first()
+        result = await db.execute(
+            select(BasicData)
+            .filter(
+                BasicData.id == basic_data_id,
+                BasicData.user_id == current_user.id
+            )
+        )
+        basic_data = result.scalar_one_or_none()
 
         if not basic_data:
             return JSONResponse({"error": "Not found"}, status_code=404)

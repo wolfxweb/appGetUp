@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Form, Response
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from datetime import datetime, timedelta
 import secrets
 from jose import jwt, JWTError
@@ -18,7 +19,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
 
 # Dependência para obter o usuário atual
-async def get_current_user(request: Request, db: Session = Depends(get_db)):
+async def get_current_user(request: Request, db: AsyncSession = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Não autorizado",
@@ -44,7 +45,8 @@ async def get_current_user(request: Request, db: Session = Depends(get_db)):
         return None
     
     # Use the provided database session
-    user = db.query(User).filter(User.email == email).first()
+    result = await db.execute(select(User).filter(User.email == email))
+    user = result.scalar_one_or_none()
     if user is None:
         return None
     
@@ -69,11 +71,12 @@ async def register(
     password: str = Form(...),
     activation_key: str = Form(None),
     terms_accepted: bool = Form(...),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     try:
         # Verificar se o email já está em uso
-        user_exists = db.query(User).filter(User.email == email).first()
+        result = await db.execute(select(User).filter(User.email == email))
+        user_exists = result.scalar_one_or_none()
         if user_exists:
             return templates.TemplateResponse(
                 "register.html", 
@@ -110,8 +113,8 @@ async def register(
         )
         
         db.add(new_user)
-        db.commit()
-        db.refresh(new_user)
+        await db.commit()
+        await db.refresh(new_user)
         
         # Criar token de acesso
         access_token = create_access_token(
@@ -154,9 +157,10 @@ async def login(
     response: Response,
     email: str = Form(...),
     password: str = Form(...),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
-    user = db.query(User).filter(User.email == email).first()
+    result = await db.execute(select(User).filter(User.email == email))
+    user = result.scalar_one_or_none()
     
     if not user or not verify_password(password, user.password):
         return templates.TemplateResponse(
@@ -189,9 +193,10 @@ async def forgot_password_page(request: Request):
 async def forgot_password(
     request: Request,
     email: str = Form(...),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
-    user = db.query(User).filter(User.email == email).first()
+    result = await db.execute(select(User).filter(User.email == email))
+    user = result.scalar_one_or_none()
     
     if not user:
         return templates.TemplateResponse(
@@ -228,7 +233,7 @@ async def reset_password(
     request: Request,
     token: str = Form(...),
     new_password: str = Form(...),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -238,7 +243,8 @@ async def reset_password(
         if not email or not reset:
             raise HTTPException(status_code=400, detail="Token inválido")
         
-        user = db.query(User).filter(User.email == email).first()
+        result = await db.execute(select(User).filter(User.email == email))
+        user = result.scalar_one_or_none()
         
         if not user:
             raise HTTPException(status_code=404, detail="Usuário não encontrado")
@@ -246,17 +252,22 @@ async def reset_password(
         # Atualizar senha
         hashed_password = get_password_hash(new_password)
         user.password = hashed_password
-        db.commit()
+        await db.commit()
         
         return templates.TemplateResponse(
             "login.html", 
             {"request": request, "success": "Senha atualizada com sucesso. Faça login com sua nova senha."}
         )
-    
+        
     except JWTError:
         return templates.TemplateResponse(
             "reset_password.html", 
-            {"request": request, "error": "Token expirado ou inválido", "token": token}
+            {"request": request, "error": "Token inválido ou expirado"}
+        )
+    except Exception as e:
+        return templates.TemplateResponse(
+            "reset_password.html", 
+            {"request": request, "error": f"Erro ao resetar senha: {str(e)}"}
         )
 
 @router.get("/logout")
@@ -270,46 +281,44 @@ async def edit_basic_data_page(
     request: Request,
     data_id: int,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     page: int = 1,
     per_page: int = 10
 ):
     # Buscar o registro específico
-    basic_data = db.query(BasicData).filter(
-        BasicData.id == data_id,
-        BasicData.user_id == current_user.id
-    ).first()
-
-    if not basic_data:
+    result = await db.execute(select(BasicData).filter(BasicData.id == data_id))
+    data = result.scalar_one_or_none()
+    
+    if not data:
         raise HTTPException(status_code=404, detail="Registro não encontrado")
-
-    # Buscar os logs com paginação
-    total_logs = db.query(BasicDataLog).filter(
-        BasicDataLog.basic_data_id == data_id
-    ).count()
-
-    logs = db.query(BasicDataLog).filter(
-        BasicDataLog.basic_data_id == data_id
-    ).order_by(
-        BasicDataLog.id.asc()
-    ).offset(
-        (page - 1) * per_page
-    ).limit(per_page).all()
-
-    # Calcular total de páginas
+    
+    # Verificar se o registro pertence ao usuário atual
+    if data.user_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Acesso negado")
+    
+    # Buscar logs do registro
+    result = await db.execute(
+        select(BasicDataLog)
+        .filter(BasicDataLog.basic_data_id == data_id)
+        .order_by(BasicDataLog.created_at.desc())
+        .offset((page - 1) * per_page)
+        .limit(per_page)
+    )
+    logs = result.scalars().all()
+    
+    # Contar total de logs para paginação
+    result = await db.execute(
+        select(BasicDataLog)
+        .filter(BasicDataLog.basic_data_id == data_id)
+    )
+    total_logs = len(result.scalars().all())
     total_pages = (total_logs + per_page - 1) // per_page
-
-    return templates.TemplateResponse(
-        "basic_data_form.html",
-        {
-            "request": request,
-            "user": current_user,
-            "basic_data": basic_data,
-            "edit_mode": True,
-            "logs": logs,
-            "current_page": page,
-            "total_pages": total_pages,
-            "per_page": per_page,
-            "total_logs": total_logs
-        }
-    ) 
+    
+    return templates.TemplateResponse("edit_basic_data.html", {
+        "request": request,
+        "data": data,
+        "logs": logs,
+        "page": page,
+        "total_pages": total_pages,
+        "user": current_user
+    }) 
