@@ -122,7 +122,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
                                     <input type="text" class="form-control" id="sales_revenue" name="sales_revenue" 
-                                        value="{{ basic_data.sales_revenue if basic_data else '' }}" required>
+                                        value="{{ (basic_data.sales_revenue/10)|round(2) if basic_data and basic_data.sales_revenue is not none else '' }}" required>
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -133,7 +133,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
                                     <input type="text" class="form-control" id="sales_expenses" name="sales_expenses" 
-                                        value="{{ basic_data.sales_expenses if basic_data else '' }}" required>
+                                        value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '' }}" required>
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -144,7 +144,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
                                     <input type="text" class="form-control" id="input_product_expenses" name="input_product_expenses" 
-                                        value="{{ basic_data.input_product_expenses if basic_data else '' }}" required>
+                                        value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '' }}" required>
                                 </div>
                             </div>
                         </div>
@@ -156,8 +156,11 @@
                                     Custos Fixos 
                                     <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i>
                                 </label>
-                                <input type="text" class="form-control" id="fixed_costs" name="fixed_costs" 
-                                    value="{{ basic_data.fixed_costs if basic_data else '' }}">
+                                <div class="input-group">
+                                    <span class="input-group-text">R$</span>
+                                    <input type="text" class="form-control" id="fixed_costs" name="fixed_costs" 
+                                        value="{{ (basic_data.fixed_costs/10)|round(2) if basic_data and basic_data.fixed_costs is not none else '' }}">
+                                </div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="ideal_profit_margin" class="form-label">
@@ -191,7 +194,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
                                     <input type="text" class="form-control" id="pro_labore" name="pro_labore" 
-                                        value="{{ basic_data.pro_labore if basic_data else '' }}">
+                                        value="{{ (basic_data.pro_labore/10)|round(2) if basic_data and basic_data.pro_labore is not none else '' }}">
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -202,7 +205,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
                                     <input type="text" class="form-control" id="other_fixed_costs" name="other_fixed_costs" 
-                                        value="{{ basic_data.other_fixed_costs if basic_data else '' }}">
+                                        value="{{ (basic_data.other_fixed_costs/10)|round(2) if basic_data and basic_data.other_fixed_costs is not none else '' }}">
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -498,6 +501,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'pro_labore', 
         'other_fixed_costs'
     ];
+    console.log(currencyInputs);
 
     // Função para formatar valor como moeda brasileira (R$)
     function formatCurrency(value) {
