@@ -7,7 +7,7 @@
 {% include 'components/navbar.html' %}
 {% endwith %}
 
-<div class="container">
+<div class="container-fluid p-5">
     {% if not user.activation_key and user.access_level != "Administrador" %}
     <div class="row">
         <div class="col-md-8 mx-auto">
