@@ -511,6 +511,39 @@ document.getElementById('calculatorForm').addEventListener('submit', async funct
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Função para selecionar o mês atual ou o primeiro item disponível
+    function selectCurrentMonthOrFirst() {
+        const basicDataSelect = document.getElementById('basicData');
+        if (!basicDataSelect) return;
+        
+        // Obter o mês e ano atual
+        const now = new Date();
+        const currentMonth = now.getMonth() + 1; // getMonth() retorna 0-11
+        const currentYear = now.getFullYear();
+        
+        // Formatar o mês/ano atual para comparação (ex: "3/2024")
+        const currentMonthYear = `${currentMonth}/${currentYear}`;
+        
+        // Verificar se existe uma opção com o mês/ano atual
+        let foundCurrentMonth = false;
+        for (let i = 0; i < basicDataSelect.options.length; i++) {
+            const option = basicDataSelect.options[i];
+            if (option.text === currentMonthYear) {
+                option.selected = true;
+                foundCurrentMonth = true;
+                break;
+            }
+        }
+        
+        // Se não encontrou o mês atual, seleciona a primeira opção (após a opção padrão)
+        if (!foundCurrentMonth && basicDataSelect.options.length > 1) {
+            basicDataSelect.selectedIndex = 1; // Seleciona a primeira opção real (índice 1)
+        }
+    }
+    
+    // Chamar a função quando a página carregar
+    selectCurrentMonthOrFirst();
+    
     // Função para filtrar os registros
     function filterRecords() {
         const product = document.getElementById('filterProduct').value.toLowerCase();
