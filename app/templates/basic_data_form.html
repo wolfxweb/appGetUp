@@ -219,9 +219,14 @@
 
                         <div class="d-grid mt-4">
                             {% if edit_mode %}
-                                <button type="button" class="btn btn-primary" id="updateButton">
-                                    <i class="bi bi-check-circle"></i> Atualizar Dados
-                                </button>
+                                <div class="d-flex gap-2">
+                                    <button type="button" class="btn btn-primary flex-grow-1" id="updateButton">
+                                        <i class="bi bi-check-circle"></i> Atualizar Dados
+                                    </button>
+                                    <a href="/basic-data" class="btn btn-outline-secondary">
+                                        <i class="bi bi-arrow-left"></i> Voltar
+                                    </a>
+                                </div>
                             {% else %}
                                 <button type="submit" class="btn btn-primary" id="saveButton">
                                     <i class="bi bi-check-circle"></i> Salvar Dados
