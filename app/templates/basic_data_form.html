@@ -28,6 +28,11 @@
     .custom-bg {
         background-color: #f8f9fa; /* Cor de fundo clara, semelhante ao bg-light */
     }
+    
+    /* Estilo para garantir que o X de fechar fique branco */
+    .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
 </style>
 {% endblock %}
 
@@ -71,7 +76,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="month" class="form-label">
                                     Mês* 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#monthHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#monthHelpModal"></i>
                                 </label>
                                 <select class="form-select" id="month" name="month" required {% if edit_mode %}disabled{% endif %}>
                                     {% for month in range(1, 13) %}
@@ -89,7 +94,7 @@
                             <div class="col-md-6 mb-3">
                                 <label for="year" class="form-label">
                                     Ano* 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#yearHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#yearHelpModal"></i>
                                 </label>
                                 <input type="number" class="form-control" id="year" name="year" 
                                     value="{{ basic_data.year if basic_data else current_year }}" 
@@ -104,7 +109,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="clients_served" class="form-label">
                                     Quantidade de Clientes Atendidos* 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#clientsServedHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#clientsServedHelpModal"></i>
                                 </label>
                                 <input type="number" class="form-control" id="clients_served" name="clients_served" 
                                     value="{{ basic_data.clients_served if basic_data else '' }}" required min="0">
@@ -112,7 +117,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="sales_revenue" class="form-label">
                                     Faturamento com Vendas* 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#salesRevenueHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#salesRevenueHelpModal"></i>
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
@@ -123,7 +128,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="sales_expenses" class="form-label">
                                     Gastos com Vendas* 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i>
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
@@ -134,7 +139,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="input_product_expenses" class="form-label">
                                     Gastos com Insumos e Produtos* 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#inputProductExpensesHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#inputProductExpensesHelpModal"></i>
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
@@ -149,7 +154,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="fixed_costs" class="form-label">
                                     Custos Fixos 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i>
                                 </label>
                                 <input type="text" class="form-control" id="fixed_costs" name="fixed_costs" 
                                     value="{{ basic_data.fixed_costs if basic_data else '' }}">
@@ -157,7 +162,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="ideal_profit_margin" class="form-label">
                                     Margem de Lucro Ideal (%) 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#idealProfitMarginHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#idealProfitMarginHelpModal"></i>
                                 </label>
                                 <div class="input-group">
                                     <input type="number" step="1" class="form-control" id="ideal_profit_margin" name="ideal_profit_margin" 
@@ -168,7 +173,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="service_capacity" class="form-label">
                                     Capacidade de Atendimento 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#serviceCapacityHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#serviceCapacityHelpModal"></i>
                                 </label>
                                 <input type="text" class="form-control" id="service_capacity" name="service_capacity" 
                                     value="{{ basic_data.service_capacity if basic_data else '' }}">
@@ -181,7 +186,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="pro_labore" class="form-label">
                                     Pró-labore 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal"></i>
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
@@ -192,7 +197,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="other_fixed_costs" class="form-label">
                                     Demais Custos Fixos 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#otherFixedCostsHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#otherFixedCostsHelpModal"></i>
                                 </label>
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
@@ -203,7 +208,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="work_hours_per_week" class="form-label">
                                     Horas de Trabalho por Semana 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i>
                                 </label>
                                 <input type="number" step="1" class="form-control" id="work_hours_per_week" name="work_hours_per_week" 
                                     value="{{ basic_data.work_hours_per_week|int if basic_data and basic_data.work_hours_per_week else '' }}" min="0" max="168">
@@ -211,7 +216,7 @@
                             <div class="col-md-3 mb-3">
                                 <label for="ideal_service_profit_margin" class="form-label">
                                     Margem de Lucro Ideal (%) 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#idealServiceProfitMarginHelpModal"></i>
+                                    <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#idealServiceProfitMarginHelpModal"></i>
                                 </label>
                                 <div class="input-group">
                                     <input type="number" step="1" class="form-control" id="ideal_service_profit_margin" name="ideal_service_profit_margin" 
