@@ -439,10 +439,18 @@ async def check_basic_data_exists(
     db: Session = Depends(get_db)
 ):
     """Verifica se já existem dados básicos para o mês e ano especificados"""
-    existing_data = db.query(BasicData).filter(
-        BasicData.user_id == current_user.id,
-        BasicData.year == year,
-        BasicData.month == month
-    ).first()
-    
-    return {"exists": existing_data is not None} 
+    try:
+        logger.info(f"Verificando dados para usuário {current_user.id}, mês {month}, ano {year}")
+        
+        existing_data = db.query(BasicData).filter(
+            BasicData.user_id == current_user.id,
+            BasicData.year == year,
+            BasicData.month == month
+        ).first()
+        
+        logger.info(f"Resultado da verificação: {existing_data is not None}")
+        
+        return {"exists": existing_data is not None}
+    except Exception as e:
+        logger.error(f"Erro ao verificar dados existentes: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e)) 
