@@ -1,5 +1,6 @@
 import logging
 import os
+import asyncio
 from fastapi import FastAPI, Request, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,15 +32,22 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
-try:
-    # Criar as tabelas no banco de dados
-    Base.metadata.create_all(bind=engine)
-    logger.info("Tabelas do banco de dados criadas com sucesso")
-except Exception as e:
-    logger.error(f"Erro ao criar tabelas do banco de dados: {str(e)}")
-    raise
-
 app = FastAPI(title="GetUp Gestão")
+
+# Função assíncrona para criar as tabelas
+async def create_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    logger.info("Tabelas do banco de dados criadas com sucesso")
+
+# Evento de inicialização para criar as tabelas
+@app.on_event("startup")
+async def startup_event():
+    try:
+        await create_tables()
+    except Exception as e:
+        logger.error(f"Erro ao criar tabelas do banco de dados: {str(e)}")
+        raise
 
 # Configurar o middleware de sessão com uma chave secreta fixa para produção
 secret_key = os.getenv("SECRET_KEY", secrets.token_urlsafe(32))

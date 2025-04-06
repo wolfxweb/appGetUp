@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from typing import Optional
 from pydantic import BaseModel
 
-from app.database.db import SessionLocal
+from app.database.db import get_db
 from app.models.basic_data import BasicData
 from app.models.calculator import Calculator
 from app.routes.auth import get_current_user
@@ -13,13 +14,6 @@ from app.models.user import User
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 # Modelo Pydantic para validação dos dados da calculadora
 class CalculatorData(BaseModel):
@@ -37,14 +31,20 @@ class CalculatorData(BaseModel):
     notes: Optional[str] = None
 
 @router.get("/calculadora", response_class=HTMLResponse)
-async def calculator(request: Request, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+async def calculator(request: Request, current_user: User = Depends(get_current_user), db: AsyncSession = Depends(get_db)):
     # Get user's basic data
-    basic_data = db.query(BasicData).filter(BasicData.user_id == current_user.id).all()
+    result = await db.execute(
+        select(BasicData).filter(BasicData.user_id == current_user.id)
+    )
+    basic_data = result.scalars().all()
     
     # Get user's calculator records
-    calculator_records = db.query(Calculator).filter(
-        Calculator.user_id == current_user.id
-    ).order_by(Calculator.created_at.desc()).all()
+    result = await db.execute(
+        select(Calculator)
+        .filter(Calculator.user_id == current_user.id)
+        .order_by(Calculator.created_at.desc())
+    )
+    calculator_records = result.scalars().all()
     
     return templates.TemplateResponse("calculadora.html", {
         "request": request,
@@ -80,13 +80,17 @@ async def calculate_price(
 async def save_calculator(
     calculator_data: CalculatorData,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Verificar se o basic_data_id pertence ao usuário atual
-    basic_data = db.query(BasicData).filter(
-        BasicData.id == calculator_data.basic_data_id,
-        BasicData.user_id == current_user.id
-    ).first()
+    result = await db.execute(
+        select(BasicData)
+        .filter(
+            BasicData.id == calculator_data.basic_data_id,
+            BasicData.user_id == current_user.id
+        )
+    )
+    basic_data = result.scalar_one_or_none()
     
     if not basic_data:
         raise HTTPException(status_code=404, detail="Dados básicos não encontrados")
@@ -110,8 +114,8 @@ async def save_calculator(
     
     # Adicionar ao banco de dados
     db.add(new_calculator)
-    db.commit()
-    db.refresh(new_calculator)
+    await db.commit()
+    await db.refresh(new_calculator)
     
     return {"success": True, "id": new_calculator.id}
 
@@ -119,19 +123,23 @@ async def save_calculator(
 async def delete_calculator(
     record_id: int,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Verificar se o registro existe e pertence ao usuário atual
-    calculator_record = db.query(Calculator).filter(
-        Calculator.id == record_id,
-        Calculator.user_id == current_user.id
-    ).first()
+    result = await db.execute(
+        select(Calculator)
+        .filter(
+            Calculator.id == record_id,
+            Calculator.user_id == current_user.id
+        )
+    )
+    calculator_record = result.scalar_one_or_none()
     
     if not calculator_record:
         raise HTTPException(status_code=404, detail="Registro não encontrado")
     
     # Remover o registro
-    db.delete(calculator_record)
-    db.commit()
+    await db.delete(calculator_record)
+    await db.commit()
     
     return {"success": True} 
