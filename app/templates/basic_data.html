@@ -358,6 +358,32 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Adicionar evento para remover o backdrop quando o modal for fechado
+    document.querySelectorAll('.modal').forEach(modalElement => {
+        modalElement.addEventListener('hidden.bs.modal', function() {
+            // Remover o backdrop manualmente
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.remove();
+            }
+            // Remover a classe modal-open do body
+            document.body.classList.remove('modal-open');
+            // Remover o padding-right do body
+            document.body.style.removeProperty('padding-right');
+        });
+    });
+    
+    // Adicionar evento para os botões de fechar
+    document.querySelectorAll('.modal .btn-close').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const modalElement = this.closest('.modal');
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.hide();
+            }
+        });
+    });
 });
 </script>
 {% endblock %}
