@@ -32,10 +32,10 @@ content %} {% with active_page='basic_data' %} {% include
           class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
         >
           <h5 class="card-title mb-0">
-            <i class="bi bi-graph-up"></i> Dados Básicos
+          Dados Básicos
           </h5>
           <a href="/basic-data/new" class="btn btn-light btn-sm">
-            <i class="bi bi-plus-circle"></i> Novo Registro
+            <i class="bi bi-plus-circle" ></i> Novo Registro
           </a>
         </div>
 
@@ -61,19 +61,19 @@ content %} {% with active_page='basic_data' %} {% include
             <table class="table table-striped table-hover" id="basicDataTable">
               <thead>
                 <tr>
-                  <th>Mês/Ano</th>
-                  <th>Clientes Atendidos</th>
-                  <th>Faturamento</th>
-                  <th>Gastos com Vendas</th>
-                  <th>Gastos com Insumos e Produtos</th>
+                  <th>Mês/Ano <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#monthYearHelpModal"></i></th>
+                  <th>Clientes <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#clientsHelpModal"></i></th>
+                  <th>Faturamento <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#revenueHelpModal"></i></th>
+                  <th>Gastos Vendas <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i></th>
+                  <th>Gastos Insumos <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#inputExpensesHelpModal"></i></th>
                   {% if user.activity_type == 'Serviços' %}
-                  <th>Pró-labore</th>
-                  <th>Demais Custos Fixos</th>
-                  <th>Horas de Trabalho por Semana</th>
-                  <th>Margem de Lucro Ideal</th>
+                  <th>Pró-labore <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal"></i></th>
+                  <th>Custos Fixos <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i></th>
+                  <th>Horas/Trab <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i></th>
+                  <th>Margem % <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#marginHelpModal"></i></th>
                   {% elif user.activity_type in ['Comércio', 'Indústria'] %}
-                  <th>Custos Fixos</th>
-                  <th>Margem de Lucro Ideal</th>
+                  <th>Custos Fixos <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i></th>
+                  <th>Margem % <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#marginHelpModal"></i></th>
                   {% endif %}
                   <th>Ações</th>
                 </tr>
@@ -151,12 +151,162 @@ content %} {% with active_page='basic_data' %} {% include
     </div>
   </div>
 </div>
+
+<!-- Modais de Ajuda -->
+<div class="modal fade" id="monthYearHelpModal" tabindex="-1" aria-labelledby="monthYearHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="monthYearHelpModalLabel">Ajuda: Mês/Ano</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Período de referência dos dados básicos cadastrados. O formato é Mês/Ano (ex: Janeiro/2025).</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="clientsHelpModal" tabindex="-1" aria-labelledby="clientsHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="clientsHelpModalLabel">Ajuda: Clientes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Número total de clientes atendidos no período. Representa a quantidade de pessoas ou empresas que receberam seus produtos ou serviços.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="revenueHelpModal" tabindex="-1" aria-labelledby="revenueHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="revenueHelpModalLabel">Ajuda: Faturamento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Valor total de receitas geradas pelas vendas no período. Inclui todos os valores recebidos de clientes.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="salesExpensesHelpModal" tabindex="-1" aria-labelledby="salesExpensesHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="salesExpensesHelpModalLabel">Ajuda: Gastos com Vendas</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Valor total gasto com despesas relacionadas às vendas, como comissões, taxas de transação, marketing, etc.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="inputExpensesHelpModal" tabindex="-1" aria-labelledby="inputExpensesHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inputExpensesHelpModalLabel">Ajuda: Gastos com Insumos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Valor gasto em matérias-primas, produtos para revenda ou insumos necessários para a produção ou prestação de serviços.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="proLaboreHelpModal" tabindex="-1" aria-labelledby="proLaboreHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="proLaboreHelpModalLabel">Ajuda: Pró-labore</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Valor da remuneração do empresário pelos serviços prestados à empresa. Representa o "salário" do dono do negócio.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="fixedCostsHelpModal" tabindex="-1" aria-labelledby="fixedCostsHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fixedCostsHelpModalLabel">Ajuda: Custos Fixos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Valor dos custos que permanecem constantes independentemente do volume de vendas, como aluguel, salários fixos, energia, água, etc.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="workHoursHelpModal" tabindex="-1" aria-labelledby="workHoursHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="workHoursHelpModalLabel">Ajuda: Horas de Trabalho por Semana</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Total de horas trabalhadas por semana. O máximo possível é 168 horas (7 dias * 24 horas).</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="marginHelpModal" tabindex="-1" aria-labelledby="marginHelpModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="marginHelpModalLabel">Ajuda: Margem de Lucro Ideal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Porcentagem de lucro que você considera ideal para seu negócio após descontar todos os custos e despesas.</p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %} {% block extra_css %}
 <style>
   .navbar {
     z-index: 1000;
     display: flex !important;
     visibility: visible !important;
+  }
+  
+  .help-icon {
+    cursor: pointer;
+    margin-left: 5px;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+  }
+
+  .help-icon:hover {
+    opacity: 1;
+  }
+
+  /* Estilo para o cabeçalho do modal */
+  .modal-header {
+    background-color: rgb(1, 57, 44);
+    color: white;
+  }
+  
+  /* Estilo para o botão de fechar dos modais */
+  .modal-header .btn-close {
+    filter: brightness(0) invert(1);
+    opacity: 1;
   }
 </style>
 {% endblock %}
@@ -190,6 +340,24 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('filterMonth').addEventListener('input', filterTable);
     document.getElementById('filterClients').addEventListener('input', filterTable);
     document.getElementById('filterRevenue').addEventListener('input', filterTable);
+
+    // Configurar os ícones de ajuda
+    document.querySelectorAll('.help-icon').forEach(icon => {
+        icon.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('data-bs-target');
+            const modalElement = document.querySelector(targetId);
+            
+            if (modalElement) {
+                const modal = new bootstrap.Modal(modalElement, {
+                    backdrop: true,
+                    keyboard: true,
+                    focus: true
+                });
+                modal.show();
+            }
+        });
+    });
 });
 </script>
 {% endblock %}
