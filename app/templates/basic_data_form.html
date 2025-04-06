@@ -114,24 +114,33 @@
                                     Faturamento com Vendas* 
                                     <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#salesRevenueHelpModal"></i>
                                 </label>
-                                <input type="text" class="form-control" id="sales_revenue" name="sales_revenue" 
-                                    value="{{ basic_data.sales_revenue if basic_data else '' }}" required>
+                                <div class="input-group">
+                                    <span class="input-group-text">R$</span>
+                                    <input type="text" class="form-control" id="sales_revenue" name="sales_revenue" 
+                                        value="{{ basic_data.sales_revenue if basic_data else '' }}" required>
+                                </div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="sales_expenses" class="form-label">
                                     Gastos com Vendas* 
                                     <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i>
                                 </label>
-                                <input type="text" class="form-control" id="sales_expenses" name="sales_expenses" 
-                                    value="{{ basic_data.sales_expenses if basic_data else '' }}" required>
+                                <div class="input-group">
+                                    <span class="input-group-text">R$</span>
+                                    <input type="text" class="form-control" id="sales_expenses" name="sales_expenses" 
+                                        value="{{ basic_data.sales_expenses if basic_data else '' }}" required>
+                                </div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="input_product_expenses" class="form-label">
                                     Gastos com Insumos e Produtos* 
                                     <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#inputProductExpensesHelpModal"></i>
                                 </label>
-                                <input type="text" class="form-control" id="input_product_expenses" name="input_product_expenses" 
-                                    value="{{ basic_data.input_product_expenses if basic_data else '' }}" required>
+                                <div class="input-group">
+                                    <span class="input-group-text">R$</span>
+                                    <input type="text" class="form-control" id="input_product_expenses" name="input_product_expenses" 
+                                        value="{{ basic_data.input_product_expenses if basic_data else '' }}" required>
+                                </div>
                             </div>
                         </div>
 
@@ -151,8 +160,8 @@
                                     <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#idealProfitMarginHelpModal"></i>
                                 </label>
                                 <div class="input-group">
-                                    <input type="number" class="form-control" id="ideal_profit_margin" name="ideal_profit_margin" 
-                                        value="{{ basic_data.ideal_profit_margin if basic_data else '' }}" min="0" max="100" required>
+                                    <input type="number" step="1" class="form-control" id="ideal_profit_margin" name="ideal_profit_margin" 
+                                        value="{{ basic_data.ideal_profit_margin|int if basic_data and basic_data.ideal_profit_margin else '' }}" min="0" max="100" required>
                                     <span class="input-group-text">%</span>
                                 </div>
                             </div>
@@ -175,17 +184,10 @@
                                     <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal"></i>
                                 </label>
                                 <div class="input-group">
+                                    <span class="input-group-text">R$</span>
                                     <input type="text" class="form-control" id="pro_labore" name="pro_labore" 
                                         value="{{ basic_data.pro_labore if basic_data else '' }}">
                                 </div>
-                            </div>
-                            <div class="col-md-3 mb-3">
-                                <label for="work_hours_per_week" class="form-label">
-                                    Horas de Trabalho por Semana 
-                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i>
-                                </label>
-                                <input type="number" step="0.5" class="form-control" id="work_hours_per_week" name="work_hours_per_week" 
-                                    value="{{ basic_data.work_hours_per_week if basic_data else '' }}" min="0" max="168">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="other_fixed_costs" class="form-label">
@@ -193,9 +195,18 @@
                                     <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#otherFixedCostsHelpModal"></i>
                                 </label>
                                 <div class="input-group">
+                                    <span class="input-group-text">R$</span>
                                     <input type="text" class="form-control" id="other_fixed_costs" name="other_fixed_costs" 
                                         value="{{ basic_data.other_fixed_costs if basic_data else '' }}">
                                 </div>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="work_hours_per_week" class="form-label">
+                                    Horas de Trabalho por Semana 
+                                    <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i>
+                                </label>
+                                <input type="number" step="1" class="form-control" id="work_hours_per_week" name="work_hours_per_week" 
+                                    value="{{ basic_data.work_hours_per_week|int if basic_data and basic_data.work_hours_per_week else '' }}" min="0" max="168">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="ideal_service_profit_margin" class="form-label">
@@ -203,8 +214,8 @@
                                     <i class="bi bi-question-circle text-primary help-icon" data-bs-toggle="modal" data-bs-target="#idealServiceProfitMarginHelpModal"></i>
                                 </label>
                                 <div class="input-group">
-                                    <input type="number" step="0.01" class="form-control" id="ideal_service_profit_margin" name="ideal_service_profit_margin" 
-                                        value="{{ basic_data.ideal_service_profit_margin if basic_data else '' }}" min="0" max="100">
+                                    <input type="number" step="1" class="form-control" id="ideal_service_profit_margin" name="ideal_service_profit_margin" 
+                                        value="{{ basic_data.ideal_service_profit_margin|int if basic_data and basic_data.ideal_service_profit_margin else '' }}" min="0" max="100">
                                     <span class="input-group-text">%</span>
                                 </div>
                             </div>
@@ -217,11 +228,11 @@
                         </div>
                         {% endif %}
 
-                        <div class="d-grid mt-4">
+                        <div class="d-flex justify-content-end mt-4">
                             {% if edit_mode %}
                                 <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-primary flex-grow-1" id="updateButton">
-                                        <i class="bi bi-check-circle"></i> Atualizar Dados
+                                    <button type="button" class="btn btn-primary" id="updateButton">
+                                        <i class="bi bi-check-circle" style="color: white !important;"></i> Atualizar Dados
                                     </button>
                                     <a href="/basic-data" class="btn btn-outline-secondary">
                                         <i class="bi bi-arrow-left"></i> Voltar
@@ -229,7 +240,7 @@
                                 </div>
                             {% else %}
                                 <button type="submit" class="btn btn-primary" id="saveButton">
-                                    <i class="bi bi-check-circle"></i> Salvar Dados
+                                    <i class="bi bi-check-circle" style="color: white !important;"></i> Salvar Dados
                                 </button>
                             {% endif %}
                         </div>
