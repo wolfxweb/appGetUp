@@ -2,6 +2,68 @@
 
 {% block title %}Gestão de Prioridades - GetUp Gestão{% endblock %}
 
+{% block extra_css %}
+<style>
+    .navbar {
+        z-index: 1000;
+        display: flex !important;
+        visibility: visible !important;
+    }
+
+    .help-icon {
+        cursor: pointer;
+        margin-left: 5px;
+        opacity: 0.7;
+        transition: opacity 0.3s ease;
+    }
+
+    .help-icon:hover {
+        opacity: 1;
+    }
+
+    .modal {
+        z-index: 1050;
+    }
+
+    .custom-bg {
+        background-color: #f8f9fa; /* Cor de fundo clara, semelhante ao bg-light */
+    }
+    
+    /* Estilo para garantir que o X de fechar fique branco */
+    .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+    
+    /* Estilo para modais sem backdrop */
+    .modal-no-backdrop {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .modal-no-backdrop .modal-dialog {
+        margin-top: 20px;
+    }
+    
+    /* Estilos para garantir que as modais não bloqueiem a interação */
+    .modal-backdrop {
+        display: none !important;
+    }
+    
+    body.modal-open {
+        overflow: auto !important;
+        padding-right: 0 !important;
+    }
+    
+    /* Garantir que o conteúdo da página permaneça clicável */
+    .modal-open .container-fluid,
+    .modal-open .card,
+    .modal-open .form-control,
+    .modal-open .btn,
+    .modal-open .help-icon {
+        pointer-events: auto !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
     {% include "components/navbar.html" %}
     <div class="container-fluid p-5">
@@ -17,7 +79,7 @@
                         <div class="form-group">
                             <label for="basicDataSelect" class="form-label">
                                 Selecione o Período dos dados básicos
-                                <i class="bi bi-question-circle-fill ms-2 text-white" 
+                                <i class="bi bi-question-circle-fill ms-2 text-white help-icon" 
                                    data-bs-toggle="modal" 
                                    data-bs-target="#helpModal" 
                                    style="cursor: pointer;"></i>
@@ -44,7 +106,7 @@
                     <div class="col-md-12 mb-4">
                         <label class="form-label">
                             Margem
-                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
                                data-bs-toggle="modal" 
                                data-bs-target="#margemHelpModal" 
                                style="cursor: pointer;"></i>
@@ -69,7 +131,7 @@
                     <div class="col-md-12 mb-4">
                         <label class="form-label">
                             Clientes Atendidos
-                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
                                data-bs-toggle="modal" 
                                data-bs-target="#clientesHelpModal" 
                                style="cursor: pointer;"></i>
@@ -92,7 +154,7 @@
                     <div class="col-md-12 mb-4">
                         <label class="form-label">
                             Preço Médio
-                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
                                data-bs-toggle="modal" 
                                data-bs-target="#precoMedioHelpModal" 
                                style="cursor: pointer;"></i>
@@ -115,7 +177,7 @@
                     <div class="col-md-12 mb-4">
                         <label class="form-label">
                             Ticket Médio
-                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
                                data-bs-toggle="modal" 
                                data-bs-target="#ticketMedioHelpModal" 
                                style="cursor: pointer;"></i>
@@ -138,7 +200,7 @@
                     <div class="col-md-12 mb-4">
                         <label class="form-label">
                             Faturamento
-                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
                                data-bs-toggle="modal" 
                                data-bs-target="#faturamentoHelpModal" 
                                style="cursor: pointer;"></i>
@@ -161,7 +223,7 @@
                     <div class="col-md-12 mb-4">
                         <label class="form-label">
                             Custos de Vendas
-                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
                                data-bs-toggle="modal" 
                                data-bs-target="#custosVendasHelpModal" 
                                style="cursor: pointer;"></i>
@@ -184,7 +246,7 @@
                     <div class="col-md-12 mb-4">
                         <label class="form-label">
                             Custos de Insumos
-                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
                                data-bs-toggle="modal" 
                                data-bs-target="#custosInsumosHelpModal" 
                                style="cursor: pointer;"></i>
@@ -207,7 +269,7 @@
                     <div class="col-md-12 mb-4">
                         <label class="form-label">
                             Custos Fixos
-                            <i class="bi bi-question-circle-fill ms-2 text-primary" 
+                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
                                data-bs-toggle="modal" 
                                data-bs-target="#custosFixosHelpModal" 
                                style="cursor: pointer;"></i>
@@ -233,7 +295,7 @@
     <!-- Modal de Ajuda -->
     <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content custom-bg">
                 <div class="modal-header">
                     <h5 class="modal-title" id="helpModalLabel">Como usar a Gestão de Prioridades</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -256,7 +318,7 @@
     <!-- Modal de Ajuda - Margem -->
     <div class="modal fade" id="margemHelpModal" tabindex="-1" aria-labelledby="margemHelpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content custom-bg">
                 <div class="modal-header">
                     <h5 class="modal-title" id="margemHelpModalLabel">Margem</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -279,7 +341,7 @@
     <!-- Modal de Ajuda - Clientes -->
     <div class="modal fade" id="clientesHelpModal" tabindex="-1" aria-labelledby="clientesHelpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content custom-bg">
                 <div class="modal-header">
                     <h5 class="modal-title" id="clientesHelpModalLabel">Clientes Atendidos</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -308,7 +370,7 @@
     <!-- Modal de Ajuda - Preço Médio -->
     <div class="modal fade" id="precoMedioHelpModal" tabindex="-1" aria-labelledby="precoMedioHelpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content custom-bg">
                 <div class="modal-header">
                     <h5 class="modal-title" id="precoMedioHelpModalLabel">Preço Médio</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -337,7 +399,7 @@
     <!-- Modal de Ajuda - Ticket Médio -->
     <div class="modal fade" id="ticketMedioHelpModal" tabindex="-1" aria-labelledby="ticketMedioHelpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content custom-bg">
                 <div class="modal-header">
                     <h5 class="modal-title" id="ticketMedioHelpModalLabel">Ticket Médio</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -366,7 +428,7 @@
     <!-- Modal de Ajuda - Faturamento -->
     <div class="modal fade" id="faturamentoHelpModal" tabindex="-1" aria-labelledby="faturamentoHelpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content custom-bg">
                 <div class="modal-header">
                     <h5 class="modal-title" id="faturamentoHelpModalLabel">Faturamento</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -395,7 +457,7 @@
     <!-- Modal de Ajuda - Custos de Vendas -->
     <div class="modal fade" id="custosVendasHelpModal" tabindex="-1" aria-labelledby="custosVendasHelpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content custom-bg">
                 <div class="modal-header">
                     <h5 class="modal-title" id="custosVendasHelpModalLabel">Custos de Vendas</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -424,7 +486,7 @@
     <!-- Modal de Ajuda - Custos de Insumos -->
     <div class="modal fade" id="custosInsumosHelpModal" tabindex="-1" aria-labelledby="custosInsumosHelpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content custom-bg">
                 <div class="modal-header">
                     <h5 class="modal-title" id="custosInsumosHelpModalLabel">Custos de Insumos</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -453,7 +515,7 @@
     <!-- Modal de Ajuda - Custos Fixos -->
     <div class="modal fade" id="custosFixosHelpModal" tabindex="-1" aria-labelledby="custosFixosHelpModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content custom-bg">
                 <div class="modal-header">
                     <h5 class="modal-title" id="custosFixosHelpModalLabel">Custos Fixos</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -503,6 +565,73 @@ document.addEventListener('DOMContentLoaded', function() {
         if (original === 0) return 0;
         return ((calculated - original) / original) * 100;
     }
+    
+    // Função para limpar qualquer backdrop residual
+    function clearModalBackdrop() {
+        // Remover qualquer backdrop residual
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => {
+            backdrop.parentNode.removeChild(backdrop);
+        });
+        
+        // Remover classes que o Bootstrap adiciona ao body
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('padding-right');
+    }
+    
+    // Limpar qualquer backdrop residual ao carregar a página
+    clearModalBackdrop();
+    
+    // Inicializar todas as modais de ajuda com backdrop: false
+    document.querySelectorAll('.help-icon').forEach(icon => {
+        icon.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const targetModalId = this.getAttribute('data-bs-target');
+            const modalElement = document.querySelector(targetModalId);
+            
+            if (modalElement) {
+                // Configurar a modal para não ter backdrop
+                const modalOptions = {
+                    backdrop: false,
+                    keyboard: true
+                };
+                
+                // Inicializar a modal com as opções
+                const modal = new bootstrap.Modal(modalElement, modalOptions);
+                
+                // Adicionar classe para estilo personalizado
+                modalElement.classList.add('modal-no-backdrop');
+                
+                // Mostrar a modal
+                modal.show();
+                
+                // Garantir que o body não tenha a classe modal-open
+                document.body.classList.remove('modal-open');
+                document.body.style.removeProperty('padding-right');
+                
+                // Adicionar evento para fechar a modal ao clicar fora
+                modalElement.addEventListener('click', function(event) {
+                    if (event.target === modalElement) {
+                        modal.hide();
+                    }
+                });
+                
+                // Adicionar evento para limpar a classe ao fechar
+                modalElement.addEventListener('hidden.bs.modal', function() {
+                    modalElement.classList.remove('modal-no-backdrop');
+                    clearModalBackdrop();
+                });
+                
+                // Adicionar evento para garantir que o body não tenha a classe modal-open
+                modalElement.addEventListener('shown.bs.modal', function() {
+                    document.body.classList.remove('modal-open');
+                    document.body.style.removeProperty('padding-right');
+                });
+            }
+        });
+    });
 
     // Event listeners para os botões de aplicar percentual em cada métrica
     document.querySelectorAll('button[data-metric]').forEach(button => {
