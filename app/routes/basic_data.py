@@ -20,10 +20,6 @@ router = APIRouter(prefix="/basic-data")
 
 templates = Jinja2Templates(directory="app/templates")
 
-# Criar a pasta logs se não existir
-if not os.path.exists('app/logs'):
-    os.makedirs('app/logs')
-
 # Configuração do logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -31,16 +27,25 @@ logger.setLevel(logging.INFO)
 # Configurar o formato do log
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-# Configurar o handler para arquivo
-log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
-file_handler = logging.FileHandler(log_file)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
-
 # Configurar o handler para console
 console_handler = logging.StreamHandler()
 console_handler.setFormatter(formatter)
 logger.addHandler(console_handler)
+
+# Configurar o handler para arquivo apenas se não estiver no ambiente Vercel
+if not os.environ.get('VERCEL_ENV'):
+    try:
+        # Criar a pasta logs se não existir
+        if not os.path.exists('app/logs'):
+            os.makedirs('app/logs')
+            
+        # Configurar o handler para arquivo
+        log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+        file_handler = logging.FileHandler(log_file)
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
+    except Exception as e:
+        logger.warning(f"Não foi possível configurar o log em arquivo: {str(e)}")
 
 class BasicDataInput(BaseModel):
     month: int

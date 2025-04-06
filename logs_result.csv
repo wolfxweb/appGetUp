@@ -1,0 +1,325 @@
+"TimeUTC","timestampInMs","requestPath","requestMethod","requestQueryString","responseStatusCode","requestId","requestUserAgent","level","environment","branch","vercelCache","type","function","host","deploymentDomain","deploymentId","durationMs","region","maxMemoryUsed","memorySize","message","projectId"
+"2025-04-06 18:54:34",1743965674129,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",-1,"mbl9t-1743965668479-a21e611cee13","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",-1,"iad1",-1,-1,"Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:32",1743965672560,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",-1,"vqjcv-1743965667149-e8aa2b48c0a0","vercel-screenshot/1.0","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",-1,"iad1",-1,-1,"Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:31",1743965671739,"app-get-up.vercel.app/","GET","",-1,"9rxrv-1743965661870-f672d65765b4","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-up.vercel.app","app-get-up.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",-1,"iad1",-1,-1,"Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.
+Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:31",1743965671188,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",-1,"qqc76-1743965661882-b597d6e41cd8","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",-1,"iad1",-1,-1,"Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.
+Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:29",1743965669271,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",-1,"rph8n-1743965659418-a43413089fbf","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",-1,"iad1",-1,-1,"Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.
+Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:29",1743965669200,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",-1,"qrfb4-1743965659493-11398ea61c9c","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",-1,"iad1",-1,-1,"Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.
+Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:29",1743965669095,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/favicon.ico","GET","",-1,"plj74-1743965663470-9de1d2e11b2e","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",-1,"iad1",-1,-1,"Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:28",1743965668519,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",500,"mbl9t-1743965668479-a21e611cee13","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",5595,"iad1",139,1024,"","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:27",1743965667657,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",-1,"6lllg-1743965658014-521848ae8e1a","vercel-screenshot/1.0","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",-1,"iad1",-1,-1,"Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.
+Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:27",1743965667194,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",500,"vqjcv-1743965667149-e8aa2b48c0a0","vercel-screenshot/1.0","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",5345,"iad1",139,1024,"","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:26",1743965666859,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",-1,"pwjv9-1743965658102-823d24354d7d","vercel-screenshot/1.0","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",-1,"iad1",-1,-1,"Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.
+Traceback (most recent call last):
+File ""/var/task/vc__handler__python.py"", line 14, in <module>
+__vc_spec.loader.exec_module(__vc_module)
+File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module
+File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed
+File ""/var/task/app/main.py"", line 12, in <module>
+from app.routes import auth, dashboard, admin, profile, basic_data, diagnostico, priorities, calculator
+File ""/var/task/app/routes/basic_data.py"", line 36, in <module>
+import os
+from datetime import datetime
+log_file = os.path.join('app', 'logs', f'basic_data_{datetime.now().strftime("%Y%m%d")}.log')
+file_handler = logging.FileHandler(log_file)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1231, in __init__
+StreamHandler.__init__(self, self._open())
+^^^^^^^^^^^^
+File ""/var/lang/lib/python3.12/logging/__init__.py"", line 1263, in _open
+return open_func(self.baseFilename, self.mode,
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 30] Read-only file system: '/var/task/app/logs/basic_data_20250406.log'
+Python process exited with exit status: 1. The logs above can help with debugging the issue.","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:23",1743965663606,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/favicon.ico","GET","",500,"plj74-1743965663470-9de1d2e11b2e","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",5465,"iad1",139,1024,"","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:22",1743965662281,"app-get-up.vercel.app/","GET","",500,"9rxrv-1743965661870-f672d65765b4","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-up.vercel.app","app-get-up.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",5690,"iad1",139,1024,"","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:21",1743965661924,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",500,"qqc76-1743965661882-b597d6e41cd8","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",5505,"iad1",139,1024,"","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:19",1743965659649,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",500,"qrfb4-1743965659493-11398ea61c9c","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",5614,"iad1",139,1024,"","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:19",1743965659496,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",500,"rph8n-1743965659418-a43413089fbf","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",5688,"iad1",139,1024,"","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:18",1743965658468,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",500,"6lllg-1743965658014-521848ae8e1a","vercel-screenshot/1.0","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",5521,"iad1",139,1024,"","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
+"2025-04-06 18:54:18",1743965658374,"app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app/","GET","",500,"pwjv9-1743965658102-823d24354d7d","vercel-screenshot/1.0","error","production","main","MISS","lambda","/app/main.py","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","app-get-hjjiu1y5r-carlos-projects-53495e53.vercel.app","dpl_DsAPHDV7N5267C7NmHaQB8zibGPo",5301,"iad1",139,1024,"","prj_SZO8BUpsTnbOwB4MVUSZNLnxXjES"
