@@ -315,19 +315,28 @@ content %} {% with active_page='basic_data' %} {% include
 document.addEventListener('DOMContentLoaded', function() {
     // Função para filtrar a tabela
     function filterTable() {
-        const monthFilter = document.getElementById('filterMonth').value.toLowerCase();
-        const clientsFilter = document.getElementById('filterClients').value;
-        const revenueFilter = document.getElementById('filterRevenue').value;
+        const table = document.getElementById('basicDataTable');
+        if (!table) return; // Exit if table doesn't exist
         
-        const rows = document.getElementById('basicDataTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+        const monthFilter = document.getElementById('filterMonth')?.value.toLowerCase() || '';
+        const clientsFilter = document.getElementById('filterClients')?.value || '';
+        const revenueFilter = document.getElementById('filterRevenue')?.value || '';
+        
+        const tbody = table.getElementsByTagName('tbody')[0];
+        if (!tbody) return; // Exit if tbody doesn't exist
+        
+        const rows = tbody.getElementsByTagName('tr');
         
         for (let row of rows) {
             const cells = row.getElementsByTagName('td');
+            if (cells.length < 3) continue; // Skip if row doesn't have enough cells
+            
             const month = cells[0].textContent.toLowerCase();
             const clients = cells[1].textContent;
-            const revenue = parseFloat(cells[2].textContent.replace('R$ ', '').replace('.', '').replace(',', '.'));
+            const revenueText = cells[2].textContent.replace('R$ ', '').replace('.', '').replace(',', '.');
+            const revenue = parseFloat(revenueText) || 0;
             
-            const matchesMonth = month.includes(monthFilter);
+            const matchesMonth = !monthFilter || month.includes(monthFilter);
             const matchesClients = !clientsFilter || clients.includes(clientsFilter);
             const matchesRevenue = !revenueFilter || revenue >= parseFloat(revenueFilter);
             
@@ -335,10 +344,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Adicionar eventos de filtro
-    document.getElementById('filterMonth').addEventListener('input', filterTable);
-    document.getElementById('filterClients').addEventListener('input', filterTable);
-    document.getElementById('filterRevenue').addEventListener('input', filterTable);
+    // Adicionar eventos de filtro apenas se os elementos existirem
+    const filterElements = ['filterMonth', 'filterClients', 'filterRevenue'];
+    
+    filterElements.forEach(elementId => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.addEventListener('input', filterTable);
+        }
+    });
 
     // Configurar os ícones de ajuda para usar o comportamento padrão do Bootstrap
     document.querySelectorAll('.help-icon').forEach(icon => {

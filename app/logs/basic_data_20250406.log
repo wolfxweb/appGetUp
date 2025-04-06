@@ -845,3 +845,11 @@
 2025-04-06 15:10:37,441 - app.routes.basic_data - INFO - Processando dados básicos para usuário 4
 2025-04-06 15:10:37,444 - app.routes.basic_data - INFO - Criando novo registro
 2025-04-06 15:10:37,450 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-06 18:07:45,666 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5
+2025-04-06 18:07:45,671 - app.routes.basic_data - ERROR - Erro ao salvar dados básicos: (sqlite3.IntegrityError) NOT NULL constraint failed: basic_data.activity_type
+[SQL: INSERT INTO basic_data (user_id, month, year, activity_type, clients_served, sales_revenue, sales_expenses, input_product_expenses, fixed_costs, ideal_profit_margin, service_capacity, pro_labore, work_hours_per_week, other_fixed_costs, ideal_service_profit_margin, is_current, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)]
+[parameters: (5, 4, 2025, None, 12, 1200.0, 1200.0, 210.0, None, None, None, 2100.0, 12.0, 1200.0, 21.0, 0, '2025-04-06 18:07:45.669942', '2025-04-06 18:07:45.669946')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-04-06 18:09:57,319 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5
+2025-04-06 18:10:02,440 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5
+2025-04-06 18:10:18,895 - app.routes.basic_data - INFO - Processando dados básicos para usuário 5

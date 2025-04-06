@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from datetime import datetime
 import calendar
 from pydantic import BaseModel, validator, ValidationError
@@ -63,7 +64,7 @@ class BasicDataInput(BaseModel):
     ideal_service_profit_margin: Optional[float] = None
     is_current: Optional[bool] = None
 
-def compare_and_log_changes(db: Session, old_data_dict: dict, new_data: dict) -> list:
+def compare_and_log_changes(db: AsyncSession, old_data_dict: dict, new_data: dict) -> list:
     """Compara os dados antigos com os novos e retorna uma lista de alterações"""
     changes = []
     
@@ -142,16 +143,16 @@ def compare_and_log_changes(db: Session, old_data_dict: dict, new_data: dict) ->
 async def basic_data_page(
     request: Request,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     try:
         # Buscar dados básicos do usuário com ordenação correta
-        basic_data = db.query(BasicData).filter(
-            BasicData.user_id == current_user.id
-        ).order_by(
-            BasicData.year.desc(),
-            BasicData.month.desc()
-        ).all()
+        result = await db.execute(
+            select(BasicData)
+            .filter(BasicData.user_id == current_user.id)
+            .order_by(BasicData.year.desc(), BasicData.month.desc())
+        )
+        basic_data = result.scalars().all()
 
         return templates.TemplateResponse(
             "basic_data.html",
@@ -178,7 +179,7 @@ async def basic_data_page(
 async def new_basic_data_page(
     request: Request,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Obter o mês e ano atual
     now = datetime.now()
@@ -186,11 +187,15 @@ async def new_basic_data_page(
     current_year = now.year
 
     # Verificar se já existe um registro para o mês atual
-    existing_data = db.query(BasicData).filter(
-        BasicData.user_id == current_user.id,
-        BasicData.month == current_month,
-        BasicData.year == current_year
-    ).first()
+    result = await db.execute(
+        select(BasicData)
+        .filter(
+            BasicData.user_id == current_user.id,
+            BasicData.month == current_month,
+            BasicData.year == current_year
+        )
+    )
+    existing_data = result.scalar_one_or_none()
 
     return templates.TemplateResponse(
         "basic_data_form.html",
@@ -207,7 +212,7 @@ async def new_basic_data_page(
 async def save_basic_data(
     request: Request,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     month: int = Form(...),
     year: int = Form(...),
     clients_served: int = Form(...),
@@ -237,7 +242,8 @@ async def save_basic_data(
         'work_hours_per_week': None,
         'other_fixed_costs': None,
         'ideal_service_profit_margin': None,
-        'is_current': False
+        'is_current': False,
+        'activity_type': current_user.activity_type  # Adicionar o tipo de atividade do usuário
     }
     
     try:
@@ -248,43 +254,71 @@ async def save_basic_data(
             is_current_bool = bool(is_current)
             
         logger.info(f"Processando dados básicos para usuário {current_user.id}")
-
-        # Se is_current for True, desmarcar todos os outros registros
-        if is_current_bool:
-            logger.info("Atualizando registros existentes para is_current = False")
-            db.query(BasicData).filter(
-                BasicData.user_id == current_user.id,
-                BasicData.is_current == True
-            ).update({"is_current": False}, synchronize_session=False)
-
-        # Buscar dados básicos existentes
-        existing_data = db.query(BasicData).filter(
-            BasicData.user_id == current_user.id,
-            BasicData.month == month,
-            BasicData.year == year
-        ).first()
-
-        # Atualizar new_data com os valores do formulário
-        new_data = {
+        
+        # Converter valores monetários de string para float
+        sales_revenue_float = float(sales_revenue.replace('R$', '').replace('.', '').replace(',', '.').strip())
+        sales_expenses_float = float(sales_expenses.replace('R$', '').replace('.', '').replace(',', '.').strip())
+        input_product_expenses_float = float(input_product_expenses.replace('R$', '').replace('.', '').replace(',', '.').strip())
+        
+        # Converter outros valores monetários se fornecidos
+        fixed_costs_float = None
+        if fixed_costs:
+            fixed_costs_float = float(fixed_costs.replace('R$', '').replace('.', '').replace(',', '.').strip())
+            
+        pro_labore_float = None
+        if pro_labore:
+            pro_labore_float = float(pro_labore.replace('R$', '').replace('.', '').replace(',', '.').strip())
+            
+        other_fixed_costs_float = None
+        if other_fixed_costs:
+            other_fixed_costs_float = float(other_fixed_costs.replace('R$', '').replace('.', '').replace(',', '.').strip())
+        
+        # Atualizar new_data com os valores convertidos
+        new_data.update({
+            'month': month,
+            'year': year,
             'clients_served': clients_served,
-            'sales_revenue': float(sales_revenue) if sales_revenue else None,
-            'sales_expenses': float(sales_expenses) if sales_expenses else None,
-            'input_product_expenses': float(input_product_expenses) if input_product_expenses else None,
-            'fixed_costs': float(fixed_costs) if fixed_costs else None,
+            'sales_revenue': sales_revenue_float,
+            'sales_expenses': sales_expenses_float,
+            'input_product_expenses': input_product_expenses_float,
+            'fixed_costs': fixed_costs_float,
             'ideal_profit_margin': ideal_profit_margin,
             'service_capacity': service_capacity,
-            'pro_labore': float(pro_labore) if pro_labore else None,
+            'pro_labore': pro_labore_float,
             'work_hours_per_week': work_hours_per_week,
-            'other_fixed_costs': float(other_fixed_costs) if other_fixed_costs else None,
+            'other_fixed_costs': other_fixed_costs_float,
             'ideal_service_profit_margin': ideal_service_profit_margin,
             'is_current': is_current_bool
-        }
-
-        if existing_data:
-            logger.info(f"Registro existente encontrado para {month}/{year}")
-
-            # Converter existing_data para um dicionário
-            existing_data_dict = {
+        })
+        
+        # Verificar se já existe um registro para o mesmo mês/ano
+        result = await db.execute(
+            select(BasicData)
+            .filter(
+                BasicData.user_id == current_user.id,
+                BasicData.month == month,
+                BasicData.year == year
+            )
+        )
+        existing_data = result.scalar_one_or_none()
+        
+        if existing_data and not edit_mode:
+            # Se já existe e não estamos em modo de edição, retornar erro
+            return templates.TemplateResponse(
+                "basic_data_form.html",
+                {
+                    "request": request,
+                    "user": current_user,
+                    "error_message": f"Já existe um registro para {calendar.month_name[month]}/{year}. Use a opção de edição.",
+                    "current_month": month,
+                    "current_year": year
+                }
+            )
+        
+        # Se estamos em modo de edição, atualizar o registro existente
+        if edit_mode and existing_data:
+            # Armazenar dados antigos para log
+            old_data_dict = {
                 'clients_served': existing_data.clients_served,
                 'sales_revenue': existing_data.sales_revenue,
                 'sales_expenses': existing_data.sales_expenses,
@@ -298,56 +332,55 @@ async def save_basic_data(
                 'ideal_service_profit_margin': existing_data.ideal_service_profit_margin,
                 'is_current': existing_data.is_current
             }
-
-            # Passar o dicionário em vez do objeto
-            changes = compare_and_log_changes(db, existing_data_dict, new_data)
-
-            if changes:  # Se houver alterações
-                logger.info(f"Alterações detectadas: {changes}")
-
-                # Registrar cada alteração no log
-                for change in changes:
-                    log_entry = BasicDataLog(
-                        basic_data_id=existing_data.id,
-                        change_description=change
-                    )
-                    db.add(log_entry)
-                    logger.info(f"Log adicionado: {change}")
-
-                # Atualizar dados existentes
-                for field, value in new_data.items():
-                    setattr(existing_data, field, value)
-                    logger.info(f"Campo {field} atualizado para {value}")
-            else:
-                logger.info("Nenhuma alteração detectada")
-
-        else:
-            logger.info("Criando novo registro")
-            basic_data = BasicData(
-                user_id=current_user.id,
-                month=month,
-                year=year,
-                activity_type=current_user.activity_type,
-                **new_data
+            
+            # Atualizar os campos
+            for key, value in new_data.items():
+                setattr(existing_data, key, value)
+            
+            # Registrar as alterações
+            changes = compare_and_log_changes(db, old_data_dict, new_data)
+            
+            # Criar log de alterações
+            if changes:
+                log_entry = BasicDataLog(
+                    basic_data_id=existing_data.id,
+                    user_id=current_user.id,
+                    changes="\n".join(changes),
+                    created_at=datetime.now()
+                )
+                db.add(log_entry)
+            
+            await db.commit()
+            await db.refresh(existing_data)
+            
+            return RedirectResponse(
+                url="/basic-data",
+                status_code=status.HTTP_303_SEE_OTHER
             )
-            db.add(basic_data)
-
-        db.commit()
-        logger.info("Dados salvos com sucesso")
-        return RedirectResponse(url="/basic-data", status_code=status.HTTP_303_SEE_OTHER)
-
+        
+        # Se não estamos em modo de edição, criar um novo registro
+        new_basic_data = BasicData(
+            user_id=current_user.id,
+            **new_data
+        )
+        
+        db.add(new_basic_data)
+        await db.commit()
+        await db.refresh(new_basic_data)
+        
+        return RedirectResponse(
+            url="/basic-data",
+            status_code=status.HTTP_303_SEE_OTHER
+        )
+        
     except Exception as e:
-        db.rollback()
-        logger.error(f"Erro ao salvar: {str(e)}")
+        logger.error(f"Erro ao salvar dados básicos: {str(e)}")
         return templates.TemplateResponse(
             "basic_data_form.html",
             {
                 "request": request,
-                "error_message": f"Erro ao salvar: {str(e)}",
                 "user": current_user,
-                "month": month,
-                "year": year,
-                **new_data,
+                "error_message": f"Erro ao salvar dados: {str(e)}",
                 "current_month": month,
                 "current_year": year
             }
@@ -358,39 +391,41 @@ async def edit_basic_data_page(
     request: Request,
     data_id: int,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     page: int = 1,
     per_page: int = 10
 ):
     # Buscar o registro específico
-    basic_data = db.query(BasicData).filter(
-        BasicData.id == data_id,
-        BasicData.user_id == current_user.id
-    ).first()
-
+    result = await db.execute(
+        select(BasicData)
+        .filter(
+            BasicData.id == data_id,
+            BasicData.user_id == current_user.id
+        )
+    )
+    basic_data = result.scalar_one_or_none()
+    
     if not basic_data:
         raise HTTPException(status_code=404, detail="Registro não encontrado")
-
-    # Log para arquivo
-    logger.info(f"Buscando logs para basic_data_id: {data_id}")
-    logger.info(f"Valores atuais: sales_revenue={basic_data.sales_revenue}, sales_expenses={basic_data.sales_expenses}")
-
-    # Buscar os logs relacionados a este registro básico
-    logs = db.query(BasicDataLog).filter(
-        BasicDataLog.basic_data_id == data_id
-    ).order_by(
-        BasicDataLog.id.desc()
-    ).offset(
-        (page - 1) * per_page
-    ).limit(per_page).all()
-
+    
+    # Buscar logs do registro
+    result = await db.execute(
+        select(BasicDataLog)
+        .filter(BasicDataLog.basic_data_id == data_id)
+        .order_by(BasicDataLog.created_at.desc())
+        .offset((page - 1) * per_page)
+        .limit(per_page)
+    )
+    logs = result.scalars().all()
+    
     # Contar total de logs para paginação
-    total_logs = db.query(BasicDataLog).filter(
-        BasicDataLog.basic_data_id == data_id
-    ).count()
-
+    result = await db.execute(
+        select(BasicDataLog)
+        .filter(BasicDataLog.basic_data_id == data_id)
+    )
+    total_logs = len(result.scalars().all())
     total_pages = (total_logs + per_page - 1) // per_page
-
+    
     return templates.TemplateResponse(
         "basic_data_form.html",
         {
@@ -411,51 +446,46 @@ async def delete_basic_data(
     request: Request,
     data_id: int,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Buscar o registro específico
-    basic_data = db.query(BasicData).filter(
-        BasicData.id == data_id,
-        BasicData.user_id == current_user.id
-    ).first()
-
+    result = await db.execute(
+        select(BasicData)
+        .filter(
+            BasicData.id == data_id,
+            BasicData.user_id == current_user.id
+        )
+    )
+    basic_data = result.scalar_one_or_none()
+    
     if not basic_data:
         raise HTTPException(status_code=404, detail="Registro não encontrado")
-
-    try:
-        db.delete(basic_data)
-        db.commit()
-        return RedirectResponse(
-            url="/basic-data?success_message=Registro excluído com sucesso", 
-            status_code=status.HTTP_303_SEE_OTHER
-        )
-    except Exception as e:
-        db.rollback()
-        return RedirectResponse(
-            url="/basic-data?error_message=Erro ao excluir registro", 
-            status_code=status.HTTP_303_SEE_OTHER
-        )
+    
+    # Excluir o registro
+    await db.delete(basic_data)
+    await db.commit()
+    
+    return RedirectResponse(
+        url="/basic-data",
+        status_code=status.HTTP_303_SEE_OTHER
+    )
 
 @router.get("/check/{year}/{month}")
 async def check_basic_data_exists(
     year: int,
     month: int,
     current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
-    """Verifica se já existem dados básicos para o mês e ano especificados"""
-    try:
-        logger.info(f"Verificando dados para usuário {current_user.id}, mês {month}, ano {year}")
-        
-        existing_data = db.query(BasicData).filter(
+    # Verificar se já existe um registro para o mesmo mês/ano
+    result = await db.execute(
+        select(BasicData)
+        .filter(
             BasicData.user_id == current_user.id,
-            BasicData.year == year,
-            BasicData.month == month
-        ).first()
-        
-        logger.info(f"Resultado da verificação: {existing_data is not None}")
-        
-        return {"exists": existing_data is not None}
-    except Exception as e:
-        logger.error(f"Erro ao verificar dados existentes: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e)) 
+            BasicData.month == month,
+            BasicData.year == year
+        )
+    )
+    existing_data = result.scalar_one_or_none()
+    
+    return {"exists": existing_data is not None} 
