@@ -108,3 +108,245 @@
 2025-04-06 11:03:26,582 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
 2025-04-06 11:22:57,449 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
 2025-04-06 11:22:57,450 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:23:22,565 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:23:22,565 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:24:27,201 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:24:27,202 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:26:11,020 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:26:11,020 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:33:05,630 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:33:05,631 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:33:40,981 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:33:40,982 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:34:57,466 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:34:57,466 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:35:06,635 - app.routes.basic_data - ERROR - Erro ao salvar: 'bool' object has no attribute 'lower'
+2025-04-06 11:35:19,916 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:35:19,916 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:37:05,978 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:37:05,978 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:37:33,026 - app.routes.basic_data - ERROR - Erro ao salvar: 'bool' object has no attribute 'lower'
+2025-04-06 11:38:00,099 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:38:00,099 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:38:17,822 - app.routes.basic_data - ERROR - Erro ao salvar: 'bool' object has no attribute 'lower'
+2025-04-06 11:39:20,644 - app.routes.basic_data - ERROR - Erro ao salvar: 'bool' object has no attribute 'lower'
+2025-04-06 11:39:50,956 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:39:50,957 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:39:56,964 - app.routes.basic_data - ERROR - Erro ao salvar: 'bool' object has no attribute 'lower'
+2025-04-06 11:40:25,757 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:40:25,758 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:40:34,069 - app.routes.basic_data - ERROR - Erro ao salvar: 'bool' object has no attribute 'lower'
+2025-04-06 11:41:06,212 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-06 11:41:06,217 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-04-06 11:41:06,219 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 65000,00 para R$ 65,00
+2025-04-06 11:41:06,219 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 5200,00 para R$ 52,00
+2025-04-06 11:41:06,219 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 27800,00 para R$ 278,00
+2025-04-06 11:41:06,219 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 5000,00 para R$ 50,00
+2025-04-06 11:41:06,219 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 19400,00 para R$ 194,00
+2025-04-06 11:41:06,219 - app.routes.basic_data - INFO - Alteração detectada: É o Atual de Sim para Não
+2025-04-06 11:41:06,219 - app.routes.basic_data - INFO - Alterações detectadas: ['Faturamento com Vendas alterado de R$ 65000,00 para R$ 65,00', 'Gastos com Vendas alterado de R$ 5200,00 para R$ 52,00', 'Gastos com Insumos e Produtos alterado de R$ 27800,00 para R$ 278,00', 'Pró-labore alterado de R$ 5000,00 para R$ 50,00', 'Demais Custos Fixos alterado de R$ 19400,00 para R$ 194,00', 'É o Atual alterado de Sim para Não']
+2025-04-06 11:41:06,219 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de R$ 65000,00 para R$ 65,00
+2025-04-06 11:41:06,219 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 5200,00 para R$ 52,00
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 27800,00 para R$ 278,00
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Log adicionado: Pró-labore alterado de R$ 5000,00 para R$ 50,00
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Log adicionado: Demais Custos Fixos alterado de R$ 19400,00 para R$ 194,00
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Log adicionado: É o Atual alterado de Sim para Não
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Campo clients_served atualizado para 87
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 65.0
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 52.0
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 278.0
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-06 11:41:06,220 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-06 11:41:06,221 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 50.0
+2025-04-06 11:41:06,221 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 50.0
+2025-04-06 11:41:06,221 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 194.0
+2025-04-06 11:41:06,221 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 25.0
+2025-04-06 11:41:06,221 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-06 11:41:06,228 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-06 11:41:08,045 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:41:08,045 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65.0, sales_expenses=52.0
+2025-04-06 11:41:13,401 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-06 11:41:13,403 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-04-06 11:41:13,403 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 52,00 para R$ 520,00
+2025-04-06 11:41:13,403 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 278,00 para R$ 2,78
+2025-04-06 11:41:13,403 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 50,00 para R$ 500,00
+2025-04-06 11:41:13,404 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 194,00 para R$ 1,94
+2025-04-06 11:41:13,404 - app.routes.basic_data - INFO - Alterações detectadas: ['Gastos com Vendas alterado de R$ 52,00 para R$ 520,00', 'Gastos com Insumos e Produtos alterado de R$ 278,00 para R$ 2,78', 'Pró-labore alterado de R$ 50,00 para R$ 500,00', 'Demais Custos Fixos alterado de R$ 194,00 para R$ 1,94']
+2025-04-06 11:41:13,405 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 52,00 para R$ 520,00
+2025-04-06 11:41:13,405 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 278,00 para R$ 2,78
+2025-04-06 11:41:13,405 - app.routes.basic_data - INFO - Log adicionado: Pró-labore alterado de R$ 50,00 para R$ 500,00
+2025-04-06 11:41:13,405 - app.routes.basic_data - INFO - Log adicionado: Demais Custos Fixos alterado de R$ 194,00 para R$ 1,94
+2025-04-06 11:41:13,405 - app.routes.basic_data - INFO - Campo clients_served atualizado para 87
+2025-04-06 11:41:13,406 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 65.0
+2025-04-06 11:41:13,406 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 520.0
+2025-04-06 11:41:13,406 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 2.78
+2025-04-06 11:41:13,406 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-06 11:41:13,406 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-06 11:41:13,406 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-06 11:41:13,406 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 500.0
+2025-04-06 11:41:13,407 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 50.0
+2025-04-06 11:41:13,407 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 1.94
+2025-04-06 11:41:13,407 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 25.0
+2025-04-06 11:41:13,407 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-06 11:41:13,413 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-06 11:41:16,514 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:41:16,514 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65.0, sales_expenses=520.0
+2025-04-06 11:41:25,150 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-06 11:41:25,151 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-04-06 11:41:25,151 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 520,00 para R$ 5,20
+2025-04-06 11:41:25,151 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 2,78 para R$ 278,00
+2025-04-06 11:41:25,152 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 500,00 para R$ 5,00
+2025-04-06 11:41:25,152 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 1,94 para R$ 194,00
+2025-04-06 11:41:25,152 - app.routes.basic_data - INFO - Alterações detectadas: ['Gastos com Vendas alterado de R$ 520,00 para R$ 5,20', 'Gastos com Insumos e Produtos alterado de R$ 2,78 para R$ 278,00', 'Pró-labore alterado de R$ 500,00 para R$ 5,00', 'Demais Custos Fixos alterado de R$ 1,94 para R$ 194,00']
+2025-04-06 11:41:25,152 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 520,00 para R$ 5,20
+2025-04-06 11:41:25,152 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 2,78 para R$ 278,00
+2025-04-06 11:41:25,152 - app.routes.basic_data - INFO - Log adicionado: Pró-labore alterado de R$ 500,00 para R$ 5,00
+2025-04-06 11:41:25,152 - app.routes.basic_data - INFO - Log adicionado: Demais Custos Fixos alterado de R$ 1,94 para R$ 194,00
+2025-04-06 11:41:25,153 - app.routes.basic_data - INFO - Campo clients_served atualizado para 87
+2025-04-06 11:41:25,153 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 65.0
+2025-04-06 11:41:25,153 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 5.2
+2025-04-06 11:41:25,153 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 278.0
+2025-04-06 11:41:25,153 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-06 11:41:25,153 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-06 11:41:25,154 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-06 11:41:25,154 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 5.0
+2025-04-06 11:41:25,154 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 50.0
+2025-04-06 11:41:25,154 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 194.0
+2025-04-06 11:41:25,154 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 25.0
+2025-04-06 11:41:25,154 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-06 11:41:25,158 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-06 11:41:28,149 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:41:28,150 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65.0, sales_expenses=5.2
+2025-04-06 11:43:47,563 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:43:47,563 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65.0, sales_expenses=5.2
+2025-04-06 11:43:53,084 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-06 11:43:53,086 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-04-06 11:43:53,086 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 65,00 para R$ 65000,00
+2025-04-06 11:43:53,086 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 5,20 para R$ 52,00
+2025-04-06 11:43:53,086 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 278,00 para R$ 2780,00
+2025-04-06 11:43:53,086 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 5,00 para R$ 50,00
+2025-04-06 11:43:53,087 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 194,00 para R$ 1940,00
+2025-04-06 11:43:53,087 - app.routes.basic_data - INFO - Alterações detectadas: ['Faturamento com Vendas alterado de R$ 65,00 para R$ 65000,00', 'Gastos com Vendas alterado de R$ 5,20 para R$ 52,00', 'Gastos com Insumos e Produtos alterado de R$ 278,00 para R$ 2780,00', 'Pró-labore alterado de R$ 5,00 para R$ 50,00', 'Demais Custos Fixos alterado de R$ 194,00 para R$ 1940,00']
+2025-04-06 11:43:53,087 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de R$ 65,00 para R$ 65000,00
+2025-04-06 11:43:53,087 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 5,20 para R$ 52,00
+2025-04-06 11:43:53,088 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 278,00 para R$ 2780,00
+2025-04-06 11:43:53,088 - app.routes.basic_data - INFO - Log adicionado: Pró-labore alterado de R$ 5,00 para R$ 50,00
+2025-04-06 11:43:53,089 - app.routes.basic_data - INFO - Log adicionado: Demais Custos Fixos alterado de R$ 194,00 para R$ 1940,00
+2025-04-06 11:43:53,089 - app.routes.basic_data - INFO - Campo clients_served atualizado para 87
+2025-04-06 11:43:53,089 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 65000.0
+2025-04-06 11:43:53,089 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 52.0
+2025-04-06 11:43:53,090 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 2780.0
+2025-04-06 11:43:53,090 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-06 11:43:53,090 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-06 11:43:53,090 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-06 11:43:53,090 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 50.0
+2025-04-06 11:43:53,091 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 50.0
+2025-04-06 11:43:53,091 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 1940.0
+2025-04-06 11:43:53,091 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 25.0
+2025-04-06 11:43:53,091 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-06 11:43:53,099 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-06 11:43:55,899 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:43:55,899 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=52.0
+2025-04-06 11:44:02,109 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-06 11:44:02,110 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-04-06 11:44:02,110 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 52,00 para R$ 520,00
+2025-04-06 11:44:02,110 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 2780,00 para R$ 27800,00
+2025-04-06 11:44:02,110 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 50,00 para R$ 500,00
+2025-04-06 11:44:02,110 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 1940,00 para R$ 19400,00
+2025-04-06 11:44:02,111 - app.routes.basic_data - INFO - Alterações detectadas: ['Gastos com Vendas alterado de R$ 52,00 para R$ 520,00', 'Gastos com Insumos e Produtos alterado de R$ 2780,00 para R$ 27800,00', 'Pró-labore alterado de R$ 50,00 para R$ 500,00', 'Demais Custos Fixos alterado de R$ 1940,00 para R$ 19400,00']
+2025-04-06 11:44:02,111 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 52,00 para R$ 520,00
+2025-04-06 11:44:02,111 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 2780,00 para R$ 27800,00
+2025-04-06 11:44:02,111 - app.routes.basic_data - INFO - Log adicionado: Pró-labore alterado de R$ 50,00 para R$ 500,00
+2025-04-06 11:44:02,111 - app.routes.basic_data - INFO - Log adicionado: Demais Custos Fixos alterado de R$ 1940,00 para R$ 19400,00
+2025-04-06 11:44:02,111 - app.routes.basic_data - INFO - Campo clients_served atualizado para 87
+2025-04-06 11:44:02,112 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 65000.0
+2025-04-06 11:44:02,112 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 520.0
+2025-04-06 11:44:02,112 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 27800.0
+2025-04-06 11:44:02,112 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-06 11:44:02,112 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-06 11:44:02,112 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-06 11:44:02,112 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 500.0
+2025-04-06 11:44:02,112 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 50.0
+2025-04-06 11:44:02,112 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 19400.0
+2025-04-06 11:44:02,113 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 25.0
+2025-04-06 11:44:02,113 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-06 11:44:02,119 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-06 11:44:04,148 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:44:04,148 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=520.0
+2025-04-06 11:44:59,121 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:44:59,129 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=520.0
+2025-04-06 11:45:04,601 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-06 11:45:04,602 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-04-06 11:45:04,603 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 520,00 para R$ 5200,00
+2025-04-06 11:45:04,603 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 27800,00 para R$ 278000,00
+2025-04-06 11:45:04,603 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 500,00 para R$ 5000,00
+2025-04-06 11:45:04,603 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 19400,00 para R$ 194000,00
+2025-04-06 11:45:04,603 - app.routes.basic_data - INFO - Alterações detectadas: ['Gastos com Vendas alterado de R$ 520,00 para R$ 5200,00', 'Gastos com Insumos e Produtos alterado de R$ 27800,00 para R$ 278000,00', 'Pró-labore alterado de R$ 500,00 para R$ 5000,00', 'Demais Custos Fixos alterado de R$ 19400,00 para R$ 194000,00']
+2025-04-06 11:45:04,603 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 520,00 para R$ 5200,00
+2025-04-06 11:45:04,603 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 27800,00 para R$ 278000,00
+2025-04-06 11:45:04,604 - app.routes.basic_data - INFO - Log adicionado: Pró-labore alterado de R$ 500,00 para R$ 5000,00
+2025-04-06 11:45:04,604 - app.routes.basic_data - INFO - Log adicionado: Demais Custos Fixos alterado de R$ 19400,00 para R$ 194000,00
+2025-04-06 11:45:04,604 - app.routes.basic_data - INFO - Campo clients_served atualizado para 87
+2025-04-06 11:45:04,604 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 65000.0
+2025-04-06 11:45:04,606 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 5200.0
+2025-04-06 11:45:04,606 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 278000.0
+2025-04-06 11:45:04,606 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-06 11:45:04,606 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-06 11:45:04,606 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-06 11:45:04,606 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 5000.0
+2025-04-06 11:45:04,606 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 50.0
+2025-04-06 11:45:04,606 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 194000.0
+2025-04-06 11:45:04,607 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 25.0
+2025-04-06 11:45:04,607 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-06 11:45:04,616 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-06 11:45:07,062 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:45:07,062 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:45:22,719 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:45:22,719 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=65000.0, sales_expenses=5200.0
+2025-04-06 11:45:35,774 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-06 11:45:35,776 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-04-06 11:45:35,776 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 65000,00 para R$ 650000,00
+2025-04-06 11:45:35,776 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 5200,00 para R$ 52000,00
+2025-04-06 11:45:35,776 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 278000,00 para R$ 27800,00
+2025-04-06 11:45:35,776 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 194000,00 para R$ 19400,00
+2025-04-06 11:45:35,776 - app.routes.basic_data - INFO - Alterações detectadas: ['Faturamento com Vendas alterado de R$ 65000,00 para R$ 650000,00', 'Gastos com Vendas alterado de R$ 5200,00 para R$ 52000,00', 'Gastos com Insumos e Produtos alterado de R$ 278000,00 para R$ 27800,00', 'Demais Custos Fixos alterado de R$ 194000,00 para R$ 19400,00']
+2025-04-06 11:45:35,776 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de R$ 65000,00 para R$ 650000,00
+2025-04-06 11:45:35,776 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 5200,00 para R$ 52000,00
+2025-04-06 11:45:35,776 - app.routes.basic_data - INFO - Log adicionado: Gastos com Insumos e Produtos alterado de R$ 278000,00 para R$ 27800,00
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Log adicionado: Demais Custos Fixos alterado de R$ 194000,00 para R$ 19400,00
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Campo clients_served atualizado para 87
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 650000.0
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 52000.0
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 27800.0
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 5000.0
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 50.0
+2025-04-06 11:45:35,777 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 19400.0
+2025-04-06 11:45:35,778 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 25.0
+2025-04-06 11:45:35,778 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-06 11:45:35,786 - app.routes.basic_data - INFO - Dados salvos com sucesso
+2025-04-06 11:45:39,847 - app.routes.basic_data - INFO - Buscando logs para basic_data_id: 8
+2025-04-06 11:45:39,847 - app.routes.basic_data - INFO - Valores atuais: sales_revenue=650000.0, sales_expenses=52000.0
+2025-04-06 11:45:59,723 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2
+2025-04-06 11:45:59,725 - app.routes.basic_data - INFO - Registro existente encontrado para 12/2025
+2025-04-06 11:45:59,725 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 650000,00 para R$ 65000,00
+2025-04-06 11:45:59,726 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 52000,00 para R$ 5200,00
+2025-04-06 11:45:59,726 - app.routes.basic_data - INFO - Alterações detectadas: ['Faturamento com Vendas alterado de R$ 650000,00 para R$ 65000,00', 'Gastos com Vendas alterado de R$ 52000,00 para R$ 5200,00']
+2025-04-06 11:45:59,726 - app.routes.basic_data - INFO - Log adicionado: Faturamento com Vendas alterado de R$ 650000,00 para R$ 65000,00
+2025-04-06 11:45:59,726 - app.routes.basic_data - INFO - Log adicionado: Gastos com Vendas alterado de R$ 52000,00 para R$ 5200,00
+2025-04-06 11:45:59,726 - app.routes.basic_data - INFO - Campo clients_served atualizado para 87
+2025-04-06 11:45:59,726 - app.routes.basic_data - INFO - Campo sales_revenue atualizado para 65000.0
+2025-04-06 11:45:59,726 - app.routes.basic_data - INFO - Campo sales_expenses atualizado para 5200.0
+2025-04-06 11:45:59,727 - app.routes.basic_data - INFO - Campo input_product_expenses atualizado para 27800.0
+2025-04-06 11:45:59,727 - app.routes.basic_data - INFO - Campo fixed_costs atualizado para None
+2025-04-06 11:45:59,727 - app.routes.basic_data - INFO - Campo ideal_profit_margin atualizado para None
+2025-04-06 11:45:59,727 - app.routes.basic_data - INFO - Campo service_capacity atualizado para None
+2025-04-06 11:45:59,727 - app.routes.basic_data - INFO - Campo pro_labore atualizado para 5000.0
+2025-04-06 11:45:59,728 - app.routes.basic_data - INFO - Campo work_hours_per_week atualizado para 50.0
+2025-04-06 11:45:59,728 - app.routes.basic_data - INFO - Campo other_fixed_costs atualizado para 19400.0
+2025-04-06 11:45:59,728 - app.routes.basic_data - INFO - Campo ideal_service_profit_margin atualizado para 25.0
+2025-04-06 11:45:59,728 - app.routes.basic_data - INFO - Campo is_current atualizado para False
+2025-04-06 11:45:59,734 - app.routes.basic_data - INFO - Dados salvos com sucesso

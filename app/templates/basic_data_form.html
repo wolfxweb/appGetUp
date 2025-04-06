@@ -489,6 +489,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Lista de campos que devem ser formatados como moeda
     const currencyInputs = [
         'sales_revenue', 
         'sales_expenses', 
@@ -497,6 +498,134 @@ document.addEventListener('DOMContentLoaded', function() {
         'pro_labore', 
         'other_fixed_costs'
     ];
+
+    // Função para formatar valor como moeda brasileira (R$)
+    function formatCurrency(value) {
+        // Remover todos os caracteres não numéricos, exceto ponto e vírgula
+        let numericValue = value.replace(/[^\d,.-]/g, '');
+        
+        // Tratar separadores de milhares e decimais
+        // Primeiro, remover todos os pontos (separadores de milhares)
+        numericValue = numericValue.replace(/\./g, '');
+        
+        // Substituir vírgula por ponto para conversão
+        numericValue = numericValue.replace(',', '.');
+        
+        // Converter para número
+        let number = parseFloat(numericValue);
+        
+        // Verificar se é um número válido
+        if (isNaN(number)) {
+            return '';
+        }
+        
+        // Formatar como moeda brasileira sem o símbolo R$
+        return new Intl.NumberFormat('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(number);
+    }
+
+    // Função para converter valor formatado para número (para envio ao banco)
+    function currencyToNumber(value) {
+        // Remover todos os caracteres não numéricos, exceto ponto e vírgula
+        let numericValue = value.replace(/[^\d,.-]/g, '');
+        
+        // Verificar se o valor contém vírgula (formato brasileiro)
+        if (numericValue.includes(',')) {
+            // Se contém vírgula, tratar como formato brasileiro (65.000,00)
+            
+            // Remover todos os pontos (separadores de milhares)
+            numericValue = numericValue.replace(/\./g, '');
+            
+            // Substituir vírgula por ponto para conversão
+            numericValue = numericValue.replace(',', '.');
+        } else if (numericValue.includes('.')) {
+            // Se contém ponto, verificar se é formato americano (65,000.00) ou brasileiro (65.000,00)
+            
+            // Verificar se o último ponto é seguido por dois dígitos (formato americano)
+            const parts = numericValue.split('.');
+            if (parts.length > 1 && parts[parts.length - 1].length === 2) {
+                // Formato americano (65,000.00), não precisa fazer nada
+            } else {
+                // Formato brasileiro com ponto (65.000,00), remover pontos
+                numericValue = numericValue.replace(/\./g, '');
+            }
+        }
+        
+        // Converter para número
+        let number = parseFloat(numericValue);
+        
+        // Verificar se é um número válido
+        if (isNaN(number)) {
+            return 0;
+        }
+        
+        // Retornar com 2 casas decimais
+        return number.toFixed(2);
+    }
+
+    // Função para aplicar formatação em tempo real
+    function setupCurrencyInputs() {
+        currencyInputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            if (input) {
+                // Formatar valor inicial se existir
+                if (input.value) {
+                    input.value = formatCurrency(input.value);
+                }
+                
+                // Adicionar evento para formatação em tempo real
+                input.addEventListener('input', function(e) {
+                    // Obter posição do cursor
+                    const cursorPosition = this.selectionStart;
+                    
+                    // Formatar o valor
+                    const formattedValue = formatCurrency(this.value);
+                    
+                    // Atualizar o valor do campo
+                    this.value = formattedValue;
+                    
+                    // Ajustar a posição do cursor
+                    if (cursorPosition) {
+                        // Calcular nova posição do cursor
+                        const newPosition = cursorPosition + (formattedValue.length - this.value.length);
+                        this.setSelectionRange(newPosition, newPosition);
+                    }
+                });
+                
+                // Adicionar evento para formatação ao perder o foco
+                input.addEventListener('blur', function() {
+                    this.value = formatCurrency(this.value);
+                });
+            }
+        });
+    }
+
+    // Função para preparar os dados antes do envio do formulário
+    function prepareFormData() {
+        currencyInputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            if (input && input.value) {
+                // Converter para número antes do envio
+                const numericValue = currencyToNumber(input.value);
+                
+                // Atualizar o valor do campo original com o valor numérico
+                input.value = numericValue;
+            }
+        });
+    }
+
+    // Inicializar formatação de campos monetários
+    setupCurrencyInputs();
+
+    // Adicionar evento para preparar dados antes do envio do formulário
+    const form = document.querySelector('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            prepareFormData();
+        });
+    }
 
     // Inicializar todas as modais de ajuda com backdrop: false para evitar que bloqueiem a interação com a página
     document.querySelectorAll('.modal').forEach(modalElement => {
@@ -516,7 +645,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Form submission handling
-    const form = document.querySelector('form');
     const confirmReplaceModal = document.getElementById('confirmReplaceModal');
     const confirmModal = new bootstrap.Modal(confirmReplaceModal, {
         backdrop: 'static',
@@ -530,12 +658,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Se já foi confirmado, permite o envio
         if (isConfirmed) {
+            prepareFormData();
             form.submit();
             return;
         }
 
         // Se não estiver em modo de edição, envia o formulário diretamente
         if (!isEditMode) {
+            prepareFormData();
             form.submit();
             return;
         }
@@ -553,10 +683,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 confirmModal.show();
             } else {
                 // Se não existe, envia o formulário normalmente
+                prepareFormData();
                 form.submit();
             }
         } catch (error) {
             console.error('Erro ao verificar dados existentes:', error);
+            prepareFormData();
             form.submit(); // Em caso de erro, tenta enviar mesmo assim
         }
     });
@@ -578,6 +710,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Submeter o formulário após um breve delay
         setTimeout(() => {
+            prepareFormData();
             form.submit();
         }, 100);
     });
@@ -602,21 +735,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // Submissão do formulário para o botão de atualizar
     document.getElementById('updateButton')?.addEventListener('click', function(e) {
         e.preventDefault();
+        prepareFormData();
         form.submit();
     });
 
     // O botão de salvar pode submeter diretamente
     document.getElementById('saveButton')?.addEventListener('click', function(e) {
+        prepareFormData();
         form.submit();
     });
-});
-</script>
-{% endblock %}
-
-{% block extra_js %}
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // ... existing script code ...
 });
 </script>
 {% endblock %}

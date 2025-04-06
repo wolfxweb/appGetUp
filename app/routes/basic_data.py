@@ -219,8 +219,29 @@ async def save_basic_data(
     is_current: str = Form(False),
     edit_mode: bool = Form(False)
 ):
+    # Inicializar new_data com valores padrão para evitar o erro de referência antes da atribuição
+    new_data = {
+        'clients_served': 0,
+        'sales_revenue': 0.0,
+        'sales_expenses': 0.0,
+        'input_product_expenses': 0.0,
+        'fixed_costs': None,
+        'ideal_profit_margin': None,
+        'service_capacity': None,
+        'pro_labore': None,
+        'work_hours_per_week': None,
+        'other_fixed_costs': None,
+        'ideal_service_profit_margin': None,
+        'is_current': False
+    }
+    
     try:
-        is_current_bool = is_current.lower() == 'true'
+        # Verificar se is_current é uma string ou um booleano
+        if isinstance(is_current, str):
+            is_current_bool = is_current.lower() == 'true'
+        else:
+            is_current_bool = bool(is_current)
+            
         logger.info(f"Processando dados básicos para usuário {current_user.id}")
 
         # Se is_current for True, desmarcar todos os outros registros
@@ -238,7 +259,7 @@ async def save_basic_data(
             BasicData.year == year
         ).first()
 
-        # Preparar os novos dados com conversão de tipos
+        # Atualizar new_data com os valores do formulário
         new_data = {
             'clients_served': clients_served,
             'sales_revenue': float(sales_revenue) if sales_revenue else None,
