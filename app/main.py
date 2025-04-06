@@ -19,27 +19,33 @@ from mangum import Mangum
 log_dir = "logs"
 os.makedirs(log_dir, exist_ok=True)
 
-# Configuração de logging
+# Configuração de logging mais detalhada
 logging.basicConfig(
-    level=logging.WARNING,
+    level=logging.DEBUG,  # Mudado para DEBUG para mais detalhes
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        # Log para o console
         logging.StreamHandler(),
-        # Log para arquivo
         logging.FileHandler(os.path.join(log_dir, "app.log"), encoding='utf-8')
     ]
 )
 
-# Criar as tabelas no banco de dados
-Base.metadata.create_all(bind=engine)
+logger = logging.getLogger(__name__)
+
+try:
+    # Criar as tabelas no banco de dados
+    Base.metadata.create_all(bind=engine)
+    logger.info("Tabelas do banco de dados criadas com sucesso")
+except Exception as e:
+    logger.error(f"Erro ao criar tabelas do banco de dados: {str(e)}")
+    raise
 
 app = FastAPI(title="GetUp Gestão")
 
-# Configurar o middleware de sessão
+# Configurar o middleware de sessão com uma chave secreta fixa para produção
+secret_key = os.getenv("SECRET_KEY", secrets.token_urlsafe(32))
 app.add_middleware(
     SessionMiddleware,
-    secret_key=secrets.token_urlsafe(32),
+    secret_key=secret_key,
     session_cookie="session",
     max_age=1800  # 30 minutos
 )
@@ -54,10 +60,21 @@ app.add_middleware(
 )
 
 # Montar arquivos estáticos
-app.mount("/static", StaticFiles(directory=os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")), name="static")
+static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+    logger.info(f"Diretório estático montado em: {static_dir}")
+else:
+    logger.warning(f"Diretório estático não encontrado: {static_dir}")
 
 # Configurar templates
-templates = Jinja2Templates(directory="app/templates")
+templates_dir = "app/templates"
+if os.path.exists(templates_dir):
+    templates = Jinja2Templates(directory=templates_dir)
+    logger.info(f"Diretório de templates configurado em: {templates_dir}")
+else:
+    logger.error(f"Diretório de templates não encontrado: {templates_dir}")
+    raise FileNotFoundError(f"Diretório de templates não encontrado: {templates_dir}")
 
 # Incluir rotas
 app.include_router(auth.router)
@@ -76,8 +93,8 @@ async def home(request: Request, current_user = Depends(get_current_user)):
         "current_user": current_user
     })
 
-# Criar o handler para a Vercel
-handler = Mangum(app)
+# Criar o handler para a Vercel com configurações específicas
+handler = Mangum(app, lifespan="off")
 
 if __name__ == "__main__":
     import uvicorn
