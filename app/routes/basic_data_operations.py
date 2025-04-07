@@ -185,6 +185,16 @@ async def save_basic_data(
             
         logger.info(f"Processando dados básicos para usuário {current_user.id} em modo {'edição' if edit_mode else 'criação'}")
         
+        # Log dos valores recebidos antes da conversão
+        logger.info(f"Valores recebidos (antes da conversão):")
+        logger.info(f"- month: {month}, year: {year}, clients_served: {clients_served}")
+        logger.info(f"- sales_revenue: '{sales_revenue}'")
+        logger.info(f"- sales_expenses: '{sales_expenses}'")
+        logger.info(f"- input_product_expenses: '{input_product_expenses}'")
+        logger.info(f"- fixed_costs: '{fixed_costs}'")
+        logger.info(f"- pro_labore: '{pro_labore}'")
+        logger.info(f"- other_fixed_costs: '{other_fixed_costs}'")
+        
         # Converter valores monetários de string para float
         sales_revenue_float = float(sales_revenue.replace('R$', '').replace('.', '').replace(',', '.').strip())
         sales_expenses_float = float(sales_expenses.replace('R$', '').replace('.', '').replace(',', '.').strip())
@@ -203,14 +213,14 @@ async def save_basic_data(
         if other_fixed_costs:
             other_fixed_costs_float = float(other_fixed_costs.replace('R$', '').replace('.', '').replace(',', '.').strip())
         
-        # Log dos valores recebidos
-        logger.info(f"Valores recebidos: month={month}, year={year}, clients_served={clients_served}")
-        logger.info(f"Valores monetários: sales_revenue={sales_revenue} -> {sales_revenue_float}")
-        logger.info(f"Valores monetários: sales_expenses={sales_expenses} -> {sales_expenses_float}")
-        logger.info(f"Valores monetários: input_product_expenses={input_product_expenses} -> {input_product_expenses_float}")
-        logger.info(f"Valores monetários: fixed_costs={fixed_costs} -> {fixed_costs_float}")
-        logger.info(f"Valores monetários: pro_labore={pro_labore} -> {pro_labore_float}")
-        logger.info(f"Valores monetários: other_fixed_costs={other_fixed_costs} -> {other_fixed_costs_float}")
+        # Log dos valores após a conversão
+        logger.info(f"Valores convertidos (após a conversão):")
+        logger.info(f"- sales_revenue_float: {sales_revenue_float}")
+        logger.info(f"- sales_expenses_float: {sales_expenses_float}")
+        logger.info(f"- input_product_expenses_float: {input_product_expenses_float}")
+        logger.info(f"- fixed_costs_float: {fixed_costs_float}")
+        logger.info(f"- pro_labore_float: {pro_labore_float}")
+        logger.info(f"- other_fixed_costs_float: {other_fixed_costs_float}")
         
         # Preparar os dados para atualização/inserção
         data_dict = {
@@ -230,7 +240,17 @@ async def save_basic_data(
             'is_current': is_current_bool,
             'activity_type': current_user.activity_type
         }
-
+        
+        # Log dos dados que serão salvos
+        logger.info(f"Dados que serão salvos no banco:")
+        logger.info(f"- month: {data_dict['month']}, year: {data_dict['year']}, clients_served: {data_dict['clients_served']}")
+        logger.info(f"- sales_revenue: {data_dict['sales_revenue']}")
+        logger.info(f"- sales_expenses: {data_dict['sales_expenses']}")
+        logger.info(f"- input_product_expenses: {data_dict['input_product_expenses']}")
+        logger.info(f"- fixed_costs: {data_dict['fixed_costs']}")
+        logger.info(f"- pro_labore: {data_dict['pro_labore']}")
+        logger.info(f"- other_fixed_costs: {data_dict['other_fixed_costs']}")
+        
         # Se estiver em modo de edição, buscar o registro existente pelo mês/ano
         if edit_mode:
             logger.info(f"Modo de edição ativado para mês {month}/{year}")

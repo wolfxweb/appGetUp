@@ -642,7 +642,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Retornar com 2 casas decimais
-        return number.toFixed(2);
+        // NÃO multiplicar por 100, apenas retornar o valor exato
+        return number;
     }
 
     // Função para aplicar formatação em tempo real
@@ -692,6 +693,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Atualizar o valor do campo original com o valor numérico
                 input.value = numericValue;
+                
+                // Log para debug
+                console.log(`Campo ${inputId}: valor original = ${input.value}, valor convertido = ${numericValue}`);
             }
         });
     }

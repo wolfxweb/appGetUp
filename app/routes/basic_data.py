@@ -50,14 +50,23 @@ async def basic_data_page(
     db: AsyncSession = Depends(get_db)
 ):
     try:
-        # Buscar dados básicos do usuário com ordenação correta
+        # Buscar dados básicos do usuário atual
         result = await db.execute(
             select(BasicData)
             .filter(BasicData.user_id == current_user.id)
             .order_by(BasicData.year.desc(), BasicData.month.desc())
         )
         basic_data = result.scalars().all()
-
+        
+        # Log dos dados básicos antes da formatação
+        logger.info(f"Dados básicos encontrados: {len(basic_data)} registros")
+        for data in basic_data:
+            logger.info(f"Registro ID {data.id}: month={data.month}, year={data.year}, clients_served={data.clients_served}")
+            logger.info(f"Valores monetários brutos: sales_revenue={data.sales_revenue}, sales_expenses={data.sales_expenses}, input_product_expenses={data.input_product_expenses}")
+            logger.info(f"Valores monetários brutos: fixed_costs={data.fixed_costs}, pro_labore={data.pro_labore}, other_fixed_costs={data.other_fixed_costs}")
+            logger.info(f"Valores formatados: sales_revenue={data.sales_revenue/10}, sales_expenses={data.sales_expenses/10}, input_product_expenses={data.input_product_expenses/10}")
+            logger.info(f"Valores formatados: fixed_costs={data.fixed_costs/10 if data.fixed_costs else None}, pro_labore={data.pro_labore/10 if data.pro_labore else None}, other_fixed_costs={data.other_fixed_costs/10 if data.other_fixed_costs else None}")
+        
         return templates.TemplateResponse(
             "basic_data.html",
             {
@@ -67,15 +76,13 @@ async def basic_data_page(
             }
         )
     except Exception as e:
-        # Log do erro para debug
-        print(f"Erro ao buscar dados básicos: {str(e)}")
+        logger.error(f"Erro ao buscar dados básicos: {str(e)}")
         return templates.TemplateResponse(
             "basic_data.html",
             {
                 "request": request,
                 "user": current_user,
-                "basic_data": [],
-                "error_message": "Erro ao carregar os dados básicos"
+                "error_message": f"Erro ao buscar dados: {str(e)}"
             }
         )
 
