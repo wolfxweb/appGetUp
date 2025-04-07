@@ -72,7 +72,7 @@ def compare_and_log_changes(db: AsyncSession, old_data_dict: dict, new_data: dic
         'pro_labore': 'Pró-labore',
         'work_hours_per_week': 'Horas de Trabalho por Semana',
         'other_fixed_costs': 'Demais Custos Fixos',
-        'ideal_service_profit_margin': 'Margem de Lucro Ideal (Serviços)',
+        'ideal_service_profit_margin': 'Margem de Lucro Ideal',
         'is_current': 'É o Atual'
     }
     
@@ -102,8 +102,23 @@ def compare_and_log_changes(db: AsyncSession, old_data_dict: dict, new_data: dic
             # Formatar valores monetários
             if field in money_fields:
                 try:
-                    old_formatted = f"R$ {old_value:.2f}".replace('.', ',')
-                    new_formatted = f"R$ {new_value:.2f}".replace('.', ',')
+                    # Não dividir por 10, usar o valor original
+                    old_formatted = f"R$ {old_value:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
+                    new_formatted = f"R$ {new_value:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
+                    
+                    changes.append(f"{field_names[field]} alterado de {old_formatted} para {new_formatted}")
+                    logger.info(f"Alteração detectada: {field_names[field]} de {old_formatted} para {new_formatted}")
+                except:
+                    # Fallback caso a formatação falhe
+                    changes.append(f"{field_names[field]} alterado de {old_value} para {new_value}")
+                    logger.info(f"Alteração detectada: {field_names[field]} de {old_value} para {new_value}")
+            # Formatar valores numéricos como inteiros (horas de trabalho, margens, etc.)
+            elif field in ['work_hours_per_week', 'ideal_profit_margin', 'ideal_service_profit_margin']:
+                try:
+                    # Formatar como inteiros
+                    old_formatted = f"{int(old_value)}"
+                    new_formatted = f"{int(new_value)}"
+                    
                     changes.append(f"{field_names[field]} alterado de {old_formatted} para {new_formatted}")
                     logger.info(f"Alteração detectada: {field_names[field]} de {old_formatted} para {new_formatted}")
                 except:
@@ -375,21 +390,21 @@ async def save_basic_data(
             # Registrar faturamento
             revenue_log = BasicDataLog(
                 basic_data_id=new_basic_data.id,
-                change_description=f"Faturamento com vendas definido como R$ {sales_revenue_float:,.2f}"
+                change_description=f"Faturamento com vendas definido como R$ {sales_revenue_float:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
             )
             db.add(revenue_log)
             
             # Registrar gastos com vendas
             expenses_log = BasicDataLog(
                 basic_data_id=new_basic_data.id,
-                change_description=f"Gastos com vendas definido como R$ {sales_expenses_float:,.2f}"
+                change_description=f"Gastos com vendas definido como R$ {sales_expenses_float:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
             )
             db.add(expenses_log)
             
             # Registrar gastos com insumos
             input_log = BasicDataLog(
                 basic_data_id=new_basic_data.id,
-                change_description=f"Gastos com insumos e produtos definido como R$ {input_product_expenses_float:,.2f}"
+                change_description=f"Gastos com insumos e produtos definido como R$ {input_product_expenses_float:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
             )
             db.add(input_log)
             
@@ -397,7 +412,7 @@ async def save_basic_data(
             if fixed_costs_float is not None:
                 fixed_costs_log = BasicDataLog(
                     basic_data_id=new_basic_data.id,
-                    change_description=f"Custos fixos definido como R$ {fixed_costs_float:,.2f}"
+                    change_description=f"Custos fixos definido como R$ {fixed_costs_float:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
                 )
                 db.add(fixed_costs_log)
             
@@ -405,7 +420,7 @@ async def save_basic_data(
             if ideal_profit_margin is not None:
                 margin_log = BasicDataLog(
                     basic_data_id=new_basic_data.id,
-                    change_description=f"Margem de lucro ideal definida como {ideal_profit_margin}%"
+                    change_description=f"Margem de lucro ideal definida como {int(ideal_profit_margin)}%"
                 )
                 db.add(margin_log)
             
@@ -421,7 +436,7 @@ async def save_basic_data(
             if pro_labore_float is not None:
                 pro_labore_log = BasicDataLog(
                     basic_data_id=new_basic_data.id,
-                    change_description=f"Pró-labore definido como R$ {pro_labore_float:,.2f}"
+                    change_description=f"Pró-labore definido como R$ {pro_labore_float:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
                 )
                 db.add(pro_labore_log)
             
@@ -429,7 +444,7 @@ async def save_basic_data(
             if work_hours_per_week is not None:
                 hours_log = BasicDataLog(
                     basic_data_id=new_basic_data.id,
-                    change_description=f"Horas de trabalho por semana definidas como {work_hours_per_week}"
+                    change_description=f"Horas de trabalho por semana definidas como {int(work_hours_per_week)}"
                 )
                 db.add(hours_log)
             
@@ -437,7 +452,7 @@ async def save_basic_data(
             if other_fixed_costs_float is not None:
                 other_costs_log = BasicDataLog(
                     basic_data_id=new_basic_data.id,
-                    change_description=f"Demais custos fixos definidos como R$ {other_fixed_costs_float:,.2f}"
+                    change_description=f"Demais custos fixos definidos como R$ {other_fixed_costs_float:,.2f}".replace(',', 'X').replace('.', ',').replace('X', '.')
                 )
                 db.add(other_costs_log)
             
@@ -445,7 +460,7 @@ async def save_basic_data(
             if ideal_service_profit_margin is not None:
                 service_margin_log = BasicDataLog(
                     basic_data_id=new_basic_data.id,
-                    change_description=f"Margem de lucro ideal para serviços definida como {ideal_service_profit_margin}%"
+                    change_description=f"Margem de lucro ideal definida como {int(ideal_service_profit_margin)}%"
                 )
                 db.add(service_margin_log)
             
