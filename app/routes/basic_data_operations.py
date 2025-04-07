@@ -271,12 +271,11 @@ async def save_basic_data(
                 await db.commit()
                 await db.refresh(existing_data)
                 
-                response = RedirectResponse(
+                # Redirecionar para a página de listagem de dados básicos
+                return RedirectResponse(
                     url="/basic-data",
                     status_code=status.HTTP_303_SEE_OTHER
                 )
-                response.headers["Location"] = "/basic-data"
-                return response
             else:
                 logger.error(f"Registro não encontrado para edição: mês {month}/{year}")
                 return templates.TemplateResponse(
@@ -325,12 +324,11 @@ async def save_basic_data(
             await db.commit()
             await db.refresh(new_basic_data)
 
-            response = RedirectResponse(
+            # Redirecionar para a página de listagem de dados básicos
+            return RedirectResponse(
                 url="/basic-data",
                 status_code=status.HTTP_303_SEE_OTHER
             )
-            response.headers["Location"] = "/basic-data"
-            return response
         
     except Exception as e:
         logger.error(f"Erro ao salvar dados básicos: {str(e)}")

@@ -9,3 +9,19 @@
 2025-04-07 18:16:40,490 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
 2025-04-07 18:16:40,490 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 8/2025
 2025-04-07 18:16:40,494 - app.routes.basic_data_operations - WARNING - Já existe registro para mês 8/2025
+2025-04-07 18:17:47,257 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:17:47,257 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 4/2025
+2025-04-07 18:17:47,267 - app.routes.basic_data_operations - INFO - Criando novo registro para mês 4/2025
+2025-04-07 18:17:47,269 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:17:47,269 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 4/2025
+2025-04-07 18:17:47,273 - app.routes.basic_data_operations - WARNING - Já existe registro para mês 4/2025
+2025-04-07 18:19:21,011 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:19:21,011 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 6/2025
+2025-04-07 18:19:21,013 - app.routes.basic_data_operations - INFO - Criando novo registro para mês 6/2025
+2025-04-07 18:19:40,814 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo edição
+2025-04-07 18:19:40,814 - app.routes.basic_data_operations - INFO - Modo de edição ativado para mês 6/2025
+2025-04-07 18:19:40,817 - app.routes.basic_data_operations - INFO - Alteração detectada: Faturamento com Vendas de R$ 200000,00 para R$ 20000000,00
+2025-04-07 18:19:40,817 - app.routes.basic_data_operations - INFO - Alteração detectada: Gastos com Vendas de R$ 200000,00 para R$ 20000000,00
+2025-04-07 18:19:40,817 - app.routes.basic_data_operations - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 200000,00 para R$ 20000000,00
+2025-04-07 18:19:40,817 - app.routes.basic_data_operations - INFO - Alteração detectada: Pró-labore de R$ 200000,00 para R$ 20000000,00
+2025-04-07 18:19:40,817 - app.routes.basic_data_operations - INFO - Alteração detectada: Demais Custos Fixos de R$ 200000,00 para R$ 20000000,00
