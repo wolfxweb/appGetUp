@@ -285,11 +285,11 @@
                             {% else %}
                                 <div class="d-flex flex-column align-items-end w-100">
                                     <div id="warningMessage" class="w-100 mb-3" style="display: none;">
-                                        <p class="text-warning">
-                                            <i class="bi bi-exclamation-triangle-fill text-danger"  style="color: red !important;"></i> 
-                                            Já existem dados básicos cadastrados para o mês e ano selecionados. 
-                                            <a href="/basic-data" class="text-warning">Volte à tela de consulta de dados básicos</a> e ajuste conforme sua necessidade.
-                                        </p>
+                                        <div class="alert alert-warning" role="alert">
+                                            <i class="bi bi-exclamation-triangle-fill"></i>
+                                            <strong>Atenção!</strong> Já existem dados básicos cadastrados para o mês e ano selecionados.
+                                            <a href="/basic-data" class="alert-link">Volte à tela de consulta de dados básicos</a> e ajuste conforme sua necessidade.
+                                        </div>
                                     </div>
                                     <div class="d-flex gap-2">
                                         <a href="/basic-data" class="btn btn-outline-secondary">
@@ -733,6 +733,98 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inicializar formatação de campos monetários
     setupCurrencyInputs();
 
+    // Função para verificar se já existem dados para o mês/ano selecionado
+    async function checkExistingData() {
+        // Se estiver em modo de edição, não fazer a verificação
+        if (isEditMode) return;
+        
+        const month = document.getElementById('month').value;
+        const year = document.getElementById('year').value;
+        const saveButtonContainer = document.getElementById('saveButtonContainer');
+        const warningMessage = document.getElementById('warningMessage');
+        
+        // Mostrar mensagem de carregamento
+        if (warningMessage) {
+            warningMessage.style.display = 'block';
+            warningMessage.innerHTML = '<div class="alert alert-info"><i class="bi bi-info-circle"></i> Verificando dados existentes...</div>';
+        }
+        
+        try {
+            const response = await fetch(`/basic-data/check/${year}/${month}`);
+            const data = await response.json();
+
+            if (data.exists) {
+                // Se existem dados, ocultar o botão de salvar e mostrar a mensagem de aviso
+                if (saveButtonContainer) {
+                    saveButtonContainer.style.display = 'none';
+                }
+                
+                // Mostrar a mensagem de aviso
+                if (warningMessage) {
+                    warningMessage.innerHTML = `
+                        <div class="alert alert-warning" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <strong>Atenção!</strong> Já existem dados básicos cadastrados para ${month}/${year}.
+                            <br>
+                            Você pode:
+                            <ul class="mb-0">
+                                <li><a href="/basic-data" class="alert-link">Voltar à tela de consulta</a> para ver os dados existentes</li>
+                                <li>Clicar em "Continuar mesmo assim" abaixo para substituir os dados existentes</li>
+                            </ul>
+                        </div>
+                    `;
+                    warningMessage.style.display = 'block';
+                }
+            } else {
+                // Se não existem dados, mostrar o botão de salvar e ocultar a mensagem de aviso
+                if (saveButtonContainer) {
+                    saveButtonContainer.style.display = 'block';
+                }
+                
+                // Ocultar a mensagem de aviso
+                if (warningMessage) {
+                    warningMessage.style.display = 'none';
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao verificar dados existentes:', error);
+            if (warningMessage) {
+                warningMessage.innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        Erro ao verificar dados existentes. Por favor, tente novamente.
+                    </div>
+                `;
+                warningMessage.style.display = 'block';
+            }
+        }
+    }
+
+    // Verificar dados existentes ao carregar a página e quando houver mudanças
+    if (!isEditMode) {
+        // Verificar imediatamente ao carregar a página
+        checkExistingData();
+        
+        // Adicionar eventos para verificar quando o mês ou ano mudar
+        const monthSelect = document.getElementById('month');
+        const yearInput = document.getElementById('year');
+        
+        if (monthSelect) {
+            monthSelect.addEventListener('change', function() {
+                checkExistingData();
+            });
+        }
+        
+        if (yearInput) {
+            yearInput.addEventListener('input', function() {
+                checkExistingData();
+            });
+            yearInput.addEventListener('change', function() {
+                checkExistingData();
+            });
+        }
+    }
+
     // Adicionar evento para preparar dados antes do envio do formulário
     const form = document.querySelector('form');
     if (form) {
@@ -758,22 +850,60 @@ document.addEventListener('DOMContentLoaded', function() {
             const month = document.getElementById('month').value;
             const year = document.getElementById('year').value;
             
+            // Mostrar mensagem de carregamento
+            const warningMessage = document.getElementById('warningMessage');
+            warningMessage.style.display = 'block';
+            warningMessage.innerHTML = '<div class="alert alert-info"><i class="bi bi-info-circle"></i> Verificando dados existentes...</div>';
+
             try {
                 const response = await fetch(`/basic-data/check/${year}/${month}`);
                 const data = await response.json();
 
                 if (data.exists) {
-                    // Se existe, mostra o modal de confirmação
+                    // Se existe, mostra o modal de confirmação e a mensagem de aviso
+                    warningMessage.innerHTML = `
+                        <div class="alert alert-warning" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <strong>Atenção!</strong> Já existem dados básicos cadastrados para ${month}/${year}.
+                            <br>
+                            Você pode:
+                            <ul class="mb-0">
+                                <li><a href="/basic-data" class="alert-link">Voltar à tela de consulta</a> para ver os dados existentes</li>
+                                <li>Clicar em "Continuar mesmo assim" abaixo para substituir os dados existentes</li>
+                            </ul>
+                        </div>
+                    `;
+                    warningMessage.style.display = 'block';
+                    
+                    // Ocultar o botão de salvar
+                    const saveButtonContainer = document.getElementById('saveButtonContainer');
+                    if (saveButtonContainer) {
+                        saveButtonContainer.style.display = 'none';
+                    }
+                    
                     confirmModal.show();
                 } else {
-                    // Se não existe, envia o formulário normalmente
+                    // Se não existe, esconde a mensagem de aviso e mostra o botão de salvar
+                    warningMessage.style.display = 'none';
+                    
+                    // Mostrar o botão de salvar
+                    const saveButtonContainer = document.getElementById('saveButtonContainer');
+                    if (saveButtonContainer) {
+                        saveButtonContainer.style.display = 'block';
+                    }
+                    
                     prepareFormData();
                     form.submit();
                 }
             } catch (error) {
                 console.error('Erro ao verificar dados existentes:', error);
-                prepareFormData();
-                form.submit(); // Em caso de erro, tenta enviar mesmo assim
+                warningMessage.innerHTML = `
+                    <div class="alert alert-danger" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        Erro ao verificar dados existentes. Por favor, tente novamente.
+                    </div>
+                `;
+                warningMessage.style.display = 'block';
             }
         });
     }
