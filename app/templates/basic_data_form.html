@@ -568,6 +568,15 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Definir variáveis globais
+    const isEditMode = {% if edit_mode %}true{% else %}false{% endif %};
+    const confirmReplaceModal = document.getElementById('confirmReplaceModal');
+    const confirmModal = new bootstrap.Modal(confirmReplaceModal, {
+        backdrop: 'static',
+        keyboard: false
+    });
+    let isConfirmed = false;
+
     // Lista de campos que devem ser formatados como moeda
     const currencyInputs = [
         'sales_revenue', 
