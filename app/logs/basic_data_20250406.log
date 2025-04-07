@@ -919,3 +919,16 @@
 2025-04-06 18:21:53,407 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 500000,00 para R$ 50000000,00
 2025-04-06 18:21:53,407 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 500000,00 para R$ 50000000,00
 2025-04-06 18:21:53,407 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 500000,00 para R$ 50000000,00
+2025-04-06 18:23:30,508 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-06 18:23:30,508 - app.routes.basic_data - INFO - Verificando se já existe registro para mês 6/2025
+2025-04-06 18:23:30,512 - app.routes.basic_data - INFO - Criando novo registro para mês 6/2025
+2025-04-06 18:23:30,536 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-06 18:23:30,536 - app.routes.basic_data - INFO - Verificando se já existe registro para mês 6/2025
+2025-04-06 18:23:30,538 - app.routes.basic_data - WARNING - Já existe registro para mês 6/2025
+2025-04-06 18:25:03,555 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2 em modo edição
+2025-04-06 18:25:03,556 - app.routes.basic_data - INFO - Modo de edição ativado para mês 12/2025
+2025-04-06 18:25:03,560 - app.routes.basic_data - INFO - Alteração detectada: Faturamento com Vendas de R$ 650000000,00 para R$ 6500000,00
+2025-04-06 18:25:03,560 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Vendas de R$ 5000,00 para R$ 500000,00
+2025-04-06 18:25:03,560 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 50000000,00 para R$ 5000000000,00
+2025-04-06 18:25:03,560 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 50000000,00 para R$ 5000000000,00
+2025-04-06 18:25:03,560 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 50000000,00 para R$ 5000000000,00

@@ -1,0 +1,11 @@
+2025-04-07 18:00:01,240 - app.routes.basic_data - INFO - Processando dados básicos para usuário 2 em modo edição
+2025-04-07 18:00:01,241 - app.routes.basic_data - INFO - Modo de edição ativado para mês 12/2025
+2025-04-07 18:00:01,246 - app.routes.basic_data - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 5000000000,00 para R$ 500000,00
+2025-04-07 18:00:01,246 - app.routes.basic_data - INFO - Alteração detectada: Pró-labore de R$ 5000000000,00 para R$ 500000,00
+2025-04-07 18:00:01,246 - app.routes.basic_data - INFO - Alteração detectada: Demais Custos Fixos de R$ 5000000000,00 para R$ 500000,00
+2025-04-07 18:16:40,472 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:16:40,472 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 8/2025
+2025-04-07 18:16:40,485 - app.routes.basic_data_operations - INFO - Criando novo registro para mês 8/2025
+2025-04-07 18:16:40,490 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:16:40,490 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 8/2025
+2025-04-07 18:16:40,494 - app.routes.basic_data_operations - WARNING - Já existe registro para mês 8/2025
