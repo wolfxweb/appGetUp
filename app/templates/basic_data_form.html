@@ -579,6 +579,36 @@ document.addEventListener('DOMContentLoaded', function() {
     ];
     console.log(currencyInputs);
 
+    // Função para validar o campo ideal_service_profit_margin
+    function validateProfitMarginInput(input) {
+        let value = parseFloat(input.value);
+        
+        // Se o valor for negativo, definir como 0
+        if (value < 0) {
+            value = 0;
+        }
+        
+        // Se o valor for maior que 100, definir como 100
+        if (value > 100) {
+            value = 100;
+        }
+        
+        // Atualizar o valor do campo
+        input.value = value;
+    }
+
+    // Adicionar evento para validar o campo ideal_service_profit_margin
+    const profitMarginInput = document.getElementById('ideal_service_profit_margin');
+    if (profitMarginInput) {
+        profitMarginInput.addEventListener('input', function() {
+            validateProfitMarginInput(this);
+        });
+        
+        profitMarginInput.addEventListener('blur', function() {
+            validateProfitMarginInput(this);
+        });
+    }
+
     // Função para formatar valor como moeda brasileira (R$)
     function formatCurrency(value) {
         // Remover todos os caracteres não numéricos, exceto ponto e vírgula
