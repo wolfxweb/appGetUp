@@ -736,176 +736,47 @@ document.addEventListener('DOMContentLoaded', function() {
     // Adicionar evento para preparar dados antes do envio do formulário
     const form = document.querySelector('form');
     if (form) {
-        form.addEventListener('submit', function(e) {
-            prepareFormData();
-        });
-    }
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
 
-    // Inicializar todas as modais de ajuda com backdrop: false para evitar que bloqueiem a interação com a página
-    document.querySelectorAll('.modal').forEach(modalElement => {
-        // Criar uma instância do modal do Bootstrap com backdrop: false
-        const modal = new bootstrap.Modal(modalElement, {
-            backdrop: false,
-            keyboard: true
-        });
-        
-        // Adicionar evento para fechar a modal quando clicar fora dela
-        modalElement.addEventListener('click', function(e) {
-            // Se o clique foi fora do conteúdo da modal
-            if (e.target === modalElement) {
-                modal.hide();
-            }
-        });
-    });
-
-    // Form submission handling
-    const confirmReplaceModal = document.getElementById('confirmReplaceModal');
-    const confirmModal = new bootstrap.Modal(confirmReplaceModal, {
-        backdrop: 'static',
-        keyboard: false
-    });
-    let isConfirmed = false;
-    const isEditMode = {% if edit_mode %}true{% else %}false{% endif %};
-
-    // Função para verificar se já existem dados para o mês/ano selecionados
-    async function checkExistingData() {
-        // Se estiver em modo de edição, não fazer a verificação
-        if (isEditMode) {
-            console.log('Modo de edição: true, não verificando dados existentes');
-            return;
-        }
-        
-        const month = document.getElementById('month').value;
-        const year = document.getElementById('year').value;
-        const saveButtonContainer = document.getElementById('saveButtonContainer');
-        const warningMessage = document.getElementById('warningMessage');
-        
-        console.log(`Verificando dados para mês: ${month}, ano: ${year}`);
-        console.log(`Elementos encontrados: saveButtonContainer=${!!saveButtonContainer}, warningMessage=${!!warningMessage}`);
-        
-        try {
-            const url = `/basic-data/check/${year}/${month}`;
-            console.log(`Fazendo requisição para: ${url}`);
-            
-            const response = await fetch(url);
-            console.log(`Resposta recebida: ${response.status} ${response.statusText}`);
-            
-            const data = await response.json();
-            console.log(`Dados recebidos: ${JSON.stringify(data)}`);
-
-            if (data.exists) {
-                // Se existem dados, ocultar o botão de salvar e mostrar a mensagem de aviso
-                console.log('Dados existem, ocultando botão e mostrando mensagem');
-                
-                // Ocultar o botão de salvar
-                if (saveButtonContainer) {
-                    saveButtonContainer.style.display = 'none';
-                    console.log('Botão de salvar ocultado');
-                }
-                
-                // Mostrar a mensagem de aviso
-                if (warningMessage) {
-                    warningMessage.style.display = 'block';
-                    console.log('Mensagem de aviso exibida');
-                }
-            } else {
-                // Se não existem dados, mostrar o botão de salvar e ocultar a mensagem de aviso
-                console.log('Dados não existem, mostrando botão e ocultando mensagem');
-                
-                // Mostrar o botão de salvar
-                if (saveButtonContainer) {
-                    saveButtonContainer.style.display = 'block';
-                    console.log('Botão de salvar exibido');
-                }
-                
-                // Ocultar a mensagem de aviso
-                if (warningMessage) {
-                    warningMessage.style.display = 'none';
-                    console.log('Mensagem de aviso ocultada');
-                }
-            }
-        } catch (error) {
-            console.error('Erro ao verificar dados existentes:', error);
-        }
-    }
-
-    // Verificar dados existentes ao carregar a página e quando houver mudanças
-    if (!isEditMode) {
-        // Verificar imediatamente ao carregar a página
-        console.log('Modo de edição: false, verificando dados existentes ao carregar a página');
-        console.log('Elementos encontrados:');
-        console.log('- saveButtonContainer:', document.getElementById('saveButtonContainer'));
-        console.log('- warningMessage:', document.getElementById('warningMessage'));
-        console.log('- month:', document.getElementById('month'));
-        console.log('- year:', document.getElementById('year'));
-        
-        checkExistingData();
-        
-        // Adicionar eventos para verificar quando o mês ou ano mudar
-        const monthSelect = document.getElementById('month');
-        const yearInput = document.getElementById('year');
-        
-        if (monthSelect) {
-            monthSelect.addEventListener('change', function() {
-                console.log('Mês alterado para:', this.value);
-                checkExistingData();
-            });
-        }
-        
-        if (yearInput) {
-            yearInput.addEventListener('input', function() {
-                console.log('Ano alterado para:', this.value);
-                checkExistingData();
-            });
-            yearInput.addEventListener('change', function() {
-                console.log('Ano alterado para:', this.value);
-                checkExistingData();
-            });
-        }
-    } else {
-        console.log('Modo de edição: true, não verificando dados existentes');
-    }
-
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        // Se estiver em modo de edição, enviar o formulário diretamente
-        if (isEditMode) {
-            console.log('Modo de edição: true, enviando formulário diretamente');
-            prepareFormData();
-            form.submit();
-            return;
-        }
-
-        // Se já foi confirmado, permite o envio
-        if (isConfirmed) {
-            prepareFormData();
-            form.submit();
-            return;
-        }
-
-        // Verifica se já existe registro para o mês/ano selecionado (apenas para novo registro)
-        const month = document.getElementById('month').value;
-        const year = document.getElementById('year').value;
-        
-        try {
-            const response = await fetch(`/basic-data/check/${year}/${month}`);
-            const data = await response.json();
-
-            if (data.exists) {
-                // Se existe, mostra o modal de confirmação
-                confirmModal.show();
-            } else {
-                // Se não existe, envia o formulário normalmente
+            // Se estiver em modo de edição, enviar o formulário diretamente
+            if (isEditMode) {
+                console.log('Modo de edição: true, enviando formulário diretamente');
                 prepareFormData();
                 form.submit();
+                return;
             }
-        } catch (error) {
-            console.error('Erro ao verificar dados existentes:', error);
-            prepareFormData();
-            form.submit(); // Em caso de erro, tenta enviar mesmo assim
-        }
-    });
+
+            // Se já foi confirmado, permite o envio
+            if (isConfirmed) {
+                prepareFormData();
+                form.submit();
+                return;
+            }
+
+            // Verifica se já existe registro para o mês/ano selecionado (apenas para novo registro)
+            const month = document.getElementById('month').value;
+            const year = document.getElementById('year').value;
+            
+            try {
+                const response = await fetch(`/basic-data/check/${year}/${month}`);
+                const data = await response.json();
+
+                if (data.exists) {
+                    // Se existe, mostra o modal de confirmação
+                    confirmModal.show();
+                } else {
+                    // Se não existe, envia o formulário normalmente
+                    prepareFormData();
+                    form.submit();
+                }
+            } catch (error) {
+                console.error('Erro ao verificar dados existentes:', error);
+                prepareFormData();
+                form.submit(); // Em caso de erro, tenta enviar mesmo assim
+            }
+        });
+    }
 
     // Botão de confirmação no modal
     document.getElementById('confirmReplace').addEventListener('click', function() {
@@ -955,6 +826,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // O botão de salvar pode submeter diretamente
     document.getElementById('saveButton')?.addEventListener('click', function(e) {
+        e.preventDefault();
         prepareFormData();
         form.submit();
     });
