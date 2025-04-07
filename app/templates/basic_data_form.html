@@ -732,7 +732,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Atualizar o valor do campo original com o valor numérico
                 input.value = numericValue;
-                
                 // Log para debug
                 console.log(`Campo ${inputId}: valor original = ${input.value}, valor convertido = ${numericValue}`);
             }
@@ -772,13 +771,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (warningMessage) {
                     warningMessage.innerHTML = `
                         <div class="alert alert-warning" role="alert">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
+                            <i class="bi bi-exclamation-triangle-fill" style="color: red !important;"></i>
                             <strong>Atenção!</strong> Já existem dados básicos cadastrados para ${month}/${year}.
                             <br>
                             Você pode:
                             <ul class="mb-0">
                                 <li><a href="/basic-data" class="alert-link">Voltar à tela de consulta</a> para ver os dados existentes</li>
-                                <li>Clicar em "Continuar mesmo assim" abaixo para substituir os dados existentes</li>
                             </ul>
                         </div>
                     `;
