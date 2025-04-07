@@ -290,12 +290,13 @@ async def save_basic_data(
                 
                 # Criar log de alterações
                 if changes:
-                    log_entry = BasicDataLog(
-                        basic_data_id=existing_data.id,
-                        change_description="\n".join(changes),
-                        created_at=datetime.now()
-                    )
-                    db.add(log_entry)
+                    for change in changes:
+                        log_entry = BasicDataLog(
+                            basic_data_id=existing_data.id,
+                            change_description=change,
+                            created_at=datetime.now()
+                        )
+                        db.add(log_entry)
                 
                 await db.commit()
                 await db.refresh(existing_data)
@@ -355,6 +356,101 @@ async def save_basic_data(
             await db.refresh(new_basic_data)
             
             logger.info(f"Registro criado com sucesso. ID: {new_basic_data.id}")
+            
+            # Registrar cada campo no histórico separadamente
+            # Registrar mês e ano
+            month_log = BasicDataLog(
+                basic_data_id=new_basic_data.id,
+                change_description=f"Mês/Ano definido como {calendar.month_name[month]}/{year}"
+            )
+            db.add(month_log)
+            
+            # Registrar clientes atendidos
+            clients_log = BasicDataLog(
+                basic_data_id=new_basic_data.id,
+                change_description=f"Clientes atendidos definido como {clients_served}"
+            )
+            db.add(clients_log)
+            
+            # Registrar faturamento
+            revenue_log = BasicDataLog(
+                basic_data_id=new_basic_data.id,
+                change_description=f"Faturamento com vendas definido como R$ {sales_revenue_float:,.2f}"
+            )
+            db.add(revenue_log)
+            
+            # Registrar gastos com vendas
+            expenses_log = BasicDataLog(
+                basic_data_id=new_basic_data.id,
+                change_description=f"Gastos com vendas definido como R$ {sales_expenses_float:,.2f}"
+            )
+            db.add(expenses_log)
+            
+            # Registrar gastos com insumos
+            input_log = BasicDataLog(
+                basic_data_id=new_basic_data.id,
+                change_description=f"Gastos com insumos e produtos definido como R$ {input_product_expenses_float:,.2f}"
+            )
+            db.add(input_log)
+            
+            # Registrar custos fixos (se aplicável)
+            if fixed_costs_float is not None:
+                fixed_costs_log = BasicDataLog(
+                    basic_data_id=new_basic_data.id,
+                    change_description=f"Custos fixos definido como R$ {fixed_costs_float:,.2f}"
+                )
+                db.add(fixed_costs_log)
+            
+            # Registrar margem de lucro ideal (se aplicável)
+            if ideal_profit_margin is not None:
+                margin_log = BasicDataLog(
+                    basic_data_id=new_basic_data.id,
+                    change_description=f"Margem de lucro ideal definida como {ideal_profit_margin}%"
+                )
+                db.add(margin_log)
+            
+            # Registrar capacidade de atendimento (se aplicável)
+            if service_capacity:
+                capacity_log = BasicDataLog(
+                    basic_data_id=new_basic_data.id,
+                    change_description=f"Capacidade de atendimento definida como {service_capacity}"
+                )
+                db.add(capacity_log)
+            
+            # Registrar pró-labore (se aplicável)
+            if pro_labore_float is not None:
+                pro_labore_log = BasicDataLog(
+                    basic_data_id=new_basic_data.id,
+                    change_description=f"Pró-labore definido como R$ {pro_labore_float:,.2f}"
+                )
+                db.add(pro_labore_log)
+            
+            # Registrar horas de trabalho por semana (se aplicável)
+            if work_hours_per_week is not None:
+                hours_log = BasicDataLog(
+                    basic_data_id=new_basic_data.id,
+                    change_description=f"Horas de trabalho por semana definidas como {work_hours_per_week}"
+                )
+                db.add(hours_log)
+            
+            # Registrar demais custos fixos (se aplicável)
+            if other_fixed_costs_float is not None:
+                other_costs_log = BasicDataLog(
+                    basic_data_id=new_basic_data.id,
+                    change_description=f"Demais custos fixos definidos como R$ {other_fixed_costs_float:,.2f}"
+                )
+                db.add(other_costs_log)
+            
+            # Registrar margem de lucro ideal para serviços (se aplicável)
+            if ideal_service_profit_margin is not None:
+                service_margin_log = BasicDataLog(
+                    basic_data_id=new_basic_data.id,
+                    change_description=f"Margem de lucro ideal para serviços definida como {ideal_service_profit_margin}%"
+                )
+                db.add(service_margin_log)
+            
+            # Salvar todos os logs
+            await db.commit()
 
             # Redirecionar para a página de listagem de dados básicos
             logger.info("Redirecionando para /basic-data/")
