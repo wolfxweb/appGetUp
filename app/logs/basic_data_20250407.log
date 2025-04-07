@@ -25,3 +25,55 @@
 2025-04-07 18:19:40,817 - app.routes.basic_data_operations - INFO - Alteração detectada: Gastos com Insumos e Produtos de R$ 200000,00 para R$ 20000000,00
 2025-04-07 18:19:40,817 - app.routes.basic_data_operations - INFO - Alteração detectada: Pró-labore de R$ 200000,00 para R$ 20000000,00
 2025-04-07 18:19:40,817 - app.routes.basic_data_operations - INFO - Alteração detectada: Demais Custos Fixos de R$ 200000,00 para R$ 20000000,00
+2025-04-07 18:24:24,831 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:24:24,831 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 4/2025
+2025-04-07 18:24:24,836 - app.routes.basic_data_operations - INFO - Criando novo registro para mês 4/2025
+2025-04-07 18:24:24,852 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:24:24,853 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 4/2025
+2025-04-07 18:24:24,856 - app.routes.basic_data_operations - WARNING - Já existe registro para mês 4/2025
+2025-04-07 18:26:53,950 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:26:53,951 - app.routes.basic_data_operations - INFO - Valores recebidos: month=4, year=2025, clients_served=505
+2025-04-07 18:26:53,951 - app.routes.basic_data_operations - INFO - Valores monetários: sales_revenue=5000.00 -> 500000.0
+2025-04-07 18:26:53,951 - app.routes.basic_data_operations - INFO - Valores monetários: sales_expenses=5000.00 -> 500000.0
+2025-04-07 18:26:53,951 - app.routes.basic_data_operations - INFO - Valores monetários: input_product_expenses=5000.00 -> 500000.0
+2025-04-07 18:26:53,952 - app.routes.basic_data_operations - INFO - Valores monetários: fixed_costs=None -> None
+2025-04-07 18:26:53,952 - app.routes.basic_data_operations - INFO - Valores monetários: pro_labore=5000.00 -> 500000.0
+2025-04-07 18:26:53,952 - app.routes.basic_data_operations - INFO - Valores monetários: other_fixed_costs=5000.00 -> 500000.0
+2025-04-07 18:26:53,952 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 4/2025
+2025-04-07 18:26:53,957 - app.routes.basic_data_operations - INFO - Criando novo registro para mês 4/2025
+2025-04-07 18:26:53,974 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:26:53,975 - app.routes.basic_data_operations - INFO - Valores recebidos: month=4, year=2025, clients_served=505
+2025-04-07 18:26:53,975 - app.routes.basic_data_operations - INFO - Valores monetários: sales_revenue=5000.00 -> 500000.0
+2025-04-07 18:26:53,975 - app.routes.basic_data_operations - INFO - Valores monetários: sales_expenses=5000.00 -> 500000.0
+2025-04-07 18:26:53,975 - app.routes.basic_data_operations - INFO - Valores monetários: input_product_expenses=5000.00 -> 500000.0
+2025-04-07 18:26:53,975 - app.routes.basic_data_operations - INFO - Valores monetários: fixed_costs=None -> None
+2025-04-07 18:26:53,975 - app.routes.basic_data_operations - INFO - Valores monetários: pro_labore=5000.00 -> 500000.0
+2025-04-07 18:26:53,975 - app.routes.basic_data_operations - INFO - Valores monetários: other_fixed_costs=5000.00 -> 500000.0
+2025-04-07 18:26:53,975 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 4/2025
+2025-04-07 18:26:53,977 - app.routes.basic_data_operations - INFO - Registro criado com sucesso. ID: 13
+2025-04-07 18:26:53,977 - app.routes.basic_data_operations - INFO - Redirecionando para /basic-data/
+2025-04-07 18:26:53,979 - app.routes.basic_data_operations - WARNING - Já existe registro para mês 4/2025
+2025-04-07 18:27:57,676 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:27:57,676 - app.routes.basic_data_operations - INFO - Valores recebidos: month=4, year=2025, clients_served=5
+2025-04-07 18:27:57,676 - app.routes.basic_data_operations - INFO - Valores monetários: sales_revenue=5000.00 -> 500000.0
+2025-04-07 18:27:57,677 - app.routes.basic_data_operations - INFO - Valores monetários: sales_expenses=5000.00 -> 500000.0
+2025-04-07 18:27:57,677 - app.routes.basic_data_operations - INFO - Valores monetários: input_product_expenses=5000.00 -> 500000.0
+2025-04-07 18:27:57,677 - app.routes.basic_data_operations - INFO - Valores monetários: fixed_costs=None -> None
+2025-04-07 18:27:57,677 - app.routes.basic_data_operations - INFO - Valores monetários: pro_labore=5000.00 -> 500000.0
+2025-04-07 18:27:57,677 - app.routes.basic_data_operations - INFO - Valores monetários: other_fixed_costs=5000.00 -> 500000.0
+2025-04-07 18:27:57,678 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 4/2025
+2025-04-07 18:27:57,687 - app.routes.basic_data_operations - INFO - Criando novo registro para mês 4/2025
+2025-04-07 18:27:57,690 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 2 em modo criação
+2025-04-07 18:27:57,690 - app.routes.basic_data_operations - INFO - Valores recebidos: month=4, year=2025, clients_served=5
+2025-04-07 18:27:57,690 - app.routes.basic_data_operations - INFO - Valores monetários: sales_revenue=5000.00 -> 500000.0
+2025-04-07 18:27:57,690 - app.routes.basic_data_operations - INFO - Valores monetários: sales_expenses=5000.00 -> 500000.0
+2025-04-07 18:27:57,691 - app.routes.basic_data_operations - INFO - Valores monetários: input_product_expenses=5000.00 -> 500000.0
+2025-04-07 18:27:57,691 - app.routes.basic_data_operations - INFO - Valores monetários: fixed_costs=None -> None
+2025-04-07 18:27:57,691 - app.routes.basic_data_operations - INFO - Valores monetários: pro_labore=5000.00 -> 500000.0
+2025-04-07 18:27:57,691 - app.routes.basic_data_operations - INFO - Valores monetários: other_fixed_costs=5000.00 -> 500000.0
+2025-04-07 18:27:57,691 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 4/2025
+2025-04-07 18:27:57,694 - app.routes.basic_data_operations - INFO - Criando novo registro para mês 4/2025
+2025-04-07 18:27:57,700 - app.routes.basic_data_operations - INFO - Registro criado com sucesso. ID: 13
+2025-04-07 18:27:57,701 - app.routes.basic_data_operations - INFO - Redirecionando para /basic-data/
+2025-04-07 18:27:57,703 - app.routes.basic_data_operations - INFO - Registro criado com sucesso. ID: 14
+2025-04-07 18:27:57,703 - app.routes.basic_data_operations - INFO - Redirecionando para /basic-data/

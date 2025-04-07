@@ -203,6 +203,15 @@ async def save_basic_data(
         if other_fixed_costs:
             other_fixed_costs_float = float(other_fixed_costs.replace('R$', '').replace('.', '').replace(',', '.').strip())
         
+        # Log dos valores recebidos
+        logger.info(f"Valores recebidos: month={month}, year={year}, clients_served={clients_served}")
+        logger.info(f"Valores monetários: sales_revenue={sales_revenue} -> {sales_revenue_float}")
+        logger.info(f"Valores monetários: sales_expenses={sales_expenses} -> {sales_expenses_float}")
+        logger.info(f"Valores monetários: input_product_expenses={input_product_expenses} -> {input_product_expenses_float}")
+        logger.info(f"Valores monetários: fixed_costs={fixed_costs} -> {fixed_costs_float}")
+        logger.info(f"Valores monetários: pro_labore={pro_labore} -> {pro_labore_float}")
+        logger.info(f"Valores monetários: other_fixed_costs={other_fixed_costs} -> {other_fixed_costs_float}")
+        
         # Preparar os dados para atualização/inserção
         data_dict = {
             'month': month,
@@ -272,8 +281,9 @@ async def save_basic_data(
                 await db.refresh(existing_data)
                 
                 # Redirecionar para a página de listagem de dados básicos
+                logger.info("Redirecionando para /basic-data/ após edição")
                 return RedirectResponse(
-                    url="/basic-data",
+                    url="/basic-data/",
                     status_code=status.HTTP_303_SEE_OTHER
                 )
             else:
@@ -323,10 +333,13 @@ async def save_basic_data(
             db.add(new_basic_data)
             await db.commit()
             await db.refresh(new_basic_data)
+            
+            logger.info(f"Registro criado com sucesso. ID: {new_basic_data.id}")
 
             # Redirecionar para a página de listagem de dados básicos
+            logger.info("Redirecionando para /basic-data/")
             return RedirectResponse(
-                url="/basic-data",
+                url="/basic-data/",
                 status_code=status.HTTP_303_SEE_OTHER
             )
         
