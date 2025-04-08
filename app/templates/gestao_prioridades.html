@@ -811,7 +811,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Determinar se a métrica é um percentual ou valor monetário
             const isPercentage = metric === 'margem';
             
-            applyMetricChange(metric, percentual, isIncrease, isPercentage);
+           applyMetricChange(metric, percentual, isIncrease, isPercentage);
         });
     });
 
@@ -841,13 +841,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const calculatedElement = document.getElementById(`${metric}Calculado`);
             if (isPercentage) {
                 calculatedElement.value = formatPercent(manualValue);
-            } else if (metric === 'clientes') {
+            }
+            /* else if (metric === 'clientes') {
                 // Para clientes, calcular o valor com base no percentual
                 const calculatedValue = original + (original * manualValue / 100);
                 calculatedElement.value = Math.round(calculatedValue); // Arredondar para número inteiro
                 
                 // Recalcular a margem com base no novo número de clientes
-                recalculateMargin();
+              //  recalculateMargin();
             } else if (metric === 'precoMedio') {
                 // Para preço médio, calcular o valor com base no percentual
                 const calculatedValue = original + (original * manualValue / 100);
@@ -886,9 +887,9 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 calculatedElement.value = formatMoney(manualValue);
             }
-            
+            */
             // Alterar a cor de fundo com base na comparação com o valor original
-            if (calculated > original) {
+          /*  if (calculated > original) {
                 if (metric === 'custosFixos') {
                     calculatedElement.style.backgroundColor = '#f8d7da'; // Vermelho para aumento de custos
                 } else {
@@ -907,6 +908,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Calcular e atualizar a variação
             const variation = calculateVariation(original, manualValue);
             document.getElementById(`${metric}Variacao`).value = formatPercent(variation);
+            */
         });
     });
 
@@ -1041,7 +1043,29 @@ document.addEventListener('DOMContentLoaded', function() {
             calculated = original - (original * percentual / 100);
             console.log(`Cálculo: ${original} - (${original} * ${percentual} / 100) = ${calculated}`);
         }
-        
+        if (metric === 'clientes') {
+            recalculateMargin();
+        } else if (metric === 'precoMedio') {
+            const campoManual = document.getElementById('precoMedioManual');
+            const manualValue = campoManual.value;
+            recalculateFromPriceChange(manualValue);
+        } else if (metric === 'ticketMedio') {
+            const campoManual = document.getElementById('ticketMedioManual');
+            const manualValue = campoManual.value;
+            recalculateFromTicketChange(manualValue);
+        } else if (metric === 'custosVendas') {
+            const campoManual = document.getElementById('custosVendasManual');
+            const manualValue = campoManual.value;
+            recalculateFromSalesCostsChange(manualValue);
+        } else if (metric === 'custosInsumos') {
+            const campoManual = document.getElementById('custosInsumosManual');
+            const manualValue = campoManual.value;
+            recalculateFromOperationalCostsChange(manualValue);
+        } else if (metric === 'custosFixos') {
+            const campoManual = document.getElementById('custosFixosManual');
+            const manualValue = campoManual.value;
+            recalculateFromFixedCostsChange(isIncrease ? manualValue : -manualValue);
+        } 
         // Calcular a variação percentual
         const variation = calculateVariation(original, calculated);
         console.log(`Variação: ${variation}%`);
