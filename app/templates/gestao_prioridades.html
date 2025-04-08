@@ -26,15 +26,109 @@
     }
 
     .custom-bg {
-        background-color: #f8f9fa; /* Cor de fundo clara, semelhante ao bg-light */
+        background-color: #f8f9fa;
     }
     
-    /* Estilo para garantir que o X de fechar fique branco */
-    .btn-close {
-        filter: invert(1) grayscale(100%) brightness(200%);
+    .metric-card {
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+        background-color: white;
+        padding: 15px;
+    }
+
+    .metric-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .metric-values {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .value-box {
+        padding: 8px;
+        border-radius: 6px;
+        background-color: #f8f9fa;
+    }
+
+    .value-box label {
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 4px;
+    }
+
+    .value-box input {
+        width: 100%;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 6px;
+        text-align: right;
+    }
+
+    .control-box {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .control-box input {
+        flex: 1;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 6px;
+    }
+
+    .btn-control {
+        padding: 6px 12px;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .period-selector {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .positive-variation {
+        color: #28a745;
+        background-color: #d4edda;
+    }
+
+    .negative-variation {
+        color: #dc3545;
+        background-color: #f8d7da;
+    }
+
+    @media (min-width: 768px) {
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .metrics-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
     }
     
-    /* Estilo para modais sem backdrop */
+    /* Modal styles */
     .modal-no-backdrop {
         background-color: rgba(0, 0, 0, 0.1);
     }
@@ -43,7 +137,6 @@
         margin-top: 20px;
     }
     
-    /* Estilos para garantir que as modais não bloqueiem a interação */
     .modal-backdrop {
         display: none !important;
     }
@@ -53,7 +146,6 @@
         padding-right: 0 !important;
     }
     
-    /* Garantir que o conteúdo da página permaneça clicável */
     .modal-open .container-fluid,
     .modal-open .card,
     .modal-open .form-control,
@@ -61,232 +153,296 @@
     .modal-open .help-icon {
         pointer-events: auto !important;
     }
+
+    .btn-close {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
 </style>
 {% endblock %}
 
 {% block content %}
     {% include "components/navbar.html" %}
-    <div class="container-fluid p-1">
-        <!-- Card Principal -->
-        <div class="card shadow mb-4">
-            <div class="card-header bg-primary text-white">
-                <h4 class="card-title mb-0">Gestão de Prioridades</h4>
+    <div class="container-fluid p-3">
+        <!-- Period Selector -->
+        <div class="period-selector">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <label for="basicDataSelect" class="form-label d-flex align-items-center">
+                        <span>Período dos dados básicos</span>
+                        <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
+                           data-bs-toggle="modal" 
+                           data-bs-target="#helpModal"></i>
+                    </label>
+                    <select class="form-select" id="basicDataSelect">
+                        {% for data in basic_data_list %}
+                        <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
+                            {{ data.month }}/{{ data.year }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 text-end">
+                    <button id="resetButton" class="btn btn-primary" onclick="window.location.reload()">
+                        <i class="bi bi-arrow-counterclockwise me-2"></i>Reiniciar
+                    </button>
+                </div>
             </div>
-            <div class="card-body">
-                <!-- Combo Box de Dados Básicos -->
-                <div class="row mb-4">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="basicDataSelect" class="form-label">
-                                Selecione o Período dos dados básicos
-                                <i class="bi bi-question-circle-fill ms-2 text-white help-icon" 
-                                   data-bs-toggle="modal" 
-                                   data-bs-target="#helpModal" 
-                                   style="cursor: pointer;"></i>
-                            </label>
-                            <select class="form-select" id="basicDataSelect">
-                                {% for data in basic_data_list %}
-                                <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
-                                    {{ data.month }}/{{ data.year }}
-                                </option>
-                                {% endfor %}
-                            </select>
-                        </div>
+        </div>
+
+        <!-- Metrics Grid -->
+        <div class="metrics-grid">
+            <!-- Margem -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>Margem</span>
+                    <i class="bi bi-question-circle-fill text-primary help-icon" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#margemHelpModal"></i>
+                </div>
+                <div class="metric-values">
+                    <div class="value-box">
+                        <label>Original</label>
+                        <input type="text" id="margemOriginal" readonly>
                     </div>
-                    <div class="col-md-6 d-flex align-items-end justify-content-end">
-                        <button id="resetButton" class="btn btn-primary" onclick="window.location.reload()">
-                            <i class="bi bi-arrow-counterclockwise me-2" style="color: white !important;"></i>Reiniciar
-                        </button>
+                    <div class="value-box">
+                        <label>Calculado</label>
+                        <input type="text" id="margemCalculado" readonly>
+                    </div>
+                    <div class="value-box">
+                        <label>Variação</label>
+                        <input type="text" id="margemVariacao" readonly>
                     </div>
                 </div>
+            </div>
 
-                <!-- Campos Comparativos -->
-                <div class="row">
-                    <!-- Margem -->
-                    <div class="col-md-12 mb-4">
-                        <label class="form-label">
-                            Margem
-                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
-                               data-bs-toggle="modal" 
-                               data-bs-target="#margemHelpModal" 
-                               style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="margemOriginal" readonly>
-                            <input type="text" class="form-control" id="margemCalculado" readonly>
-                            <input type="text" class="form-control" id="margemVariacao" readonly>
-                          <!--
-                            <input type="text" class="form-control" id="margemManual" placeholder="Digite um valor">
-                            <button class="btn btn-success text-white" type="button" data-metric="margem" data-action="increase">
-                                <i class="bi bi-plus-circle text-white" style="color: white !important;"></i>
-                            </button>
-                            <button class="btn btn-danger text-white" type="button" data-metric="margem" data-action="decrease">
-                                <i class="bi bi-dash-circle text-white" style="color: white !important;"></i>
-                            </button>
-                        -->
-                        </div>
+            <!-- Clientes -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>Clientes Atendidos</span>
+                    <i class="bi bi-question-circle-fill text-primary help-icon" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#clientesHelpModal"></i>
+                </div>
+                <div class="metric-values">
+                    <div class="value-box">
+                        <label>Original</label>
+                        <input type="text" id="clientesOriginal" readonly>
                     </div>
+                    <div class="value-box">
+                        <label>Calculado</label>
+                        <input type="text" id="clientesCalculado" readonly>
+                    </div>
+                    <div class="value-box">
+                        <label>Variação</label>
+                        <input type="text" id="clientesVariacao" readonly>
+                    </div>
+                </div>
+                <div class="control-box">
+                    <input type="text" id="clientesManual" placeholder="Digite a variação %" class="form-control">
+                    <button class="btn btn-success btn-control" type="button" data-metric="clientes" data-action="increase">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button class="btn btn-danger btn-control" type="button" data-metric="clientes" data-action="decrease">
+                        <i class="bi bi-dash-circle"></i>
+                    </button>
+                </div>
+            </div>
 
-                    <!-- Clientes -->
-                    <div class="col-md-12 mb-4">
-                        <label class="form-label">
-                            Clientes Atendidos
-                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
-                               data-bs-toggle="modal" 
-                               data-bs-target="#clientesHelpModal" 
-                               style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="clientesOriginal" readonly>
-                            <input type="text" class="form-control" id="clientesCalculado" readonly>
-                            <input type="text" class="form-control" id="clientesVariacao" readonly>
-                            <input type="text" class="form-control" id="clientesManual" placeholder="Digite um valor">
-                            <button class="btn btn-success text-white" type="button" data-metric="clientes" data-action="increase">
-                                <i class="bi bi-plus-circle text-white" style="color: white !important;"></i>
-                            </button>
-                            <button class="btn btn-danger text-white" type="button" data-metric="clientes" data-action="decrease">
-                                <i class="bi bi-dash-circle text-white" style="color: white !important;"></i>
-                            </button>
-                        </div>
+            <!-- Preço Médio -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>Preço Médio</span>
+                    <i class="bi bi-question-circle-fill text-primary help-icon" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#precoMedioHelpModal"></i>
+                </div>
+                <div class="metric-values">
+                    <div class="value-box">
+                        <label>Original</label>
+                        <input type="text" id="precoMedioOriginal" readonly>
                     </div>
+                    <div class="value-box">
+                        <label>Calculado</label>
+                        <input type="text" id="precoMedioCalculado" readonly>
+                    </div>
+                    <div class="value-box">
+                        <label>Variação</label>
+                        <input type="text" id="precoMedioVariacao" readonly>
+                    </div>
+                </div>
+                <div class="control-box">
+                    <input type="text" id="precoMedioManual" placeholder="Digite a variação %" class="form-control">
+                    <button class="btn btn-success btn-control" type="button" data-metric="precoMedio" data-action="increase">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button class="btn btn-danger btn-control" type="button" data-metric="precoMedio" data-action="decrease">
+                        <i class="bi bi-dash-circle"></i>
+                    </button>
+                </div>
+            </div>
 
-                    <!-- Preço Médio -->
-                    <div class="col-md-12 mb-4">
-                        <label class="form-label">
-                            Preço Médio
-                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
-                               data-bs-toggle="modal" 
-                               data-bs-target="#precoMedioHelpModal" 
-                               style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="precoMedioOriginal" readonly>
-                            <input type="text" class="form-control" id="precoMedioCalculado" readonly>
-                            <input type="text" class="form-control" id="precoMedioVariacao" readonly>
-                            <input type="text" class="form-control" id="precoMedioManual" placeholder="Digite um valor">
-                            <button class="btn btn-success text-white" type="button" data-metric="precoMedio" data-action="increase">
-                                <i class="bi bi-plus-circle text-white" style="color: white !important;"></i>
-                            </button>
-                            <button class="btn btn-danger text-white" type="button" data-metric="precoMedio" data-action="decrease">
-                                <i class="bi bi-dash-circle text-white" style="color: white !important;"></i>
-                            </button>
-                        </div>
+            <!-- Ticket Médio -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>Ticket Médio</span>
+                    <i class="bi bi-question-circle-fill text-primary help-icon" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#ticketMedioHelpModal"></i>
+                </div>
+                <div class="metric-values">
+                    <div class="value-box">
+                        <label>Original</label>
+                        <input type="text" id="ticketMedioOriginal" readonly>
                     </div>
+                    <div class="value-box">
+                        <label>Calculado</label>
+                        <input type="text" id="ticketMedioCalculado" readonly>
+                    </div>
+                    <div class="value-box">
+                        <label>Variação</label>
+                        <input type="text" id="ticketMedioVariacao" readonly>
+                    </div>
+                </div>
+                <div class="control-box">
+                    <input type="text" id="ticketMedioManual" placeholder="Digite a variação %" class="form-control">
+                    <button class="btn btn-success btn-control" type="button" data-metric="ticketMedio" data-action="increase">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button class="btn btn-danger btn-control" type="button" data-metric="ticketMedio" data-action="decrease">
+                        <i class="bi bi-dash-circle"></i>
+                    </button>
+                </div>
+            </div>
 
-                    <!-- Ticket Médio -->
-                    <div class="col-md-12 mb-4">
-                        <label class="form-label">
-                            Ticket Médio
-                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
-                               data-bs-toggle="modal" 
-                               data-bs-target="#ticketMedioHelpModal" 
-                               style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="ticketMedioOriginal" readonly>
-                            <input type="text" class="form-control" id="ticketMedioCalculado" readonly>
-                            <input type="text" class="form-control" id="ticketMedioVariacao" readonly>
-                            <input type="text" class="form-control" id="ticketMedioManual" placeholder="Digite um valor">
-                            <button class="btn btn-success text-white" type="button" data-metric="ticketMedio" data-action="increase">
-                                <i class="bi bi-plus-circle text-white" style="color: white !important;"></i>
-                            </button>
-                            <button class="btn btn-danger text-white" type="button" data-metric="ticketMedio" data-action="decrease">
-                                <i class="bi bi-dash-circle text-white" style="color: white !important;"></i>
-                            </button>
-                        </div>
+            <!-- Faturamento -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>Faturamento</span>
+                    <i class="bi bi-question-circle-fill text-primary help-icon" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#faturamentoHelpModal"></i>
+                </div>
+                <div class="metric-values">
+                    <div class="value-box">
+                        <label>Original</label>
+                        <input type="text" id="faturamentoOriginal" readonly>
                     </div>
+                    <div class="value-box">
+                        <label>Calculado</label>
+                        <input type="text" id="faturamentoCalculado" readonly>
+                    </div>
+                    <div class="value-box">
+                        <label>Variação</label>
+                        <input type="text" id="faturamentoVariacao" readonly>
+                    </div>
+                </div>
+                <div class="control-box">
+                    <input type="text" id="faturamentoManual" placeholder="Digite a variação %" class="form-control">
+                    <button class="btn btn-success btn-control" type="button" data-metric="faturamento" data-action="increase">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button class="btn btn-danger btn-control" type="button" data-metric="faturamento" data-action="decrease">
+                        <i class="bi bi-dash-circle"></i>
+                    </button>
+                </div>
+            </div>
 
-                    <!-- Faturamento -->
-                    <div class="col-md-12 mb-4">
-                        <label class="form-label">
-                            Faturamento
-                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
-                               data-bs-toggle="modal" 
-                               data-bs-target="#faturamentoHelpModal" 
-                               style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="faturamentoOriginal" readonly>
-                            <input type="text" class="form-control" id="faturamentoCalculado" readonly>
-                            <input type="text" class="form-control" id="faturamentoVariacao" readonly>
-                            <input type="text" class="form-control" id="faturamentoManual" placeholder="Digite um valor">
-                            <button class="btn btn-success text-white" type="button" data-metric="faturamento" data-action="increase">
-                                <i class="bi bi-plus-circle text-white" style="color: white !important;"></i>
-                            </button>
-                            <button class="btn btn-danger text-white" type="button" data-metric="faturamento" data-action="decrease">
-                                <i class="bi bi-dash-circle text-white" style="color: white !important;"></i>
-                            </button>
-                        </div>
+            <!-- Custos de Vendas -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>Custos de Vendas</span>
+                    <i class="bi bi-question-circle-fill text-primary help-icon" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#custosVendasHelpModal"></i>
+                </div>
+                <div class="metric-values">
+                    <div class="value-box">
+                        <label>Original</label>
+                        <input type="text" id="custosVendasOriginal" readonly>
                     </div>
+                    <div class="value-box">
+                        <label>Calculado</label>
+                        <input type="text" id="custosVendasCalculado" readonly>
+                    </div>
+                    <div class="value-box">
+                        <label>Variação</label>
+                        <input type="text" id="custosVendasVariacao" readonly>
+                    </div>
+                </div>
+                <div class="control-box">
+                    <input type="text" id="custosVendasManual" placeholder="Digite a variação %" class="form-control">
+                    <button class="btn btn-success btn-control" type="button" data-metric="custosVendas" data-action="increase">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button class="btn btn-danger btn-control" type="button" data-metric="custosVendas" data-action="decrease">
+                        <i class="bi bi-dash-circle"></i>
+                    </button>
+                </div>
+            </div>
 
-                    <!-- Custos de Vendas -->
-                    <div class="col-md-12 mb-4">
-                        <label class="form-label">
-                            Custos de Vendas
-                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
-                               data-bs-toggle="modal" 
-                               data-bs-target="#custosVendasHelpModal" 
-                               style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="custosVendasOriginal" readonly>
-                            <input type="text" class="form-control" id="custosVendasCalculado" readonly>
-                            <input type="text" class="form-control" id="custosVendasVariacao" readonly>
-                            <input type="text" class="form-control" id="custosVendasManual" placeholder="Digite um valor">
-                            <button class="btn btn-success text-white" type="button" data-metric="custosVendas" data-action="increase">
-                                <i class="bi bi-plus-circle text-white" style="color: white !important;"></i>
-                            </button>
-                            <button class="btn btn-danger text-white" type="button" data-metric="custosVendas" data-action="decrease">
-                                <i class="bi bi-dash-circle text-white" style="color: white !important;"></i>
-                            </button>
-                        </div>
+            <!-- Custos de Insumos -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>Custos de Insumos</span>
+                    <i class="bi bi-question-circle-fill text-primary help-icon" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#custosInsumosHelpModal"></i>
+                </div>
+                <div class="metric-values">
+                    <div class="value-box">
+                        <label>Original</label>
+                        <input type="text" id="custosInsumosOriginal" readonly>
                     </div>
+                    <div class="value-box">
+                        <label>Calculado</label>
+                        <input type="text" id="custosInsumosCalculado" readonly>
+                    </div>
+                    <div class="value-box">
+                        <label>Variação</label>
+                        <input type="text" id="custosInsumosVariacao" readonly>
+                    </div>
+                </div>
+                <div class="control-box">
+                    <input type="text" id="custosInsumosManual" placeholder="Digite a variação %" class="form-control">
+                    <button class="btn btn-success btn-control" type="button" data-metric="custosInsumos" data-action="increase">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button class="btn btn-danger btn-control" type="button" data-metric="custosInsumos" data-action="decrease">
+                        <i class="bi bi-dash-circle"></i>
+                    </button>
+                </div>
+            </div>
 
-                    <!-- Custos de Insumos -->
-                    <div class="col-md-12 mb-4">
-                        <label class="form-label">
-                            Custos de Insumos
-                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
-                               data-bs-toggle="modal" 
-                               data-bs-target="#custosInsumosHelpModal" 
-                               style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="custosInsumosOriginal" readonly>
-                            <input type="text" class="form-control" id="custosInsumosCalculado" readonly>
-                            <input type="text" class="form-control" id="custosInsumosVariacao" readonly>
-                            <input type="text" class="form-control" id="custosInsumosManual" placeholder="Digite um valor">
-                            <button class="btn btn-success text-white" type="button" data-metric="custosInsumos" data-action="increase">
-                                <i class="bi bi-plus-circle text-white" style="color: white !important;"></i>
-                            </button>
-                            <button class="btn btn-danger text-white" type="button" data-metric="custosInsumos" data-action="decrease">
-                                <i class="bi bi-dash-circle text-white" style="color: white !important;"></i>
-                            </button>
-                        </div>
+            <!-- Custos Fixos -->
+            <div class="metric-card">
+                <div class="metric-title">
+                    <span>Custos Fixos</span>
+                    <i class="bi bi-question-circle-fill text-primary help-icon" 
+                       data-bs-toggle="modal" 
+                       data-bs-target="#custosFixosHelpModal"></i>
+                </div>
+                <div class="metric-values">
+                    <div class="value-box">
+                        <label>Original</label>
+                        <input type="text" id="custosFixosOriginal" readonly>
                     </div>
-
-                    <!-- Custos Fixos -->
-                    <div class="col-md-12 mb-4">
-                        <label class="form-label">
-                            Custos Fixos
-                            <i class="bi bi-question-circle-fill ms-2 text-primary help-icon" 
-                               data-bs-toggle="modal" 
-                               data-bs-target="#custosFixosHelpModal" 
-                               style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="custosFixosOriginal" readonly>
-                            <input type="text" class="form-control" id="custosFixosCalculado" readonly>
-                            <input type="text" class="form-control" id="custosFixosVariacao" readonly>
-                            <input type="text" class="form-control" id="custosFixosManual" placeholder="Digite um valor">
-                            <button class="btn btn-success text-white" type="button" data-metric="custosFixos" data-action="increase">
-                                <i class="bi bi-plus-circle text-white" style="color: white !important;"></i>
-                            </button>
-                            <button class="btn btn-danger text-white" type="button" data-metric="custosFixos" data-action="decrease">
-                                <i class="bi bi-dash-circle text-white" style="color: white !important;"></i>
-                            </button>
-                        </div>
+                    <div class="value-box">
+                        <label>Calculado</label>
+                        <input type="text" id="custosFixosCalculado" readonly>
                     </div>
+                    <div class="value-box">
+                        <label>Variação</label>
+                        <input type="text" id="custosFixosVariacao" readonly>
+                    </div>
+                </div>
+                <div class="control-box">
+                    <input type="text" id="custosFixosManual" placeholder="Digite a variação %" class="form-control">
+                    <button class="btn btn-success btn-control" type="button" data-metric="custosFixos" data-action="increase">
+                        <i class="bi bi-plus-circle"></i>
+                    </button>
+                    <button class="btn btn-danger btn-control" type="button" data-metric="custosFixos" data-action="decrease">
+                        <i class="bi bi-dash-circle"></i>
+                    </button>
                 </div>
             </div>
         </div>
