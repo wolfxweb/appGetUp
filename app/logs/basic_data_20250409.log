@@ -1,0 +1,6 @@
+2025-04-09 19:00:58,813 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-04-09 19:00:58,813 - app.routes.basic_data - INFO - Registro ID 7: month=12, year=2025, clients_served=10
+2025-04-09 19:00:58,813 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=1.0, sales_expenses=1.0, input_product_expenses=1.0
+2025-04-09 19:00:58,813 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=1.0, pro_labore=None, other_fixed_costs=None
+2025-04-09 19:00:58,813 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=0.1, sales_expenses=0.1, input_product_expenses=0.1
+2025-04-09 19:00:58,813 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=0.1, pro_labore=None, other_fixed_costs=None

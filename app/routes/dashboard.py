@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from jose import JWTError, jwt
 from datetime import datetime
 import logging
@@ -19,7 +20,7 @@ templates = Jinja2Templates(directory="app/templates")
 logger = logging.getLogger(__name__)
 
 # Dependência para obter o usuário atual
-async def get_current_user(request: Request, db: Session = Depends(get_db)):
+async def get_current_user(request: Request, db: AsyncSession = Depends(get_db)):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Não autorizado",
@@ -44,7 +45,8 @@ async def get_current_user(request: Request, db: Session = Depends(get_db)):
     except (JWTError, ValueError):
         return None
     
-    user = db.query(User).filter(User.email == email).first()
+    result = await db.execute(select(User).filter(User.email == email))
+    user = result.scalar_one_or_none()
     if user is None:
         return None
     
@@ -54,7 +56,7 @@ async def get_current_user(request: Request, db: Session = Depends(get_db)):
 async def dashboard_page(
     request: Request,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Logs de depuração para verificar o usuário
     logger.warning(f"Dashboard Access - User: {current_user}")
@@ -77,19 +79,19 @@ async def dashboard_page(
     }
 
     if current_user.access_level in ["Administrador", "Administrador"]:
-        total_users = db.query(User).count()
-        active_licenses = db.query(License).filter(License.status == "Utilizada").count()
-        available_licenses = db.query(License).filter(License.status == "Disponível").count()
+        total_users = await db.execute(select(User).count())
+        active_licenses = await db.execute(select(License).filter(License.status == "Utilizada").count())
+        available_licenses = await db.execute(select(License).filter(License.status == "Disponível").count())
 
         # Logs de depuração
-        logger.warning(f"Dashboard Statistics - Total Users: {total_users}")
-        logger.warning(f"Dashboard Statistics - Active Licenses: {active_licenses}")
-        logger.warning(f"Dashboard Statistics - Available Licenses: {available_licenses}")
+        logger.warning(f"Dashboard Statistics - Total Users: {total_users.scalar()}")
+        logger.warning(f"Dashboard Statistics - Active Licenses: {active_licenses.scalar()}")
+        logger.warning(f"Dashboard Statistics - Available Licenses: {available_licenses.scalar()}")
 
         template_context.update({
-            "total_users": total_users,
-            "active_licenses": active_licenses,
-            "available_licenses": available_licenses
+            "total_users": total_users.scalar(),
+            "active_licenses": active_licenses.scalar(),
+            "available_licenses": available_licenses.scalar()
         })
 
     return templates.TemplateResponse(
@@ -102,7 +104,7 @@ async def activate_license(
     request: Request,
     activation_key: str = Form(...),
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Logs de depuração
     logger.warning(f"License Activation - Current User: {current_user}")
@@ -110,10 +112,11 @@ async def activate_license(
     logger.warning(f"License Activation - Activation Key: {activation_key}")
 
     # Verificar se a chave existe e está disponível
-    license = db.query(License).filter(
+    result = await db.execute(select(License).filter(
         License.activation_key == activation_key,
         License.status == "Disponível"
-    ).first()
+    ))
+    license = result.scalar_one_or_none()
 
     # Logs de depuração da licença
     logger.warning(f"License Activation - License Found: {license}")
@@ -139,7 +142,7 @@ async def activate_license(
     # Atualizar o usuário
     current_user.activation_key = activation_key
 
-    db.commit()
+    await db.commit()
 
     # Log final
     logger.warning(f"License Activation - Completed for User: {current_user.email}")

@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Form, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select, or_, func
 from typing import Optional
 from datetime import datetime, timedelta
-from sqlalchemy import or_
 import math
 import random
 import string
@@ -25,14 +25,14 @@ async def admin_required(request: Request, current_user = Depends(get_current_us
         return RedirectResponse(url="/dashboard", status_code=status.HTTP_303_SEE_OTHER)
     return current_user
 
-def generate_activation_key():
+async def generate_activation_key(db: AsyncSession):
     """Gera uma chave de ativação única de 8 caracteres"""
     while True:
         # Gera uma chave de 8 caracteres usando letras maiúsculas e números
         key = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
         # Verifica se a chave já existe no banco
-        db = next(get_db())
-        if not db.query(License).filter(License.activation_key == key).first():
+        result = await db.execute(select(License).filter(License.activation_key == key))
+        if not result.scalar_one_or_none():
             return key
 
 # Rota para listar todos os usuários
@@ -40,7 +40,7 @@ def generate_activation_key():
 async def list_users(
     request: Request, 
     current_user = Depends(admin_required),
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     page: int = 1,
     search_email: str = "",
     status_filter: str = "",
@@ -53,7 +53,7 @@ async def list_users(
     offset = (page - 1) * items_per_page
 
     # Construir a query base
-    query = db.query(User)
+    query = select(User)
 
     # Aplicar filtros
     if search_email:
@@ -64,11 +64,14 @@ async def list_users(
         query = query.filter(User.activity_type == activity_filter)
 
     # Obter o total de registros e calcular o total de páginas
-    total_users = query.count()
+    total_users_result = await db.execute(select(func.count()).select_from(query.subquery()))
+    total_users = total_users_result.scalar()
     total_pages = math.ceil(total_users / items_per_page)
 
     # Aplicar paginação
-    users = query.offset(offset).limit(items_per_page).all()
+    query = query.offset(offset).limit(items_per_page)
+    result = await db.execute(query)
+    users = result.scalars().all()
 
     return templates.TemplateResponse(
         "admin_users.html", 
@@ -83,7 +86,8 @@ async def list_users(
             "status_filter": status_filter,
             "activity_filter": activity_filter,
             "success_message": success_message,
-            "error_message": error_message
+            "error_message": error_message,
+            "active_page": "admin_users"
         }
     )
 
@@ -98,10 +102,11 @@ async def add_user(
     status: str = Form(...),
     access_level: str = Form(...),
     current_user = Depends(admin_required),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Verificar se o email já está em uso
-    existing_user = db.query(User).filter(User.email == email).first()
+    existing_user = await db.execute(select(User).filter(User.email == email))
+    existing_user = existing_user.scalar()
     if existing_user:
         return await list_users(
             request, 
@@ -126,13 +131,13 @@ async def add_user(
     # Adicionar e salvar no banco de dados
     try:
         db.add(new_user)
-        db.commit()
+        await db.commit()
         return RedirectResponse(
             url="/admin/users?success_message=Usuário adicionado com sucesso", 
             status_code=status.HTTP_303_SEE_OTHER
         )
     except Exception as e:
-        db.rollback()
+        await db.rollback()
         return await list_users(
             request, 
             current_user, 
@@ -152,10 +157,11 @@ async def edit_user(
     status: str = Form(...),
     access_level: str = Form(...),
     current_user = Depends(admin_required),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Buscar o usuário a ser editado
-    user_to_edit = db.query(User).filter(User.id == user_id).first()
+    user_to_edit = await db.execute(select(User).filter(User.id == user_id))
+    user_to_edit = user_to_edit.scalar()
     if not user_to_edit:
         return await list_users(
             request, 
@@ -166,7 +172,8 @@ async def edit_user(
     
     # Verificar se o email já está em uso por outro usuário
     if email != user_to_edit.email:
-        existing_user = db.query(User).filter(User.email == email).first()
+        existing_user = await db.execute(select(User).filter(User.email == email))
+        existing_user = existing_user.scalar()
         if existing_user:
             return await list_users(
                 request, 
@@ -188,13 +195,13 @@ async def edit_user(
     
     # Salvar alterações
     try:
-        db.commit()
+        await db.commit()
         return RedirectResponse(
             url="/admin/users?success_message=Usuário atualizado com sucesso", 
             status_code=status.HTTP_303_SEE_OTHER
         )
     except Exception as e:
-        db.rollback()
+        await db.rollback()
         return await list_users(
             request, 
             current_user, 
@@ -208,7 +215,7 @@ async def delete_user(
     request: Request,
     user_id: int = Form(...),
     current_user = Depends(admin_required),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Não permitir excluir o próprio usuário
     if current_user.id == user_id:
@@ -220,7 +227,8 @@ async def delete_user(
         )
     
     # Buscar o usuário a ser excluído
-    user_to_delete = db.query(User).filter(User.id == user_id).first()
+    user_to_delete = await db.execute(select(User).filter(User.id == user_id))
+    user_to_delete = user_to_delete.scalar()
     if not user_to_delete:
         return await list_users(
             request, 
@@ -231,14 +239,14 @@ async def delete_user(
     
     # Excluir o usuário
     try:
-        db.delete(user_to_delete)
-        db.commit()
+        await db.delete(user_to_delete)
+        await db.commit()
         return RedirectResponse(
             url="/admin/users?success_message=Usuário excluído com sucesso", 
             status_code=status.HTTP_303_SEE_OTHER
         )
     except Exception as e:
-        db.rollback()
+        await db.rollback()
         return await list_users(
             request, 
             current_user, 
@@ -250,7 +258,7 @@ async def delete_user(
 async def list_licenses(
     request: Request,
     current_user = Depends(admin_required),
-    db: Session = Depends(get_db),
+    db: AsyncSession = Depends(get_db),
     search_key: str = "",
     status_filter: str = "",
     date_filter: str = "",
@@ -258,7 +266,7 @@ async def list_licenses(
     error_message: Optional[str] = None
 ):
     # Construir a query base
-    query = db.query(License)
+    query = select(License)
 
     # Aplicar filtros
     if search_key:
@@ -274,7 +282,9 @@ async def list_licenses(
             query = query.filter(License.created_at >= datetime.now().date() - timedelta(days=30))
 
     # Ordenar por data de criação (mais recentes primeiro)
-    licenses = query.order_by(License.created_at.desc()).all()
+    query = query.order_by(License.created_at.desc())
+    result = await db.execute(query)
+    licenses = result.scalars().all()
 
     return templates.TemplateResponse(
         "admin_licenses.html",
@@ -286,7 +296,8 @@ async def list_licenses(
             "status_filter": status_filter,
             "date_filter": date_filter,
             "success_message": success_message,
-            "error_message": error_message
+            "error_message": error_message,
+            "active_page": "admin_licenses"
         }
     )
 
@@ -295,12 +306,12 @@ async def generate_licenses(
     request: Request,
     quantity: int = Form(...),
     current_user = Depends(admin_required),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     try:
         generated_keys = []
         for _ in range(quantity):
-            key = generate_activation_key()
+            key = await generate_activation_key(db)
             license = License(
                 activation_key=key,
                 status="Disponível",
@@ -309,13 +320,13 @@ async def generate_licenses(
             db.add(license)
             generated_keys.append(key)
         
-        db.commit()
+        await db.commit()
         return RedirectResponse(
             url="/admin/licenses?success_message=Chaves geradas com sucesso",
             status_code=status.HTTP_303_SEE_OTHER
         )
     except Exception as e:
-        db.rollback()
+        await db.rollback()
         return RedirectResponse(
             url=f"/admin/licenses?error_message=Erro ao gerar chaves: {str(e)}",
             status_code=status.HTTP_303_SEE_OTHER

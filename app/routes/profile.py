@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, status, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import datetime
 
 from app.database.db import get_db
@@ -17,12 +17,12 @@ templates = Jinja2Templates(directory="app/templates")
 async def profile_page(
     request: Request,
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Garantir que a data de registro esteja definida
     if not current_user.registration_date:
         current_user.registration_date = datetime.now()
-        db.commit()
+        await db.commit()
 
     return templates.TemplateResponse(
         "profile.html",
@@ -41,7 +41,7 @@ async def update_profile(
     activity_type: str = Form(...),
     activation_key: str = Form(None),
     current_user = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_db)
 ):
     # Garantir que a data de registro esteja definida
     if not current_user.registration_date:
@@ -49,9 +49,7 @@ async def update_profile(
 
     if action == "activate" and activation_key:
         # Verificar se a chave existe e está disponível
-        license = db.query(License).filter(
-            License.activation_key == activation_key
-        ).first()
+        license = await db.get(License, License.activation_key == activation_key)
 
         if not license:
             return templates.TemplateResponse(
@@ -82,7 +80,7 @@ async def update_profile(
         current_user.activation_key = activation_key
 
         try:
-            db.commit()
+            await db.commit()
             return templates.TemplateResponse(
                 "profile.html",
                 {
@@ -92,7 +90,7 @@ async def update_profile(
                 }
             )
         except Exception as e:
-            db.rollback()
+            await db.rollback()
             return templates.TemplateResponse(
                 "profile.html",
                 {
@@ -108,7 +106,7 @@ async def update_profile(
         current_user.activity_type = activity_type
 
         try:
-            db.commit()
+            await db.commit()
             return templates.TemplateResponse(
                 "profile.html",
                 {
@@ -118,7 +116,7 @@ async def update_profile(
                 }
             )
         except Exception as e:
-            db.rollback()
+            await db.rollback()
             return templates.TemplateResponse(
                 "profile.html",
                 {

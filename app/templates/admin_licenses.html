@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}Gerenciar Licenças{% endblock %}
-{% include 'components/navbar.html' %}
+
 {% block content %}
+{% with active_page='admin_licenses' %}
+{% include 'components/navbar.html' %}
+{% endwith %}
 <!-- Espaçador para a navbar -->
 <div style="height: 70px;"></div>
 

@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block title %}Gerenciar Usuários{% endblock %}
-{% include 'components/navbar.html' %}
-{% block content %}
 
+{% block content %}
+{% with active_page='admin_users' %}
+{% include 'components/navbar.html' %}
+{% endwith %}
 
 <!-- Espaçador para a navbar -->
 <div style="height: 70px;"></div>
