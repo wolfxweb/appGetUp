@@ -204,7 +204,7 @@ async def login(
     )
     
     # Configurar cookie com o token
-    response = RedirectResponse(url="/diagnostico", status_code=status.HTTP_303_SEE_OTHER)
+    response = RedirectResponse(url="/basic-data", status_code=status.HTTP_303_SEE_OTHER)
     response.set_cookie(
         key="access_token",
         value=f"Bearer {access_token}",
