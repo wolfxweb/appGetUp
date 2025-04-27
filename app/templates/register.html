@@ -2,6 +2,54 @@
 
 {% block title %}Cadastro de Usuário{% endblock %}
 
+{% block head %}
+<script>
+    function buscarEnderecoPorCEP() {
+        const cepInput = document.getElementById('cep');
+        const searchCepButton = document.getElementById('searchCep');
+        const cep = cepInput.value.replace(/\D/g, '');
+        
+        // Validar CEP
+        if (cep.length !== 8) {
+            alert('CEP inválido. Digite um CEP com 8 dígitos.');
+            return;
+        }
+
+        // Mostrar loading no botão
+        searchCepButton.disabled = true;
+        searchCepButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
+
+        // Fazer requisição para ViaCEP
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.erro) {
+                    throw new Error('CEP não encontrado');
+                }
+
+                console.log("data", data);
+
+                // Preencher os campos com os dados retornados
+                document.getElementById('street').value = data.logradouro || '';
+                document.getElementById('neighborhood').value = data.bairro || '';
+                document.getElementById('city').value = data.localidade || '';
+                
+                // Preencher estado (UF)
+                const stateSelect = document.getElementById('state');
+                stateSelect.value = data.uf || '';
+            })
+            .catch(error => {
+                alert(error.message || 'Erro ao buscar CEP. Tente novamente.');
+            })
+            .finally(() => {
+                // Restaurar botão
+                searchCepButton.disabled = false;
+                searchCepButton.innerHTML = '<i class="bi bi-search"></i> Buscar';
+            });
+    }
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="row justify-content-center p-1 mt-5">
     <div class="col-md-10 col-lg-8">
@@ -114,42 +162,42 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label">Casado? <span class="text-danger">*</span></label>
+                                    <label class="form-label">Casado?</label>
                                     <div class="d-flex gap-3">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="married" id="married_yes" value="Sim" required>
+                                            <input class="form-check-input" type="radio" name="married" id="married_yes" value="Sim">
                                             <label class="form-check-label" for="married_yes">Sim</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="married" id="married_no" value="Não" required>
+                                            <input class="form-check-input" type="radio" name="married" id="married_no" value="Não">
                                             <label class="form-check-label" for="married_no">Não</label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label">Filhos? <span class="text-danger">*</span></label>
+                                    <label class="form-label">Filhos?</label>
                                     <div class="d-flex gap-3">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="children" id="children_yes" value="Sim" required>
+                                            <input class="form-check-input" type="radio" name="children" id="children_yes" value="Sim">
                                             <label class="form-check-label" for="children_yes">Sim</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="children" id="children_no" value="Não" required>
+                                            <input class="form-check-input" type="radio" name="children" id="children_no" value="Não">
                                             <label class="form-check-label" for="children_no">Não</label>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label">Netos? <span class="text-danger">*</span></label>
+                                    <label class="form-label">Netos?</label>
                                     <div class="d-flex gap-3">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="grandchildren" id="grandchildren_yes" value="Sim" required>
+                                            <input class="form-check-input" type="radio" name="grandchildren" id="grandchildren_yes" value="Sim">
                                             <label class="form-check-label" for="grandchildren_yes">Sim</label>
                                         </div>
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="grandchildren" id="grandchildren_no" value="Não" required>
+                                            <input class="form-check-input" type="radio" name="grandchildren" id="grandchildren_no" value="Não">
                                             <label class="form-check-label" for="grandchildren_no">Não</label>
                                         </div>
                                     </div>
@@ -165,6 +213,37 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="cep" class="form-label">CEP <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="cep" name="cep" required 
+                                               pattern="[0-9]{5}-[0-9]{3}" placeholder="00000-000"
+                                               title="Digite um CEP válido no formato 00000-000">
+                                        <button class="btn btn-outline-primary" type="button" id="searchCep" onclick="buscarEnderecoPorCEP()">
+                                            <i class="bi bi-search"></i> Buscar
+                                        </button>
+                                    </div>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe um CEP válido no formato 00000-000.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="street" class="form-label">Logradouro <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="street" name="street" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe o logradouro.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="neighborhood" class="form-label">Bairro <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="neighborhood" name="neighborhood" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe o bairro.
+                                    </div>
+                                </div>
+
                                 <div class="col-md-6 mb-3">
                                     <label for="state" class="form-label">Estado <span class="text-danger">*</span></label>
                                     <select class="form-select" id="state" name="state" required>
@@ -201,9 +280,15 @@
 
                                 <div class="col-md-6 mb-3">
                                     <label for="city" class="form-label">Cidade <span class="text-danger">*</span></label>
-                                    <select class="form-select" id="city" name="city" required disabled>
-                                        <option value="" selected disabled>Selecione a cidade</option>
-                                    </select>
+                                    <input type="text" class="form-control" id="city" name="city" required>
+                                    <div class="invalid-feedback">
+                                        Por favor, informe a cidade.
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label for="complement" class="form-label">Complemento</label>
+                                    <input type="text" class="form-control" id="complement" name="complement">
                                 </div>
                             </div>
                         </div>
@@ -421,222 +506,58 @@
 
 {% block extra_js %}
 <script>
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('form');
     const whatsappInput = document.getElementById('whatsapp');
-    const stateSelect = document.getElementById('state');
-    const citySelect = document.getElementById('city');
-    const companyActivitySelect = document.getElementById('company_activity');
-    const specialtyAreaSelect = document.getElementById('specialty_area');
 
     // Formatar WhatsApp
-    whatsappInput.addEventListener('input', function(e) {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length <= 11) {
+    if (whatsappInput) {
+        whatsappInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 11) {
+                value = value.substring(0, 11);
+            }
+            
+            // Formatar como (XX) XXXXX-XXXX
             if (value.length > 2) {
-                value = '(' + value.substring(0,2) + ') ' + value.substring(2);
+                value = '(' + value.substring(0, 2) + ') ' + value.substring(2);
             }
-            if (value.length > 9) {
-                value = value.substring(0,10) + '-' + value.substring(10);
+            if (value.length > 10) {
+                value = value.substring(0, 10) + '-' + value.substring(10);
             }
+            
             e.target.value = value;
-        }
-    });
+        });
+    }
 
-    // Estados e Cidades
-    const states = {
-        'AC': 'Acre',
-        'AL': 'Alagoas',
-        'AP': 'Amapá',
-        'AM': 'Amazonas',
-        'BA': 'Bahia',
-        'CE': 'Ceará',
-        'DF': 'Distrito Federal',
-        'ES': 'Espírito Santo',
-        'GO': 'Goiás',
-        'MA': 'Maranhão',
-        'MT': 'Mato Grosso',
-        'MS': 'Mato Grosso do Sul',
-        'MG': 'Minas Gerais',
-        'PA': 'Pará',
-        'PB': 'Paraíba',
-        'PR': 'Paraná',
-        'PE': 'Pernambuco',
-        'PI': 'Piauí',
-        'RJ': 'Rio de Janeiro',
-        'RN': 'Rio Grande do Norte',
-        'RS': 'Rio Grande do Sul',
-        'RO': 'Rondônia',
-        'RR': 'Roraima',
-        'SC': 'Santa Catarina',
-        'SP': 'São Paulo',
-        'SE': 'Sergipe',
-        'TO': 'Tocantins'
-    };
-
-    // Preencher estados
-    Object.entries(states).forEach(([uf, name]) => {
-        const option = document.createElement('option');
-        option.value = uf;
-        option.textContent = name;
-        stateSelect.appendChild(option);
-    });
-
-    // Atualizar cidades quando estado mudar
-    stateSelect.addEventListener('change', function() {
-        citySelect.disabled = false;
-        citySelect.innerHTML = '<option value="" selected disabled>Selecione a cidade</option>';
-        
-        // Aqui você faria uma requisição AJAX para buscar as cidades do estado selecionado
-        // Por enquanto, vamos apenas habilitar o campo
-    });
-
-    // Áreas de especialidade por atividade
-    const specialtyAreas = {
-        'AMBULANTE': [
-            'Açaí', 'Algodão doce', 'Artesanato', 'Balas, bombons e chocolates',
-            'Barraca de pastel', 'Bebidas e refresco', 'Bijuterias', 'Cachorro-quente',
-            'Calçados', 'Caldo de cana', 'Churrasquinho', 'Churros', 'Crepe', 'Doces',
-            'Eletrônicos', 'Ervas medicinais', 'Sanduiches', 'Mate', 'Milho cozido',
-            'Óculos', 'Pipoca', 'Relógios', 'Revenda de bijuterias e semi-jóias',
-            'Roupas e/ou acessórios', 'Sorvete', 'Souvenirs temáticos e lembranças',
-            'Tapioca', 'Outra area ambulante'
-        ],
-        'ATACADO': [
-            'Acessórios para aparelhos celulares', 'Adubos e defensivos agrícolas',
-            'Alimentos congelados', 'Artigos de decoração', 'Artigos esportivos',
-            'Artigos para festas', 'Autopeças e acessórios', 'Bebidas',
-            'Bolsas, carteiras, cintos, malas, etc.', 'Brinquedos e jogos',
-            'Calçados atacado', 'Cama, mesa e banho', 'Cereais', 'Doces atacado',
-            'Eletrodomésticos atacado', 'Eletro-eletrônicos e informática',
-            'Equipamentos de sinalização e segurança',
-            'Equipamentos e acessórios para a área da saúde',
-            'Equipamentos e utensílios para copa e cozinha', 'Fantasias',
-            'Implementos agrícolas', 'Instrumentos musicais',
-            'Livros, revistas, jornais', 'Materiais de construção',
-            'Materiais de escritório', 'Materiais de higiene e limpeza',
-            'Medicamentos', 'Medicamentos e produtos veterinários',
-            'Produtos alimentícios', 'Produtos e implementos de jardinagem',
-            'Roupas', 'Sorvetes', 'Uniformes atacado', 'Vestuário',
-            'Outra área atacado'
-        ],
-        // ... outros mapeamentos de especialidades ...
-    };
-
-    // Atualizar áreas de especialidade quando atividade mudar
-    companyActivitySelect.addEventListener('change', function() {
-        specialtyAreaSelect.disabled = false;
-        specialtyAreaSelect.innerHTML = '<option value="" selected disabled>Selecione a área de especialidade</option>';
-        
-        const selectedActivity = this.value;
-        if (specialtyAreas[selectedActivity]) {
-            specialtyAreas[selectedActivity].forEach(area => {
-                const option = document.createElement('option');
-                option.value = area;
-                option.textContent = area;
-                specialtyAreaSelect.appendChild(option);
-            });
-        }
-    });
-
-    // Validação do formulário
+    // Enviar formulário
     form.addEventListener('submit', function(e) {
-        const name = document.getElementById('name').value.trim();
-        const email = document.getElementById('email').value.trim();
-        const whatsapp = document.getElementById('whatsapp').value.trim();
-        const password = document.getElementById('password').value;
-        const terms = document.getElementById('terms_accepted').checked;
-        const gender = document.querySelector('input[name="gender"]:checked');
-        const birthDay = document.getElementById('birth_day').value;
-        const birthMonth = document.getElementById('birth_month').value;
-        const married = document.querySelector('input[name="married"]:checked');
-        const children = document.querySelector('input[name="children"]:checked');
-        const grandchildren = document.querySelector('input[name="grandchildren"]:checked');
-        const state = document.getElementById('state').value;
-        const city = document.getElementById('city').value;
-        const companyActivity = document.getElementById('company_activity').value;
-        const specialtyArea = document.getElementById('specialty_area').value;
+        e.preventDefault();
         
-        let isValid = true;
-        let errorMessage = '';
+        const formData = new FormData(form);
         
-        // Validações existentes...
-        if (name.length < 3) {
-            errorMessage = 'O nome deve ter pelo menos 3 caracteres.';
-            isValid = false;
-        }
-        
-        if (!email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
-            errorMessage = 'Por favor, insira um email válido.';
-            isValid = false;
-        }
-        
-        if (!whatsapp.match(/^\(\d{2}\) \d{5}-\d{4}$/)) {
-            errorMessage = 'Por favor, insira um número de WhatsApp válido.';
-            isValid = false;
-        }
-        
-        if (password.length < 6) {
-            errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
-            isValid = false;
-        }
-        
-        if (!terms) {
-            errorMessage = 'Você deve aceitar os termos e condições.';
-            isValid = false;
-        }
-
-        // Novas validações
-        if (!gender) {
-            errorMessage = 'Por favor, selecione o sexo.';
-            isValid = false;
-        }
-
-        if (!birthDay || !birthMonth) {
-            errorMessage = 'Por favor, preencha a data de aniversário.';
-            isValid = false;
-        }
-
-        if (!married) {
-            errorMessage = 'Por favor, selecione se é casado.';
-            isValid = false;
-        }
-
-        if (!children) {
-            errorMessage = 'Por favor, selecione se tem filhos.';
-            isValid = false;
-        }
-
-        if (!grandchildren) {
-            errorMessage = 'Por favor, selecione se tem netos.';
-            isValid = false;
-        }
-
-        if (!state) {
-            errorMessage = 'Por favor, selecione o estado.';
-            isValid = false;
-        }
-
-        if (!city) {
-            errorMessage = 'Por favor, selecione a cidade.';
-            isValid = false;
-        }
-
-        if (!companyActivity) {
-            errorMessage = 'Por favor, selecione a atividade da empresa.';
-            isValid = false;
-        }
-
-        if (!specialtyArea) {
-            errorMessage = 'Por favor, selecione a área de especialidade.';
-            isValid = false;
-        }
-        
-        if (!isValid) {
-            e.preventDefault();
+        fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(formData)
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.href = '/login';
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.detail || 'Erro ao cadastrar usuário');
+                });
+            }
+        })
+        .catch(error => {
             const errorDiv = document.createElement('div');
             errorDiv.className = 'alert alert-danger';
-            errorDiv.textContent = errorMessage;
+            errorDiv.textContent = error.message;
             
             const existingError = form.querySelector('.alert');
             if (existingError) {
@@ -644,7 +565,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             
             form.insertBefore(errorDiv, form.firstChild);
-        }
+        });
     });
 });
 </script>
@@ -671,6 +592,11 @@ document.addEventListener('DOMContentLoaded', function() {
         content: "*";
         color: red;
         margin-left: 3px;
+    }
+
+    .input-group .btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
     }
 </style>
 {% endblock %} 

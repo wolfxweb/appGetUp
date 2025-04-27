@@ -36,4 +36,30 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 500);
         }, 5000);
     });
+
+
+    // Tornar a função disponível globalmente
+    window.buscarEnderecoPorCEP = buscarEnderecoPorCEP;
+
+    // Formatar CEP
+    const cepInput = document.getElementById('cep');
+    if (cepInput) {
+        cepInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length <= 8) {
+                if (value.length > 5) {
+                    value = value.substring(0,5) + '-' + value.substring(5);
+                }
+                e.target.value = value;
+            }
+        });
+
+        // Buscar CEP ao pressionar Enter no campo
+        cepInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                buscarEnderecoPorCEP();
+            }
+        });
+    }
 }); 

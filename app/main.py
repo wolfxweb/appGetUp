@@ -1,11 +1,12 @@
 import logging
 import os
 import asyncio
+import httpx
 from fastapi import FastAPI, Request, Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from starlette.middleware.sessions import SessionMiddleware
 import secrets
 
@@ -93,6 +94,22 @@ async def home(request: Request, current_user = Depends(get_current_user)):
         "request": request,
         "user": current_user
     })
+
+@app.get("/api/cities/{state}")
+async def get_cities(state: str):
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(f"https://viacep.com.br/ws/{state}/cidades/")
+            if response.status_code == 200:
+                data = response.json()
+                # Ordenar cidades alfabeticamente
+                cities = sorted([city["nome"] for city in data])
+                return JSONResponse(content={"cities": cities})
+            else:
+                return JSONResponse(content={"cities": []}, status_code=response.status_code)
+    except Exception as e:
+        logger.error(f"Erro ao buscar cidades: {str(e)}")
+        return JSONResponse(content={"cities": []}, status_code=500)
 
 # Criar o handler para a Vercel com configurações específicas
 handler = Mangum(app, lifespan="off")
