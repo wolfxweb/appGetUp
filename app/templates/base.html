@@ -20,8 +20,20 @@
         .bg-primary {
             background-color: rgb(1, 57, 44) !important;
         }
-        .text-primary, .bi {
+        .text-primary {
             color: rgb(1, 57, 44) !important;
+        }
+        /* Regras específicas para checkboxes e radio buttons */
+        .form-check-input:checked {
+            background-color: rgb(1, 57, 44) !important;
+            border-color: rgb(1, 57, 44) !important;
+        }
+        .form-check-input:focus {
+            border-color: rgb(1, 57, 44) !important;
+            box-shadow: 0 0 0 0.25rem rgba(1, 57, 44, 0.25) !important;
+        }
+        .form-check-input {
+            border-color: rgb(1, 57, 44) !important;
         }
     </style>
     {% block head %}

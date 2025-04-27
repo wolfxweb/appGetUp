@@ -489,7 +489,7 @@
                                         <input type="text" class="form-control" id="cep" name="cep" value="{{ user.cep|default('', true) }}" required 
                                                pattern="[0-9]{5}-[0-9]{3}" placeholder="00000-000"
                                                title="Digite um CEP válido no formato 00000-000">
-                                        <button class="btn btn-outline-primary" type="button" id="searchCep" onclick="buscarEnderecoPorCEP()">
+                                        <button class="btn bg-primary text-white" type="button" id="searchCep" onclick="buscarEnderecoPorCEP()">
                                             <i class="bi bi-search"></i> Buscar
                                         </button>
                                     </div>
@@ -635,7 +635,7 @@
 
                     <!-- Botões de Ação -->
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+                        <button type="submit" class="btn bg-primary text-white btn-lg">Cadastrar</button>
                         <a href="/login" class="btn btn-outline-secondary">Já tem uma conta? Faça login</a>
                     </div>
                 </form>

@@ -3,17 +3,9 @@
 {% block title %}Meu Perfil{% endblock %}
 
 {% block content %}
+{% include "components/navbar.html" %}
 <div class="row justify-content-center p-1 mt-5">
     <div class="col-md-10 col-lg-8">
-        <div class="d-flex align-items-center mb-4">
-            <div class="me-3 bg-primary">
-                <img src="{{ url_for('static', path='images/Wolfx-Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
-            </div>
-            <div>
-                <p class="text-danger mb-0">Cliente tem que enviar o logo da empresa com 150px x 300px</p>
-            </div>
-        </div>
-
         <div class="card shadow">
             <div class="card-header bg-primary text-white">
                 <h3 class="mb-0">Meu Perfil</h3>
@@ -167,8 +159,8 @@
                                     <div class="col-md-4 mb-3">
                                         <label class="form-label">Netos?</label>
                                         <div class="d-flex gap-3">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="grandchildren" id="grandchildren_yes" value="Sim" {% if user.grandchildren == 'Sim' %}checked{% endif %}>
+                                            <div class="form-check ">
+                                                <input class="form-check-input  " type="radio" name="grandchildren" id="grandchildren_yes" value="Sim" {% if user.grandchildren == 'Sim' %}checked{% endif %}>
                                                 <label class="form-check-label" for="grandchildren_yes">Sim</label>
                                             </div>
                                             <div class="form-check">
@@ -193,7 +185,7 @@
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="cep" name="cep" value="{{ user.cep|default('', true) }}" 
                                                    pattern="[0-9]{5}-[0-9]{3}" placeholder="00000-000" required>
-                                            <button class="btn btn-outline-primary" type="button" id="searchCep" onclick="buscarEnderecoPorCEP()">
+                                            <button class="btn bg-primary text-white" type="button" id="searchCep" onclick="buscarEnderecoPorCEP()">
                                                 <i class="bi bi-search"></i> Buscar
                                             </button>
                                         </div>
@@ -338,8 +330,8 @@
                                         <label for="activation_key" class="form-label">Chave de Ativação</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="activation_key" name="activation_key" value="{{ user.activation_key|default('', true) }}" readonly>
-                                            <span class="input-group-text bg-success text-white">
-                                                <i class="bi bi-check-circle"></i> Ativada
+                                            <span class="input-group-text  bg-primary  text-white">
+                                                <i class="bi bi-check-circle "> </i> 
                                             </span>
                                         </div>
                                         <div class="form-text">
@@ -363,7 +355,7 @@
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" name="action" value="update" class="btn btn-primary">
+                            <button type="submit" name="action" value="update" class="btn bg-primary text-white">
                                 <i class="bi bi-check-circle"></i> Salvar Alterações
                             </button>
                         </div>

@@ -56,6 +56,13 @@ i.bi, .bi-question-circle, i.help-icon {
     color: var(--primary-color) !important;
 }
 
+/* Ícones brancos em botões */
+button.btn.text-white .bi,
+.btn.text-white .bi,
+.btn.text-white i.bi {
+    color: white !important;
+}
+
 .btn-outline-primary {
     color: var(--primary-color) !important;
     border-color: var(--primary-color) !important;
@@ -160,7 +167,16 @@ a[data-bs-toggle="modal"]:hover {
     box-shadow: 0 0 0 0.25rem rgba(1, 57, 44, 0.25);
 }
 
-.form-check-input:checked {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+/* Cor personalizada para checkboxes e radio buttons */
+.form-check-input[type="radio"]:checked,
+.form-check-input[type="checkbox"]:checked {
+    background-color: rgb(1, 57, 44) !important;
+    border-color: rgb(1, 57, 44) !important;
+    box-shadow: 0 0 0 0.25rem rgba(1, 57, 44, 0.25) !important;
+}
+
+/* Cor personalizada para o estado não selecionado */
+.form-check-input[type="radio"],
+.form-check-input[type="checkbox"] {
+    border-color: rgb(1, 57, 44) !important;
 } 
