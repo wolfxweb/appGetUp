@@ -101,7 +101,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form method="post" action="/basic-data/save" id="basicDataForm">
+                    <form method="post" action="{% if edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
                         {% if show_confirm %}
                         <input type="hidden" name="confirm_update" value="true">
                         {% endif %}
@@ -783,6 +783,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Função para preparar os dados antes do envio do formulário
     function prepareFormData() {
+        // Lista de campos que devem ser formatados como moeda
+        const currencyInputs = [
+            'sales_revenue', 
+            'sales_expenses', 
+            'input_product_expenses', 
+            'fixed_costs', 
+            'pro_labore', 
+            'other_fixed_costs'
+        ];
+        
+        // Processar campos monetários
         currencyInputs.forEach(inputId => {
             const input = document.getElementById(inputId);
             if (input && input.value) {
@@ -791,10 +802,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Atualizar o valor do campo original com o valor numérico
                 input.value = numericValue;
+                
                 // Log para debug
                 console.log(`Campo ${inputId}: valor original = ${input.value}, valor convertido = ${numericValue}`);
             }
         });
+        
+        // Log todos os campos do formulário para debug
+        const formData = new FormData(form);
+        console.log('Dados do formulário antes do envio:', Object.fromEntries(formData));
     }
 
     // Inicializar formatação de campos monetários
@@ -891,88 +907,130 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Adicionar evento para preparar dados antes do envio do formulário
-    const form = document.querySelector('form');
-    if (form) {
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
+    // Função para validar campos obrigatórios
+    function validateRequiredFields() {
+        // Campos obrigatórios base
+        const baseRequiredFields = [
+            { id: 'clients_served', name: 'Quantidade de Clientes Atendidos' },
+            { id: 'sales_revenue', name: 'Faturamento com Vendas' },
+            { id: 'sales_expenses', name: 'Gastos com Vendas' },
+            { id: 'input_product_expenses', name: 'Gastos com Insumos e Produtos' }
+        ];
 
-            // Se estiver em modo de edição, enviar o formulário diretamente
-            if (isEditMode) {
-                console.log('Modo de edição: true, enviando formulário diretamente');
-                prepareFormData();
-                form.submit();
-                return;
-            }
+        // Campos obrigatórios adicionais para Serviços
+        const servicesRequiredFields = [
+            { id: 'pro_labore', name: 'Pró-labore' },
+            { id: 'other_fixed_costs', name: 'Demais Custos Fixos' },
+            { id: 'work_hours_per_week', name: 'Horas de Trabalho por Semana' },
+            { id: 'ideal_service_profit_margin', name: 'Margem de Lucro Ideal (%)' }
+        ];
 
-            // Se já foi confirmado, permite o envio
-            if (isConfirmed) {
-                prepareFormData();
-                form.submit();
-                return;
-            }
+        // Determinar se é do tipo Serviços
+        const isServicesType = {% if user.activity_type == 'Serviços' %}true{% else %}false{% endif %};
 
-            // Verifica se já existe registro para o mês/ano selecionado (apenas para novo registro)
-            const month = document.getElementById('month').value;
-            const year = document.getElementById('year').value;
-            
-            // Mostrar mensagem de carregamento
-            const warningMessage = document.getElementById('warningMessage');
-            warningMessage.style.display = 'block';
-            warningMessage.innerHTML = '<div class="alert alert-info"><i class="bi bi-info-circle"></i> Verificando dados existentes...</div>';
+        // Combinar campos obrigatórios base com campos adicionais se for do tipo Serviços
+        const requiredFields = isServicesType 
+            ? [...baseRequiredFields, ...servicesRequiredFields]
+            : baseRequiredFields;
 
-            try {
-                const response = await fetch(`/basic-data/check/${year}/${month}`);
-                const data = await response.json();
+        let isValid = true;
+        let missingFields = [];
 
-                if (data.exists) {
-                    // Se existe, mostra o modal de confirmação e a mensagem de aviso
-                    warningMessage.innerHTML = `
-                        <div class="alert alert-warning" role="alert">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                            <strong>Atenção!</strong> Já existem dados básicos cadastrados para ${month}/${year}.
-                            <br>
-                            Você pode:
-                            <ul class="mb-0">
-                                <li><a href="/basic-data" class="alert-link">Voltar à tela de consulta</a> para ver os dados existentes</li>
-                                <li>Clicar em "Continuar mesmo assim" abaixo para substituir os dados existentes</li>
-                            </ul>
-                        </div>
-                    `;
-                    warningMessage.style.display = 'block';
-                    
-                    // Ocultar o botão de salvar
-                    const saveButtonContainer = document.getElementById('saveButtonContainer');
-                    if (saveButtonContainer) {
-                        saveButtonContainer.style.display = 'none';
-                    }
-                    
-                    confirmModal.show();
-                } else {
-                    // Se não existe, esconde a mensagem de aviso e mostra o botão de salvar
-                    warningMessage.style.display = 'none';
-                    
-                    // Mostrar o botão de salvar
-                    const saveButtonContainer = document.getElementById('saveButtonContainer');
-                    if (saveButtonContainer) {
-                        saveButtonContainer.style.display = 'block';
-                    }
-                    
-                    prepareFormData();
-                    form.submit();
-                }
-            } catch (error) {
-                console.error('Erro ao verificar dados existentes:', error);
-                warningMessage.innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill"></i>
-                        Erro ao verificar dados existentes. Por favor, tente novamente.
-                    </div>
-                `;
-                warningMessage.style.display = 'block';
+        requiredFields.forEach(field => {
+            const input = document.getElementById(field.id);
+            if (!input || !input.value.trim()) {
+                isValid = false;
+                missingFields.push(field.name);
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
             }
         });
+
+        if (!isValid) {
+            // Verificar se já existe um alerta de campos obrigatórios
+            let existingAlert = document.querySelector('.alert-danger[data-type="required-fields"]');
+            
+            if (!existingAlert) {
+                existingAlert = document.createElement('div');
+                existingAlert.className = 'alert alert-danger alert-dismissible fade show';
+                existingAlert.setAttribute('data-type', 'required-fields');
+                existingAlert.role = 'alert';
+                existingAlert.innerHTML = `
+                    <strong>Campos obrigatórios não preenchidos:</strong>
+                    <ul class="mb-0">
+                        ${missingFields.map(field => `<li>${field}</li>`).join('')}
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                `;
+
+                // Inserir o novo alerta antes do formulário
+                const form = document.getElementById('basicDataForm');
+                form.parentNode.insertBefore(existingAlert, form);
+            } else {
+                // Atualizar o conteúdo do alerta existente
+                existingAlert.querySelector('ul').innerHTML = missingFields.map(field => `<li>${field}</li>`).join('');
+            }
+
+            // Rolar até o alerta
+            existingAlert.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+            // Remover o alerta de campos obrigatórios se existir
+            const existingAlert = document.querySelector('.alert-danger[data-type="required-fields"]');
+            if (existingAlert) {
+                existingAlert.remove();
+            }
+        }
+
+        return isValid;
     }
+
+    // Modificar o evento de submit do formulário
+    form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        // Validar campos obrigatórios
+        if (!validateRequiredFields()) {
+            return;
+        }
+
+        // Se estiver em modo de edição, enviar o formulário diretamente
+        if (isEditMode) {
+            console.log('Modo de edição: true, enviando formulário diretamente');
+            prepareFormData();
+            form.submit();
+            return;
+        }
+
+        // Se já foi confirmado, permite o envio
+        if (isConfirmed) {
+            prepareFormData();
+            form.submit();
+            return;
+        }
+
+        // Verifica se já existe registro para o mês/ano selecionado (apenas para novo registro)
+        const month = document.getElementById('month').value;
+        const year = document.getElementById('year').value;
+        
+        try {
+            const response = await fetch(`/basic-data/check/${year}/${month}`);
+            const data = await response.json();
+
+            if (data.exists) {
+                // Se existe, mostra o modal de confirmação
+                confirmModal.show();
+            } else {
+                // Se não existe, envia o formulário normalmente
+                prepareFormData();
+                form.submit();
+            }
+        } catch (error) {
+            console.error('Erro ao verificar dados existentes:', error);
+            prepareFormData();
+            form.submit(); // Em caso de erro, tenta enviar mesmo assim
+        }
+    });
 
     // Botão de confirmação no modal
     document.getElementById('confirmReplace').addEventListener('click', function() {
@@ -1013,16 +1071,28 @@ document.addEventListener('DOMContentLoaded', function() {
         document.body.style.removeProperty('padding-right');
     });
 
-    // Submissão do formulário para o botão de atualizar
+    // Modificar o evento do botão de atualizar
     document.getElementById('updateButton')?.addEventListener('click', function(e) {
         e.preventDefault();
+        
+        // Validar campos obrigatórios
+        if (!validateRequiredFields()) {
+            return;
+        }
+        
         prepareFormData();
         form.submit();
     });
 
-    // O botão de salvar pode submeter diretamente
+    // Modificar o evento do botão de salvar
     document.getElementById('saveButton')?.addEventListener('click', function(e) {
         e.preventDefault();
+        
+        // Validar campos obrigatórios
+        if (!validateRequiredFields()) {
+            return;
+        }
+        
         prepareFormData();
         form.submit();
     });
