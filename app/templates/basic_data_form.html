@@ -101,7 +101,7 @@
                 </div>
                 <div class="card-body">
 
-                    <form method="post" action="/basic-data/save">
+                    <form method="post" action="/basic-data/save" id="basicDataForm">
                         {% if show_confirm %}
                         <input type="hidden" name="confirm_update" value="true">
                         {% endif %}
@@ -158,7 +158,11 @@
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
                                     <input type="text" class="form-control" id="sales_revenue" name="sales_revenue" 
-                                        value="{{ (basic_data.sales_revenue/10)|round(2) if basic_data and basic_data.sales_revenue is not none else '' }}" required>
+                                        value="{{ (basic_data.sales_revenue/10)|round(2) if basic_data and basic_data.sales_revenue is not none else '' }}" 
+                                        required pattern="^R?\$?\s*[\d.,]+$">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor, informe o faturamento com vendas.
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -169,7 +173,11 @@
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
                                     <input type="text" class="form-control" id="sales_expenses" name="sales_expenses" 
-                                        value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '' }}" required>
+                                        value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '' }}" 
+                                        required pattern="^R?\$?\s*[\d.,]+$">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor, informe os gastos com vendas.
                                 </div>
                             </div>
                             <div class="col-md-3 mb-3">
@@ -180,7 +188,11 @@
                                 <div class="input-group">
                                     <span class="input-group-text">R$</span>
                                     <input type="text" class="form-control" id="input_product_expenses" name="input_product_expenses" 
-                                        value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '' }}" required>
+                                        value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '' }}" 
+                                        required pattern="^R?\$?\s*[\d.,]+$">
+                                </div>
+                                <div class="invalid-feedback">
+                                    Por favor, informe os gastos com insumos e produtos.
                                 </div>
                             </div>
                         </div>
@@ -568,6 +580,53 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('basicDataForm');
+    
+    // Função para validar o formulário
+    function validateForm() {
+        let isValid = true;
+        
+        // Validar campos monetários
+        const currencyFields = ['sales_revenue', 'sales_expenses', 'input_product_expenses'];
+        currencyFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                const value = field.value.trim();
+                if (!value || !value.match(/^R?\$?\s*[\d.,]+$/)) {
+                    field.classList.add('is-invalid');
+                    isValid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                }
+            }
+        });
+        
+        return isValid;
+    }
+    
+    // Adicionar evento de submit ao formulário
+    form.addEventListener('submit', function(e) {
+        if (!validateForm()) {
+            e.preventDefault();
+            return false;
+        }
+    });
+    
+    // Adicionar eventos de input para validação em tempo real
+    const currencyFields = ['sales_revenue', 'sales_expenses', 'input_product_expenses'];
+    currencyFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', function() {
+                if (this.value.trim().match(/^R?\$?\s*[\d.,]+$/)) {
+                    this.classList.remove('is-invalid');
+                } else {
+                    this.classList.add('is-invalid');
+                }
+            });
+        }
+    });
+    
     // Definir variáveis globais
     const isEditMode = {% if edit_mode %}true{% else %}false{% endif %};
     const confirmReplaceModal = document.getElementById('confirmReplaceModal');

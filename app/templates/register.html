@@ -224,7 +224,7 @@
             });
         }
 
-        // Adicionar evento de submit no formulário
+        // Enviar formulário
         const form = document.querySelector('form');
         if (form) {
             form.addEventListener('submit', function(e) {
@@ -244,13 +244,51 @@
                         window.location.href = '/login';
                     } else {
                         return response.json().then(data => {
-                            throw new Error(data.detail || 'Erro ao cadastrar usuário');
+                            let errorMessage = 'Erro ao cadastrar usuário';
+                            
+                            if (data.detail) {
+                                if (Array.isArray(data.detail)) {
+                                    // Mapear os nomes dos campos para português
+                                    const fieldNames = {
+                                        'name': 'Nome Completo',
+                                        'email': 'Email',
+                                        'whatsapp': 'WhatsApp',
+                                        'password': 'Senha',
+                                        'gender': 'Sexo',
+                                        'birth_day': 'Dia de Nascimento',
+                                        'birth_month': 'Mês de Nascimento',
+                                        'married': 'Estado Civil',
+                                        'children': 'Filhos',
+                                        'grandchildren': 'Netos',
+                                        'cep': 'CEP',
+                                        'street': 'Logradouro',
+                                        'neighborhood': 'Bairro',
+                                        'state': 'Estado',
+                                        'city': 'Cidade',
+                                        'activity_type': 'Tipo de Atividade',
+                                        'company_activity': 'Atividade da Empresa',
+                                        'specialty_area': 'Área de Especialidade',
+                                        'terms_accepted': 'Termos e Condições'
+                                    };
+
+                                    // Se for um array de erros, juntar todas as mensagens com quebra de linha
+                                    errorMessage = data.detail.map(error => {
+                                        const fieldName = error.loc && error.loc[1] ? fieldNames[error.loc[1]] || error.loc[1] : 'Campo';
+                                        return `O preenchimento do campo ${fieldName} é obrigatório.`;
+                                    }).join('\n\n');
+                                } else {
+                                    errorMessage = data.detail;
+                                }
+                            }
+                            
+                            throw new Error(errorMessage);
                         });
                     }
                 })
                 .catch(error => {
                     const errorDiv = document.createElement('div');
                     errorDiv.className = 'alert alert-danger';
+                    errorDiv.style.whiteSpace = 'pre-line'; // Adiciona suporte a quebras de linha no alert
                     errorDiv.textContent = error.message;
                     
                     const existingError = form.querySelector('.alert');
@@ -820,13 +858,51 @@ document.addEventListener('DOMContentLoaded', function() {
                 window.location.href = '/login';
             } else {
                 return response.json().then(data => {
-                    throw new Error(data.detail || 'Erro ao cadastrar usuário');
+                    let errorMessage = 'Erro ao cadastrar usuário';
+                    
+                    if (data.detail) {
+                        if (Array.isArray(data.detail)) {
+                            // Mapear os nomes dos campos para português
+                            const fieldNames = {
+                                'name': 'Nome Completo',
+                                'email': 'Email',
+                                'whatsapp': 'WhatsApp',
+                                'password': 'Senha',
+                                'gender': 'Sexo',
+                                'birth_day': 'Dia de Nascimento',
+                                'birth_month': 'Mês de Nascimento',
+                                'married': 'Estado Civil',
+                                'children': 'Filhos',
+                                'grandchildren': 'Netos',
+                                'cep': 'CEP',
+                                'street': 'Logradouro',
+                                'neighborhood': 'Bairro',
+                                'state': 'Estado',
+                                'city': 'Cidade',
+                                'activity_type': 'Tipo de Atividade',
+                                'company_activity': 'Atividade da Empresa',
+                                'specialty_area': 'Área de Especialidade',
+                                'terms_accepted': 'Termos e Condições'
+                            };
+
+                            // Se for um array de erros, juntar todas as mensagens com quebra de linha
+                            errorMessage = data.detail.map(error => {
+                                const fieldName = error.loc && error.loc[1] ? fieldNames[error.loc[1]] || error.loc[1] : 'Campo';
+                                return `O preenchimento do campo ${fieldName} é obrigatório.`;
+                            }).join('\n\n');
+                        } else {
+                            errorMessage = data.detail;
+                        }
+                    }
+                    
+                    throw new Error(errorMessage);
                 });
             }
         })
         .catch(error => {
             const errorDiv = document.createElement('div');
             errorDiv.className = 'alert alert-danger';
+            errorDiv.style.whiteSpace = 'pre-line'; // Adiciona suporte a quebras de linha no alert
             errorDiv.textContent = error.message;
             
             const existingError = form.querySelector('.alert');

@@ -341,7 +341,7 @@
                                         <label for="activation_key" class="form-label">Chave de Ativação <span class="text-danger">*</span></label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="activation_key" name="activation_key" value="{{ user.activation_key|default('', true) }}" placeholder="Digite sua chave de ativação" required>
-                                            <button type="submit" name="action" value="activate" class="btn btn-success">
+                                            <button type="submit" name="action" value="activate" class="btn bg-primary text-white">
                                                 <i class="bi bi-check-circle"></i> Ativar
                                             </button>
                                         </div>
@@ -621,7 +621,42 @@
                         window.location.reload();
                     } else {
                         const result = await response.json();
-                        alert(result.detail || 'Erro ao atualizar perfil');
+                        let errorMessage = 'Erro ao atualizar perfil';
+                        
+                        if (result.detail) {
+                            if (Array.isArray(result.detail)) {
+                                // Mapear os nomes dos campos para português
+                                const fieldNames = {
+                                    'name': 'Nome Completo',
+                                    'email': 'Email',
+                                    'whatsapp': 'WhatsApp',
+                                    'gender': 'Sexo',
+                                    'birth_day': 'Dia de Nascimento',
+                                    'birth_month': 'Mês de Nascimento',
+                                    'married': 'Estado Civil',
+                                    'children': 'Filhos',
+                                    'grandchildren': 'Netos',
+                                    'cep': 'CEP',
+                                    'street': 'Logradouro',
+                                    'neighborhood': 'Bairro',
+                                    'state': 'Estado',
+                                    'city': 'Cidade',
+                                    'activity_type': 'Tipo de Atividade',
+                                    'company_activity': 'Atividade da Empresa',
+                                    'specialty_area': 'Área de Especialidade'
+                                };
+
+                                // Se for um array de erros, juntar todas as mensagens com quebra de linha
+                                errorMessage = result.detail.map(error => {
+                                    const fieldName = error.loc && error.loc[1] ? fieldNames[error.loc[1]] || error.loc[1] : 'Campo';
+                                    return `O preenchimento do campo ${fieldName} é obrigatório.`;
+                                }).join('\n\n');
+                            } else {
+                                errorMessage = result.detail;
+                            }
+                        }
+                        
+                        alert(errorMessage);
                     }
                 } catch (error) {
                     console.error('Erro:', error);
