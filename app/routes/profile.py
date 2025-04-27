@@ -19,6 +19,9 @@ async def profile_page(
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
+    if not current_user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+
     # Garantir que a data de registro esteja definida
     if not current_user.registration_date:
         current_user.registration_date = datetime.now()
