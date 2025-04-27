@@ -217,6 +217,16 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-6 mb-3">
+                                    <label for="activity_type" class="form-label">Tipo de Atividade <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="activity_type" name="activity_type" required>
+                                        <option value="" selected disabled>Selecione o tipo de atividade</option>
+                                        <option value="Serviços">Serviços</option>
+                                        <option value="Comércio">Comércio</option>
+                                        <option value="Indústria">Indústria</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
                                     <label for="company_activity" class="form-label">Atividade da Empresa <span class="text-danger">*</span></label>
                                     <select class="form-select" id="company_activity" name="company_activity" required>
                                         <option value="" selected disabled>Selecione a atividade</option>
@@ -237,7 +247,9 @@
                                         <option value="Varejo - Vestuário,calçados e complementos">Varejo - Vestuário,calçados e complementos</option>
                                     </select>
                                 </div>
+                            </div>
 
+                            <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="specialty_area" class="form-label">Área de Especialidade <span class="text-danger">*</span></label>
                                     <select class="form-select" id="specialty_area" name="specialty_area" required disabled>
