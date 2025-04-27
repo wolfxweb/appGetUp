@@ -71,6 +71,21 @@ async def register(
     password: str = Form(...),
     activation_key: str = Form(None),
     terms_accepted: bool = Form(...),
+    # Novos campos
+    gender: str = Form(None),
+    birth_day: int = Form(None),
+    birth_month: int = Form(None),
+    married: str = Form(None),
+    children: str = Form(None),
+    grandchildren: str = Form(None),
+    cep: str = Form(None),
+    street: str = Form(None),
+    neighborhood: str = Form(None),
+    state: str = Form(None),
+    city: str = Form(None),
+    complement: str = Form(None),
+    company_activity: str = Form(None),
+    specialty_area: str = Form(None),
     db: AsyncSession = Depends(get_db)
 ):
     try:
@@ -109,7 +124,22 @@ async def register(
             password=hashed_password,
             activation_key=activation_key,
             registration_date=datetime.now(),
-            terms_accepted=terms_accepted
+            terms_accepted=terms_accepted,
+            # Novos campos
+            gender=gender,
+            birth_day=birth_day,
+            birth_month=birth_month,
+            married=married,
+            children=children,
+            grandchildren=grandchildren,
+            cep=cep,
+            street=street,
+            neighborhood=neighborhood,
+            state=state,
+            city=city,
+            complement=complement,
+            company_activity=company_activity,
+            specialty_area=specialty_area
         )
         
         db.add(new_user)

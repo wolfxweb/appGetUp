@@ -19,6 +19,22 @@ class User(Base):
     access_level = Column(String, default="Cliente")
     terms_accepted = Column(Boolean, default=False)
     
+    # Novos campos opcionais
+    gender = Column(String, nullable=True)  # Masculino ou Feminino
+    birth_day = Column(Integer, nullable=True)  # Dia do aniversário
+    birth_month = Column(Integer, nullable=True)  # Mês do aniversário
+    married = Column(String, nullable=True)  # Sim ou Não
+    children = Column(String, nullable=True)  # Sim ou Não
+    grandchildren = Column(String, nullable=True)  # Sim ou Não
+    cep = Column(String, nullable=True)  # CEP
+    street = Column(String, nullable=True)  # Logradouro
+    neighborhood = Column(String, nullable=True)  # Bairro
+    state = Column(String, nullable=True)  # Estado (UF)
+    city = Column(String, nullable=True)  # Cidade
+    complement = Column(String, nullable=True)  # Complemento
+    company_activity = Column(String, nullable=True)  # Atividade da Empresa
+    specialty_area = Column(String, nullable=True)  # Área de Especialidade
+    
     # Relacionamento com Dados Básicos
     basic_data = relationship("BasicData", back_populates="user", cascade="all, delete-orphan")
     
