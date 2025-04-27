@@ -42,10 +42,28 @@ async def update_profile(
     email: str = Form(...),
     whatsapp: str = Form(...),
     activity_type: str = Form(...),
+    company_activity: str = Form(None),
+    specialty_area: str = Form(None),
+    name: str = Form(None),
+    gender: str = Form(None),
+    birth_day: int = Form(None),
+    birth_month: int = Form(None),
+    married: str = Form(None),
+    children: str = Form(None),
+    grandchildren: str = Form(None),
+    cep: str = Form(None),
+    street: str = Form(None),
+    neighborhood: str = Form(None),
+    state: str = Form(None),
+    city: str = Form(None),
+    complement: str = Form(None),
     activation_key: str = Form(None),
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
+    if not current_user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+
     # Garantir que a data de registro esteja definida
     if not current_user.registration_date:
         current_user.registration_date = datetime.now()
@@ -104,9 +122,24 @@ async def update_profile(
             )
 
     elif action == "update":
-        # Atualizar informações básicas
+        # Atualizar informações do usuário
+        current_user.name = name
         current_user.whatsapp = whatsapp
         current_user.activity_type = activity_type
+        current_user.company_activity = company_activity
+        current_user.specialty_area = specialty_area
+        current_user.gender = gender
+        current_user.birth_day = birth_day
+        current_user.birth_month = birth_month
+        current_user.married = married
+        current_user.children = children
+        current_user.grandchildren = grandchildren
+        current_user.cep = cep
+        current_user.street = street
+        current_user.neighborhood = neighborhood
+        current_user.state = state
+        current_user.city = city
+        current_user.complement = complement
 
         try:
             await db.commit()
@@ -125,6 +158,6 @@ async def update_profile(
                 {
                     "request": request,
                     "user": current_user,
-                    "error_message": "Erro ao atualizar o perfil. Tente novamente."
+                    "error_message": f"Erro ao atualizar o perfil: {str(e)}"
                 }
             ) 

@@ -48,7 +48,7 @@
                     </div>
                     {% endif %}
 
-                    <form method="post" action="/profile/update" class="needs-validation" novalidate>
+                    <form method="post" action="/profile/update" class="needs-validation" novalidate id="profileForm">
                         <!-- Informações Pessoais -->
                         <div class="card mb-4">
                             <div class="card-header bg-light">
@@ -277,11 +277,12 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="activity_type" class="form-label">Tipo de Atividade</label>
-                                        <select class="form-select" id="activity_type" name="activity_type" required disabled>
+                                        <select class="form-select" id="activity_type" name="activity_type" readonly required>
                                             <option value="Serviços" {% if user.activity_type == 'Serviços' %}selected{% endif %}>Serviços</option>
                                             <option value="Comércio" {% if user.activity_type == 'Comércio' %}selected{% endif %}>Comércio</option>
                                             <option value="Indústria" {% if user.activity_type == 'Indústria' %}selected{% endif %}>Indústria</option>
                                         </select>
+                                        <input type="hidden" name="activity_type" value="{{ user.activity_type }}">
                                         <small class="text-muted">O tipo de atividade não pode ser alterado após o cadastro.</small>
                                     </div>
 
@@ -311,7 +312,8 @@
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="specialty_area" class="form-label">Área de Especialidade <span class="text-danger">*</span></label>
-                                        <select class="form-select" id="specialty_area" name="specialty_area" required disabled>
+                                        <select class="form-select" id="specialty_area" name="specialty_area" required
+                                                data-current-value="{{ user.specialty_area|default('', true) }}">
                                             <option value="" selected disabled>Selecione a área de especialidade</option>
                                         </select>
                                     </div>
@@ -537,6 +539,7 @@
         if (!companyActivity || !specialtyAreaSelect) return;
         
         const activityType = companyActivity.value;
+        const currentSpecialty = specialtyAreaSelect.getAttribute('data-current-value');
         
         // Limpar opções existentes
         specialtyAreaSelect.innerHTML = '<option value="" selected disabled>Selecione a área de especialidade</option>';
@@ -550,6 +553,10 @@
                 const option = document.createElement('option');
                 option.value = area;
                 option.textContent = area;
+                // Selecionar a opção se for a mesma que estava salva
+                if (currentSpecialty && area === currentSpecialty) {
+                    option.selected = true;
+                }
                 specialtyAreaSelect.appendChild(option);
             });
         }
@@ -600,6 +607,34 @@
                 }
                 
                 e.target.value = value;
+            });
+        }
+
+        // Adicionar evento de submit no formulário
+        const form = document.getElementById('profileForm');
+        if (form) {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+                formData.append('action', 'update');
+
+                try {
+                    const response = await fetch('/profile/update', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        const result = await response.json();
+                        alert(result.detail || 'Erro ao atualizar perfil');
+                    }
+                } catch (error) {
+                    console.error('Erro:', error);
+                    alert('Erro ao atualizar perfil');
+                }
             });
         }
     });
