@@ -1,27 +1,25 @@
-version: '3.8'
-
 services:
-  web:
+  app:
     build: .
     ports:
       - "8000:8000"
     volumes:
       - .:/app
-      - sqlite_data:/app/app/database
     environment:
-      - DATABASE_URL=sqlite:///./app/database/app.db
-      - SECRET_KEY=${SECRET_KEY}
-      - ALGORITHM=${ALGORITHM}
-      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
-      - SMTP_SERVER=${SMTP_SERVER}
-      - SMTP_PORT=${SMTP_PORT}
-      - SMTP_USER=${SMTP_USER}
-      - SMTP_PASSWORD=${SMTP_PASSWORD}
-      - APP_URL=${APP_URL}
-    command: >
-      sh -c "python migrate_db.py &&
-             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@db:5432/appgetup
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=appgetup
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
 
 volumes:
-  sqlite_data:
-    driver: local 
+  postgres_data: 
