@@ -33,7 +33,7 @@ COPY . .
 RUN chmod -R 777 /app
 
 # Expose port
-EXPOSE 8000
+EXPOSE 9090
 
 # Command to run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9090", "--reload"] 
