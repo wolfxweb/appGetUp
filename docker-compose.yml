@@ -2,7 +2,7 @@ services:
   app:
     build: .
     ports:
-      - "9090:8000"
+      - "9090:9090"
     volumes:
       - .:/app
       - sqlite_data:/app/app/database
@@ -10,8 +10,9 @@ services:
       - DATABASE_URL=sqlite:///./app/database/app.db
     command: >
       sh -c "python migrate_db.py &&
-             uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+             uvicorn app.main:app --host 0.0.0.0 --port 9090 --reload"
 
 volumes:
   sqlite_data:
-    driver: local 
+    driver: local
+
