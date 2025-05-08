@@ -2,3 +2,80 @@
 2025-05-08 21:03:12,517 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
 2025-05-08 21:05:58,016 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
 2025-05-08 21:12:56,220 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:13:55,726 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:14:15,141 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:14:26,091 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:15:26,970 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:15:30,125 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:16:09,851 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:16:23,959 - app.routes.basic_data_operations - INFO - Processando dados básicos para usuário 1 em modo criação
+2025-05-08 21:16:23,960 - app.routes.basic_data_operations - INFO - Valores recebidos (antes da conversão):
+2025-05-08 21:16:23,960 - app.routes.basic_data_operations - INFO - - month: 5, year: 2025, clients_served: 101
+2025-05-08 21:16:23,960 - app.routes.basic_data_operations - INFO - - sales_revenue: '10'
+2025-05-08 21:16:23,960 - app.routes.basic_data_operations - INFO - - sales_expenses: '10'
+2025-05-08 21:16:23,961 - app.routes.basic_data_operations - INFO - - input_product_expenses: '10'
+2025-05-08 21:16:23,961 - app.routes.basic_data_operations - INFO - - fixed_costs: '10'
+2025-05-08 21:16:23,961 - app.routes.basic_data_operations - INFO - - pro_labore: 'None'
+2025-05-08 21:16:23,961 - app.routes.basic_data_operations - INFO - - other_fixed_costs: 'None'
+2025-05-08 21:16:23,962 - app.routes.basic_data_operations - INFO - Valores convertidos (após a conversão):
+2025-05-08 21:16:23,962 - app.routes.basic_data_operations - INFO - - sales_revenue_float: 10.0
+2025-05-08 21:16:23,962 - app.routes.basic_data_operations - INFO - - sales_expenses_float: 10.0
+2025-05-08 21:16:23,963 - app.routes.basic_data_operations - INFO - - input_product_expenses_float: 10.0
+2025-05-08 21:16:23,963 - app.routes.basic_data_operations - INFO - - fixed_costs_float: 10.0
+2025-05-08 21:16:23,963 - app.routes.basic_data_operations - INFO - - pro_labore_float: None
+2025-05-08 21:16:23,963 - app.routes.basic_data_operations - INFO - - other_fixed_costs_float: None
+2025-05-08 21:16:23,963 - app.routes.basic_data_operations - INFO - Dados que serão salvos no banco:
+2025-05-08 21:16:23,964 - app.routes.basic_data_operations - INFO - - month: 5, year: 2025, clients_served: 101
+2025-05-08 21:16:23,964 - app.routes.basic_data_operations - INFO - - sales_revenue: 10.0
+2025-05-08 21:16:23,964 - app.routes.basic_data_operations - INFO - - sales_expenses: 10.0
+2025-05-08 21:16:23,964 - app.routes.basic_data_operations - INFO - - input_product_expenses: 10.0
+2025-05-08 21:16:23,965 - app.routes.basic_data_operations - INFO - - fixed_costs: 10.0
+2025-05-08 21:16:23,965 - app.routes.basic_data_operations - INFO - - pro_labore: None
+2025-05-08 21:16:23,965 - app.routes.basic_data_operations - INFO - - other_fixed_costs: None
+2025-05-08 21:16:23,965 - app.routes.basic_data_operations - INFO - Verificando se já existe registro para mês 5/2025
+2025-05-08 21:16:23,968 - app.routes.basic_data_operations - INFO - Criando novo registro para mês 5/2025
+2025-05-08 21:16:23,984 - app.routes.basic_data_operations - INFO - Registro criado com sucesso. ID: 20
+2025-05-08 21:16:24,009 - app.routes.basic_data_operations - INFO - Redirecionando para /basic-data/
+2025-05-08 21:16:24,021 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-05-08 21:16:24,021 - app.routes.basic_data - INFO - Registro ID 20: month=5, year=2025, clients_served=101
+2025-05-08 21:16:24,022 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=10.0, sales_expenses=10.0, input_product_expenses=10.0
+2025-05-08 21:16:24,022 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=10.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:16:24,022 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1.0, sales_expenses=1.0, input_product_expenses=1.0
+2025-05-08 21:16:24,023 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=1.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:16:29,086 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-05-08 21:16:29,086 - app.routes.basic_data - INFO - Registro ID 20: month=5, year=2025, clients_served=101
+2025-05-08 21:16:29,086 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=10.0, sales_expenses=10.0, input_product_expenses=10.0
+2025-05-08 21:16:29,086 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=10.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:16:29,087 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1.0, sales_expenses=1.0, input_product_expenses=1.0
+2025-05-08 21:16:29,087 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=1.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:18:20,578 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-05-08 21:18:20,578 - app.routes.basic_data - INFO - Registro ID 20: month=5, year=2025, clients_served=101
+2025-05-08 21:18:20,578 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=10.0, sales_expenses=10.0, input_product_expenses=10.0
+2025-05-08 21:18:20,579 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=10.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:18:20,579 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1.0, sales_expenses=1.0, input_product_expenses=1.0
+2025-05-08 21:18:20,579 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=1.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:18:28,346 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-05-08 21:18:28,347 - app.routes.basic_data - INFO - Registro ID 20: month=5, year=2025, clients_served=101
+2025-05-08 21:18:28,347 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=10.0, sales_expenses=10.0, input_product_expenses=10.0
+2025-05-08 21:18:28,347 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=10.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:18:28,347 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1.0, sales_expenses=1.0, input_product_expenses=1.0
+2025-05-08 21:18:28,348 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=1.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:18:46,596 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-05-08 21:18:46,597 - app.routes.basic_data - INFO - Registro ID 20: month=5, year=2025, clients_served=101
+2025-05-08 21:18:46,597 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=10.0, sales_expenses=10.0, input_product_expenses=10.0
+2025-05-08 21:18:46,597 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=10.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:18:46,597 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1.0, sales_expenses=1.0, input_product_expenses=1.0
+2025-05-08 21:18:46,597 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=1.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:19:09,902 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-05-08 21:19:09,902 - app.routes.basic_data - INFO - Registro ID 20: month=5, year=2025, clients_served=101
+2025-05-08 21:19:09,903 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=10.0, sales_expenses=10.0, input_product_expenses=10.0
+2025-05-08 21:19:09,903 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=10.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:19:09,903 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1.0, sales_expenses=1.0, input_product_expenses=1.0
+2025-05-08 21:19:09,904 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=1.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:19:15,904 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-05-08 21:19:15,904 - app.routes.basic_data - INFO - Registro ID 20: month=5, year=2025, clients_served=101
+2025-05-08 21:19:15,904 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=10.0, sales_expenses=10.0, input_product_expenses=10.0
+2025-05-08 21:19:15,904 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=10.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:19:15,905 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1.0, sales_expenses=1.0, input_product_expenses=1.0
+2025-05-08 21:19:15,905 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=1.0, pro_labore=None, other_fixed_costs=None
+2025-05-08 21:19:20,373 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
