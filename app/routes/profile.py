@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from datetime import datetime
 
 from app.database.db import get_db
@@ -64,100 +65,106 @@ async def update_profile(
     if not current_user:
         return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
 
-    # Garantir que a data de registro esteja definida
-    if not current_user.registration_date:
-        current_user.registration_date = datetime.now()
+    try:
+        # Garantir que a data de registro esteja definida
+        if not current_user.registration_date:
+            current_user.registration_date = datetime.now()
 
-    if action == "activate" and activation_key:
-        # Verificar se a chave existe e está disponível
-        license = await db.get(License, License.activation_key == activation_key)
+        if action == "activate" and activation_key:
+            # Verificar se a chave existe e está disponível
+            result = await db.execute(select(License).filter(
+                License.activation_key == activation_key,
+                License.status == "Disponível"
+            ))
+            license = result.scalar_one_or_none()
 
-        if not license:
-            return templates.TemplateResponse(
-                "profile.html",
-                {
-                    "request": request,
-                    "user": current_user,
-                    "error_message": "Chave de ativação não encontrada"
-                }
-            )
+            if not license:
+                return templates.TemplateResponse(
+                    "profile.html",
+                    {
+                        "request": request,
+                        "user": current_user,
+                        "error": "Chave de ativação não encontrada ou já utilizada"
+                    }
+                )
 
-        if license.status != "Disponível":
-            return templates.TemplateResponse(
-                "profile.html",
-                {
-                    "request": request,
-                    "user": current_user,
-                    "error_message": "Esta chave de ativação já foi utilizada"
-                }
-            )
+            # Atualizar apenas o status e a data de ativação da licença
+            license.status = "Utilizada"
+            license.activation_date = datetime.now()
+            license.activation_email = email
 
-        # Atualizar a licença
-        license.status = "Utilizada"
-        license.activation_email = email
-        license.activation_date = datetime.now()
+            # Atualizar o usuário com a chave de ativação
+            current_user.activation_key = activation_key
 
-        # Atualizar o usuário
-        current_user.activation_key = activation_key
+            try:
+                await db.commit()
+                return templates.TemplateResponse(
+                    "profile.html",
+                    {
+                        "request": request,
+                        "user": current_user,
+                        "success": "Licença ativada com sucesso!"
+                    }
+                )
+            except Exception as e:
+                await db.rollback()
+                return templates.TemplateResponse(
+                    "profile.html",
+                    {
+                        "request": request,
+                        "user": current_user,
+                        "error": f"Erro ao ativar a licença: {str(e)}"
+                    }
+                )
 
-        try:
-            await db.commit()
-            return templates.TemplateResponse(
-                "profile.html",
-                {
-                    "request": request,
-                    "user": current_user,
-                    "success_message": "Licença ativada com sucesso!"
-                }
-            )
-        except Exception as e:
-            await db.rollback()
-            return templates.TemplateResponse(
-                "profile.html",
-                {
-                    "request": request,
-                    "user": current_user,
-                    "error_message": "Erro ao ativar a licença. Tente novamente."
-                }
-            )
+        elif action == "update":
+            # Atualizar informações do usuário
+            current_user.name = name
+            current_user.whatsapp = whatsapp
+            current_user.activity_type = activity_type
+            current_user.company_activity = company_activity
+            current_user.specialty_area = specialty_area
+            current_user.gender = gender
+            current_user.birth_day = birth_day
+            current_user.birth_month = birth_month
+            current_user.married = married
+            current_user.children = children
+            current_user.grandchildren = grandchildren
+            current_user.cep = cep
+            current_user.street = street
+            current_user.neighborhood = neighborhood
+            current_user.state = state
+            current_user.city = city
+            current_user.complement = complement
 
-    elif action == "update":
-        # Atualizar informações do usuário
-        current_user.name = name
-        current_user.whatsapp = whatsapp
-        current_user.activity_type = activity_type
-        current_user.company_activity = company_activity
-        current_user.specialty_area = specialty_area
-        current_user.gender = gender
-        current_user.birth_day = birth_day
-        current_user.birth_month = birth_month
-        current_user.married = married
-        current_user.children = children
-        current_user.grandchildren = grandchildren
-        current_user.cep = cep
-        current_user.street = street
-        current_user.neighborhood = neighborhood
-        current_user.state = state
-        current_user.city = city
-        current_user.complement = complement
+            try:
+                await db.commit()
+                return templates.TemplateResponse(
+                    "profile.html",
+                    {
+                        "request": request,
+                        "user": current_user,
+                        "success": "Perfil atualizado com sucesso!"
+                    }
+                )
+            except Exception as e:
+                await db.rollback()
+                return templates.TemplateResponse(
+                    "profile.html",
+                    {
+                        "request": request,
+                        "user": current_user,
+                        "error": f"Erro ao atualizar o perfil: {str(e)}"
+                    }
+                )
 
-        try:
-            await db.commit()
-            return templates.TemplateResponse(
-                "profile.html",
-                {
-                    "request": request,
-                    "user": current_user,
-                    "success_message": "Perfil atualizado com sucesso!"
-                }
-            )
-        except Exception as e:
-            await db.rollback()
-            return templates.TemplateResponse(
-                "profile.html",
-                {
-                    "request": request,
-                    "user": current_user,
-                    "error_message": f"Erro ao atualizar o perfil: {str(e)}"
-                }
-            ) 
+    except Exception as e:
+        await db.rollback()
+        return templates.TemplateResponse(
+            "profile.html",
+            {
+                "request": request,
+                "user": current_user,
+                "error": f"Erro ao processar a requisição: {str(e)}"
+            }
+        ) 

@@ -162,9 +162,10 @@
     function loadSpecialtyAreas() {
         const activityType = document.getElementById('company_activity').value;
         const specialtyAreaSelect = document.getElementById('specialty_area');
+        const savedSpecialtyArea = specialtyAreaSelect.getAttribute('data-saved-value');
         
         // Limpar opções existentes
-        specialtyAreaSelect.innerHTML = '<option value="" selected disabled>Selecione a área de especialidade</option>';
+        specialtyAreaSelect.innerHTML = '<option value="" disabled>Selecione a área de especialidade</option>';
         
         // Habilitar o select
         specialtyAreaSelect.disabled = false;
@@ -175,6 +176,9 @@
                 const option = document.createElement('option');
                 option.value = area;
                 option.textContent = area;
+                if (area === savedSpecialtyArea) {
+                    option.selected = true;
+                }
                 specialtyAreaSelect.appendChild(option);
             });
         }
@@ -182,8 +186,19 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         const companyActivitySelect = document.getElementById('company_activity');
+        const specialtyAreaSelect = document.getElementById('specialty_area');
+        
+        // Salvar o valor atual da área de especialidade
+        if (specialtyAreaSelect) {
+            const currentValue = specialtyAreaSelect.value;
+            if (currentValue) {
+                specialtyAreaSelect.setAttribute('data-saved-value', currentValue);
+            }
+        }
+        
         if (companyActivitySelect) {
             companyActivitySelect.addEventListener('change', loadSpecialtyAreas);
+            // Carregar áreas de especialidade se já houver uma atividade selecionada
             if (companyActivitySelect.value) {
                 loadSpecialtyAreas();
             }
@@ -218,7 +233,18 @@
                 
                 const formData = new FormData(form);
                 
-                fetch('/profile', {
+                // Remover o campo de senha do FormData
+                formData.delete('password');
+                
+                // Adicionar o campo action baseado no botão que foi clicado
+                const submitButton = document.activeElement;
+                if (submitButton && submitButton.name === 'action') {
+                    formData.append('action', submitButton.value);
+                } else {
+                    formData.append('action', 'update');
+                }
+                
+                fetch('/profile/update', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
@@ -227,34 +253,46 @@
                 })
                 .then(response => {
                     if (response.ok) {
-                        window.location.href = '/profile';
+                        // Se a resposta for ok, recarregar a página
+                        window.location.reload();
+                    } else if (response.status === 500) {
+                        // Se for erro interno do servidor
+                        throw new Error('Erro interno do servidor. Por favor, tente novamente mais tarde.');
                     } else {
-                        return response.json().then(data => {
-                            let errorMessage = 'Erro ao atualizar perfil';
-                            
-                            if (data.detail) {
-                                if (Array.isArray(data.detail)) {
-                                    const fieldNames = {
-                                        'name': 'Nome',
-                                        'email': 'Email',
-                                        'whatsapp': 'WhatsApp',
-                                        'state': 'Estado',
-                                        'city': 'Cidade',
-                                        'activity_type': 'Área de atuação',
-                                        'company_activity': 'Atividade da Empresa',
-                                        'specialty_area': 'Área de Especialidade'
-                                    };
+                        // Para outros erros, tentar ler como texto
+                        return response.text().then(text => {
+                            try {
+                                // Tentar parsear como JSON
+                                const data = JSON.parse(text);
+                                let errorMessage = 'Erro ao atualizar perfil';
+                                
+                                if (data.detail) {
+                                    if (Array.isArray(data.detail)) {
+                                        const fieldNames = {
+                                            'name': 'Nome',
+                                            'email': 'Email',
+                                            'whatsapp': 'WhatsApp',
+                                            'state': 'Estado',
+                                            'city': 'Cidade',
+                                            'activity_type': 'Área de atuação',
+                                            'company_activity': 'Atividade da Empresa',
+                                            'specialty_area': 'Área de Especialidade'
+                                        };
 
-                                    errorMessage = data.detail.map(error => {
-                                        const fieldName = error.loc && error.loc[1] ? fieldNames[error.loc[1]] || error.loc[1] : 'Campo';
-                                        return `O preenchimento do campo ${fieldName} é obrigatório.`;
-                                    }).join('\n\n');
-                                } else {
-                                    errorMessage = data.detail;
+                                        errorMessage = data.detail.map(error => {
+                                            const fieldName = error.loc && error.loc[1] ? fieldNames[error.loc[1]] || error.loc[1] : 'Campo';
+                                            return `O preenchimento do campo ${fieldName} é obrigatório.`;
+                                        }).join('\n\n');
+                                    } else {
+                                        errorMessage = data.detail;
+                                    }
                                 }
+                                
+                                throw new Error(errorMessage);
+                            } catch (e) {
+                                // Se não for JSON, usar o texto da resposta como mensagem de erro
+                                throw new Error(text || 'Erro ao processar a requisição');
                             }
-                            
-                            throw new Error(errorMessage);
                         });
                     }
                 })
@@ -341,9 +379,9 @@
                                 Nova Senha
                                 <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#passwordHelpModal"></i>
                             </label>
-                            <input type="password" class="form-control" id="password" name="password">
-                            <div class="invalid-feedback">
-                                A senha deve ter pelo menos 6 caracteres.
+                            <input type="password" class="form-control" id="password" name="password" disabled>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Alteração de senha não disponível no momento
                             </div>
                         </div>
                     </div>
@@ -355,34 +393,34 @@
                                 <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#stateHelpModal"></i>
                             </label>
                             <select class="form-select" id="state" name="state" required>
-                                <option value="" selected disabled>Selecione o estado</option>
-                                <option value="AC">Acre</option>
-                                <option value="AL">Alagoas</option>
-                                <option value="AP">Amapá</option>
-                                <option value="AM">Amazonas</option>
-                                <option value="BA">Bahia</option>
-                                <option value="CE">Ceará</option>
-                                <option value="DF">Distrito Federal</option>
-                                <option value="ES">Espírito Santo</option>
-                                <option value="GO">Goiás</option>
-                                <option value="MA">Maranhão</option>
-                                <option value="MT">Mato Grosso</option>
-                                <option value="MS">Mato Grosso do Sul</option>
-                                <option value="MG">Minas Gerais</option>
-                                <option value="PA">Pará</option>
-                                <option value="PB">Paraíba</option>
-                                <option value="PR">Paraná</option>
-                                <option value="PE">Pernambuco</option>
-                                <option value="PI">Piauí</option>
-                                <option value="RJ">Rio de Janeiro</option>
-                                <option value="RN">Rio Grande do Norte</option>
-                                <option value="RS">Rio Grande do Sul</option>
-                                <option value="RO">Rondônia</option>
-                                <option value="RR">Roraima</option>
-                                <option value="SC">Santa Catarina</option>
-                                <option value="SP">São Paulo</option>
-                                <option value="SE">Sergipe</option>
-                                <option value="TO">Tocantins</option>
+                                <option value="" disabled>Selecione o estado</option>
+                                <option value="AC" {% if user.state == 'AC' %}selected{% endif %}>Acre</option>
+                                <option value="AL" {% if user.state == 'AL' %}selected{% endif %}>Alagoas</option>
+                                <option value="AP" {% if user.state == 'AP' %}selected{% endif %}>Amapá</option>
+                                <option value="AM" {% if user.state == 'AM' %}selected{% endif %}>Amazonas</option>
+                                <option value="BA" {% if user.state == 'BA' %}selected{% endif %}>Bahia</option>
+                                <option value="CE" {% if user.state == 'CE' %}selected{% endif %}>Ceará</option>
+                                <option value="DF" {% if user.state == 'DF' %}selected{% endif %}>Distrito Federal</option>
+                                <option value="ES" {% if user.state == 'ES' %}selected{% endif %}>Espírito Santo</option>
+                                <option value="GO" {% if user.state == 'GO' %}selected{% endif %}>Goiás</option>
+                                <option value="MA" {% if user.state == 'MA' %}selected{% endif %}>Maranhão</option>
+                                <option value="MT" {% if user.state == 'MT' %}selected{% endif %}>Mato Grosso</option>
+                                <option value="MS" {% if user.state == 'MS' %}selected{% endif %}>Mato Grosso do Sul</option>
+                                <option value="MG" {% if user.state == 'MG' %}selected{% endif %}>Minas Gerais</option>
+                                <option value="PA" {% if user.state == 'PA' %}selected{% endif %}>Pará</option>
+                                <option value="PB" {% if user.state == 'PB' %}selected{% endif %}>Paraíba</option>
+                                <option value="PR" {% if user.state == 'PR' %}selected{% endif %}>Paraná</option>
+                                <option value="PE" {% if user.state == 'PE' %}selected{% endif %}>Pernambuco</option>
+                                <option value="PI" {% if user.state == 'PI' %}selected{% endif %}>Piauí</option>
+                                <option value="RJ" {% if user.state == 'RJ' %}selected{% endif %}>Rio de Janeiro</option>
+                                <option value="RN" {% if user.state == 'RN' %}selected{% endif %}>Rio Grande do Norte</option>
+                                <option value="RS" {% if user.state == 'RS' %}selected{% endif %}>Rio Grande do Sul</option>
+                                <option value="RO" {% if user.state == 'RO' %}selected{% endif %}>Rondônia</option>
+                                <option value="RR" {% if user.state == 'RR' %}selected{% endif %}>Roraima</option>
+                                <option value="SC" {% if user.state == 'SC' %}selected{% endif %}>Santa Catarina</option>
+                                <option value="SP" {% if user.state == 'SP' %}selected{% endif %}>São Paulo</option>
+                                <option value="SE" {% if user.state == 'SE' %}selected{% endif %}>Sergipe</option>
+                                <option value="TO" {% if user.state == 'TO' %}selected{% endif %}>Tocantins</option>
                             </select>
                         </div>
 
@@ -405,10 +443,10 @@
                                 <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#activityTypeHelpModal"></i>
                             </label>
                             <select class="form-select" id="activity_type" name="activity_type" required>
-                                <option value="" selected disabled>Selecione o tipo de atividade</option>
-                                <option value="Serviços">Serviços</option>
-                                <option value="Comércio">Comércio</option>
-                                <option value="Indústria">Indústria</option>
+                                <option value="" disabled>Selecione o tipo de atividade</option>
+                                <option value="Serviços" {% if user.activity_type == 'Serviços' %}selected{% endif %}>Serviços</option>
+                                <option value="Comércio" {% if user.activity_type == 'Comércio' %}selected{% endif %}>Comércio</option>
+                                <option value="Indústria" {% if user.activity_type == 'Indústria' %}selected{% endif %}>Indústria</option>
                             </select>
                         </div>
 
@@ -418,22 +456,22 @@
                                 <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#companyActivityHelpModal"></i>
                             </label>
                             <select class="form-select" id="company_activity" name="company_activity" required>
-                                <option value="" selected disabled>Selecione a atividade</option>
-                                <option value="AMBULANTE">AMBULANTE</option>
-                                <option value="ATACADO">ATACADO</option>
-                                <option value="AUTOMOTORES">AUTOMOTORES</option>
-                                <option value="VAREJO - Alimentação fora do Lar">VAREJO - Alimentação fora do Lar</option>
-                                <option value="Varejo - Animais domesticos">Varejo - Animais domesticos</option>
-                                <option value="Varejo - Arte, decoração e utilidades para o Lar">Varejo - Arte, decoração e utilidades para o Lar</option>
-                                <option value="Varejo - Bebidas e produtos alimentícios">Varejo - Bebidas e produtos alimentícios</option>
-                                <option value="Varejo - Copa e cozinha">Varejo - Copa e cozinha</option>
-                                <option value="Varejo - Eletroeletrônicos e informática">Varejo - Eletroeletrônicos e informática</option>
-                                <option value="Varejo - Festas, leitura, música, esporte e lazer">Varejo - Festas, leitura, música, esporte e lazer</option>
-                                <option value="Varejo - Jardinagem">Varejo - Jardinagem</option>
-                                <option value="Varejo - Materiais de construção">Varejo - Materiais de construção</option>
-                                <option value="Varejo - Papéis e utilidades para escritórios">Varejo - Papéis e utilidades para escritórios</option>
-                                <option value="Varejo - Saúde e bem-estar">Varejo - Saúde e bem-estar</option>
-                                <option value="Varejo - Vestuário,calçados e complementos">Varejo - Vestuário,calçados e complementos</option>
+                                <option value="" disabled>Selecione a atividade</option>
+                                <option value="AMBULANTE" {% if user.company_activity == 'AMBULANTE' %}selected{% endif %}>AMBULANTE</option>
+                                <option value="ATACADO" {% if user.company_activity == 'ATACADO' %}selected{% endif %}>ATACADO</option>
+                                <option value="AUTOMOTORES" {% if user.company_activity == 'AUTOMOTORES' %}selected{% endif %}>AUTOMOTORES</option>
+                                <option value="VAREJO - Alimentação fora do Lar" {% if user.company_activity == 'VAREJO - Alimentação fora do Lar' %}selected{% endif %}>VAREJO - Alimentação fora do Lar</option>
+                                <option value="Varejo - Animais domesticos" {% if user.company_activity == 'Varejo - Animais domesticos' %}selected{% endif %}>Varejo - Animais domesticos</option>
+                                <option value="Varejo - Arte, decoração e utilidades para o Lar" {% if user.company_activity == 'Varejo - Arte, decoração e utilidades para o Lar' %}selected{% endif %}>Varejo - Arte, decoração e utilidades para o Lar</option>
+                                <option value="Varejo - Bebidas e produtos alimentícios" {% if user.company_activity == 'Varejo - Bebidas e produtos alimentícios' %}selected{% endif %}>Varejo - Bebidas e produtos alimentícios</option>
+                                <option value="Varejo - Copa e cozinha" {% if user.company_activity == 'Varejo - Copa e cozinha' %}selected{% endif %}>Varejo - Copa e cozinha</option>
+                                <option value="Varejo - Eletroeletrônicos e informática" {% if user.company_activity == 'Varejo - Eletroeletrônicos e informática' %}selected{% endif %}>Varejo - Eletroeletrônicos e informática</option>
+                                <option value="Varejo - Festas, leitura, música, esporte e lazer" {% if user.company_activity == 'Varejo - Festas, leitura, música, esporte e lazer' %}selected{% endif %}>Varejo - Festas, leitura, música, esporte e lazer</option>
+                                <option value="Varejo - Jardinagem" {% if user.company_activity == 'Varejo - Jardinagem' %}selected{% endif %}>Varejo - Jardinagem</option>
+                                <option value="Varejo - Materiais de construção" {% if user.company_activity == 'Varejo - Materiais de construção' %}selected{% endif %}>Varejo - Materiais de construção</option>
+                                <option value="Varejo - Papéis e utilidades para escritórios" {% if user.company_activity == 'Varejo - Papéis e utilidades para escritórios' %}selected{% endif %}>Varejo - Papéis e utilidades para escritórios</option>
+                                <option value="Varejo - Saúde e bem-estar" {% if user.company_activity == 'Varejo - Saúde e bem-estar' %}selected{% endif %}>Varejo - Saúde e bem-estar</option>
+                                <option value="Varejo - Vestuário,calçados e complementos" {% if user.company_activity == 'Varejo - Vestuário,calçados e complementos' %}selected{% endif %}>Varejo - Vestuário,calçados e complementos</option>
                             </select>
                         </div>
                     </div>
@@ -444,8 +482,11 @@
                                 Área de Especialidade <span class="text-danger">*</span>
                                 <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#specialtyAreaHelpModal"></i>
                             </label>
-                            <select class="form-select" id="specialty_area" name="specialty_area" required disabled>
-                                <option value="" selected disabled>Selecione a área de especialidade</option>
+                            <select class="form-select" id="specialty_area" name="specialty_area" required {% if not user.company_activity %}disabled{% endif %}>
+                                <option value="" disabled>Selecione a área de especialidade</option>
+                                {% if user.specialty_area %}
+                                <option value="{{ user.specialty_area }}" selected>{{ user.specialty_area }}</option>
+                                {% endif %}
                             </select>
                         </div>
 

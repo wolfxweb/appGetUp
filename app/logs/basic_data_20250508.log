@@ -79,3 +79,8 @@
 2025-05-08 21:19:15,905 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1.0, sales_expenses=1.0, input_product_expenses=1.0
 2025-05-08 21:19:15,905 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=1.0, pro_labore=None, other_fixed_costs=None
 2025-05-08 21:19:20,373 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:25:39,809 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:29:28,875 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:32:07,170 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:33:10,561 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-05-08 21:35:48,651 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
