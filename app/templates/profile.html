@@ -1,371 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Meu Perfil{% endblock %}
-
-{% block content %}
-{% include "components/navbar.html" %}
-<div class="row justify-content-center p-2 mb-5">
-    <div class="col-md-10 col-lg-12">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Meu Perfil</h3>
-            </div>
-            <div class="card-body">
-                {% if user is not defined or user is none %}
-                <div class="alert alert-danger">
-                    <h4 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Erro!</h4>
-                    <p>Não foi possível carregar os dados do usuário. Por favor, tente novamente mais tarde.</p>
-                </div>
-                {% else %}
-                    {% if not user.activation_key %}
-                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                        <h4 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Atenção!</h4>
-                        <p>Para acessar o sistema, você precisa ativar sua licença. Por favor, insira sua chave de ativação abaixo.</p>
-                        <hr>
-                        <p class="mb-0">Se você não possui uma chave de ativação, entre em contato com o administrador do sistema.</p>
-                    </div>
-                    {% endif %}
-
-                    {% if success_message %}
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ success_message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-                    </div>
-                    {% endif %}
-
-                    {% if error_message %}
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ error_message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-                    </div>
-                    {% endif %}
-
-                    <form method="post" action="/profile/update" class="needs-validation" novalidate id="profileForm">
-                        <!-- Informações Pessoais -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0">Informações Pessoais</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="name" class="form-label">Como gosta de ser chamado(a)? <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default('', true) }}" required>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe seu nome completo.
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default('', true) }}" disabled>
-                                        <input type="hidden" name="email" value="{{ user.email|default('', true) }}">
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="whatsapp" class="form-label">WhatsApp <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="whatsapp" name="whatsapp" value="{{ user.whatsapp|default('', true) }}" required>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe um número de WhatsApp válido.
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Sexo <span class="text-danger">*</span></label>
-                                        <div class="d-flex gap-3">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="gender" id="gender_male" value="Masculino" {% if user.gender == 'Masculino' %}checked{% endif %} required>
-                                                <label class="form-check-label" for="gender_male">Masculino</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="gender" id="gender_female" value="Feminino" {% if user.gender == 'Feminino' %}checked{% endif %} required>
-                                                <label class="form-check-label" for="gender_female">Feminino</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label class="form-label">Aniversário <span class="text-danger">*</span></label>
-                                        <div class="row g-2">
-                                            <div class="col-6">
-                                                <input type="number" class="form-control" id="birth_day" name="birth_day" min="1" max="31" value="{{ user.birth_day }}" placeholder="Dia" required
-                                                       oninput="if(this.value > 31) this.value = 31; if(this.value < 1) this.value = 1;">
-                                                <div class="invalid-feedback">
-                                                    Por favor, informe um dia válido (1-31).
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <select class="form-select" id="birth_month" name="birth_month" required>
-                                                    <option value="" disabled>Mês</option>
-                                                    <option value="1" {% if user.birth_month == 1 %}selected{% endif %}>Janeiro</option>
-                                                    <option value="2" {% if user.birth_month == 2 %}selected{% endif %}>Fevereiro</option>
-                                                    <option value="3" {% if user.birth_month == 3 %}selected{% endif %}>Março</option>
-                                                    <option value="4" {% if user.birth_month == 4 %}selected{% endif %}>Abril</option>
-                                                    <option value="5" {% if user.birth_month == 5 %}selected{% endif %}>Maio</option>
-                                                    <option value="6" {% if user.birth_month == 6 %}selected{% endif %}>Junho</option>
-                                                    <option value="7" {% if user.birth_month == 7 %}selected{% endif %}>Julho</option>
-                                                    <option value="8" {% if user.birth_month == 8 %}selected{% endif %}>Agosto</option>
-                                                    <option value="9" {% if user.birth_month == 9 %}selected{% endif %}>Setembro</option>
-                                                    <option value="10" {% if user.birth_month == 10 %}selected{% endif %}>Outubro</option>
-                                                    <option value="11" {% if user.birth_month == 11 %}selected{% endif %}>Novembro</option>
-                                                    <option value="12" {% if user.birth_month == 12 %}selected{% endif %}>Dezembro</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Situação Familiar -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0">Situação Familiar</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label">Casado?</label>
-                                        <div class="d-flex gap-3">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="married" id="married_yes" value="Sim" {% if user.married == 'Sim' %}checked{% endif %}>
-                                                <label class="form-check-label" for="married_yes">Sim</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="married" id="married_no" value="Não" {% if user.married == 'Não' %}checked{% endif %}>
-                                                <label class="form-check-label" for="married_no">Não</label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label">Filhos?</label>
-                                        <div class="d-flex gap-3">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="children" id="children_yes" value="Sim" {% if user.children == 'Sim' %}checked{% endif %}>
-                                                <label class="form-check-label" for="children_yes">Sim</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="children" id="children_no" value="Não" {% if user.children == 'Não' %}checked{% endif %}>
-                                                <label class="form-check-label" for="children_no">Não</label>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-4 mb-3">
-                                        <label class="form-label">Netos?</label>
-                                        <div class="d-flex gap-3">
-                                            <div class="form-check ">
-                                                <input class="form-check-input  " type="radio" name="grandchildren" id="grandchildren_yes" value="Sim" {% if user.grandchildren == 'Sim' %}checked{% endif %}>
-                                                <label class="form-check-label" for="grandchildren_yes">Sim</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="grandchildren" id="grandchildren_no" value="Não" {% if user.grandchildren == 'Não' %}checked{% endif %}>
-                                                <label class="form-check-label" for="grandchildren_no">Não</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Localização -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0">Localização</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="cep" class="form-label">CEP <span class="text-danger">*</span></label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="cep" name="cep" value="{{ user.cep|default('', true) }}" 
-                                                   pattern="[0-9]{5}-[0-9]{3}" placeholder="00000-000" required>
-                                            <button class="btn bg-primary text-white" type="button" id="searchCep" onclick="buscarEnderecoPorCEP()">
-                                                <i class="bi bi-search"></i> Buscar
-                                            </button>
-                                        </div>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe um CEP válido no formato 00000-000.
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="street" class="form-label">Logradouro <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="street" name="street" value="{{ user.street|default('', true) }}" required>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe o logradouro.
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="neighborhood" class="form-label">Bairro <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="neighborhood" name="neighborhood" value="{{ user.neighborhood|default('', true) }}" required>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe o bairro.
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="state" class="form-label">Estado <span class="text-danger">*</span></label>
-                                        <select class="form-select" id="state" name="state" required>
-                                            <option value="" disabled>Selecione o estado</option>
-                                            <option value="AC" {% if user.state == 'AC' %}selected{% endif %}>Acre</option>
-                                            <option value="AL" {% if user.state == 'AL' %}selected{% endif %}>Alagoas</option>
-                                            <option value="AP" {% if user.state == 'AP' %}selected{% endif %}>Amapá</option>
-                                            <option value="AM" {% if user.state == 'AM' %}selected{% endif %}>Amazonas</option>
-                                            <option value="BA" {% if user.state == 'BA' %}selected{% endif %}>Bahia</option>
-                                            <option value="CE" {% if user.state == 'CE' %}selected{% endif %}>Ceará</option>
-                                            <option value="DF" {% if user.state == 'DF' %}selected{% endif %}>Distrito Federal</option>
-                                            <option value="ES" {% if user.state == 'ES' %}selected{% endif %}>Espírito Santo</option>
-                                            <option value="GO" {% if user.state == 'GO' %}selected{% endif %}>Goiás</option>
-                                            <option value="MA" {% if user.state == 'MA' %}selected{% endif %}>Maranhão</option>
-                                            <option value="MT" {% if user.state == 'MT' %}selected{% endif %}>Mato Grosso</option>
-                                            <option value="MS" {% if user.state == 'MS' %}selected{% endif %}>Mato Grosso do Sul</option>
-                                            <option value="MG" {% if user.state == 'MG' %}selected{% endif %}>Minas Gerais</option>
-                                            <option value="PA" {% if user.state == 'PA' %}selected{% endif %}>Pará</option>
-                                            <option value="PB" {% if user.state == 'PB' %}selected{% endif %}>Paraíba</option>
-                                            <option value="PR" {% if user.state == 'PR' %}selected{% endif %}>Paraná</option>
-                                            <option value="PE" {% if user.state == 'PE' %}selected{% endif %}>Pernambuco</option>
-                                            <option value="PI" {% if user.state == 'PI' %}selected{% endif %}>Piauí</option>
-                                            <option value="RJ" {% if user.state == 'RJ' %}selected{% endif %}>Rio de Janeiro</option>
-                                            <option value="RN" {% if user.state == 'RN' %}selected{% endif %}>Rio Grande do Norte</option>
-                                            <option value="RS" {% if user.state == 'RS' %}selected{% endif %}>Rio Grande do Sul</option>
-                                            <option value="RO" {% if user.state == 'RO' %}selected{% endif %}>Rondônia</option>
-                                            <option value="RR" {% if user.state == 'RR' %}selected{% endif %}>Roraima</option>
-                                            <option value="SC" {% if user.state == 'SC' %}selected{% endif %}>Santa Catarina</option>
-                                            <option value="SP" {% if user.state == 'SP' %}selected{% endif %}>São Paulo</option>
-                                            <option value="SE" {% if user.state == 'SE' %}selected{% endif %}>Sergipe</option>
-                                            <option value="TO" {% if user.state == 'TO' %}selected{% endif %}>Tocantins</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="city" class="form-label">Cidade <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="city" name="city" value="{{ user.city|default('', true) }}" required>
-                                        <div class="invalid-feedback">
-                                            Por favor, informe a cidade.
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="complement" class="form-label">Complemento</label>
-                                        <input type="text" class="form-control" id="complement" name="complement" value="{{ user.complement|default('', true) }}">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Informações da Empresa -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0">Informações da Empresa</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="activity_type" class="form-label">Área de atuação</label>
-                                        <select class="form-select" id="activity_type" name="activity_type" readonly required>
-                                            <option value="Serviços" {% if user.activity_type == 'Serviços' %}selected{% endif %}>Serviços</option>
-                                            <option value="Comércio" {% if user.activity_type == 'Comércio' %}selected{% endif %}>Comércio</option>
-                                            <option value="Indústria" {% if user.activity_type == 'Indústria' %}selected{% endif %}>Indústria</option>
-                                        </select>
-                                        <input type="hidden" name="activity_type" value="{{ user.activity_type }}">
-                                        <small class="text-muted">O tipo de atividade não pode ser alterado após o cadastro.</small>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        <label for="company_activity" class="form-label">Atividade da Empresa <span class="text-danger">*</span></label>
-                                        <select class="form-select" id="company_activity" name="company_activity" required>
-                                            <option value="" disabled>Selecione a atividade</option>
-                                            <option value="AMBULANTE" {% if user.company_activity == 'AMBULANTE' %}selected{% endif %}>AMBULANTE</option>
-                                            <option value="ATACADO" {% if user.company_activity == 'ATACADO' %}selected{% endif %}>ATACADO</option>
-                                            <option value="AUTOMOTORES" {% if user.company_activity == 'AUTOMOTORES' %}selected{% endif %}>AUTOMOTORES</option>
-                                            <option value="VAREJO - Alimentação fora do Lar" {% if user.company_activity == 'VAREJO - Alimentação fora do Lar' %}selected{% endif %}>VAREJO - Alimentação fora do Lar</option>
-                                            <option value="Varejo - Animais domesticos" {% if user.company_activity == 'Varejo - Animais domesticos' %}selected{% endif %}>Varejo - Animais domesticos</option>
-                                            <option value="Varejo - Arte, decoração e utilidades para o Lar" {% if user.company_activity == 'Varejo - Arte, decoração e utilidades para o Lar' %}selected{% endif %}>Varejo - Arte, decoração e utilidades para o Lar</option>
-                                            <option value="Varejo - Bebidas e produtos alimentícios" {% if user.company_activity == 'Varejo - Bebidas e produtos alimentícios' %}selected{% endif %}>Varejo - Bebidas e produtos alimentícios</option>
-                                            <option value="Varejo - Copa e cozinha" {% if user.company_activity == 'Varejo - Copa e cozinha' %}selected{% endif %}>Varejo - Copa e cozinha</option>
-                                            <option value="Varejo - Eletroeletrônicos e informática" {% if user.company_activity == 'Varejo - Eletroeletrônicos e informática' %}selected{% endif %}>Varejo - Eletroeletrônicos e informática</option>
-                                            <option value="Varejo - Festas, leitura, música, esporte e lazer" {% if user.company_activity == 'Varejo - Festas, leitura, música, esporte e lazer' %}selected{% endif %}>Varejo - Festas, leitura, música, esporte e lazer</option>
-                                            <option value="Varejo - Jardinagem" {% if user.company_activity == 'Varejo - Jardinagem' %}selected{% endif %}>Varejo - Jardinagem</option>
-                                            <option value="Varejo - Materiais de construção" {% if user.company_activity == 'Varejo - Materiais de construção' %}selected{% endif %}>Varejo - Materiais de construção</option>
-                                            <option value="Varejo - Papéis e utilidades para escritórios" {% if user.company_activity == 'Varejo - Papéis e utilidades para escritórios' %}selected{% endif %}>Varejo - Papéis e utilidades para escritórios</option>
-                                            <option value="Varejo - Saúde e bem-estar" {% if user.company_activity == 'Varejo - Saúde e bem-estar' %}selected{% endif %}>Varejo - Saúde e bem-estar</option>
-                                            <option value="Varejo - Vestuário,calçados e complementos" {% if user.company_activity == 'Varejo - Vestuário,calçados e complementos' %}selected{% endif %}>Varejo - Vestuário,calçados e complementos</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="specialty_area" class="form-label">Área de Especialidade <span class="text-danger">*</span></label>
-                                        <select class="form-select" id="specialty_area" name="specialty_area" required
-                                                data-current-value="{{ user.specialty_area|default('', true) }}">
-                                            <option value="" selected disabled>Selecione a área de especialidade</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Ativação -->
-                        <div class="card mb-4">
-                            <div class="card-header bg-light">
-                                <h5 class="mb-0">Ativação</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="registration_date" class="form-label">Data de Cadastro</label>
-                                        <input type="text" class="form-control" id="registration_date" value="{{ user.registration_date.strftime('%d/%m/%Y %H:%M') if user.registration_date else '' }}" disabled>
-                                    </div>
-
-                                    <div class="col-md-6 mb-3">
-                                        {% if user.activation_key %}
-                                        <label for="activation_key" class="form-label">Chave de Ativação</label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="activation_key" name="activation_key" value="{{ user.activation_key|default('', true) }}" readonly>
-                                            <span class="input-group-text  bg-primary  text-white">
-                                                <i class="bi bi-check-circle "> </i> 
-                                            </span>
-                                        </div>
-                                        <div class="form-text">
-                                            <i class="bi bi-info-circle"></i> Sua licença está ativa
-                                        </div>
-                                        {% else %}
-                                        <label for="activation_key" class="form-label">Chave de Ativação <span class="text-danger">*</span></label>
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="activation_key" name="activation_key" value="{{ user.activation_key|default('', true) }}" placeholder="Digite sua chave de ativação" required>
-                                            <button type="submit" name="action" value="activate" class="btn bg-primary text-white">
-                                                <i class="bi bi-check-circle"></i> Ativar
-                                            </button>
-                                        </div>
-                                        <div class="form-text">
-                                            <i class="bi bi-info-circle"></i> Insira a chave de ativação fornecida pelo administrador
-                                        </div>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-grid">
-                            <button type="submit" name="action" value="update" class="btn bg-primary text-white">
-                                <i class="bi bi-check-circle"></i> Salvar Alterações
-                            </button>
-                        </div>
-                    </form>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-</div>
-{% endblock %}
+{% block title %}Perfil do Usuário{% endblock %}
 
 {% block head %}
 <script>
@@ -525,19 +160,14 @@
 
     // Função para carregar as áreas de especialidade
     function loadSpecialtyAreas() {
-        const companyActivity = document.getElementById('company_activity');
+        const activityType = document.getElementById('company_activity').value;
         const specialtyAreaSelect = document.getElementById('specialty_area');
-        
-        if (!companyActivity || !specialtyAreaSelect) return;
-        
-        const activityType = companyActivity.value;
-        const currentSpecialty = specialtyAreaSelect.getAttribute('data-current-value');
         
         // Limpar opções existentes
         specialtyAreaSelect.innerHTML = '<option value="" selected disabled>Selecione a área de especialidade</option>';
         
-        // Habilitar o select apenas se houver uma atividade selecionada
-        specialtyAreaSelect.disabled = !activityType;
+        // Habilitar o select
+        specialtyAreaSelect.disabled = false;
         
         // Adicionar novas opções
         if (activityType && specialtyAreas[activityType]) {
@@ -545,39 +175,18 @@
                 const option = document.createElement('option');
                 option.value = area;
                 option.textContent = area;
-                // Selecionar a opção se for a mesma que estava salva
-                if (currentSpecialty && area === currentSpecialty) {
-                    option.selected = true;
-                }
                 specialtyAreaSelect.appendChild(option);
             });
         }
     }
 
-    // Inicializar quando o documento estiver carregado
     document.addEventListener('DOMContentLoaded', function() {
         const companyActivitySelect = document.getElementById('company_activity');
-        const specialtyAreaSelect = document.getElementById('specialty_area');
-        
-        // Adicionar event listener para mudança na atividade da empresa
         if (companyActivitySelect) {
             companyActivitySelect.addEventListener('change', loadSpecialtyAreas);
-            
-            // Carregar áreas de especialidade inicialmente se já houver uma atividade selecionada
             if (companyActivitySelect.value) {
                 loadSpecialtyAreas();
             }
-        }
-
-        // Adicionar evento de tecla Enter no campo CEP
-        const cepInput = document.getElementById('cep');
-        if (cepInput) {
-            cepInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    buscarEnderecoPorCEP();
-                }
-            });
         }
 
         // Formatar WhatsApp
@@ -590,7 +199,6 @@
                     value = value.substring(0, 11);
                 }
                 
-                // Formatar como (XX) XXXXX-XXXX
                 if (value.length > 2) {
                     value = '(' + value.substring(0, 2) + ') ' + value.substring(2);
                 }
@@ -602,126 +210,429 @@
             });
         }
 
-        // Adicionar evento de submit no formulário
-        const form = document.getElementById('profileForm');
+        // Enviar formulário
+        const form = document.querySelector('form');
         if (form) {
-            form.addEventListener('submit', async function(e) {
+            form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                const formData = new FormData(this);
-                formData.append('action', 'update');
-
-                try {
-                    const response = await fetch('/profile/update', {
-                        method: 'POST',
-                        body: formData
-                    });
-
-                    if (response.ok) {
-                        window.location.reload();
-                    } else {
-                        const result = await response.json();
-                        let errorMessage = 'Erro ao atualizar perfil';
-                        
-                        if (result.detail) {
-                            if (Array.isArray(result.detail)) {
-                                // Mapear os nomes dos campos para português
-                                const fieldNames = {
-                                    'name': 'Nome Completo',
-                                    'email': 'Email',
-                                    'whatsapp': 'WhatsApp',
-                                    'gender': 'Sexo',
-                                    'birth_day': 'Dia de Nascimento',
-                                    'birth_month': 'Mês de Nascimento',
-                                    'married': 'Estado Civil',
-                                    'children': 'Filhos',
-                                    'grandchildren': 'Netos',
-                                    'cep': 'CEP',
-                                    'street': 'Logradouro',
-                                    'neighborhood': 'Bairro',
-                                    'state': 'Estado',
-                                    'city': 'Cidade',
-                                    'activity_type': 'Tipo de Atividade',
-                                    'company_activity': 'Atividade da Empresa',
-                                    'specialty_area': 'Área de Especialidade'
-                                };
-
-                                // Se for um array de erros, juntar todas as mensagens com quebra de linha
-                                errorMessage = result.detail.map(error => {
-                                    const fieldName = error.loc && error.loc[1] ? fieldNames[error.loc[1]] || error.loc[1] : 'Campo';
-                                    return `O preenchimento do campo ${fieldName} é obrigatório.`;
-                                }).join('\n\n');
-                            } else {
-                                errorMessage = result.detail;
-                            }
-                        }
-                        
-                        alert(errorMessage);
-                    }
-                } catch (error) {
-                    console.error('Erro:', error);
-                    alert('Erro ao atualizar perfil');
-                }
-            });
-        }
-    });
-
-    // Função para buscar endereço por CEP
-    function buscarEnderecoPorCEP() {
-        const cepInput = document.getElementById('cep');
-        const searchCepButton = document.getElementById('searchCep');
-        const cep = cepInput.value.replace(/\D/g, '');
-        
-        // Validar CEP
-        if (cep.length !== 8) {
-            alert('CEP inválido. Digite um CEP com 8 dígitos.');
-            return;
-        }
-
-        // Mostrar loading no botão
-        searchCepButton.disabled = true;
-        searchCepButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Buscando...';
-
-        // Fazer requisição para ViaCEP
-        fetch(`https://viacep.com.br/ws/${cep}/json/`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.erro) {
-                    throw new Error('CEP não encontrado');
-                }
-
-                // Preencher os campos com os dados retornados
-                document.getElementById('street').value = data.logradouro || '';
-                document.getElementById('neighborhood').value = data.bairro || '';
-                document.getElementById('city').value = data.localidade || '';
+                const formData = new FormData(form);
                 
-                // Preencher estado (UF)
-                const stateSelect = document.getElementById('state');
-                stateSelect.value = data.uf || '';
-            })
-            .catch(error => {
-                alert(error.message || 'Erro ao buscar CEP. Tente novamente.');
-            })
-            .finally(() => {
-                // Restaurar botão
-                searchCepButton.disabled = false;
-                searchCepButton.innerHTML = '<i class="bi bi-search"></i> Buscar';
+                fetch('/profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(formData)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.href = '/profile';
+                    } else {
+                        return response.json().then(data => {
+                            let errorMessage = 'Erro ao atualizar perfil';
+                            
+                            if (data.detail) {
+                                if (Array.isArray(data.detail)) {
+                                    const fieldNames = {
+                                        'name': 'Nome',
+                                        'email': 'Email',
+                                        'whatsapp': 'WhatsApp',
+                                        'state': 'Estado',
+                                        'city': 'Cidade',
+                                        'activity_type': 'Área de atuação',
+                                        'company_activity': 'Atividade da Empresa',
+                                        'specialty_area': 'Área de Especialidade'
+                                    };
+
+                                    errorMessage = data.detail.map(error => {
+                                        const fieldName = error.loc && error.loc[1] ? fieldNames[error.loc[1]] || error.loc[1] : 'Campo';
+                                        return `O preenchimento do campo ${fieldName} é obrigatório.`;
+                                    }).join('\n\n');
+                                } else {
+                                    errorMessage = data.detail;
+                                }
+                            }
+                            
+                            throw new Error(errorMessage);
+                        });
+                    }
+                })
+                .catch(error => {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'alert alert-danger';
+                    errorDiv.style.whiteSpace = 'pre-line';
+                    errorDiv.textContent = error.message;
+                    
+                    const existingError = form.querySelector('.alert');
+                    if (existingError) {
+                        existingError.remove();
+                    }
+                    
+                    form.insertBefore(errorDiv, form.firstChild);
+                });
             });
-    }
+        }
+
+        // Inicializar todos os tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl, {
+                html: true
+            })
+        });
+    });
 </script>
 {% endblock %}
 
-{% block extra_js %}
-<script>
-    // Código adicional que precisa ser executado após o carregamento do DOM
-    document.addEventListener('DOMContentLoaded', function() {
-        // Garantir que o carregamento inicial das áreas de especialidade seja feito
-        const companyActivitySelect = document.getElementById('company_activity');
-        if (companyActivitySelect && companyActivitySelect.value) {
-            loadSpecialtyAreas();
-        }
-    });
-</script>
+{% block content %}
+{% include "components/navbar.html" %}
+<div class="row justify-content-center p-1 mt-5">
+    <div class="col-md-8 mt-5 col-lg-8">
+
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Perfil do Usuário</h3>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <form method="post" action="/profile" class="needs-validation" novalidate>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">
+                                Como gosta de ser chamado(a)? <span class="text-danger">*</span>
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#nameHelpModal"></i>
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default('', true) }}" required>
+                            <div class="invalid-feedback">
+                                Por favor, informe seu nome.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">
+                                Email <span class="text-danger">*</span>
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#emailHelpModal"></i>
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default('', true) }}" required>
+                            <div class="invalid-feedback">
+                                Por favor, informe um email válido.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="whatsapp" class="form-label">
+                                WhatsApp <span class="text-danger">*</span>
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#whatsappHelpModal"></i>
+                            </label>
+                            <input type="tel" class="form-control" id="whatsapp" name="whatsapp" value="{{ user.whatsapp|default('', true) }}" required>
+                            <div class="invalid-feedback">
+                                Por favor, informe um número de WhatsApp válido.
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="password" class="form-label">
+                                Nova Senha
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#passwordHelpModal"></i>
+                            </label>
+                            <input type="password" class="form-control" id="password" name="password">
+                            <div class="invalid-feedback">
+                                A senha deve ter pelo menos 6 caracteres.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="state" class="form-label">
+                                Estado <span class="text-danger">*</span>
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#stateHelpModal"></i>
+                            </label>
+                            <select class="form-select" id="state" name="state" required>
+                                <option value="" selected disabled>Selecione o estado</option>
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="city" class="form-label">
+                                Cidade <span class="text-danger">*</span>
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#cityHelpModal"></i>
+                            </label>
+                            <input type="text" class="form-control" id="city" name="city" value="{{ user.city|default('', true) }}" required>
+                            <div class="invalid-feedback">
+                                Por favor, informe a cidade.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="activity_type" class="form-label">
+                                Área de atuação <span class="text-danger">*</span>
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#activityTypeHelpModal"></i>
+                            </label>
+                            <select class="form-select" id="activity_type" name="activity_type" required>
+                                <option value="" selected disabled>Selecione o tipo de atividade</option>
+                                <option value="Serviços">Serviços</option>
+                                <option value="Comércio">Comércio</option>
+                                <option value="Indústria">Indústria</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label for="company_activity" class="form-label">
+                                Atividade da Empresa <span class="text-danger">*</span>
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#companyActivityHelpModal"></i>
+                            </label>
+                            <select class="form-select" id="company_activity" name="company_activity" required>
+                                <option value="" selected disabled>Selecione a atividade</option>
+                                <option value="AMBULANTE">AMBULANTE</option>
+                                <option value="ATACADO">ATACADO</option>
+                                <option value="AUTOMOTORES">AUTOMOTORES</option>
+                                <option value="VAREJO - Alimentação fora do Lar">VAREJO - Alimentação fora do Lar</option>
+                                <option value="Varejo - Animais domesticos">Varejo - Animais domesticos</option>
+                                <option value="Varejo - Arte, decoração e utilidades para o Lar">Varejo - Arte, decoração e utilidades para o Lar</option>
+                                <option value="Varejo - Bebidas e produtos alimentícios">Varejo - Bebidas e produtos alimentícios</option>
+                                <option value="Varejo - Copa e cozinha">Varejo - Copa e cozinha</option>
+                                <option value="Varejo - Eletroeletrônicos e informática">Varejo - Eletroeletrônicos e informática</option>
+                                <option value="Varejo - Festas, leitura, música, esporte e lazer">Varejo - Festas, leitura, música, esporte e lazer</option>
+                                <option value="Varejo - Jardinagem">Varejo - Jardinagem</option>
+                                <option value="Varejo - Materiais de construção">Varejo - Materiais de construção</option>
+                                <option value="Varejo - Papéis e utilidades para escritórios">Varejo - Papéis e utilidades para escritórios</option>
+                                <option value="Varejo - Saúde e bem-estar">Varejo - Saúde e bem-estar</option>
+                                <option value="Varejo - Vestuário,calçados e complementos">Varejo - Vestuário,calçados e complementos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="specialty_area" class="form-label">
+                                Área de Especialidade <span class="text-danger">*</span>
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#specialtyAreaHelpModal"></i>
+                            </label>
+                            <select class="form-select" id="specialty_area" name="specialty_area" required disabled>
+                                <option value="" selected disabled>Selecione a área de especialidade</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            {% if user.activation_key %}
+                            <label for="activation_key" class="form-label">
+                                Chave de Ativação
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#activationKeyHelpModal"></i>
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="activation_key" name="activation_key" value="{{ user.activation_key|default('', true) }}" readonly>
+                                <span class="input-group-text bg-primary text-white">
+                                    <i class="bi bi-check-circle"></i>
+                                </span>
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Sua licença está ativa
+                            </div>
+                            {% else %}
+                            <label for="activation_key" class="form-label">
+                                Chave de Ativação <span class="text-danger">*</span>
+                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#activationKeyHelpModal"></i>
+                            </label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="activation_key" name="activation_key" value="{{ user.activation_key|default('', true) }}" placeholder="Digite sua chave de ativação" required>
+                                <button type="submit" name="action" value="activate" class="btn bg-primary text-white">
+                                    <i class="bi bi-check-circle"></i> Ativar
+                                </button>
+                            </div>
+                            <div class="form-text">
+                                <i class="bi bi-info-circle"></i> Insira a chave de ativação fornecida pelo administrador
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn bg-primary text-white btn-lg">Atualizar Perfil</button>
+                        <a href="/dashboard" class="btn btn-outline-secondary">Voltar para o Dashboard</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Help Modals -->
+<div class="modal fade" id="nameHelpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuda - Nome</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Informe como você prefere ser chamado(a). Este nome será usado em comunicações do sistema.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="emailHelpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuda - Email</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Seu email será usado para login e recuperação de senha. Certifique-se de usar um email válido e acessível.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="whatsappHelpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuda - WhatsApp</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Seu número de WhatsApp será usado para comunicações importantes. Formato: (XX) XXXXX-XXXX</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="stateHelpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuda - Estado</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Selecione o estado onde sua empresa está localizada.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cityHelpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuda - Cidade</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Informe a cidade onde sua empresa está localizada.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="activityTypeHelpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuda - Área de Atuação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Selecione o tipo principal de atividade da sua empresa: Serviços, Comércio ou Indústria.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="companyActivityHelpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuda - Atividade da Empresa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Selecione a atividade específica da sua empresa. Esta informação ajudará a personalizar o sistema para seu negócio.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="specialtyAreaHelpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuda - Área de Especialidade</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Selecione a especialidade específica da sua empresa. Esta opção será habilitada após selecionar a Atividade da Empresa.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="passwordHelpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuda - Senha</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>Deixe em branco se não desejar alterar sua senha. Caso contrário, sua nova senha deve ter pelo menos 6 caracteres. Use uma combinação de letras, números e símbolos para maior segurança.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="activationKeyHelpModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ajuda - Chave de Ativação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p>A chave de ativação é necessária para acessar o sistema. Se você não possui uma chave, entre em contato com o administrador do sistema.</p>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_css %}
@@ -729,16 +640,18 @@
     .help-icon {
         cursor: pointer;
         margin-left: 5px;
-        opacity: 0.8;
-        color: var(--primary-color);
+        color: #FFC107;
+        font-size: 1.1rem;
     }
     
     .help-icon:hover {
-        opacity: 1;
+        opacity: 0.8;
     }
     
     .form-label {
         font-weight: 500;
+        display: flex;
+        align-items: center;
     }
     
     .required:after {
