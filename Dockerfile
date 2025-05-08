@@ -36,4 +36,4 @@ RUN chmod -R 777 /app
 EXPOSE 9090
 
 # Command to run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9090", "--reload"] 
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9090", "--reload"]
