@@ -222,49 +222,37 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
+                        'Accept': 'application/json'
                     },
                     body: new URLSearchParams(formData)
                 })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = '/login';
+                .then(async response => {
+                    const contentType = response.headers.get('content-type');
+                    if (!response.ok) {
+                        if (contentType && contentType.includes('application/json')) {
+                            const errorData = await response.json();
+                            throw new Error(errorData.detail || 'Erro ao processar a requisição');
+                        } else {
+                            throw new Error('Erro interno do servidor. Por favor, tente novamente mais tarde.');
+                        }
+                    }
+                    if (contentType && contentType.includes('application/json')) {
+                        return response.json();
+                    }
+                    throw new Error('Resposta inválida do servidor');
+                })
+                .then(data => {
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
                     } else {
-                        return response.json().then(data => {
-                            let errorMessage = 'Erro ao cadastrar usuário';
-                            
-                            if (data.detail) {
-                                if (Array.isArray(data.detail)) {
-                                    const fieldNames = {
-                                        'name': 'Nome',
-                                        'email': 'Email',
-                                        'whatsapp': 'WhatsApp',
-                                        'password': 'Senha',
-                                        'state': 'Estado',
-                                        'city': 'Cidade',
-                                        'activity_type': 'Área de atuação',
-                                        'company_activity': 'Atividade da Empresa',
-                                        'specialty_area': 'Área de Especialidade',
-                                        'terms_accepted': 'Termos e Condições'
-                                    };
-
-                                    errorMessage = data.detail.map(error => {
-                                        const fieldName = error.loc && error.loc[1] ? fieldNames[error.loc[1]] || error.loc[1] : 'Campo';
-                                        return `O preenchimento do campo ${fieldName} é obrigatório.`;
-                                    }).join('\n\n');
-                                } else {
-                                    errorMessage = data.detail;
-                                }
-                            }
-                            
-                            throw new Error(errorMessage);
-                        });
+                        window.location.href = '/login';
                     }
                 })
                 .catch(error => {
                     const errorDiv = document.createElement('div');
                     errorDiv.className = 'alert alert-danger';
                     errorDiv.style.whiteSpace = 'pre-line';
-                    errorDiv.textContent = error.message;
+                    errorDiv.textContent = error.message || 'Erro ao cadastrar usuário. Por favor, tente novamente.';
                     
                     const existingError = form.querySelector('.alert');
                     if (existingError) {

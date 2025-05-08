@@ -24,7 +24,7 @@
                 <div class="alert alert-success">{{ success }}</div>
                 {% endif %}
                 
-                <form method="post" action="/login">
+                <form id="login-form">
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="email" class="form-control" id="email" name="email" required>
@@ -46,4 +46,54 @@
         </div>
     </div>
 </div>
+
+<script>
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const form = this;
+    const formData = new FormData(form);
+
+    fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json'
+        },
+        body: new URLSearchParams(formData)
+    })
+    .then(async response => {
+        const contentType = response.headers.get('content-type');
+        if (!response.ok) {
+            if (contentType && contentType.includes('application/json')) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || 'Erro ao processar a requisição');
+            } else {
+                throw new Error('Erro interno do servidor. Por favor, tente novamente mais tarde.');
+            }
+        }
+        if (contentType && contentType.includes('application/json')) {
+            return response.json();
+        }
+        throw new Error('Resposta inválida do servidor');
+    })
+    .then(data => {
+        if (data.redirect) {
+            window.location.href = data.redirect;
+        }
+    })
+    .catch(error => {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'alert alert-danger';
+        errorDiv.style.whiteSpace = 'pre-line';
+        errorDiv.textContent = error.message || 'Erro ao fazer login. Por favor, tente novamente.';
+        
+        const existingError = form.querySelector('.alert');
+        if (existingError) {
+            existingError.remove();
+        }
+        
+        form.insertBefore(errorDiv, form.firstChild);
+    });
+});
+</script>
 {% endblock %} 

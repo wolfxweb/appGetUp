@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Request, Form, Response
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
@@ -93,25 +93,15 @@ async def register(
         result = await db.execute(select(User).filter(User.email == email))
         user_exists = result.scalar_one_or_none()
         if user_exists:
-            return templates.TemplateResponse(
-                "register.html", 
-                {
-                    "request": request, 
-                    "error": "Email já cadastrado",
-                    "now": datetime.now(),
-                    "user": None
-                }
+            return JSONResponse(
+                status_code=400,
+                content={"detail": "Email já cadastrado"}
             )
         
         if not terms_accepted:
-            return templates.TemplateResponse(
-                "register.html", 
-                {
-                    "request": request, 
-                    "error": "Você deve aceitar os termos para continuar",
-                    "now": datetime.now(),
-                    "user": None
-                }
+            return JSONResponse(
+                status_code=400,
+                content={"detail": "Você deve aceitar os termos para continuar"}
             )
         
         # Criar novo usuário
@@ -152,7 +142,10 @@ async def register(
         )
         
         # Configurar cookie com o token
-        response = RedirectResponse(url="/diagnostico", status_code=status.HTTP_303_SEE_OTHER)
+        response = JSONResponse(
+            content={"redirect": "/basic-data"},
+            status_code=200
+        )
         response.set_cookie(
             key="access_token",
             value=f"Bearer {access_token}",
@@ -164,14 +157,9 @@ async def register(
         return response
         
     except Exception as e:
-        return templates.TemplateResponse(
-            "register.html",
-            {
-                "request": request,
-                "error": f"Erro ao criar conta: {str(e)}",
-                "now": datetime.now(),
-                "user": None
-            }
+        return JSONResponse(
+            status_code=500,
+            content={"detail": f"Erro ao criar conta: {str(e)}"}
         )
 
 @router.get("/login", response_class=HTMLResponse)
@@ -189,31 +177,41 @@ async def login(
     password: str = Form(...),
     db: AsyncSession = Depends(get_db)
 ):
-    result = await db.execute(select(User).filter(User.email == email))
-    user = result.scalar_one_or_none()
-    
-    if not user or not verify_password(password, user.password):
-        return templates.TemplateResponse(
-            "login.html", 
-            {"request": request, "error": "Email ou senha incorretos"}
+    try:
+        result = await db.execute(select(User).filter(User.email == email))
+        user = result.scalar_one_or_none()
+        
+        if not user or not verify_password(password, user.password):
+            return JSONResponse(
+                status_code=401,
+                content={"detail": "Email ou senha incorretos"}
+            )
+        
+        # Criar token de acesso
+        access_token = create_access_token(
+            data={"sub": user.email}
         )
-    
-    # Criar token de acesso
-    access_token = create_access_token(
-        data={"sub": user.email}
-    )
-    
-    # Configurar cookie com o token
-    response = RedirectResponse(url="/basic-data", status_code=status.HTTP_303_SEE_OTHER)
-    response.set_cookie(
-        key="access_token",
-        value=f"Bearer {access_token}",
-        httponly=True,
-        max_age=1800,
-        samesite="lax"
-    )
-    
-    return response
+        
+        # Configurar cookie com o token e redirecionar
+        response = JSONResponse(
+            content={"redirect": "/basic-data"},
+            status_code=200
+        )
+        response.set_cookie(
+            key="access_token",
+            value=f"Bearer {access_token}",
+            httponly=True,
+            max_age=1800,
+            samesite="lax"
+        )
+        
+        return response
+        
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"detail": f"Erro ao fazer login: {str(e)}"}
+        )
 
 @router.get("/forgot-password", response_class=HTMLResponse)
 async def forgot_password_page(request: Request):
