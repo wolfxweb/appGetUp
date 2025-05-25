@@ -231,7 +231,34 @@
                     if (!response.ok) {
                         if (contentType && contentType.includes('application/json')) {
                             const errorData = await response.json();
-                            throw new Error(errorData.detail || 'Erro ao processar a requisição');
+                            if (Array.isArray(errorData)) {
+                                const errorMessages = errorData.map(error => {
+                                    if (error.loc && error.msg) {
+                                        const fieldName = error.loc[error.loc.length - 1];
+                                        let fieldLabel = '';
+                                        switch(fieldName) {
+                                            case 'name': fieldLabel = 'Nome'; break;
+                                            case 'email': fieldLabel = 'Email'; break;
+                                            case 'whatsapp': fieldLabel = 'WhatsApp'; break;
+                                            case 'password': fieldLabel = 'Senha'; break;
+                                            case 'state': fieldLabel = 'Estado'; break;
+                                            case 'city': fieldLabel = 'Cidade'; break;
+                                            case 'activity_type': fieldLabel = 'Área de atuação'; break;
+                                            case 'company_activity': fieldLabel = 'Ramo de atuação'; break;
+                                            case 'specialty_area': fieldLabel = 'Atividade da empresa'; break;
+                                            case 'terms_accepted': fieldLabel = 'Termos e condições'; break;
+                                            default: fieldLabel = fieldName;
+                                        }
+                                        return `${fieldLabel}: ${error.msg}`;
+                                    }
+                                    return error.msg || JSON.stringify(error);
+                                });
+                                throw new Error(errorMessages.join('\n'));
+                            } else if (errorData.detail) {
+                                throw new Error(errorData.detail);
+                            } else {
+                                throw new Error(JSON.stringify(errorData));
+                            }
                         } else {
                             throw new Error('Erro interno do servidor. Por favor, tente novamente mais tarde.');
                         }
@@ -252,7 +279,25 @@
                     const errorDiv = document.createElement('div');
                     errorDiv.className = 'alert alert-danger';
                     errorDiv.style.whiteSpace = 'pre-line';
-                    errorDiv.textContent = error.message || 'Erro ao cadastrar usuário. Por favor, tente novamente.';
+                    
+                    // Tenta fazer o parse da mensagem de erro
+                    try {
+                        const errorObj = JSON.parse(error.message);
+                        if (Array.isArray(errorObj)) {
+                            errorDiv.textContent = errorObj.map(err => {
+                                if (err.loc && err.msg) {
+                                    const fieldName = err.loc[err.loc.length - 1];
+                                    const fieldLabel = document.querySelector(`label[for="${fieldName}"]`)?.textContent.trim() || fieldName;
+                                    return `${fieldLabel}: ${err.msg}`;
+                                }
+                                return err.msg || JSON.stringify(err);
+                            }).join('\n');
+                        } else {
+                            errorDiv.textContent = errorObj.detail || error.message;
+                        }
+                    } catch (e) {
+                        errorDiv.textContent = error.message || 'Erro ao cadastrar usuário. Por favor, tente novamente.';
+                    }
                     
                     const existingError = form.querySelector('.alert');
                     if (existingError) {
@@ -304,7 +349,39 @@
             </div>
             <div class="card-body">
                 {% if error %}
-                <div class="alert alert-danger">{{ error }}</div>
+                <div class="alert alert-danger">
+                    <!-- Debug info -->
+                    <pre style="background: #f8f9fa; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
+                        Tipo do erro: {{ error.__class__.__name__ }}
+                        Conteúdo do erro: {{ error }}
+                        {% if error is sequence %}
+                            É uma sequência
+                            {% if error is mapping %}
+                                É um dicionário
+                            {% endif %}
+                        {% endif %}
+                    </pre>
+                    <!-- Fim do debug info -->
+                    {% if error is sequence and error is not string %}
+                        {% for err in error %}
+                            {% if err is mapping %}
+                                {% if err.loc and err.msg %}
+                                    <p>{{ err.loc[-1] }}: {{ err.msg }}</p>
+                                {% else %}
+                                    <p>{{ err }}</p>
+                                {% endif %}
+                            {% else %}
+                                <p>{{ err }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% elif error is mapping %}
+                        {% for field, message in error.items() %}
+                            <p>{{ field }}: {{ message }}</p>
+                        {% endfor %}
+                    {% else %}
+                        <p>{{ error }}</p>
+                    {% endif %}
+                </div>
                 {% endif %}
 
                 <form method="post" action="/register" class="needs-validation" novalidate>
@@ -484,9 +561,6 @@
                     </div>
                 </form>
             </div>
-        </div>
-        <div class="d-flex justify-content-center mt-4">
-            <img src="{{ url_for('static', path='images/logo-getup.png') }}" alt="GetUp" class="img-fluid" style="max-width: 300px;">
         </div>
     </div>
 </div>
