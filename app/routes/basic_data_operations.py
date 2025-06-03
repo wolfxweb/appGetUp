@@ -143,6 +143,10 @@ async def new_basic_data_page(
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
+    # Verificar se o usuário está autenticado
+    if not current_user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+
     # Obter o mês e ano atual
     now = datetime.now()
     current_month = now.month
@@ -191,6 +195,10 @@ async def save_basic_data(
     is_current: str = Form(False),
     edit_mode: bool = Form(False)
 ):
+    # Verificar se o usuário está autenticado
+    if not current_user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+
     try:
         # Verificar se is_current é uma string ou um booleano
         if isinstance(is_current, str):
@@ -557,6 +565,10 @@ async def check_basic_data_exists(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
+    # Verificar se o usuário está autenticado
+    if not current_user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+
     # Verificar se já existe um registro para o mesmo mês/ano
     result = await db.execute(
         select(BasicData)
@@ -568,7 +580,7 @@ async def check_basic_data_exists(
     )
     existing_data = result.scalar_one_or_none()
     
-    return {"exists": existing_data is not None}
+    return {"exists": existing_data is not None} 
 
 @router.post("/update/{data_id}")
 async def update_basic_data(
@@ -591,7 +603,17 @@ async def update_basic_data(
     ideal_service_profit_margin: float = Form(None),
     is_current: str = Form(False)
 ):
+    # Verificar se o usuário está autenticado
+    if not current_user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+
     try:
+        # Verificar se is_current é uma string ou um booleano
+        if isinstance(is_current, str):
+            is_current_bool = is_current.lower() == 'true'
+        else:
+            is_current_bool = bool(is_current)
+
         # Buscar o registro existente
         result = await db.execute(
             select(BasicData)
@@ -653,7 +675,7 @@ async def update_basic_data(
         existing_data.work_hours_per_week = work_hours_per_week
         existing_data.other_fixed_costs = other_fixed_costs_float
         existing_data.ideal_service_profit_margin = ideal_service_profit_margin
-        existing_data.is_current = is_current.lower() == 'true' if isinstance(is_current, str) else bool(is_current)
+        existing_data.is_current = is_current_bool
 
         # Registrar as alterações
         changes = compare_and_log_changes(db, old_data_dict, {

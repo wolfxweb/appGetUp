@@ -3,6 +3,251 @@
 {% block title %}GetUp Gestão - Controle de Custos{% endblock %}
 
 {% block content %}
+{% if user %}
+<div class="container-fluid p-0">
+    <!-- Hero Section -->
+    <div class="bg-primary text-white py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold">Bem-vindo(a), {{ user.name }}!</h1>
+                    <p class="fs-5 my-4">Gerencie seus custos com eficiência. Tome decisões baseadas em dados reais.</p>
+                    <a href="/dashboard" class="btn btn-light btn-lg px-4 me-md-2">Acessar Dashboard</a>
+                </div>
+                <div class="col-lg-6">
+                    <img src="/static/images/Logo.png" alt="Gestão de Custos" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Recursos Principais</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-graph-up-arrow text-primary fs-1 mb-3"></i>
+                            <h5 class="card-title">Análise Financeira</h5>
+                            <p class="card-text">Acompanhe receitas, despesas e lucros com gráficos intuitivos e relatórios detalhados.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-calculator text-primary fs-1 mb-3"></i>
+                            <h5 class="card-title">Controle de Custos</h5>
+                            <p class="card-text">Registre e categorize todos os seus custos. Identifique oportunidades de economia.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-clipboard-data text-primary fs-1 mb-3"></i>
+                            <h5 class="card-title">Histórico Completo</h5>
+                            <p class="card-text">Mantenha um registro de todas as alterações e visualize a evolução do seu negócio.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Benefits Section -->
+    <div class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Por que usar nossa plataforma?</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <img src="/static/images/financial-planning.svg" alt="Planejamento Financeiro" class="img-fluid rounded shadow">
+                </div>
+                <div class="col-lg-6">
+                    <div class="ps-lg-4">
+                        <h3 class="mb-4">Decisões mais inteligentes para seu negócio</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Aumente sua margem de lucro identificando custos desnecessários</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Planeje investimentos com base em dados concretos</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Identifique tendências e padrões no seu fluxo de caixa</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Compare desempenho entre períodos diferentes</li>
+                            <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i> Otimize processos para reduzir desperdícios</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pricing Plans Section -->
+    <div class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Nossos Planos</h2>
+            <div class="row g-4 justify-content-center">
+                <!-- Plano Básico -->
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="card h-100 shadow-sm w-100">
+                        <div class="card-header bg-white py-3">
+                            <h4 class="my-0 text-center">Básico</h4>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h1 class="card-title text-center mb-4">R$ 49<small class="text-muted fw-light">/mês</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Controle de custos básico</li>
+                 
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Relatórios mensais</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Suporte por email</li>
+                                <li class="mb-2 text-muted"><i class="bi bi-x text-danger me-2"></i>Análise avançada</li>
+                              
+                            </ul>
+                            <div class="mt-auto pt-3">
+                                <a href="/register" class="btn btn-outline-primary w-100">Começar agora</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Plano Profissional (em destaque) -->
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="card h-100 shadow border border-primary w-100" style="transform: scale(1.05);">
+                        <div class="card-header bg-primary text-white py-3">
+                            <h4 class="my-0 text-center">Profissional</h4>
+                            <div class="text-center mt-2">
+                                <span class="badge bg-warning">MAIS POPULAR</span>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h1 class="card-title text-center mb-4">R$ 99<small class="text-muted fw-light">/mês</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Controle de custos completo</li>
+                     
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Relatórios detalhados</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Suporte prioritário</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Análise avançada</li> 
+                            </ul>
+                            <div class="mt-auto pt-3">
+                                <a href="/register" class="btn btn-primary w-100">Escolher Plano</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Plano Empresarial -->
+                <div class="col-md-4 d-flex align-items-stretch">
+                    <div class="card h-100 shadow-sm w-100">
+                        <div class="card-header bg-white py-3">
+                            <h4 class="my-0 text-center">Empresarial</h4>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <h1 class="card-title text-center mb-4">R$ 199<small class="text-muted fw-light">/mês</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Controle de custos completo</li>
+                       
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Relatórios personalizados</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Suporte 24/7</li>
+                                <li class="mb-2"><i class="bi bi-check text-success me-2"></i>Análise avançada</li>
+                          
+                            </ul>
+                            <div class="mt-auto pt-3">
+                                <a href="/register" class="btn btn-outline-primary w-100">Contato comercial</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">O que dizem nossos clientes</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                            </div>
+                            <p class="card-text fst-italic">"Com esta plataforma consegui reduzir meus custos em 20% no primeiro trimestre de uso. Interface simples e muito eficiente!"</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <div class="fw-bold">Carlos Silva</div>
+                                <div class="ms-2 text-muted small">Comércio Varejista</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                            </div>
+                            <p class="card-text fst-italic">"Finalmente consigo ter uma visão clara das minhas finanças. Agora sei exatamente onde cada real está sendo investido no meu negócio."</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <div class="fw-bold">Ana Oliveira</div>
+                                <div class="ms-2 text-muted small">Serviços de Consultoria</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <div class="d-flex mb-3">
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning me-1"></i>
+                                <i class="bi bi-star-fill text-warning"></i>
+                            </div>
+                            <p class="card-text fst-italic">"O sistema me ajudou a identificar desperdícios que nem imaginava que tinha. O suporte é excelente e as atualizações constantes."</p>
+                            <div class="d-flex align-items-center mt-3">
+                                <div class="fw-bold">Marcos Pereira</div>
+                                <div class="ms-2 text-muted small">Indústria de Alimentos</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="py-5 bg-primary text-white text-center">
+        <div class="container">
+            <h2 class="mb-4">Comece a controlar seus custos hoje mesmo</h2>
+            <p class="lead mb-4">Junte-se a milhares de empresários que já transformaram a gestão financeira dos seus negócios</p>
+            <a href="/register" class="btn btn-light btn-lg px-4">Criar conta gratuita</a>
+        </div>
+    </div>
+</div>
+
+<footer class="py-4 bg-dark text-white">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="mb-0">© 2025 GetUp Gestão. Todos os direitos reservados.</p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <a href="#" class="text-white me-3">Termos de Uso</a>
+                <a href="#" class="text-white me-3">Privacidade</a>
+                <a href="#" class="text-white">Contato</a>
+            </div>
+        </div>
+    </div>
+</footer>
+{% else %}
 <div class="container-fluid p-0">
     <!-- Hero Section -->
     <div class="bg-primary text-white py-5">
@@ -247,4 +492,5 @@
         </div>
     </div>
 </footer>
+{% endif %}
 {% endblock %} 

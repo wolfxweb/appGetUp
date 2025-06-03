@@ -3,119 +3,117 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-{% with active_page='dashboard' %}
-{% include 'components/navbar.html' %}
-{% endwith %}
-
-<div class="container-fluid p-1">
-    {% if not user.activation_key and user.access_level != "Administrador" %}
-    <div class="row">
-        <div class="col-md-8 mx-auto">
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <h4 class="alert-heading"><i class="bi bi-exclamation-triangle"></i> Atenção!</h4>
-                <p>Para acessar o sistema, você precisa ativar sua licença. Por favor, insira sua chave de ativação abaixo.</p>
-                <hr>
-                <p class="mb-0">Se você não possui uma chave de ativação, entre em contato com o administrador do sistema.</p>
-            </div>
-            <div class="card shadow-sm">
-                <div class="card-body text-center">
-                    <a href="/profile" class="btn btn-primary btn-lg">
-                        <i class="bi bi-key"></i> Ativar Licença
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-    {% else %}
+<div class="container-fluid p-5" style="background-color: #F5F5F5; min-height: 100vh;">
     <div class="row">
         <div class="col-md-12">
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="card-title mb-0"><i class="bi bi-speedometer2"></i> Dashboard</h5>
-                </div>
-                <div class="card-body">
-                    {% if user.access_level in ["Administrador", "Admin"] %}
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card bg-primary text-white mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">Total de Usuários</h5>
-                                    <h2 class="card-text">{{ total_users }}</h2>
-                                </div>
+            <div class="card shadow-sm mb-4" style="background-color: #F5F5F5;">
+                <div class="card-body p-3">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-md-6">
+                            <p>Aguarando logo do cliente</p>
+                           <!--<img src="/static/images/Wolfx-Logo.png" alt="Logo" height="40">-->
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <div>
+                                <h6 class="mb-0">{{ now.strftime('%d/%m/%Y') }}</h6>
+                                <a href="https://www.climatempo.com.br/" target="_blank" class="text-decoration-none">
+                                    <small><i class="bi bi-cloud-sun"></i> Previsão do Tempo</small>
+                                </a>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="card bg-success text-white mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">Licenças Ativas</h5>
-                                    <h2 class="card-text">{{ active_licenses }}</h2>
+                    </div>
+                    <div class="text-center mb-4">
+                        {% set hour = now.hour %}
+                        {% if hour >= 5 and hour < 12 %}
+                            <h4>Bom dia, {{ user.name }}!</h4>
+                        {% elif hour >= 12 and hour < 18 %}
+                            <h4>Boa tarde, {{ user.name }}!</h4>
+                        {% else %}
+                            <h4>Boa noite, {{ user.name }}!</h4>
+                        {% endif %}
+                    </div>
+                    <div class="card shadow-sm mb-4" style="background-color: #F0F0F0;">
+                        <div class="card-body p-3">
+                            <div class="row">
+                                <div class="col-md-2-4 text-center">
+                                    <a href="/dashboard" class="btn btn-secondary w-100 mb-2">Índice</a>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card bg-warning text-dark mb-4">
-                                <div class="card-body">
-                                    <h5 class="card-title">Licenças Disponíveis</h5>
-                                    <h2 class="card-text">{{ available_licenses }}</h2>
+                                <div class="col-md-2-4 text-center">
+                                    <a href="/basic-data/new" class="btn btn-secondary w-100 mb-2">Dados Básicos</a>
+                                    <button class="btn btn-secondary w-100">Histórico</button>
+                                </div>
+                                <div class="col-md-2-4 text-center">
+                                    <button class="btn btn-secondary w-100 mb-2">Diagnóstico</button>
+                                    <button class="btn btn-secondary w-100">Histórico</button>
+                                </div>
+                                <div class="col-md-2-4 text-center">
+                                    <button class="btn btn-secondary w-100 mb-2">Simulador</button>
+                                    <button class="btn btn-secondary w-100">Prioridade</button>
+                                </div>
+                                <div class="col-md-2-4 text-center">
+                                    <button class="btn btn-secondary w-100 mb-2">Calculadora de Preços</button>
+                                    <button class="btn btn-secondary w-100">Histórico</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {% else %}
-                    <div class="alert alert-info">
-                        <p>Bem-vindo ao Dashboard. Sua licença está ativa.</p>
+                    <div class="card shadow-sm mb-4" style="background-color: #F0F0F0;">
+                        <div class="card-body p-3">
+                            <div class="text-center">
+                                <h5 class="mb-0" style="color: #000000;">ESPAÇO PARA MENSAGENS AUTOMÁTICAS</h5>
+                            </div>
+                        </div>
                     </div>
-                    {% endif %}
+                    <div class="card shadow-sm mb-4" style="background-color: #F0F0F0;">
+                        <div class="card-body p-3">
+                            <div class="text-center">
+                                <h5 class="mb-0" style="color: #000000;">ESPAÇO PARA AS MENSAGENS QUE FOREM ENVIADAS PELO ADMINISTRADOR</h5>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    {% endif %}
 </div>
 {% endblock %}
 
 {% block extra_css %}
 <style>
+    body {
+        background-color: #F5F5F5;
+    }
     /* Estilos adicionais para garantir visibilidade da navbar */
     .navbar {
         z-index: 1000;
         display: flex !important;
         visibility: visible !important;
     }
+    .col-md-2-4 {
+        flex: 0 0 20%;
+        max-width: 20%;
+        position: relative;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: white;
+    }
 </style>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    // Mostrar o modal de ativação se necessário
-    document.addEventListener('DOMContentLoaded', function() {
-        {% if show_activation_modal and user.access_level != "Administrador" %}
-        var activationModal = new bootstrap.Modal(document.getElementById('activationModal'));
-        activationModal.show();
-        {% endif %}
+
     });
 </script>
 {% endblock %}
 
-<!-- Modal de Ativação -->
-<div class="modal fade" id="activationModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="activationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="activationModalLabel">Ativar Licença</h5>
-            </div>
-            <div class="modal-body">
-                <p>Para continuar usando o sistema, você precisa ativar sua licença.</p>
-                <form action="/activate-license" method="post">
-                    <div class="mb-3">
-                        <label for="activation_key" class="form-label">Chave de Ativação</label>
-                        <input type="text" class="form-control" id="activation_key" name="activation_key" required>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Ativar Licença</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div> 

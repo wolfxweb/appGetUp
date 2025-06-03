@@ -3,49 +3,55 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center p-1 mt-5">
-    <div class="col-md-6 col-lg-4">
-        <div class="d-flex align-items-center mb-4">
-            <div class="me-3 bg-primary">
-                <img src="{{ url_for('static', path='images/Wolfx-Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
+<div class="container-fluid mt-5" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div class="row justify-content-center p-1">
+        <div class="col-md-6 col-lg-4">
+            <div class="d-flex align-items-center mb-4">
+                <div class="me-3">
+                    <img src="{{ url_for('static', path='images/Wolfx-Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
+                </div> 
             </div> 
-        </div> 
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Login</h3>
-            </div>
-            <div class="card-body">
-  
-                {% if error %}
-                <div class="alert alert-danger">{{ error }}</div>
-                {% endif %}
-                
-                {% if success %}
-                <div class="alert alert-success">{{ success }}</div>
-                {% endif %}
-                
-                <form id="login-form">
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
+            <div class="card shadow" style="background-color: #F0F0F0;">
+   
+                <div class="card-body">
+                    {% if error %}
+                    <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
                     
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Senha</label>
-                        <input type="password" class="form-control" id="password" name="password" required>
-                    </div>
+                    {% if success %}
+                    <div class="alert alert-success">{{ success }}</div>
+                    {% endif %}
                     
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn bg-primary text-white">Entrar</button>
-                        <a href="/register" class="btn btn-outline-secondary">Não tem uma conta? Cadastre-se</a>
-                        <a href="/forgot-password" class="btn btn-link">Esqueceu a senha?</a>
-                
-                    </div>
-                </form>
+                    <form id="login-form">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required style="background-color: #D3D3D3;">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="password" name="password" required style="background-color: #D3D3D3;">
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn bg-secondary text-white">Entrar</button>
+                            <a href="/register" class="btn btn-outline-secondary">Não tem uma conta? Cadastre-se</a>
+                            <a href="/forgot-password" class="btn btn-link">Esqueceu a senha?</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #F5F5F5;
+    }
+</style>
+{% endblock %}
 
 <script>
 document.getElementById('login-form').addEventListener('submit', function(event) {

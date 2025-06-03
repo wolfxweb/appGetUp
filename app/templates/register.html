@@ -321,245 +321,250 @@
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center p-1 mt-5">
-    <div class="col-md-8 col-lg-7">
-        <p>Logo envida e no formato post instrgram, deve ser envida a logo de 150px x 300px fundo transparente</p>
-                <div class="d-flex align-items-center mb-4">
-            <div class="me-3 bg-primary">
-       
-                <img src="{{ url_for('static', path='images/SuccessWay.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
-            </div>
-            <div class="flex-grow-1 d-flex flex-column justify-content-center">
-
-            </div>
-        </div>
-        <div class="d-flex align-items-center mb-4">
-            <div class="me-3 bg-primary">
-                <img src="{{ url_for('static', path='images/user-register.jpg') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
-            </div>
-            <div class="flex-grow-1 d-flex flex-column justify-content-center">
-                <p class="mb-2" style="font-size: 1.2rem;">É uma grande satisfação ter você aqui conosco! Para começar vamos precisar de algumas informações.</p>
-                <p class="mb-0" style="font-size: 1.2rem;">Qualquer dúvida é só clicar <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.3rem; color: #FFD700 !important;"></i></p>
-                <p class="mt-2" style="font-size: 1.2rem;">Recomendamos que leia o <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" class="text-primary">Termo de uso e confidencialidade</a>.</p>
-            </div>
-        </div>
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white">
-                <h3 class="mb-0">Cadastro de Usuário</h3>
-            </div>
-            <div class="card-body">
-                {% if error %}
-                <div class="alert alert-danger">
-                    <!-- Debug info -->
-                    <pre style="background: #f8f9fa; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
-                        Tipo do erro: {{ error.__class__.__name__ }}
-                        Conteúdo do erro: {{ error }}
-                        {% if error is sequence %}
-                            É uma sequência
-                            {% if error is mapping %}
-                                É um dicionário
-                            {% endif %}
-                        {% endif %}
-                    </pre>
-                    <!-- Fim do debug info -->
-                    {% if error is sequence and error is not string %}
-                        {% for err in error %}
-                            {% if err is mapping %}
-                                {% if err.loc and err.msg %}
-                                    <p>{{ err.loc[-1] }}: {{ err.msg }}</p>
-                                {% else %}
-                                    <p>{{ err }}</p>
-                                {% endif %}
-                            {% else %}
-                                <p>{{ err }}</p>
-                            {% endif %}
-                        {% endfor %}
-                    {% elif error is mapping %}
-                        {% for field, message in error.items() %}
-                            <p>{{ field }}: {{ message }}</p>
-                        {% endfor %}
-                    {% else %}
-                        <p>{{ error }}</p>
-                    {% endif %}
-                </div>
-                {% endif %}
-
-                <form method="post" action="/register" class="needs-validation" novalidate>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="name" class="form-label">
-                                Como gosta de ser chamado(a)?
-                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#nameHelpModal"></i>
-                            </label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default('', true) }}" required>
-                            <div class="invalid-feedback">
-                                Por favor, informe seu nome.
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="email" class="form-label">
-                                Email
-                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#emailHelpModal"></i>
-                            </label>
-                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default('', true) }}" required>
-                            <div class="invalid-feedback">
-                                Por favor, informe um email válido.
-                            </div>
+<div class="container-fluid mt-5" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card shadow" style="background-color: #F5F5F5;">
+                <div class="card-body">
+                    <!-- Logo dentro do card -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <p>Logo envida e no formato post instrgram, deve ser envida a logo de 150px x 300px fundo transparente </p>
+                            <img src="{{ url_for('static', path='images/Wolfx-Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="whatsapp" class="form-label">
-                                WhatsApp
-                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#whatsappHelpModal"></i>
-                            </label>
-                            <input type="tel" class="form-control" id="whatsapp" name="whatsapp" value="{{ user.whatsapp|default('', true) }}" required>
-                            <div class="invalid-feedback">
-                                Por favor, informe um número de WhatsApp válido.
+                        <!-- Coluna da Imagem (3 colunas) -->
+                        <div class="col-md-2">
+                            <div class="d-flex flex-column align-items-center">
+                                <div class="mb-4">
+                                    <img src="{{ url_for('static', path='images/user-register.jpg') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="password" class="form-label">
-                                Senha
-                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#passwordHelpModal"></i>
-                            </label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                            <div class="invalid-feedback">
-                                A senha deve ter pelo menos 6 caracteres.
+                        <!-- Coluna do Formulário (9 colunas) -->
+                        <div class="col-md-10">
+                   
+                            <div class="mb-4">
+                                <p class="mb-2" style="font-size: 1.2rem;">É uma grande satisfação ter você aqui conosco! Para começar vamos precisar de algumas informações.</p>
+                                <p class="mb-0" style="font-size: 1.2rem;">Qualquer dúvida é só clicar <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.3rem; color: #FFD700 !important;"></i></p>
+                                <p class="mt-2" style="font-size: 1.2rem;">Recomendamos que leia o <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" class="text-primary">Termo de uso e confidencialidade</a>.</p>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="state" class="form-label">
-                                Estado
-                            </label>
-                            <select class="form-select" id="state" name="state" required>
-                                <option value="" selected disabled>Selecione o estado</option>
-                                <option value="AC">Acre</option>
-                                <option value="AL">Alagoas</option>
-                                <option value="AP">Amapá</option>
-                                <option value="AM">Amazonas</option>
-                                <option value="BA">Bahia</option>
-                                <option value="CE">Ceará</option>
-                                <option value="DF">Distrito Federal</option>
-                                <option value="ES">Espírito Santo</option>
-                                <option value="GO">Goiás</option>
-                                <option value="MA">Maranhão</option>
-                                <option value="MT">Mato Grosso</option>
-                                <option value="MS">Mato Grosso do Sul</option>
-                                <option value="MG">Minas Gerais</option>
-                                <option value="PA">Pará</option>
-                                <option value="PB">Paraíba</option>
-                                <option value="PR">Paraná</option>
-                                <option value="PE">Pernambuco</option>
-                                <option value="PI">Piauí</option>
-                                <option value="RJ">Rio de Janeiro</option>
-                                <option value="RN">Rio Grande do Norte</option>
-                                <option value="RS">Rio Grande do Sul</option>
-                                <option value="RO">Rondônia</option>
-                                <option value="RR">Roraima</option>
-                                <option value="SC">Santa Catarina</option>
-                                <option value="SP">São Paulo</option>
-                                <option value="SE">Sergipe</option>
-                                <option value="TO">Tocantins</option>
-                            </select>
-                        </div>
+                            <div class="card mb-5" style="background-color: #F0F0F0;">
+                                <div class="card-body">
+                                    {% if error %}
+                                    <div class="alert alert-danger">
+                                        <!-- Debug info -->
+                                        <pre style="background: #f8f9fa; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
+                                            Tipo do erro: {{ error.__class__.__name__ }}
+                                            Conteúdo do erro: {{ error }}
+                                            {% if error is sequence %}
+                                                É uma sequência
+                                                {% if error is mapping %}
+                                                    É um dicionário
+                                                {% endif %}
+                                            {% endif %}
+                                        </pre>
+                                        <!-- Fim do debug info -->
+                                        {% if error is sequence and error is not string %}
+                                            {% for err in error %}
+                                                {% if err is mapping %}
+                                                    {% if err.loc and err.msg %}
+                                                        <p>{{ err.loc[-1] }}: {{ err.msg }}</p>
+                                                    {% else %}
+                                                        <p>{{ err }}</p>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <p>{{ err }}</p>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% elif error is mapping %}
+                                            {% for field, message in error.items() %}
+                                                <p>{{ field }}: {{ message }}</p>
+                                            {% endfor %}
+                                        {% else %}
+                                            <p>{{ error }}</p>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
 
-                        <div class="col-md-6 mb-3">
-                            <label for="city" class="form-label">
-                                Cidade
-                            </label>
-                            <input type="text" class="form-control" id="city" name="city" value="{{ user.city|default('', true) }}" required>
-                            <div class="invalid-feedback">
-                                Por favor, informe a cidade.
-                            </div>
-                        </div>
-                    </div>
+                                    <form method="post" action="/register" class="needs-validation " novalidate>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="name" class="form-label">
+                                                    Como gosta de ser chamado(a)?
+                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#nameHelpModal"></i>
+                                                </label>
+                                                <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default('', true) }}" required style="background-color: #D3D3D3;">
+                                                <div class="invalid-feedback">
+                                                    Por favor, informe seu nome.
+                                                </div>
+                                            </div>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="activity_type" class="form-label">
-                                Área de atuação
-                            </label>
-                            <select class="form-select" id="activity_type" name="activity_type" required>
-                                <option value="" selected disabled>Selecione o tipo de atividade</option>
-                                <option value="Serviços">Serviços</option>
-                                <option value="Comércio">Comércio</option>
-                                <option value="Indústria">Indústria</option>
-                            </select>
-                        </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label for="email" class="form-label">
+                                                    Email
+                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#emailHelpModal"></i>
+                                                </label>
+                                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default('', true) }}" required style="background-color: #D3D3D3;">
+                                                <div class="invalid-feedback">
+                                                    Por favor, informe um email válido.
+                                                </div>
+                                            </div>
+                                        </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="company_activity" class="form-label">
-                                Ramo de atuação
-                            </label>
-                            <select class="form-select" id="company_activity" name="company_activity" required>
-                                <option value="" selected disabled>Selecione o ramo de atuação</option>
-                                <option value="AMBULANTE">AMBULANTE</option>
-                                <option value="ATACADO">ATACADO</option>
-                                <option value="AUTOMOTORES">AUTOMOTORES</option>
-                                <option value="VAREJO - Alimentação fora do Lar">VAREJO - Alimentação fora do Lar</option>
-                                <option value="Varejo - Animais domesticos">Varejo - Animais domesticos</option>
-                                <option value="Varejo - Arte, decoração e utilidades para o Lar">Varejo - Arte, decoração e utilidades para o Lar</option>
-                                <option value="Varejo - Bebidas e produtos alimentícios">Varejo - Bebidas e produtos alimentícios</option>
-                                <option value="Varejo - Copa e cozinha">Varejo - Copa e cozinha</option>
-                                <option value="Varejo - Eletroeletrônicos e informática">Varejo - Eletroeletrônicos e informática</option>
-                                <option value="Varejo - Festas, leitura, música, esporte e lazer">Varejo - Festas, leitura, música, esporte e lazer</option>
-                                <option value="Varejo - Jardinagem">Varejo - Jardinagem</option>
-                                <option value="Varejo - Materiais de construção">Varejo - Materiais de construção</option>
-                                <option value="Varejo - Papéis e utilidades para escritórios">Varejo - Papéis e utilidades para escritórios</option>
-                                <option value="Varejo - Saúde e bem-estar">Varejo - Saúde e bem-estar</option>
-                                <option value="Varejo - Vestuário,calçados e complementos">Varejo - Vestuário,calçados e complementos</option>
-                            </select>
-                        </div>
-                    </div>
+                                        <div class="row">
+                                            <input type="hidden" id="whatsapp" name="whatsapp" value="9999-9999">
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="specialty_area" class="form-label">
-                                Atividade da empresa
-                            </label>
-                            <select class="form-select" id="specialty_area" name="specialty_area" required disabled>
-                                <option value="" selected disabled>Selecione a atividade da empresa</option>
-                            </select>
-                        </div>
+                                            <div class="col-md-2 mb-3">
+                                                <label for="state" class="form-label">
+                                                    Estado
+                                                </label>
+                                                <select class="form-select" id="state" name="state" required style="background-color: #D3D3D3;">
+                                                    <option value="" selected disabled>Selecione</option>
+                                                    <option value="AC">Acre</option>
+                                                    <option value="AL">Alagoas</option>
+                                                    <option value="AP">Amapá</option>
+                                                    <option value="AM">Amazonas</option>
+                                                    <option value="BA">Bahia</option>
+                                                    <option value="CE">Ceará</option>
+                                                    <option value="DF">Distrito Federal</option>
+                                                    <option value="ES">Espírito Santo</option>
+                                                    <option value="GO">Goiás</option>
+                                                    <option value="MA">Maranhão</option>
+                                                    <option value="MT">Mato Grosso</option>
+                                                    <option value="MS">Mato Grosso do Sul</option>
+                                                    <option value="MG">Minas Gerais</option>
+                                                    <option value="PA">Pará</option>
+                                                    <option value="PB">Paraíba</option>
+                                                    <option value="PR">Paraná</option>
+                                                    <option value="PE">Pernambuco</option>
+                                                    <option value="PI">Piauí</option>
+                                                    <option value="RJ">Rio de Janeiro</option>
+                                                    <option value="RN">Rio Grande do Norte</option>
+                                                    <option value="RS">Rio Grande do Sul</option>
+                                                    <option value="RO">Rondônia</option>
+                                                    <option value="RR">Roraima</option>
+                                                    <option value="SC">Santa Catarina</option>
+                                                    <option value="SP">São Paulo</option>
+                                                    <option value="SE">Sergipe</option>
+                                                    <option value="TO">Tocantins</option>
+                                                </select>
+                                            </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="activation_key" class="form-label">
-                                Chave de Ativação
-                                <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#activationKeyHelpModal"></i>
-                            </label>
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação">
-                            </div>
-                        </div>
-                    </div>
+                                            <div class="col-md-4 mb-3">
+                                                <label for="city" class="form-label">
+                                                    Cidade
+                                                </label>
+                                                <input type="text" class="form-control" id="city" name="city" value="{{ user.city|default('', true) }}" required style="background-color: #D3D3D3;">
+                                                <div class="invalid-feedback">
+                                                    Por favor, informe a cidade.
+                                                </div>
+                                            </div>
 
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <div class="form-check mt-4">
-                                <input type="checkbox" class="form-check-input" id="terms_accepted" name="terms_accepted" required>
-                                <label class="form-check-label" for="terms_accepted">
-                                    Li e aceito os <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">termos e condições</a>
-                                </label>
-                                <div class="invalid-feedback">
-                                    Você deve aceitar os termos e condições.
+                                            <div class="col-md-6 mb-3">
+                                                <label for="activity_type" class="form-label">
+                                                    Área de atuação
+                                                </label>
+                                                <select class="form-select" id="activity_type" name="activity_type" required style="background-color: #D3D3D3;">
+                                                    <option value="" selected disabled>Selecione o tipo de atividade</option>
+                                                    <option value="Serviços">Serviços</option>
+                                                    <option value="Comércio">Comércio</option>
+                                                    <option value="Indústria">Indústria</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="company_activity" class="form-label">
+                                                    Ramo de atuação
+                                                </label>
+                                                <select class="form-select" id="company_activity" name="company_activity" required style="background-color: #D3D3D3;">
+                                                    <option value="" selected disabled>Selecione o ramo de atuação</option>
+                                                    <option value="AMBULANTE">AMBULANTE</option>
+                                                    <option value="ATACADO">ATACADO</option>
+                                                    <option value="AUTOMOTORES">AUTOMOTORES</option>
+                                                    <option value="VAREJO - Alimentação fora do Lar">VAREJO - Alimentação fora do Lar</option>
+                                                    <option value="Varejo - Animais domesticos">Varejo - Animais domesticos</option>
+                                                    <option value="Varejo - Arte, decoração e utilidades para o Lar">Varejo - Arte, decoração e utilidades para o Lar</option>
+                                                    <option value="Varejo - Bebidas e produtos alimentícios">Varejo - Bebidas e produtos alimentícios</option>
+                                                    <option value="Varejo - Copa e cozinha">Varejo - Copa e cozinha</option>
+                                                    <option value="Varejo - Eletroeletrônicos e informática">Varejo - Eletroeletrônicos e informática</option>
+                                                    <option value="Varejo - Festas, leitura, música, esporte e lazer">Varejo - Festas, leitura, música, esporte e lazer</option>
+                                                    <option value="Varejo - Jardinagem">Varejo - Jardinagem</option>
+                                                    <option value="Varejo - Materiais de construção">Varejo - Materiais de construção</option>
+                                                    <option value="Varejo - Papéis e utilidades para escritórios">Varejo - Papéis e utilidades para escritórios</option>
+                                                    <option value="Varejo - Saúde e bem-estar">Varejo - Saúde e bem-estar</option>
+                                                    <option value="Varejo - Vestuário,calçados e complementos">Varejo - Vestuário,calçados e complementos</option>
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-6 mb-3">
+                                                <label for="specialty_area" class="form-label">
+                                                    Atividade da empresa
+                                                </label>
+                                                <select class="form-select" id="specialty_area" name="specialty_area" required disabled style="background-color: #D3D3D3;">
+                                                    <option value="" selected disabled>Selecione a atividade da empresa</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="password" class="form-label">
+                                                    Senha
+                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#passwordHelpModal"></i>
+                                                </label>
+                                                <input type="password" class="form-control" id="password" name="password" required style="background-color: #D3D3D3;">
+                                                <div class="invalid-feedback">
+                                                    A senha deve ter pelo menos 6 caracteres.
+                                                </div>
+                                            </div>
+                                        
+                                            <div class="col-md-6 mb-3">
+                                                <label for="activation_key" class="form-label">
+                                                    Chave de Ativação
+                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#activationKeyHelpModal"></i>
+                                                </label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" style="background-color: #D3D3D3;">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12 mb-3">
+                                                <div class="form-check mt-4">
+                                                    <input type="checkbox" class="form-check-input" id="terms_accepted" name="terms_accepted" required>
+                                                    <label class="form-check-label" for="terms_accepted">
+                                                        Li e aceito os <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">termos e condições</a>
+                                                    </label>
+                                                    <div class="invalid-feedback">
+                                                        Você deve aceitar os termos e condições.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Botões de Ação -->
+                                        <div class="row justify-content-center">
+                                            <div class="col-md-6">
+                                                <div class="d-grid gap-2">
+                                                    <button type="submit" class="btn bg-secondary text-white btn-lg">Cadastrar</button>
+                                                    <a href="/login" class="btn btn-outline-secondary">Já tem uma conta? Faça login</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Botões de Ação -->
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn bg-primary text-white btn-lg">Cadastrar</button>
-                        <a href="/login" class="btn btn-outline-secondary">Já tem uma conta? Faça login</a>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -610,19 +615,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="whatsappHelpModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <p>Seu número de WhatsApp será usado para comunicações importantes. Formato: (XX) XXXXX-XXXX</p>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="passwordHelpModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -652,6 +644,10 @@
 
 {% block extra_css %}
 <style>
+    body {
+        background-color: #F5F5F5;
+    }
+    
     .help-icon {
         cursor: pointer;
         margin-left: 5px;

@@ -335,7 +335,7 @@
             <div class="card-body">
                 {% if error %}
                 <div class="alert alert-danger">{{ error }}</div>
-                {% endif %}
+            {% endif %}
 
                 <form method="post" action="/profile" class="needs-validation" novalidate>
                     <div class="row">
@@ -359,7 +359,7 @@
                             <div class="invalid-feedback">
                                 Por favor, informe um email válido.
                             </div>
-                        </div>
+                </div>
                     </div>
 
                     <div class="row">
@@ -491,7 +491,7 @@
                         </div>
 
                         <div class="col-md-6 mb-3">
-                            {% if user.activation_key %}
+                        {% if user.activation_key %}
                             <label for="activation_key" class="form-label">
                                 Chave de Ativação
                                 <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#activationKeyHelpModal"></i>
@@ -504,8 +504,8 @@
                             </div>
                             <div class="form-text">
                                 <i class="bi bi-info-circle"></i> Sua licença está ativa
-                            </div>
-                            {% else %}
+                        </div>
+                        {% else %}
                             <label for="activation_key" class="form-label">
                                 Chave de Ativação <span class="text-danger">*</span>
                                 <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#activationKeyHelpModal"></i>
@@ -527,9 +527,9 @@
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn bg-primary text-white btn-lg">Atualizar Perfil</button>
                         <a href="/dashboard" class="btn btn-outline-secondary">Voltar para o Dashboard</a>
-                    </div>
-                </form>
-            </div>
+                        </div>
+                    </form>
+                </div>
         </div>
     </div>
 </div>

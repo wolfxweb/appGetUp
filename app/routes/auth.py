@@ -141,9 +141,9 @@ async def register(
             data={"sub": email}
         )
         
-        # Configurar cookie com o token
+        # Configurar cookie com o token e redirecionar
         response = JSONResponse(
-            content={"redirect": "/basic-data"},
+            content={"redirect": "/dashboard"},
             status_code=200
         )
         response.set_cookie(
@@ -194,7 +194,7 @@ async def login(
         
         # Configurar cookie com o token e redirecionar
         response = JSONResponse(
-            content={"redirect": "/basic-data"},
+            content={"redirect": "/dashboard"},
             status_code=200
         )
         response.set_cookie(
@@ -212,6 +212,16 @@ async def login(
             status_code=500,
             content={"detail": f"Erro ao fazer login: {str(e)}"}
         )
+
+@router.get("/home", response_class=HTMLResponse)
+async def home_page(request: Request, current_user = Depends(get_current_user)):
+    if not current_user:
+        return RedirectResponse(url="/login")
+    
+    return templates.TemplateResponse("home.html", {
+        "request": request,
+        "user": current_user
+    })
 
 @router.get("/forgot-password", response_class=HTMLResponse)
 async def forgot_password_page(request: Request):
@@ -349,4 +359,15 @@ async def edit_basic_data_page(
         "page": page,
         "total_pages": total_pages,
         "user": current_user
+    })
+
+@router.get("/dashboard", response_class=HTMLResponse)
+async def dashboard_page(request: Request, current_user = Depends(get_current_user)):
+    if not current_user:
+        return RedirectResponse(url="/login")
+    
+    return templates.TemplateResponse("dashboard.html", {
+        "request": request,
+        "user": current_user,
+        "now": datetime.now()
     }) 

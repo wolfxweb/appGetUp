@@ -12,3 +12,14 @@ python app/main.py
 
 cd /Users/wolfx/Documents/appGetUp
 python -m uvicorn app.main:app --reload
+
+
+cor de funco e9ecb
+cor fundo formulario D3D3D3
+
+#F5F5F5 - Branco gelo
+#F0F0F0 - Branco 50
+#E8E8E8 - Branco acinzentado
+#E0E0E0 - Branco cinza claro
+#D3D3D3 - Cinza claro (Light Gray)
+#DCDCDC - Gainsboro (um tom de cinza muito claro)bg-secondary text-white
