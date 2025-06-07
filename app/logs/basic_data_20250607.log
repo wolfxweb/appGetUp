@@ -871,3 +871,11 @@ WHERE ? = basic_data_logs.basic_data_id]
 2025-06-07 17:04:31,173 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=10300.0, other_fixed_costs=13000.0
 2025-06-07 17:04:31,174 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=5000.0, sales_expenses=1000.0, input_product_expenses=1700.0
 2025-06-07 17:04:31,174 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=1030.0, other_fixed_costs=1300.0
+2025-06-07 17:04:57,745 - app.routes.basic_data_operations - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 100 para 10000
+2025-06-07 17:04:57,745 - app.routes.basic_data_operations - INFO - Alteração detectada: Margem de Lucro Ideal de 100 para 52
+2025-06-07 17:04:57,786 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-06-07 17:04:57,787 - app.routes.basic_data - INFO - Registro ID 1: month=6, year=2025, clients_served=10000
+2025-06-07 17:04:57,787 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=50000.0, sales_expenses=10000.0, input_product_expenses=17000.0
+2025-06-07 17:04:57,788 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=10300.0, other_fixed_costs=13000.0
+2025-06-07 17:04:57,788 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=5000.0, sales_expenses=1000.0, input_product_expenses=1700.0
+2025-06-07 17:04:57,788 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=1030.0, other_fixed_costs=1300.0
