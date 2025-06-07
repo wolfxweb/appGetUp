@@ -238,8 +238,16 @@
                                             </div>
                                         </div>
 
-                                        <!-- Segunda linha: Faturamento e Quantidade de Clientes -->
+                                        <!-- Segunda linha: Clientes e Faturamento -->
                                         <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="clients_served" class="form-label">
+                                                    Quantidade de Clientes Atendidos* 
+                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#clientsServedHelpModal"></i>
+                                                </label>
+                                                <input type="number" class="form-control" id="clients_served" name="clients_served" 
+                                                    value="{{ basic_data.clients_served if basic_data else '' }}" required min="0">
+                                            </div>
                                             <div class="col-md-6 mb-3">
                                                 <label for="sales_revenue" class="form-label">
                                                     Faturamento com Vendas* 
@@ -251,28 +259,20 @@
                                                         required pattern="^R?\$?\s*[\d.,]+$">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="clients_served" class="form-label">
-                                                    Quantidade de Clientes Atendidos
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#clientsServedHelpModal"></i>
-                                                </label>
-                                                <input type="number" class="form-control" id="clients_served" name="clients_served" 
-                                                    value="{{ basic_data.clients_served if basic_data else '' }}" min="0">
-                                            </div>
                                         </div>
 
                                         <!-- Terceira linha: Gastos -->
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label for="sales_expenses" class="form-label">
-                                                    Gastos com Vendas 
+                                                    Gastos com Vendas* 
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
                                                         <input type="text" class="form-control" id="sales_expenses_display" 
                                                             value="{{ basic_data.sales_expenses|float if basic_data and basic_data.sales_expenses is not none else '' }}" 
-                                                            pattern="^R?\$?\s*[\d.,]+$">
+                                                            required pattern="^R?\$?\s*[\d.,]+$">
                                                         <input type="hidden" id="sales_expenses" name="sales_expenses" value="{{ basic_data.sales_expenses|float if basic_data and basic_data.sales_expenses is not none else '0' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
@@ -301,12 +301,28 @@
                                             </div>
                                         </div>
 
-                                        <!-- Quarta linha: Custos Fixos e Capacidade de Atendimento -->
+                                        <!-- Quarta linha: Pró-labore e Custos Fixos -->
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
+                                                <label for="pro_labore" class="form-label">
+                                                    Pró-labore 
+                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal"></i>
+                                                </label>
+                                                <div class="input-group">
+                                                    <div class="col-9 p-0">
+                                                        <input type="text" class="form-control" id="pro_labore" name="pro_labore" 
+                                                            value="{{ basic_data.pro_labore|round(2) if basic_data and basic_data.pro_labore is not none else '' }}">
+                                                    </div>
+                                                    <div class="col-3 p-0">
+                                                        <input type="text" class="form-control" id="pro_labore_percentual" readonly>
+                                                        <input type="hidden" id="pro_labore_percentual_hidden" name="pro_labore_percentual">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
                                                 <label for="other_fixed_costs" class="form-label">
-                                                    Custos Fixos 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i>
+                                                    Demais Custos Fixos* 
+                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#otherFixedCostsHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
@@ -314,14 +330,26 @@
                                                             value="{{ basic_data.other_fixed_costs|round(2) if basic_data and basic_data.other_fixed_costs is not none else '' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
-                                                        <input type="text" class="form-control" id="other_fixed_costs_percentual" readonly>
+                                                        <input type="text" class="form-control" id="other_fixed_costs_percentual" name="other_fixed_costs_percentual" readonly>
                                                         <input type="hidden" id="other_fixed_costs_percentual_hidden" name="other_fixed_costs_percentual_hidden">
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+
+                                        <!-- Quinta linha: Horas e Capacidade -->
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label for="work_hours_per_week" class="form-label">
+                                                    Horas de Trabalho por Semana 
+                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i>
+                                                </label>
+                                                <input type="number" step="1" class="form-control" id="work_hours_per_week" name="work_hours_per_week" 
+                                                    value="{{ basic_data.work_hours_per_week|int if basic_data and basic_data.work_hours_per_week else '' }}" min="0" max="168">
+                                            </div>
                                             <div class="col-md-6 mb-3">
                                                 <label for="service_capacity" class="form-label">
-                                                    Capacidade de Atendimento
+                                                    Capacidade de Atendimento 
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#serviceCapacityHelpModal"></i>
                                                 </label>
                                                 <input type="text" class="form-control" id="service_capacity" name="service_capacity" 
@@ -329,13 +357,13 @@
                                             </div>
                                         </div>
 
-                                        <!-- Quinta linha: Margem de Lucro Ideal -->
+                                        <!-- Sexta linha: Margem de Lucro -->
                                         <div class="row justify-content-center">
                                             <div class="col-md-4">
                                                 <div class="text-center mb-2">
                                                     <label for="ideal_service_profit_margin" class="form-label">
                                                         Margem de Lucro Ideal (%)
-                                                        <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#idealProfitMarginHelpModal"></i>
+                                                        <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#idealServiceProfitMarginHelpModal"></i>
                                                     </label>
                                                 </div>
                                                 <div class="input-group">
@@ -437,14 +465,14 @@
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label for="sales_expenses" class="form-label">
-                                                    Gastos com Vendas 
+                                                    Gastos com Vendas* 
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
                                                         <input type="text" class="form-control" id="sales_expenses_display" 
                                                             value="{{ basic_data.sales_expenses|float if basic_data and basic_data.sales_expenses is not none else '' }}" 
-                                                            pattern="^R?\$?\s*[\d.,]+$">
+                                                            required pattern="^R?\$?\s*[\d.,]+$">
                                                         <input type="hidden" id="sales_expenses" name="sales_expenses" value="{{ basic_data.sales_expenses|float if basic_data and basic_data.sales_expenses is not none else '0' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
