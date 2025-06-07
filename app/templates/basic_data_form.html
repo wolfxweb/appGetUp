@@ -783,40 +783,77 @@
     // Função para formatar valores monetários
     function formatarMoeda(valor) {
         if (!valor) return '';
+        
         // Remove caracteres não numéricos exceto ponto e vírgula
-        valor = valor.toString().replace(/[^\d.,]/g, '');
-        // Converte para número
-        const numero = parseFloat(valor.replace(',', '.'));
-        if (isNaN(numero)) return '';
-        // Formata como moeda brasileira
-        return numero.toLocaleString('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
+        let valorLimpo = valor.toString().replace(/[^\d.,]/g, '');
+        
+        // Se não tem vírgula nem ponto, assume que é um número inteiro
+        if (!valorLimpo.includes(',') && !valorLimpo.includes('.')) {
+            const numero = parseFloat(valorLimpo);
+            if (isNaN(numero)) return '';
+            return numero.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+        
+        // Se tem vírgula, trata como formato brasileiro (vírgula = decimal)
+        if (valorLimpo.includes(',')) {
+            // Se tem ponto antes da vírgula, remove pontos (separadores de milhares)
+            const partes = valorLimpo.split(',');
+            if (partes.length === 2) {
+                const inteira = partes[0].replace(/\./g, '');
+                const decimal = partes[1];
+                const numero = parseFloat(inteira + '.' + decimal);
+                if (isNaN(numero)) return '';
+                return numero.toLocaleString('pt-BR', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            }
+        }
+        
+        // Se tem apenas ponto, trata como decimal
+        if (valorLimpo.includes('.') && !valorLimpo.includes(',')) {
+            const numero = parseFloat(valorLimpo);
+            if (isNaN(numero)) return '';
+            return numero.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+        
+        return valor.toString();
     }
 
     // Função para converter valor formatado para número
     function converterParaNumero(valor) {
         if (!valor) return 0;
-        // Remove caracteres não numéricos exceto ponto e vírgula
-        valor = valor.toString().replace(/[^\d.,]/g, '');
+        // Remove pontos (separadores de milhares)
+        valor = valor.toString().replace(/\./g, '');
+        // Substitui a vírgula por ponto (separador decimal)
+        valor = valor.replace(',', '.');
+        // Remove qualquer outro caractere não numérico exceto o ponto decimal
+        valor = valor.replace(/[^\d.]/g, '');
         // Converte para número
-        return parseFloat(valor.replace(',', '.'));
+        return parseFloat(valor) || 0;
     }
 
     // Função para calcular porcentagem
     function calcularPorcentagem(valor, receita) {
         if (!valor || !receita || receita === 0) return '';
-        const porcentagem = (converterParaNumero(valor) / converterParaNumero(receita)) * 100;
+        // Remove caracteres não numéricos e converte para número
+        const valorNumerico = converterParaNumero(valor);
+        const receitaNumerica = converterParaNumero(receita);
+        const porcentagem = (valorNumerico / receitaNumerica) * 100;
         return porcentagem.toFixed(2) + '%';
     }
 
     // Função para verificar e aplicar cor na porcentagem
     function verificarPorcentagem(campo) {
         if (!campo.value) return;
-        const valor = parseFloat(campo.value);
+        // Remove o símbolo % e converte para número
+        const valor = parseFloat(campo.value.replace('%', ''));
         if (valor > 100) {
             campo.classList.add('invalid-percentage');
         } else {
@@ -838,43 +875,6 @@
         const inputProductExpenses = document.getElementById('input_product_expenses');
         if (inputProductExpensesDisplay && inputProductExpenses) {
             inputProductExpenses.value = converterParaNumero(inputProductExpensesDisplay.value);
-        }
-    }
-
-    // Função para atualizar todas as porcentagens
-    function atualizarPorcentagens() {
-        const receita = document.getElementById('sales_revenue').value;
-        
-        // Atualizar porcentagem de gastos com vendas
-        const salesExpensesDisplay = document.getElementById('sales_expenses_display');
-        const salesExpensesPercentual = document.getElementById('sales_expenses_percentual');
-        if (salesExpensesDisplay && salesExpensesPercentual) {
-            salesExpensesPercentual.value = calcularPorcentagem(salesExpensesDisplay.value, receita);
-            verificarPorcentagem(salesExpensesPercentual);
-        }
-
-        // Atualizar porcentagem de gastos com insumos
-        const inputProductExpensesDisplay = document.getElementById('input_product_expenses_display');
-        const inputProductExpensesPercentual = document.getElementById('input_product_expenses_percentual');
-        if (inputProductExpensesDisplay && inputProductExpensesPercentual) {
-            inputProductExpensesPercentual.value = calcularPorcentagem(inputProductExpensesDisplay.value, receita);
-            verificarPorcentagem(inputProductExpensesPercentual);
-        }
-
-        // Atualizar porcentagem de pró-labore
-        const proLabore = document.getElementById('pro_labore');
-        const proLaborePercentual = document.getElementById('pro_labore_percentual');
-        if (proLabore && proLaborePercentual) {
-            proLaborePercentual.value = calcularPorcentagem(proLabore.value, receita);
-            verificarPorcentagem(proLaborePercentual);
-        }
-
-        // Atualizar porcentagem de custos fixos
-        const otherFixedCosts = document.getElementById('other_fixed_costs');
-        const otherFixedCostsPercentual = document.getElementById('other_fixed_costs_percentual');
-        if (otherFixedCosts && otherFixedCostsPercentual) {
-            otherFixedCostsPercentual.value = calcularPorcentagem(otherFixedCosts.value, receita);
-            verificarPorcentagem(otherFixedCostsPercentual);
         }
     }
 
@@ -915,36 +915,78 @@
             const field = document.getElementById(fieldId);
             if (field) {
                 field.addEventListener('input', function(e) {
-                    // Preserva a posição do cursor
-                    const start = this.selectionStart;
-                    const end = this.selectionEnd;
-                    
-                    // Formata o valor
-                    this.value = formatarMoeda(this.value);
-                    
-                    // Restaura a posição do cursor
-                    const newLength = this.value.length;
-                    const newStart = Math.min(start, newLength);
-                    const newEnd = Math.min(end, newLength);
-                    this.setSelectionRange(newStart, newEnd);
-                    
-                    atualizarPorcentagens();
+                    // Durante a digitação, apenas recalcula as porcentagens
+                    // Não formata o valor para não interferir na digitação
+                    recalcularPorcentagens();
                 });
 
                 field.addEventListener('blur', function() {
+                    // Ao sair do campo, formata o valor
                     this.value = formatarMoeda(this.value);
-                    atualizarPorcentagens();
+                    recalcularPorcentagens();
                 });
             }
         });
 
+        // Função para recalcular todas as porcentagens
+        function recalcularPorcentagens() {
+            const receita = converterParaNumero(document.getElementById('sales_revenue').value);
+            
+            // Recalcular porcentagem de gastos com vendas em relação ao faturamento
+            const salesExpensesDisplay = document.getElementById('sales_expenses_display');
+            const salesExpensesPercentual = document.getElementById('sales_expenses_percentual');
+            if (salesExpensesDisplay && salesExpensesPercentual && receita > 0) {
+                const valorGastos = converterParaNumero(salesExpensesDisplay.value);
+                const porcentagem = (valorGastos / receita) * 100;
+                salesExpensesPercentual.value = porcentagem.toFixed(2) + '%';
+                verificarPorcentagem(salesExpensesPercentual);
+            } else if (salesExpensesPercentual) {
+                salesExpensesPercentual.value = '0.00%';
+            }
+
+            // Recalcular porcentagem de gastos com insumos em relação ao faturamento
+            const inputProductExpensesDisplay = document.getElementById('input_product_expenses_display');
+            const inputProductExpensesPercentual = document.getElementById('input_product_expenses_percentual');
+            if (inputProductExpensesDisplay && inputProductExpensesPercentual && receita > 0) {
+                const valorInsumos = converterParaNumero(inputProductExpensesDisplay.value);
+                const porcentagem = (valorInsumos / receita) * 100;
+                inputProductExpensesPercentual.value = porcentagem.toFixed(2) + '%';
+                verificarPorcentagem(inputProductExpensesPercentual);
+            } else if (inputProductExpensesPercentual) {
+                inputProductExpensesPercentual.value = '0.00%';
+            }
+
+            // Recalcular porcentagem de pró-labore em relação ao faturamento
+            const proLabore = document.getElementById('pro_labore');
+            const proLaborePercentual = document.getElementById('pro_labore_percentual');
+            if (proLabore && proLaborePercentual && receita > 0) {
+                const valorProLabore = converterParaNumero(proLabore.value);
+                const porcentagem = (valorProLabore / receita) * 100;
+                proLaborePercentual.value = porcentagem.toFixed(2) + '%';
+                verificarPorcentagem(proLaborePercentual);
+            } else if (proLaborePercentual) {
+                proLaborePercentual.value = '0.00%';
+            }
+
+            // Recalcular porcentagem de custos fixos em relação ao faturamento
+            const otherFixedCosts = document.getElementById('other_fixed_costs');
+            const otherFixedCostsPercentual = document.getElementById('other_fixed_costs_percentual');
+            if (otherFixedCosts && otherFixedCostsPercentual && receita > 0) {
+                const valorCustosFixos = converterParaNumero(otherFixedCosts.value);
+                const porcentagem = (valorCustosFixos / receita) * 100;
+                otherFixedCostsPercentual.value = porcentagem.toFixed(2) + '%';
+                verificarPorcentagem(otherFixedCostsPercentual);
+            } else if (otherFixedCostsPercentual) {
+                otherFixedCostsPercentual.value = '0.00%';
+            }
+        }
+
         // Atualizar porcentagens ao carregar a página
-        atualizarPorcentagens();
+        recalcularPorcentagens();
         
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             updateHiddenFields();
-            atualizarPorcentagens();
             form.submit();
         });
     });
