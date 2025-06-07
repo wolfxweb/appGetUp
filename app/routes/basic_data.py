@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request, status, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, delete
 from datetime import datetime
 import logging
 import os
@@ -10,6 +10,7 @@ import os
 from app.database.db import get_db
 from app.models.user import User
 from app.models.basic_data import BasicData
+from app.models.basic_data_log import BasicDataLog
 from app.routes.auth import get_current_user
 from app.schemas.basic_data import BasicDataForm
 
@@ -116,7 +117,12 @@ async def delete_basic_data(
                 status_code=status.HTTP_303_SEE_OTHER
             )
         
-        # Excluir o registro
+        # Primeiro, deletar os logs associados
+        await db.execute(
+            delete(BasicDataLog).where(BasicDataLog.basic_data_id == data_id)
+        )
+        
+        # Depois, deletar o registro principal
         await db.delete(basic_data)
         await db.commit()
         
