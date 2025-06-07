@@ -103,20 +103,20 @@ content %}
                   <td>{{ ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'][data.month - 1] }}</td>
                   <td>{{ data.year }}</td>
                   <td>{{ data.clients_served }}</td>
-                  <td>R$ {{ "{:,.2f}".format(data.sales_revenue/10).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
-                  <td>R$ {{ "{:,.2f}".format(data.sales_expenses/10).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
-                  <td>R$ {{ "{:,.2f}".format(data.input_product_expenses/10).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
+                  <td>R$ {{ "{:,.2f}".format(data.sales_revenue).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
+                  <td>R$ {{ "{:,.2f}".format(data.sales_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
+                  <td>R$ {{ "{:,.2f}".format(data.input_product_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
                   {% if user.activity_type == 'Serviços' %}
                   <td>
                     {% if data.pro_labore is not none %}
-                      R$ {{ "{:,.2f}".format(data.pro_labore/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                      R$ {{ "{:,.2f}".format(data.pro_labore).replace(",", "X").replace(".", ",").replace("X", ".") }}
                     {% else %}
                       N/A
                     {% endif %}
                   </td>
                   <td>
                     {% if data.other_fixed_costs is not none %}
-                      R$ {{ "{:,.2f}".format(data.other_fixed_costs/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                      R$ {{ "{:,.2f}".format(data.other_fixed_costs).replace(",", "X").replace(".", ",").replace("X", ".") }}
                     {% else %}
                       N/A
                     {% endif %}
