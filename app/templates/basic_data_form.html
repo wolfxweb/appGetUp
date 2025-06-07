@@ -94,6 +94,29 @@
         border-color: #dc3545 !important;
         color: #dc3545 !important;
     }
+
+    /* Pagination icons styling */
+    .pagination .page-link {
+        color: #6c757d !important;
+        border-color: #6c757d !important;
+    }
+    
+    .pagination .page-link:hover {
+        color: #5a6268 !important;
+        background-color: #e9ecef !important;
+        border-color: #5a6268 !important;
+    }
+    
+    .pagination .page-item.active .page-link {
+        background-color: #6c757d !important;
+        border-color: #6c757d !important;
+        color: white !important;
+    }
+    
+    .pagination .page-item.disabled .page-link {
+        color: #adb5bd !important;
+        border-color: #dee2e6 !important;
+    }
 </style>
 {% endblock %}
 
@@ -524,10 +547,10 @@
 
     <!-- Tabela de Logs - Movida para fora do card principal -->
     {% if edit_mode %}
-    <div class="row mt-4">
+    <div class="row mt-4 mb-5">
         <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
+            <div class="card" style="background-color: #F0F0F0;">
+                <div class="card-header bg-secondary text-white">
                     <h5 class="mb-0">Histórico de Alterações</h5>
                 </div>
                 <div class="card-body">
@@ -565,6 +588,84 @@
                     </table>
                     {% if logs|length == 0 %}
                     <p class="text-muted">Nenhuma alteração registrada.</p>
+                    {% endif %}
+                    
+                    <!-- Controles de Paginação -->
+                    {% if total_pages > 1 %}
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="text-muted">
+                            Mostrando {{ logs|length }} de {{ total_logs }} registros
+                            (Página {{ current_page }} de {{ total_pages }})
+                        </div>
+                        <nav aria-label="Paginação do histórico">
+                            <ul class="pagination pagination-sm mb-0">
+                                <!-- Primeira página -->
+                                {% if current_page > 1 %}
+                                <li class="page-item">
+                                    <a class="page-link" href="/basic-data/edit/{{ basic_data.id }}?page=1" aria-label="Primeira">
+                                        <span aria-hidden="true">&laquo;&laquo;</span>
+                                    </a>
+                                </li>
+                                <!-- Página anterior -->
+                                <li class="page-item">
+                                    <a class="page-link" href="/basic-data/edit/{{ basic_data.id }}?page={{ current_page - 1 }}" aria-label="Anterior">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">&laquo;&laquo;</span>
+                                </li>
+                                <li class="page-item disabled">
+                                    <span class="page-link">&laquo;</span>
+                                </li>
+                                {% endif %}
+                                
+                                <!-- Páginas numeradas -->
+                                {% for page_num in range(1, total_pages + 1) %}
+                                    {% if page_num == current_page %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_num }}</span>
+                                    </li>
+                                    {% elif page_num >= current_page - 2 and page_num <= current_page + 2 %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="/basic-data/edit/{{ basic_data.id }}?page={{ page_num }}">{{ page_num }}</a>
+                                    </li>
+                                    {% elif page_num == 1 or page_num == total_pages %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="/basic-data/edit/{{ basic_data.id }}?page={{ page_num }}">{{ page_num }}</a>
+                                    </li>
+                                    {% elif page_num == current_page - 3 or page_num == current_page + 3 %}
+                                    <li class="page-item disabled">
+                                        <span class="page-link">...</span>
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                <!-- Próxima página -->
+                                {% if current_page < total_pages %}
+                                <li class="page-item">
+                                    <a class="page-link" href="/basic-data/edit/{{ basic_data.id }}?page={{ current_page + 1 }}" aria-label="Próxima">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                                <!-- Última página -->
+                                <li class="page-item">
+                                    <a class="page-link" href="/basic-data/edit/{{ basic_data.id }}?page={{ total_pages }}" aria-label="Última">
+                                        <span aria-hidden="true">&raquo;&raquo;</span>
+                                    </a>
+                                </li>
+                                {% else %}
+                                <li class="page-item disabled">
+                                    <span class="page-link">&raquo;</span>
+                                </li>
+                                <li class="page-item disabled">
+                                    <span class="page-link">&raquo;&raquo;</span>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -983,6 +1084,127 @@
 
         // Atualizar porcentagens ao carregar a página
         recalcularPorcentagens();
+        
+        // Funcionalidade de filtros para o histórico de alterações
+        const logFilter = document.getElementById('logFilter');
+        const dateFilter = document.getElementById('dateFilter');
+        const logsTable = document.getElementById('logsTable');
+        
+        if (logFilter && dateFilter && logsTable) {
+            // Função para filtrar as linhas da tabela
+            function filterLogs() {
+                const filterText = logFilter.value.toLowerCase();
+                const filterDate = dateFilter.value;
+                const rows = logsTable.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+                
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
+                    const description = row.cells[0].textContent.toLowerCase();
+                    const dateCell = row.cells[1].textContent;
+                    
+                    // Converter data brasileira (dd/mm/yyyy) para formato compatível com input date (yyyy-mm-dd)
+                    let rowDate = '';
+                    if (dateCell) {
+                        const dateParts = dateCell.split('/');
+                        if (dateParts.length === 3) {
+                            rowDate = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`;
+                        }
+                    }
+                    
+                    // Verificar se a linha atende aos critérios de filtro
+                    const matchesText = !filterText || description.includes(filterText);
+                    const matchesDate = !filterDate || rowDate === filterDate;
+                    
+                    if (matchesText && matchesDate) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                }
+                
+                // Mostrar mensagem se nenhum resultado for encontrado
+                updateNoResultsMessage();
+            }
+            
+            // Função para mostrar/esconder mensagem de "nenhum resultado"
+            function updateNoResultsMessage() {
+                const tbody = logsTable.getElementsByTagName('tbody')[0];
+                const rows = tbody.getElementsByTagName('tr');
+                let hasVisibleRows = false;
+                let hasRealRows = 0;
+                
+                // Primeiro, remover qualquer mensagem existente
+                const existingMessage = tbody.querySelector('.no-results-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+                
+                // Contar linhas reais (excluindo mensagens) e verificar quais estão visíveis
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
+                    // Ignorar linhas que são mensagens de "nenhum resultado"
+                    if (!row.className.includes('no-results-message')) {
+                        hasRealRows++;
+                        // Verificar se a linha está visível (display não é 'none')
+                        const computedStyle = window.getComputedStyle(row);
+                        if (computedStyle.display !== 'none' && row.style.display !== 'none') {
+                            hasVisibleRows = true;
+                        }
+                    }
+                }
+                
+                // Só adicionar mensagem se há registros reais mas nenhum está visível
+                if (hasRealRows > 0 && !hasVisibleRows) {
+                    const messageRow = document.createElement('tr');
+                    messageRow.className = 'no-results-message';
+                    messageRow.innerHTML = '<td colspan="2" class="text-center text-muted">Nenhuma alteração encontrada com os filtros aplicados.</td>';
+                    tbody.appendChild(messageRow);
+                }
+            }
+            
+            // Adicionar event listeners para os filtros
+            logFilter.addEventListener('input', filterLogs);
+            dateFilter.addEventListener('change', filterLogs);
+            
+            // Função para limpar filtros
+            function clearFilters() {
+                logFilter.value = '';
+                dateFilter.value = '';
+                
+                // Garantir que todas as linhas reais estejam visíveis
+                const tbody = logsTable.getElementsByTagName('tbody')[0];
+                const rows = tbody.getElementsByTagName('tr');
+                
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
+                    // Só mostrar linhas que não são mensagens
+                    if (!row.className.includes('no-results-message')) {
+                        row.style.display = '';
+                    }
+                }
+                
+                // Remover qualquer mensagem de "nenhum resultado"
+                const existingMessage = tbody.querySelector('.no-results-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+            }
+            
+            // Adicionar botão para limpar filtros (opcional)
+            const clearButton = document.createElement('button');
+            clearButton.type = 'button';
+            clearButton.className = 'btn btn-outline-secondary btn-sm';
+            clearButton.textContent = 'Limpar Filtros';
+            clearButton.onclick = clearFilters;
+            
+            // Inserir o botão após o campo de data
+            if (dateFilter.parentNode && dateFilter.parentNode.parentNode) {
+                const buttonCol = document.createElement('div');
+                buttonCol.className = 'col-md-12 mt-2 text-end';
+                buttonCol.appendChild(clearButton);
+                dateFilter.parentNode.parentNode.appendChild(buttonCol);
+            }
+        }
         
         form.addEventListener('submit', function(e) {
             e.preventDefault();
