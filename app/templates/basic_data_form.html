@@ -771,12 +771,26 @@
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('basicDataForm');
-    
+    // Função para formatar valores monetários
+    function formatarMoeda(valor) {
+        if (!valor) return '';
+        // Remove caracteres não numéricos
+        valor = valor.replace(/\D/g, '');
+        // Converte para número e divide por 100 para obter os centavos
+        const numero = parseInt(valor) / 100;
+        if (isNaN(numero)) return '';
+        // Formata como moeda brasileira
+        return numero.toLocaleString('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
     // Função para calcular porcentagem
     function calcularPorcentagem(valor, receita) {
-        if (!valor || !receita || receita === 0) return '0%';
+        if (!valor || !receita || receita === 0) return '';
         const porcentagem = (parseFloat(valor) / parseFloat(receita)) * 100;
         return porcentagem.toFixed(2) + '%';
     }
@@ -787,7 +801,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const salesExpensesDisplay = document.getElementById('sales_expenses_display');
         const salesExpenses = document.getElementById('sales_expenses');
         if (salesExpensesDisplay && salesExpenses) {
-            const value = salesExpensesDisplay.value.replace(/[^\d,]/g, '').replace(',', '.');
+            const value = salesExpensesDisplay.value.replace(/\D/g, '');
             salesExpenses.value = value;
         }
 
@@ -795,17 +809,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const inputProductExpensesDisplay = document.getElementById('input_product_expenses_display');
         const inputProductExpenses = document.getElementById('input_product_expenses');
         if (inputProductExpensesDisplay && inputProductExpenses) {
-            const value = inputProductExpensesDisplay.value.replace(/[^\d,]/g, '').replace(',', '.');
+            const value = inputProductExpensesDisplay.value.replace(/\D/g, '');
             inputProductExpenses.value = value;
         }
     }
 
     // Função para atualizar porcentagens
     function atualizarPorcentagens() {
-        const receita = document.getElementById('sales_revenue').value.replace(/[^\d,]/g, '').replace(',', '.');
+        const receita = document.getElementById('sales_revenue').value.replace(/\D/g, '');
         
         // Gastos com Vendas
-        const gastosVendas = document.getElementById('sales_expenses_display').value.replace(/[^\d,]/g, '').replace(',', '.');
+        const gastosVendas = document.getElementById('sales_expenses_display').value.replace(/\D/g, '');
         const porcentagemVendas = calcularPorcentagem(gastosVendas, receita);
         document.getElementById('sales_expenses_percentual').value = porcentagemVendas;
         document.getElementById('sales_expenses_percentual_hidden').value = porcentagemVendas.replace('%', '');
@@ -820,7 +834,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Gastos com Insumos
-        const gastosInsumos = document.getElementById('input_product_expenses_display').value.replace(/[^\d,]/g, '').replace(',', '.');
+        const gastosInsumos = document.getElementById('input_product_expenses_display').value.replace(/\D/g, '');
         const porcentagemInsumos = calcularPorcentagem(gastosInsumos, receita);
         document.getElementById('input_product_expenses_percentual').value = porcentagemInsumos;
         document.getElementById('input_product_expenses_percentual_hidden').value = porcentagemInsumos.replace('%', '');
@@ -835,7 +849,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Pro-labore
-        const proLabore = document.getElementById('pro_labore').value.replace(/[^\d,]/g, '').replace(',', '.');
+        const proLabore = document.getElementById('pro_labore').value.replace(/\D/g, '');
         const porcentagemProLabore = calcularPorcentagem(proLabore, receita);
         document.getElementById('pro_labore_percentual').value = porcentagemProLabore;
         document.getElementById('pro_labore_percentual_hidden').value = porcentagemProLabore.replace('%', '');
@@ -850,7 +864,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Demais Custos Fixos
-        const demaisCustos = document.getElementById('other_fixed_costs').value.replace(/[^\d,]/g, '').replace(',', '.');
+        const demaisCustos = document.getElementById('other_fixed_costs').value.replace(/\D/g, '');
         const porcentagemDemaisCustos = calcularPorcentagem(demaisCustos, receita);
         document.getElementById('other_fixed_costs_percentual').value = porcentagemDemaisCustos;
         document.getElementById('other_fixed_costs_percentual_hidden').value = porcentagemDemaisCustos.replace('%', '');
@@ -868,48 +882,77 @@ document.addEventListener('DOMContentLoaded', function() {
         updateHiddenFields();
     }
 
-    // Atualizar porcentagens quando os valores mudarem
-    document.getElementById('sales_revenue').addEventListener('input', atualizarPorcentagens);
-    document.getElementById('sales_expenses_display').addEventListener('input', atualizarPorcentagens);
-    document.getElementById('input_product_expenses_display').addEventListener('input', atualizarPorcentagens);
-    document.getElementById('pro_labore').addEventListener('input', atualizarPorcentagens);
-    document.getElementById('other_fixed_costs').addEventListener('input', atualizarPorcentagens);
-
-    // Atualizar porcentagens ao carregar a página
-    atualizarPorcentagens();
-    
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('basicDataForm');
         
-        // Atualizar campos hidden antes do envio
-        updateHiddenFields();
+        // Função para formatar valores iniciais
+        function formatInitialValues() {
+            const fields = [
+                'sales_expenses_display',
+                'input_product_expenses_display',
+                'pro_labore',
+                'other_fixed_costs',
+                'sales_revenue'
+            ];
+
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field && field.value) {
+                    const value = field.value.replace(/\D/g, '');
+                    field.value = formatarMoeda(value);
+                }
+            });
+        }
+
+        // Formatar valores iniciais
+        formatInitialValues();
+
+        // Atualizar campos quando os valores mudarem
+        const monetaryFields = [
+            'sales_expenses_display',
+            'input_product_expenses_display',
+            'pro_labore',
+            'other_fixed_costs',
+            'sales_revenue'
+        ];
+
+        monetaryFields.forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            if (field) {
+                field.addEventListener('input', function(e) {
+                    // Preserva a posição do cursor
+                    const start = this.selectionStart;
+                    const end = this.selectionEnd;
+                    
+                    // Formata o valor
+                    const value = this.value.replace(/\D/g, '');
+                    this.value = formatarMoeda(value);
+                    
+                    // Restaura a posição do cursor
+                    const newLength = this.value.length;
+                    const newStart = Math.min(start, newLength);
+                    const newEnd = Math.min(end, newLength);
+                    this.setSelectionRange(newStart, newEnd);
+                    
+                    atualizarPorcentagens();
+                });
+
+                field.addEventListener('blur', function() {
+                    const value = this.value.replace(/\D/g, '');
+                    this.value = formatarMoeda(value);
+                    atualizarPorcentagens();
+                });
+            }
+        });
+
+        // Atualizar porcentagens ao carregar a página
+        atualizarPorcentagens();
         
-        // Enviar o formulário
-        form.submit();
-    });
-
-    // Função para formatar valores monetários
-    function formatCurrency(value) {
-        if (!value) return '';
-        // Remove caracteres não numéricos
-        value = value.replace(/[^\d,]/g, '');
-        // Converte vírgula para ponto
-        value = value.replace(',', '.');
-        // Formata o número
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        }).format(value);
-    }
-
-    // Atualizar campos quando os valores mudarem
-    const monetaryInputs = document.querySelectorAll('input[type="text"]');
-    monetaryInputs.forEach(input => {
-        input.addEventListener('input', function() {
-            this.value = formatCurrency(this.value);
-            atualizarPorcentagens();
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            updateHiddenFields();
+            form.submit();
         });
     });
-});
 </script>
 {% endblock %}
