@@ -973,3 +973,26 @@ WHERE ? = basic_data_logs.basic_data_id]
 2025-06-07 17:29:53,054 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=130300.0, other_fixed_costs=133000.0
 2025-06-07 17:29:53,054 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=53000.0, sales_expenses=13000.0, input_product_expenses=13700.0
 2025-06-07 17:29:53,055 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=13030.0, other_fixed_costs=13300.0
+2025-06-07 17:31:18,106 - app.routes.basic_data - INFO - Dados básicos encontrados: 2 registros
+2025-06-07 17:31:18,107 - app.routes.basic_data - INFO - Registro ID 2: month=7, year=2025, clients_served=33
+2025-06-07 17:31:18,108 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=3.0, sales_expenses=3.0, input_product_expenses=3.0
+2025-06-07 17:31:18,110 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=3.0, other_fixed_costs=3.0
+2025-06-07 17:31:18,110 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=0.3, sales_expenses=0.3, input_product_expenses=0.3
+2025-06-07 17:31:18,112 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=0.3, other_fixed_costs=0.3
+2025-06-07 17:31:18,113 - app.routes.basic_data - INFO - Registro ID 1: month=6, year=2025, clients_served=100
+2025-06-07 17:31:18,115 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=530000.0, sales_expenses=130000.0, input_product_expenses=137000.0
+2025-06-07 17:31:18,117 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=130300.0, other_fixed_costs=133000.0
+2025-06-07 17:31:18,119 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=53000.0, sales_expenses=13000.0, input_product_expenses=13700.0
+2025-06-07 17:31:18,120 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=13030.0, other_fixed_costs=13300.0
+2025-06-07 17:31:51,047 - app.routes.basic_data - INFO - Dados básicos encontrados: 2 registros
+2025-06-07 17:31:51,048 - app.routes.basic_data - INFO - Registro ID 2: month=7, year=2025, clients_served=33
+2025-06-07 17:31:51,049 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=3.0, sales_expenses=3.0, input_product_expenses=3.0
+2025-06-07 17:31:51,050 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=3.0, other_fixed_costs=3.0
+2025-06-07 17:31:51,052 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=0.3, sales_expenses=0.3, input_product_expenses=0.3
+2025-06-07 17:31:51,053 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=0.3, other_fixed_costs=0.3
+2025-06-07 17:31:51,054 - app.routes.basic_data - INFO - Registro ID 1: month=6, year=2025, clients_served=100
+2025-06-07 17:31:51,054 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=530000.0, sales_expenses=130000.0, input_product_expenses=137000.0
+2025-06-07 17:31:51,054 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=130300.0, other_fixed_costs=133000.0
+2025-06-07 17:31:51,055 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=53000.0, sales_expenses=13000.0, input_product_expenses=13700.0
+2025-06-07 17:31:51,055 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=13030.0, other_fixed_costs=13300.0
+2025-06-07 17:32:04,651 - app.routes.basic_data - ERROR - Erro ao salvar dados básicos: 'total_pages' is undefined
