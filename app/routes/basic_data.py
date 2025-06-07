@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -11,6 +11,7 @@ from app.database.db import get_db
 from app.models.user import User
 from app.models.basic_data import BasicData
 from app.routes.auth import get_current_user
+from app.schemas.basic_data import BasicDataForm
 
 router = APIRouter(prefix="/basic-data")
 
@@ -113,4 +114,107 @@ async def delete_basic_data(
     return RedirectResponse(
         url="/basic-data",
         status_code=status.HTTP_303_SEE_OTHER
-    ) 
+    )
+
+@router.post("/save", response_class=HTMLResponse)
+async def save_basic_data(
+    request: Request,
+    current_user = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+    month: int = Form(...),
+    year: int = Form(...),
+    clients_served: int = Form(...),
+    sales_revenue: str = Form(...),
+    sales_expenses: str = Form(...),
+    input_product_expenses: str = Form(...),
+    fixed_costs: str = Form(None),
+    ideal_profit_margin: float = Form(None),
+    service_capacity: str = Form(None),
+    pro_labore: str = Form(None),
+    work_hours_per_week: float = Form(None),
+    other_fixed_costs: str = Form(None),
+    ideal_service_profit_margin: float = Form(None)
+):
+    try:
+        # Verificar se já existe um registro para o mesmo mês/ano
+        result = await db.execute(
+            select(BasicData)
+            .filter(
+                BasicData.user_id == current_user.id,
+                BasicData.month == month,
+                BasicData.year == year
+            )
+        )
+        existing_data = result.scalar_one_or_none()
+        
+        if existing_data:
+            return templates.TemplateResponse(
+                "basic_data_form.html",
+                {
+                    "request": request,
+                    "user": current_user,
+                    "error_message": "Já existe um registro para este mês/ano. Por favor, edite o registro existente.",
+                    "basic_data": existing_data,
+                    "edit_mode": True
+                }
+            )
+        
+        # Função para converter valor monetário para float
+        def convert_currency(value: str) -> float:
+            if not value:
+                return 0.0
+            # Remove caracteres não numéricos e converte vírgula para ponto
+            value = value.replace('R$', '').replace('$', '').replace('.', '').replace(',', '.').strip()
+            return float(value) if value else 0.0
+        
+        # Criar novo registro
+        basic_data = BasicData(
+            user_id=current_user.id,
+            month=month,
+            year=year,
+            activity_type=current_user.activity_type,
+            clients_served=clients_served,
+            sales_revenue=int(convert_currency(sales_revenue) * 100),  # Multiplicar por 100 para armazenar em centavos
+            sales_expenses=int(convert_currency(sales_expenses) * 100),
+            input_product_expenses=int(convert_currency(input_product_expenses) * 100),
+            fixed_costs=int(convert_currency(fixed_costs) * 100) if fixed_costs else None,
+            ideal_profit_margin=float(ideal_profit_margin) if ideal_profit_margin else None,
+            service_capacity=service_capacity,
+            pro_labore=int(convert_currency(pro_labore) * 100) if pro_labore else None,
+            work_hours_per_week=float(work_hours_per_week) if work_hours_per_week else None,
+            other_fixed_costs=int(convert_currency(other_fixed_costs) * 100) if other_fixed_costs else None,
+            ideal_service_profit_margin=float(ideal_service_profit_margin) if ideal_service_profit_margin else None,
+            is_current=True
+        )
+        
+        # Desativar is_current de outros registros
+        result = await db.execute(
+            select(BasicData)
+            .filter(
+                BasicData.user_id == current_user.id,
+                BasicData.is_current == True
+            )
+        )
+        other_records = result.scalars().all()
+        for record in other_records:
+            record.is_current = False
+        
+        # Salvar novo registro
+        db.add(basic_data)
+        await db.commit()
+        
+        return RedirectResponse(
+            url="/basic-data",
+            status_code=status.HTTP_303_SEE_OTHER
+        )
+        
+    except Exception as e:
+        logger.error(f"Erro ao salvar dados básicos: {str(e)}")
+        return templates.TemplateResponse(
+            "basic_data_form.html",
+            {
+                "request": request,
+                "user": current_user,
+                "error_message": f"Erro ao salvar dados: {str(e)}"
+            }
+        ) 

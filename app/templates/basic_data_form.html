@@ -87,6 +87,11 @@
         background-color: #ffebee !important;
         border-color: #dc3545 !important;
     }
+
+    #demais_custos_fixos_percentual.invalid-percentage {
+        background-color: #ffebee !important;
+        border-color: #dc3545 !important;
+    }
 </style>
 {% endblock %}
 
@@ -231,32 +236,38 @@
                                         <!-- Terceira linha: Gastos -->
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <label for="gastos_vendas" class="form-label">
+                                                <label for="sales_expenses" class="form-label">
                                                     Gastos com Vendas* 
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
-                                                        <input type="text" class="form-control" id="gastos_vendas" name="gastos_vendas" required>
+                                                        <input type="text" class="form-control" id="sales_expenses_display" 
+                                                            value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '' }}" 
+                                                            required pattern="^R?\$?\s*[\d.,]+$">
+                                                        <input type="hidden" id="sales_expenses" name="sales_expenses" value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '0' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
-                                                        <input type="text" class="form-control" id="gastos_vendas_percentual" readonly>
-                                                        <input type="hidden" id="gastos_vendas_percentual_hidden" name="gastos_vendas_percentual">
+                                                        <input type="text" class="form-control" id="sales_expenses_percentual" readonly>
+                                                        <input type="hidden" id="sales_expenses_percentual_hidden" name="sales_expenses_percentual">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="gastos_insumos" class="form-label">
+                                                <label for="input_product_expenses" class="form-label">
                                                     Gastos com Insumos e Produtos* 
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#inputProductExpensesHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
-                                                        <input type="text" class="form-control" id="gastos_insumos" name="gastos_insumos" required>
+                                                        <input type="text" class="form-control" id="input_product_expenses_display" 
+                                                            value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '' }}" 
+                                                            required pattern="^R?\$?\s*[\d.,]+$">
+                                                        <input type="hidden" id="input_product_expenses" name="input_product_expenses" value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '0' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
-                                                        <input type="text" class="form-control" id="gastos_insumos_percentual" readonly>
-                                                        <input type="hidden" id="gastos_insumos_percentual_hidden" name="gastos_insumos_percentual">
+                                                        <input type="text" class="form-control" id="input_product_expenses_percentual" readonly>
+                                                        <input type="hidden" id="input_product_expenses_percentual_hidden" name="input_product_expenses_percentual">
                                                     </div>
                                                 </div>
                                             </div>
@@ -419,32 +430,38 @@
                                         <!-- Terceira linha: Gastos -->
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
-                                                <label for="gastos_vendas" class="form-label">
+                                                <label for="sales_expenses" class="form-label">
                                                     Gastos com Vendas* 
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
-                                                        <input type="text" class="form-control" id="gastos_vendas" name="gastos_vendas" required>
+                                                        <input type="text" class="form-control" id="sales_expenses_display" 
+                                                            value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '' }}" 
+                                                            required pattern="^R?\$?\s*[\d.,]+$">
+                                                        <input type="hidden" id="sales_expenses" name="sales_expenses" value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '0' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
-                                                        <input type="text" class="form-control" id="gastos_vendas_percentual" readonly>
-                                                        <input type="hidden" id="gastos_vendas_percentual_hidden" name="gastos_vendas_percentual">
+                                                        <input type="text" class="form-control" id="sales_expenses_percentual" readonly>
+                                                        <input type="hidden" id="sales_expenses_percentual_hidden" name="sales_expenses_percentual">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label for="gastos_insumos" class="form-label">
+                                                <label for="input_product_expenses" class="form-label">
                                                     Gastos com Insumos e Produtos* 
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#inputProductExpensesHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
-                                                        <input type="text" class="form-control" id="gastos_insumos" name="gastos_insumos" required>
+                                                        <input type="text" class="form-control" id="input_product_expenses_display" 
+                                                            value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '' }}" 
+                                                            required pattern="^R?\$?\s*[\d.,]+$">
+                                                        <input type="hidden" id="input_product_expenses" name="input_product_expenses" value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '0' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
-                                                        <input type="text" class="form-control" id="gastos_insumos_percentual" readonly>
-                                                        <input type="hidden" id="gastos_insumos_percentual_hidden" name="gastos_insumos_percentual">
+                                                        <input type="text" class="form-control" id="input_product_expenses_percentual" readonly>
+                                                        <input type="hidden" id="input_product_expenses_percentual_hidden" name="input_product_expenses_percentual">
                                                     </div>
                                                 </div>
                                             </div>
@@ -756,527 +773,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('basicDataForm');
     
-    // Função para validar o formulário
-    function validateForm() {
-        let isValid = true;
-        
-        // Validar campos monetários
-        const currencyFields = ['sales_revenue', 'sales_expenses', 'input_product_expenses'];
-        currencyFields.forEach(fieldId => {
-            const field = document.getElementById(fieldId);
-            if (field) {
-                const value = field.value.trim();
-                if (!value || !value.match(/^R?\$?\s*[\d.,]+$/)) {
-                    field.classList.add('is-invalid');
-                    isValid = false;
-                } else {
-                    field.classList.remove('is-invalid');
-                }
-            }
-        });
-        
-        return isValid;
-    }
-    
-    // Adicionar evento de submit ao formulário
-    form.addEventListener('submit', function(e) {
-        if (!validateForm()) {
-            e.preventDefault();
-            return false;
-        }
-    });
-    
-    // Adicionar eventos de input para validação em tempo real
-    const currencyFields = ['sales_revenue', 'sales_expenses', 'input_product_expenses'];
-    currencyFields.forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (field) {
-            field.addEventListener('input', function() {
-                if (this.value.trim().match(/^R?\$?\s*[\d.,]+$/)) {
-                    this.classList.remove('is-invalid');
-                } else {
-                    this.classList.add('is-invalid');
-                }
-            });
-        }
-    });
-    
-    // Definir variáveis globais
-    const isEditMode = {% if edit_mode %}true{% else %}false{% endif %};
-    const confirmReplaceModal = document.getElementById('confirmReplaceModal');
-    const confirmModal = new bootstrap.Modal(confirmReplaceModal, {
-        backdrop: 'static',
-        keyboard: false
-    });
-    let isConfirmed = false;
-
-    // Lista de campos que devem ser formatados como moeda
-    const currencyInputs = [
-        'sales_revenue', 
-        'sales_expenses', 
-        'input_product_expenses', 
-        'fixed_costs', 
-        'pro_labore', 
-        'other_fixed_costs'
-    ];
-    console.log(currencyInputs);
-
-    // Função para validar o campo ideal_service_profit_margin
-    function validateProfitMarginInput(input) {
-        let value = parseFloat(input.value);
-        
-        // Se o valor for negativo, definir como 0
-        if (value < 0) {
-            value = 0;
-        }
-        
-        // Se o valor for maior que 100, definir como 100
-        if (value > 100) {
-            value = 100;
-        }
-        
-        // Atualizar o valor do campo
-        input.value = value;
-    }
-
-    // Adicionar evento para validar o campo ideal_service_profit_margin
-    const profitMarginInput = document.getElementById('ideal_service_profit_margin');
-    if (profitMarginInput) {
-        profitMarginInput.addEventListener('input', function() {
-            validateProfitMarginInput(this);
-        });
-        
-        profitMarginInput.addEventListener('blur', function() {
-            validateProfitMarginInput(this);
-        });
-    }
-
-    // Função para formatar valor como moeda brasileira (R$)
-    function formatCurrency(value) {
-        // Remover todos os caracteres não numéricos, exceto ponto e vírgula
-        let numericValue = value.replace(/[^\d,.-]/g, '');
-        
-        // Tratar separadores de milhares e decimais
-        // Primeiro, remover todos os pontos (separadores de milhares)
-        numericValue = numericValue.replace(/\./g, '');
-        
-        // Substituir vírgula por ponto para conversão
-        numericValue = numericValue.replace(',', '.');
-        
-        // Converter para número
-        let number = parseFloat(numericValue);
-        
-        // Verificar se é um número válido
-        if (isNaN(number)) {
-            return '';
-        }
-        
-        // Formatar como moeda brasileira sem o símbolo R$
-        return new Intl.NumberFormat('pt-BR', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(number);
-    }
-
-    // Função para converter valor formatado para número (para envio ao banco)
-    function currencyToNumber(value) {
-        // Remover todos os caracteres não numéricos, exceto ponto e vírgula
-        let numericValue = value.replace(/[^\d,.-]/g, '');
-        
-        // Verificar se o valor contém vírgula (formato brasileiro)
-        if (numericValue.includes(',')) {
-            // Se contém vírgula, tratar como formato brasileiro (65.000,00)
-            
-            // Remover todos os pontos (separadores de milhares)
-            numericValue = numericValue.replace(/\./g, '');
-            
-            // Substituir vírgula por ponto para conversão
-            numericValue = numericValue.replace(',', '.');
-        } else if (numericValue.includes('.')) {
-            // Se contém ponto, verificar se é formato americano (65,000.00) ou brasileiro (65.000,00)
-            
-            // Verificar se o último ponto é seguido por dois dígitos (formato americano)
-            const parts = numericValue.split('.');
-            if (parts.length > 1 && parts[parts.length - 1].length === 2) {
-                // Formato americano (65,000.00), não precisa fazer nada
-            } else {
-                // Formato brasileiro com ponto (65.000,00), remover pontos
-                numericValue = numericValue.replace(/\./g, '');
-            }
-        }
-        
-        // Converter para número
-        let number = parseFloat(numericValue);
-        
-        // Verificar se é um número válido
-        if (isNaN(number)) {
-            return 0;
-        }
-        
-        // Retornar com 2 casas decimais
-        // NÃO multiplicar por 100, apenas retornar o valor exato
-        return number;
-    }
-
-    // Função para aplicar formatação em tempo real
-    function setupCurrencyInputs() {
-        currencyInputs.forEach(inputId => {
-            const input = document.getElementById(inputId);
-            if (input) {
-                // Formatar valor inicial se existir
-                if (input.value) {
-                    input.value = formatCurrency(input.value);
-                }
-                
-                // Adicionar evento para formatação em tempo real
-                input.addEventListener('input', function(e) {
-                    // Obter posição do cursor
-                    const cursorPosition = this.selectionStart;
-                    
-                    // Formatar o valor
-                    const formattedValue = formatCurrency(this.value);
-                    
-                    // Atualizar o valor do campo
-                    this.value = formattedValue;
-                    
-                    // Ajustar a posição do cursor
-                    if (cursorPosition) {
-                        // Calcular nova posição do cursor
-                        const newPosition = cursorPosition + (formattedValue.length - this.value.length);
-                        this.setSelectionRange(newPosition, newPosition);
-                    }
-                });
-                
-                // Adicionar evento para formatação ao perder o foco
-                input.addEventListener('blur', function() {
-                    this.value = formatCurrency(this.value);
-                });
-            }
-        });
-    }
-
-    // Função para preparar os dados antes do envio do formulário
-    function prepareFormData() {
-        // Lista de campos que devem ser formatados como moeda
-        const currencyInputs = [
-            'sales_revenue', 
-            'sales_expenses', 
-            'input_product_expenses', 
-            'fixed_costs', 
-            'pro_labore', 
-            'other_fixed_costs'
-        ];
-        
-        // Processar campos monetários
-        currencyInputs.forEach(inputId => {
-            const input = document.getElementById(inputId);
-            if (input && input.value) {
-                // Converter para número antes do envio
-                const numericValue = currencyToNumber(input.value);
-                
-                // Atualizar o valor do campo original com o valor numérico
-                input.value = numericValue;
-                
-                // Log para debug
-                console.log(`Campo ${inputId}: valor original = ${input.value}, valor convertido = ${numericValue}`);
-            }
-        });
-        
-        // Log todos os campos do formulário para debug
-        const formData = new FormData(form);
-        console.log('Dados do formulário antes do envio:', Object.fromEntries(formData));
-    }
-
-    // Inicializar formatação de campos monetários
-    setupCurrencyInputs();
-
-    // Função para verificar se já existem dados para o mês/ano selecionado
-    async function checkExistingData() {
-        // Se estiver em modo de edição, não fazer a verificação
-        if (isEditMode) return;
-        
-        const month = document.getElementById('month').value;
-        const year = document.getElementById('year').value;
-        const saveButtonContainer = document.getElementById('saveButtonContainer');
-        const warningMessage = document.getElementById('warningMessage');
-        
-        // Mostrar mensagem de carregamento
-        if (warningMessage) {
-            warningMessage.style.display = 'block';
-            warningMessage.innerHTML = '<div class="alert alert-info"><i class="bi bi-info-circle"></i> Verificando dados existentes...</div>';
-        }
-        
-        try {
-            const response = await fetch(`/basic-data/check/${year}/${month}`);
-            const data = await response.json();
-
-            if (data.exists) {
-                // Se existem dados, ocultar o botão de salvar e mostrar a mensagem de aviso
-                if (saveButtonContainer) {
-                    saveButtonContainer.style.display = 'none';
-                }
-                
-                // Mostrar a mensagem de aviso
-                if (warningMessage) {
-                    warningMessage.innerHTML = `
-                        <div class="alert alert-warning" role="alert">
-                            <i class="bi bi-exclamation-triangle-fill" style="color: red !important;"></i>
-                            <strong>Atenção!</strong> Já existem dados básicos cadastrados para ${month}/${year}.
-                            <br>
-                            Você pode:
-                            <ul class="mb-0">
-                                <li><a href="/basic-data" class="alert-link">Voltar à tela de consulta</a> para ver os dados existentes</li>
-                            </ul>
-                        </div>
-                    `;
-                    warningMessage.style.display = 'block';
-                }
-            } else {
-                // Se não existem dados, mostrar o botão de salvar e ocultar a mensagem de aviso
-                if (saveButtonContainer) {
-                    saveButtonContainer.style.display = 'block';
-                }
-                
-                // Ocultar a mensagem de aviso
-                if (warningMessage) {
-                    warningMessage.style.display = 'none';
-                }
-            }
-        } catch (error) {
-            console.error('Erro ao verificar dados existentes:', error);
-            if (warningMessage) {
-                warningMessage.innerHTML = `
-                    <div class="alert alert-danger" role="alert">
-                        <i class="bi bi-exclamation-triangle-fill"></i>
-                        Erro ao verificar dados existentes. Por favor, tente novamente.
-                    </div>
-                `;
-                warningMessage.style.display = 'block';
-            }
-        }
-    }
-
-    // Verificar dados existentes ao carregar a página e quando houver mudanças
-    if (!isEditMode) {
-        // Verificar imediatamente ao carregar a página
-        checkExistingData();
-        
-        // Adicionar eventos para verificar quando o mês ou ano mudar
-        const monthSelect = document.getElementById('month');
-        const yearInput = document.getElementById('year');
-        
-        if (monthSelect) {
-            monthSelect.addEventListener('change', function() {
-                checkExistingData();
-            });
-        }
-        
-        if (yearInput) {
-            yearInput.addEventListener('input', function() {
-                checkExistingData();
-            });
-            yearInput.addEventListener('change', function() {
-                checkExistingData();
-            });
-        }
-    }
-
-    // Função para validar campos obrigatórios
-    function validateRequiredFields() {
-        // Campos obrigatórios base
-        const baseRequiredFields = [
-            { id: 'clients_served', name: 'Quantidade de Clientes Atendidos' },
-            { id: 'sales_revenue', name: 'Faturamento com Vendas' },
-            { id: 'sales_expenses', name: 'Gastos com Vendas' },
-            { id: 'input_product_expenses', name: 'Gastos com Insumos e Produtos' }
-        ];
-
-        // Campos obrigatórios adicionais para Serviços
-        const servicesRequiredFields = [
-            { id: 'pro_labore', name: 'Pró-labore' },
-            { id: 'other_fixed_costs', name: 'Demais Custos Fixos' },
-            { id: 'work_hours_per_week', name: 'Horas de Trabalho por Semana' },
-            { id: 'ideal_service_profit_margin', name: 'Margem de Lucro Ideal (%)' }
-        ];
-
-        // Determinar se é do tipo Serviços
-        const isServicesType = {% if user.activity_type == 'Serviços' %}true{% else %}false{% endif %};
-
-        // Combinar campos obrigatórios base com campos adicionais se for do tipo Serviços
-        const requiredFields = isServicesType 
-            ? [...baseRequiredFields, ...servicesRequiredFields]
-            : baseRequiredFields;
-
-        let isValid = true;
-        let missingFields = [];
-
-        requiredFields.forEach(field => {
-            const input = document.getElementById(field.id);
-            if (!input || !input.value.trim()) {
-                isValid = false;
-                missingFields.push(field.name);
-                input.classList.add('is-invalid');
-            } else {
-                input.classList.remove('is-invalid');
-            }
-        });
-
-        if (!isValid) {
-            // Verificar se já existe um alerta de campos obrigatórios
-            let existingAlert = document.querySelector('.alert-danger[data-type="required-fields"]');
-            
-            if (!existingAlert) {
-                existingAlert = document.createElement('div');
-                existingAlert.className = 'alert alert-danger alert-dismissible fade show';
-                existingAlert.setAttribute('data-type', 'required-fields');
-                existingAlert.role = 'alert';
-                existingAlert.innerHTML = `
-                    <strong>Campos obrigatórios não preenchidos:</strong>
-                    <ul class="mb-0">
-                        ${missingFields.map(field => `<li>${field}</li>`).join('')}
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
-                `;
-
-                // Inserir o novo alerta antes do formulário
-                const form = document.getElementById('basicDataForm');
-                form.parentNode.insertBefore(existingAlert, form);
-            } else {
-                // Atualizar o conteúdo do alerta existente
-                existingAlert.querySelector('ul').innerHTML = missingFields.map(field => `<li>${field}</li>`).join('');
-            }
-
-            // Rolar até o alerta
-            existingAlert.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        } else {
-            // Remover o alerta de campos obrigatórios se existir
-            const existingAlert = document.querySelector('.alert-danger[data-type="required-fields"]');
-            if (existingAlert) {
-                existingAlert.remove();
-            }
-        }
-
-        return isValid;
-    }
-
-    // Manipulador do envio do formulário
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        // Validar campos obrigatórios
-        if (!validateRequiredFields()) {
-            return;
-        }
-
-        // Se estiver em modo de edição, enviar o formulário diretamente
-        if (isEditMode) {
-            console.log('Modo de edição: true, enviando formulário diretamente');
-            prepareFormData();
-            form.submit();
-            return;
-        }
-
-        // Se já foi confirmado, permite o envio
-        if (isConfirmed) {
-            prepareFormData();
-            form.submit();
-            return;
-        }
-
-        // Verificar se já existe registro para o mês/ano selecionado
-        const month = document.getElementById('month').value;
-        const year = document.getElementById('year').value;
-        
-        try {
-            const response = await fetch(`/basic-data/check/${year}/${month}`);
-            const data = await response.json();
-
-            if (data.exists) {
-                // Se existe, mostra o modal de confirmação
-                confirmModal.show();
-            } else {
-                // Se não existe, envia o formulário normalmente
-                prepareFormData();
-                form.submit();
-            }
-        } catch (error) {
-            console.error('Erro ao verificar dados existentes:', error);
-            prepareFormData();
-            form.submit();
-        }
-    });
-
-    // Botão de confirmação no modal
-    document.getElementById('confirmReplace').addEventListener('click', function() {
-        isConfirmed = true;
-        confirmModal.hide();
-        prepareFormData();
-        form.submit();
-    });
-
-    // Reset da confirmação quando o modal é fechado
-    confirmReplaceModal.addEventListener('hidden.bs.modal', function() {
-        isConfirmed = false;
-    });
-
-    // Implementação do filtro para a tabela de logs
-    const logFilter = document.getElementById('logFilter');
-    const dateFilter = document.getElementById('dateFilter');
-    const logsTable = document.getElementById('logsTable');
-    
-    if (logFilter && dateFilter && logsTable) {
-        // Função para filtrar a tabela
-        function filterLogsTable() {
-            const filterText = logFilter.value.toLowerCase();
-            const filterDate = dateFilter.value;
-            
-            const rows = logsTable.querySelectorAll('tbody tr');
-            
-            rows.forEach(row => {
-                const description = row.cells[0].textContent.toLowerCase();
-                const dateCell = row.cells[1].textContent;
-                
-                // Verificar se a descrição contém o texto do filtro
-                const matchesText = description.includes(filterText);
-                
-                // Verificar se a data corresponde ao filtro de data
-                let matchesDate = true;
-                if (filterDate) {
-                    // Converter a data do formato dd/mm/yyyy para yyyy-mm-dd para comparação
-                    const dateParts = dateCell.split(' ')[0].split('/');
-                    const rowDate = `${dateParts[2]}-${dateParts[1].padStart(2, '0')}-${dateParts[0].padStart(2, '0')}`;
-                    matchesDate = rowDate === filterDate;
-                }
-                
-                // Mostrar ou esconder a linha com base nos filtros
-                if (matchesText && matchesDate) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-            
-            // Verificar se há linhas visíveis
-            const visibleRows = Array.from(rows).filter(row => row.style.display !== 'none');
-            const noResultsMessage = logsTable.nextElementSibling;
-            
-            if (visibleRows.length === 0) {
-                if (!noResultsMessage || !noResultsMessage.classList.contains('text-muted')) {
-                    const message = document.createElement('p');
-                    message.className = 'text-muted mt-3';
-                    message.textContent = 'Nenhum resultado encontrado.';
-                    logsTable.parentNode.insertBefore(message, logsTable.nextSibling);
-                }
-            } else if (noResultsMessage && noResultsMessage.classList.contains('text-muted')) {
-                noResultsMessage.remove();
-            }
-        }
-        
-        // Adicionar eventos para os filtros
-        logFilter.addEventListener('input', filterLogsTable);
-        dateFilter.addEventListener('change', filterLogsTable);
-    }
-
     // Função para calcular porcentagem
     function calcularPorcentagem(valor, receita) {
         if (!valor || !receita || receita === 0) return '0%';
@@ -1284,57 +780,135 @@ document.addEventListener('DOMContentLoaded', function() {
         return porcentagem.toFixed(2) + '%';
     }
 
-    // Função para validar e formatar porcentagem
-    function validarPorcentagem(valor, receita) {
-        if (!valor || !receita || receita === 0) return { value: '0%', isValid: true };
-        const porcentagem = (parseFloat(valor) / parseFloat(receita)) * 100;
-        return {
-            value: porcentagem.toFixed(2) + '%',
-            isValid: porcentagem >= 0 && porcentagem <= 100
-        };
+    // Função para atualizar campos hidden
+    function updateHiddenFields() {
+        // Sales Expenses
+        const salesExpensesDisplay = document.getElementById('sales_expenses_display');
+        const salesExpenses = document.getElementById('sales_expenses');
+        if (salesExpensesDisplay && salesExpenses) {
+            const value = salesExpensesDisplay.value.replace(/[^\d,]/g, '').replace(',', '.');
+            salesExpenses.value = value;
+        }
+
+        // Input Product Expenses
+        const inputProductExpensesDisplay = document.getElementById('input_product_expenses_display');
+        const inputProductExpenses = document.getElementById('input_product_expenses');
+        if (inputProductExpensesDisplay && inputProductExpenses) {
+            const value = inputProductExpensesDisplay.value.replace(/[^\d,]/g, '').replace(',', '.');
+            inputProductExpenses.value = value;
+        }
     }
 
-    // Função para atualizar todas as porcentagens
+    // Função para atualizar porcentagens
     function atualizarPorcentagens() {
         const receita = document.getElementById('sales_revenue').value.replace(/[^\d,]/g, '').replace(',', '.');
         
         // Gastos com Vendas
-        const gastosVendas = document.getElementById('gastos_vendas').value.replace(/[^\d,]/g, '').replace(',', '.');
-        const gastosVendasResult = validarPorcentagem(gastosVendas, receita);
-        document.getElementById('gastos_vendas_percentual').value = gastosVendasResult.value;
-        document.getElementById('gastos_vendas_percentual_hidden').value = gastosVendasResult.value.replace('%', '');
-        document.getElementById('gastos_vendas_percentual').classList.toggle('invalid-percentage', !gastosVendasResult.isValid);
+        const gastosVendas = document.getElementById('sales_expenses_display').value.replace(/[^\d,]/g, '').replace(',', '.');
+        const porcentagemVendas = calcularPorcentagem(gastosVendas, receita);
+        document.getElementById('sales_expenses_percentual').value = porcentagemVendas;
+        document.getElementById('sales_expenses_percentual_hidden').value = porcentagemVendas.replace('%', '');
         
+        // Aplicar regra de cor para gastos com vendas
+        const porcentagemVendasNum = parseFloat(porcentagemVendas);
+        const percentualVendasField = document.getElementById('sales_expenses_percentual');
+        if (porcentagemVendasNum > 30) {
+            percentualVendasField.classList.add('invalid-percentage');
+        } else {
+            percentualVendasField.classList.remove('invalid-percentage');
+        }
+
         // Gastos com Insumos
-        const gastosInsumos = document.getElementById('gastos_insumos').value.replace(/[^\d,]/g, '').replace(',', '.');
-        const gastosInsumosResult = validarPorcentagem(gastosInsumos, receita);
-        document.getElementById('gastos_insumos_percentual').value = gastosInsumosResult.value;
-        document.getElementById('gastos_insumos_percentual_hidden').value = gastosInsumosResult.value.replace('%', '');
-        document.getElementById('gastos_insumos_percentual').classList.toggle('invalid-percentage', !gastosInsumosResult.isValid);
+        const gastosInsumos = document.getElementById('input_product_expenses_display').value.replace(/[^\d,]/g, '').replace(',', '.');
+        const porcentagemInsumos = calcularPorcentagem(gastosInsumos, receita);
+        document.getElementById('input_product_expenses_percentual').value = porcentagemInsumos;
+        document.getElementById('input_product_expenses_percentual_hidden').value = porcentagemInsumos.replace('%', '');
         
+        // Aplicar regra de cor para gastos com insumos
+        const porcentagemInsumosNum = parseFloat(porcentagemInsumos);
+        const percentualInsumosField = document.getElementById('input_product_expenses_percentual');
+        if (porcentagemInsumosNum > 30) {
+            percentualInsumosField.classList.add('invalid-percentage');
+        } else {
+            percentualInsumosField.classList.remove('invalid-percentage');
+        }
+
         // Pro-labore
         const proLabore = document.getElementById('pro_labore').value.replace(/[^\d,]/g, '').replace(',', '.');
-        const proLaboreResult = validarPorcentagem(proLabore, receita);
-        document.getElementById('pro_labore_percentual').value = proLaboreResult.value;
-        document.getElementById('pro_labore_percentual_hidden').value = proLaboreResult.value.replace('%', '');
-        document.getElementById('pro_labore_percentual').classList.toggle('invalid-percentage', !proLaboreResult.isValid);
+        const porcentagemProLabore = calcularPorcentagem(proLabore, receita);
+        document.getElementById('pro_labore_percentual').value = porcentagemProLabore;
+        document.getElementById('pro_labore_percentual_hidden').value = porcentagemProLabore.replace('%', '');
         
+        // Aplicar regra de cor para pró-labore
+        const porcentagemProLaboreNum = parseFloat(porcentagemProLabore);
+        const percentualProLaboreField = document.getElementById('pro_labore_percentual');
+        if (porcentagemProLaboreNum > 30) {
+            percentualProLaboreField.classList.add('invalid-percentage');
+        } else {
+            percentualProLaboreField.classList.remove('invalid-percentage');
+        }
+
         // Demais Custos Fixos
         const demaisCustos = document.getElementById('demais_custos_fixos').value.replace(/[^\d,]/g, '').replace(',', '.');
-        const demaisCustosResult = validarPorcentagem(demaisCustos, receita);
-        document.getElementById('demais_custos_fixos_percentual').value = demaisCustosResult.value;
-        document.getElementById('demais_custos_fixos_percentual').classList.toggle('invalid-percentage', !demaisCustosResult.isValid);
+        const porcentagemDemaisCustos = calcularPorcentagem(demaisCustos, receita);
+        document.getElementById('demais_custos_fixos_percentual').value = porcentagemDemaisCustos;
+        document.getElementById('demais_custos_fixos_percentual_hidden').value = porcentagemDemaisCustos.replace('%', '');
+        
+        // Aplicar regra de cor para demais custos fixos
+        const porcentagemDemaisCustosNum = parseFloat(porcentagemDemaisCustos);
+        const percentualDemaisCustosField = document.getElementById('demais_custos_fixos_percentual');
+        if (porcentagemDemaisCustosNum < 0 || porcentagemDemaisCustosNum > 100) {
+            percentualDemaisCustosField.classList.add('invalid-percentage');
+        } else {
+            percentualDemaisCustosField.classList.remove('invalid-percentage');
+        }
+
+        // Atualizar campos hidden
+        updateHiddenFields();
     }
 
-    // Adicionar event listeners para os campos
+    // Atualizar porcentagens quando os valores mudarem
     document.getElementById('sales_revenue').addEventListener('input', atualizarPorcentagens);
-    document.getElementById('gastos_vendas').addEventListener('input', atualizarPorcentagens);
-    document.getElementById('gastos_insumos').addEventListener('input', atualizarPorcentagens);
+    document.getElementById('sales_expenses_display').addEventListener('input', atualizarPorcentagens);
+    document.getElementById('input_product_expenses_display').addEventListener('input', atualizarPorcentagens);
     document.getElementById('pro_labore').addEventListener('input', atualizarPorcentagens);
     document.getElementById('demais_custos_fixos').addEventListener('input', atualizarPorcentagens);
 
     // Atualizar porcentagens ao carregar a página
     atualizarPorcentagens();
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Atualizar campos hidden antes do envio
+        updateHiddenFields();
+        
+        // Enviar o formulário
+        form.submit();
+    });
+
+    // Função para formatar valores monetários
+    function formatCurrency(value) {
+        if (!value) return '';
+        // Remove caracteres não numéricos
+        value = value.replace(/[^\d,]/g, '');
+        // Converte vírgula para ponto
+        value = value.replace(',', '.');
+        // Formata o número
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+        }).format(value);
+    }
+
+    // Atualizar campos quando os valores mudarem
+    const monetaryInputs = document.querySelectorAll('input[type="text"]');
+    monetaryInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            this.value = formatCurrency(this.value);
+            atualizarPorcentagens();
+        });
+    });
 });
 </script>
 {% endblock %}

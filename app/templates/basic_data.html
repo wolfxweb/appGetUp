@@ -1,66 +1,78 @@
 {% extends "base.html" %} {% block title %}Dados Básicos{% endblock %} {% block
-content %} {% with active_page='basic_data' %} {% include
-'components/navbar.html' %} {% endwith %}
+content %}
 
 <div class="container-fluid mt-5 pt-5">
   <div class="row">
     <div class="col-md-12">
-      {% if error_message %}
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ error_message }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Fechar"
-        ></button>
-      </div>
-      {% endif %} {% if success_message %}
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ success_message }}
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Fechar"
-        ></button>
-      </div>
-      {% endif %}
+      <div class="card">
+        {% if error_message %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          {{ error_message }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Fechar"
+          ></button>
+        </div>
+        {% endif %} {% if success_message %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+          {{ success_message }}
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="alert"
+            aria-label="Fechar"
+          ></button>
+        </div>
+        {% endif %}
 
-      <div class="card shadow-sm">
         <div
-          class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
+          class="card-header d-flex justify-content-between align-items-center"
         >
           <h5 class="card-title mb-0">
-          Dados Básicos
+          Histórico Dados Básicos
           </h5>
-          <a href="/basic-data/new" class="btn btn-light btn-sm">
-            <i class="bi bi-plus-circle" ></i> Novo Registro
-          </a>
         </div>
 
         <div class="card-body">
           {% if basic_data %}
-          <!-- Filtros para a tabela -->
-          <div class="row mb-3">
-            <div class="col-md-4">
-              <label for="filterMonth" class="form-label">Mês/Ano</label>
-              <input type="text" class="form-control" id="filterMonth" placeholder="Filtrar por mês/ano">
+          <!-- Nova linha com os 4 botões -->
+          <div class="row mb-4">
+            <div class="col-12 col-md-3 mb-2 mb-md-0">
+              <a href="/dashboard" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+                Índice
+              </a>
             </div>
-            <!-- 
-            <div class="col-md-4">
-              <label for="filterClients" class="form-label">Clientes Atendidos</label>
-              <input type="number" class="form-control" id="filterClients" placeholder="Filtrar por clientes">
+            <div class="col-12 col-md-3 mb-2 mb-md-0">
+              <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+                Diagnóstico
+              </button>
             </div>
-            <div class="col-md-4">
-              <label for="filterRevenue" class="form-label">Faturamento</label>
-              <input type="number" class="form-control" id="filterRevenue" placeholder="Filtrar por faturamento">
+            <div class="col-12 col-md-3 mb-2 mb-md-0">
+              <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+                Simulador
+              </button>
             </div>
-            -->
+            <div class="col-12 col-md-3">
+              <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+                Calculadora de preços
+              </button>
+            </div>
+          </div>
+
+          <!-- Filtros -->
+          <div class="filter-section">
+            <div class="row">
+              <div class="col-md-4">
+                <label for="filterMonth" class="form-label">Mês/Ano</label>
+                <input type="text" class="form-control" id="filterMonth" placeholder="Filtrar por mês/ano">
+              </div>
+            </div>
           </div>
           
           <div class="table-responsive">
-            <table class="table table-striped table-hover" id="basicDataTable">
+            <table class="table table-hover" id="basicDataTable">
               <thead>
                 <tr>
                   <th>Mês/Ano <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#monthYearHelpModal"></i></th>
@@ -90,35 +102,92 @@ content %} {% with active_page='basic_data' %} {% include
                     'Novembro', 'Dezembro'][data.month - 1] }} {{ data.year }}
                   </td>
                   <td>{{ data.clients_served }}</td>
-                  <td>R$ {{ "{:,.2f}".format(data.sales_revenue).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
-                  <td>R$ {{ "{:,.2f}".format(data.sales_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
-                  <td>R$ {{ "{:,.2f}".format(data.input_product_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
+                  <td>R$ {{ "{:,.2f}".format(data.sales_revenue/10).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
+                  <td>
+                    {% set sales_expenses_percent = (data.sales_expenses / data.sales_revenue * 100) if data.sales_revenue else 0 %}
+                    <span class="{% if sales_expenses_percent > 30 %}value-critical{% elif sales_expenses_percent > 20 %}value-warning{% else %}value-good{% endif %}"
+                          data-bs-toggle="tooltip"
+                          title="{{ "%.1f"|format(sales_expenses_percent) }}% do faturamento">
+                      R$ {{ "{:,.2f}".format(data.sales_expenses/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                    </span>
+                  </td>
+                  <td>
+                    {% set input_expenses_percent = (data.input_product_expenses / data.sales_revenue * 100) if data.sales_revenue else 0 %}
+                    <span class="{% if input_expenses_percent > 30 %}value-critical{% elif input_expenses_percent > 20 %}value-warning{% else %}value-good{% endif %}"
+                          data-bs-toggle="tooltip"
+                          title="{{ "%.1f"|format(input_expenses_percent) }}% do faturamento">
+                      R$ {{ "{:,.2f}".format(data.input_product_expenses/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                    </span>
+                  </td>
                   {% if user.activity_type == 'Serviços' %}
                   <td>
-                    R$ {{ "{:,.2f}".format(data.pro_labore).replace(",", "X").replace(".", ",").replace("X", ".") if data.pro_labore is not none else 'N/A' }}
+                    {% if data.pro_labore is not none %}
+                      {% set pro_labore_percent = (data.pro_labore / data.sales_revenue * 100) if data.sales_revenue else 0 %}
+                      <span class="{% if pro_labore_percent > 30 %}value-critical{% elif pro_labore_percent > 20 %}value-warning{% else %}value-good{% endif %}"
+                            data-bs-toggle="tooltip"
+                            title="{{ "%.1f"|format(pro_labore_percent) }}% do faturamento">
+                        R$ {{ "{:,.2f}".format(data.pro_labore/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                      </span>
+                    {% else %}
+                      N/A
+                    {% endif %}
                   </td>
-                  <td>R$ {{ "{:,.2f}".format(data.other_fixed_costs).replace(",", "X").replace(".", ",").replace("X", ".") if data.other_fixed_costs is not none else 'N/A' }}</td>
+                  <td>
+                    {% if data.other_fixed_costs is not none %}
+                      {% set fixed_costs_percent = (data.other_fixed_costs / data.sales_revenue * 100) if data.sales_revenue else 0 %}
+                      <span class="{% if fixed_costs_percent > 30 %}value-critical{% elif fixed_costs_percent > 20 %}value-warning{% else %}value-good{% endif %}"
+                            data-bs-toggle="tooltip"
+                            title="{{ "%.1f"|format(fixed_costs_percent) }}% do faturamento">
+                        R$ {{ "{:,.2f}".format(data.other_fixed_costs/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                      </span>
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
                   <td>
                     {{ "%.0f"|format(data.work_hours_per_week) if data.work_hours_per_week is not none else 'N/A' }}
                   </td>
                   <td>
-                    {{ "%.0f"|format(data.ideal_service_profit_margin) if data.ideal_service_profit_margin is not none else 'N/A' }}%
+                    {% if data.ideal_service_profit_margin is not none %}
+                      <span class="{% if data.ideal_service_profit_margin < 10 %}value-critical{% elif data.ideal_service_profit_margin < 20 %}value-warning{% else %}value-good{% endif %}">
+                        {{ "%.0f"|format(data.ideal_service_profit_margin) }}%
+                      </span>
+                    {% else %}
+                      N/A
+                    {% endif %}
                   </td>
                   {% elif user.activity_type in ['Comércio', 'Indústria'] %}
                   <td>
-                    R$ {{ "{:,.2f}".format(data.fixed_costs).replace(",", "X").replace(".", ",").replace("X", ".") if data.fixed_costs is not none else 'N/A' }}
+                    {% if data.fixed_costs is not none %}
+                      {% set fixed_costs_percent = (data.fixed_costs / data.sales_revenue * 100) if data.sales_revenue else 0 %}
+                      <span class="{% if fixed_costs_percent > 30 %}value-critical{% elif fixed_costs_percent > 20 %}value-warning{% else %}value-good{% endif %}"
+                            data-bs-toggle="tooltip"
+                            title="{{ "%.1f"|format(fixed_costs_percent) }}% do faturamento">
+                        R$ {{ "{:,.2f}".format(data.fixed_costs/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                      </span>
+                    {% else %}
+                      N/A
+                    {% endif %}
                   </td>
                   <td>
-                    {{ "%.0f"|format(data.ideal_profit_margin) if data.ideal_profit_margin is not none else 'N/A' }}%
+                    {% if data.ideal_profit_margin is not none %}
+                      <span class="{% if data.ideal_profit_margin < 10 %}value-critical{% elif data.ideal_profit_margin < 20 %}value-warning{% else %}value-good{% endif %}">
+                        {{ "%.0f"|format(data.ideal_profit_margin) }}%
+                      </span>
+                    {% else %}
+                      N/A
+                    {% endif %}
                   </td>
                   {% endif %}
                   <td>
                     <div class="d-flex gap-1">
                       <a
                         href="/basic-data/edit/{{ data.id }}"
-                        class="btn btn-sm btn-primary"
+                        class="btn btn-primary btn-action"
+                        data-bs-toggle="tooltip"
+                        title="Editar"
                       >
-                        <i class="bi bi-pencil" style="color: white !important;"></i>
+                        <i class="bi bi-pencil text-white"></i>
                       </a>
                       <form
                         method="post"
@@ -128,9 +197,11 @@ content %} {% with active_page='basic_data' %} {% include
                       >
                         <button
                           type="submit"
-                          class="btn btn-sm btn-danger"
+                          class="btn btn-danger btn-action"
+                          data-bs-toggle="tooltip"
+                          title="Excluir"
                         >
-                          <i class="bi bi-trash" style="color: white !important;"></i>
+                          <i class="bi bi-trash text-white"></i>
                         </button>
                       </form>
                     </div>
@@ -299,15 +370,58 @@ content %} {% with active_page='basic_data' %} {% include
     opacity: 1;
   }
 
-  /* Estilo para o cabeçalho do modal */
-  .modal-header {
-    background-color: rgb(1, 57, 44);
-    color: white;
+  .table th {
+    white-space: nowrap;
+    background-color: #f8f9fa;
   }
-  
-  /* Estilo para o botão de fechar dos modais */
-  .modal-header .btn-close {
-    filter: invert(1);
+
+  .table td {
+    vertical-align: middle;
+  }
+
+  .value-critical {
+    color: #dc3545;
+    font-weight: bold;
+  }
+
+  .value-warning {
+    color: #ffc107;
+    font-weight: bold;
+  }
+
+  .value-good {
+    color: #198754;
+    font-weight: bold;
+  }
+
+  .btn-action {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+  }
+
+  .table-responsive {
+    margin-bottom: 1rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+
+  .filter-section {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 0.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .card {
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+
+  .card-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.125);
   }
 </style>
 {% endblock %}
@@ -315,168 +429,30 @@ content %} {% with active_page='basic_data' %} {% include
 {% block scripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Função para filtrar a tabela
-    function filterTable() {
-        const table = document.getElementById('basicDataTable');
-        if (!table) return; // Exit if table doesn't exist
-        
-        const monthFilter = document.getElementById('filterMonth')?.value.toLowerCase() || '';
-        const clientsFilter = document.getElementById('filterClients')?.value || '';
-        const revenueFilter = document.getElementById('filterRevenue')?.value || '';
-        
-        const tbody = table.getElementsByTagName('tbody')[0];
-        if (!tbody) return; // Exit if tbody doesn't exist
-        
-        const rows = tbody.getElementsByTagName('tr');
-        
-        for (let row of rows) {
-            const cells = row.getElementsByTagName('td');
-            if (cells.length < 3) continue; // Skip if row doesn't have enough cells
-            
-            const month = cells[0].textContent.toLowerCase();
-            const clients = cells[1].textContent;
-            const revenueText = cells[2].textContent.replace('R$ ', '').replace('.', '').replace(',', '.');
-            const revenue = parseFloat(revenueText) || 0;
-            
-            const matchesMonth = !monthFilter || month.includes(monthFilter);
-            const matchesClients = !clientsFilter || clients.includes(clientsFilter);
-            const matchesRevenue = !revenueFilter || revenue >= parseFloat(revenueFilter);
-            
-            row.style.display = (matchesMonth && matchesClients && matchesRevenue) ? '' : 'none';
-        }
-    }
+    // Inicializar tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+
+    // Filtro da tabela
+    const filterMonth = document.getElementById('filterMonth');
+    const table = document.getElementById('basicDataTable');
     
-    // Adicionar eventos de filtro apenas se os elementos existirem
-    const filterElements = ['filterMonth', 'filterClients', 'filterRevenue'];
-    
-    filterElements.forEach(elementId => {
-        const element = document.getElementById(elementId);
-        if (element) {
-            element.addEventListener('input', filterTable);
-        }
-    });
-
-    // Configurar os ícones de ajuda para usar o comportamento padrão do Bootstrap
-    document.querySelectorAll('.help-icon').forEach(icon => {
-        // Remover qualquer manipulador de eventos personalizado
-        const newIcon = icon.cloneNode(true);
-        icon.parentNode.replaceChild(newIcon, icon);
-    });
-
-    // Form submission handling
-    const confirmReplaceModal = document.getElementById('confirmReplaceModal');
-    const confirmModal = new bootstrap.Modal(confirmReplaceModal, {
-        backdrop: 'static',
-        keyboard: false
-    });
-    let isConfirmed = false;
-    const isEditMode = {% if edit_mode %}true{% else %}false{% endif %};
-
-    // Função para verificar se já existem dados para o mês/ano selecionados
-    async function checkExistingData() {
-        // Se estiver em modo de edição, não fazer a verificação
-        if (isEditMode) return;
-        
-        const month = document.getElementById('month').value;
-        const year = document.getElementById('year').value;
-        const saveButtonContainer = document.getElementById('saveButtonContainer');
-        const warningMessage = document.getElementById('warningMessage');
-        
-        try {
-            const url = `/basic-data/check/${year}/${month}`;
-            const response = await fetch(url);
-            const data = await response.json();
-
-            if (data.exists) {
-                // Se existem dados, ocultar o botão de salvar e mostrar a mensagem de aviso
-                if (saveButtonContainer) {
-                    saveButtonContainer.style.display = 'none';
-                }
-                
-                // Mostrar a mensagem de aviso
-                if (warningMessage) {
-                    warningMessage.style.display = 'block';
-                }
-            } else {
-                // Se não existem dados, mostrar o botão de salvar e ocultar a mensagem de aviso
-                if (saveButtonContainer) {
-                    saveButtonContainer.style.display = 'block';
-                }
-                
-                // Ocultar a mensagem de aviso
-                if (warningMessage) {
-                    warningMessage.style.display = 'none';
+    if (filterMonth && table) {
+        filterMonth.addEventListener('keyup', function() {
+            const filter = this.value.toLowerCase();
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 1; i < rows.length; i++) {
+                const cell = rows[i].getElementsByTagName('td')[0];
+                if (cell) {
+                    const text = cell.textContent || cell.innerText;
+                    rows[i].style.display = text.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
                 }
             }
-        } catch (error) {
-            console.error('Erro ao verificar dados existentes:', error);
-        }
+        });
     }
-
-    // Verificar dados existentes ao carregar a página e quando houver mudanças
-    if (!isEditMode) {
-        // Verificar imediatamente ao carregar a página
-        checkExistingData();
-        
-        // Adicionar eventos para verificar quando o mês ou ano mudar
-        const monthSelect = document.getElementById('month');
-        const yearInput = document.getElementById('year');
-        
-        if (monthSelect) {
-            monthSelect.addEventListener('change', function() {
-                checkExistingData();
-            });
-        }
-        
-        if (yearInput) {
-            yearInput.addEventListener('input', function() {
-                checkExistingData();
-            });
-            yearInput.addEventListener('change', function() {
-                checkExistingData();
-            });
-        }
-    }
-
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        // Se estiver em modo de edição, enviar o formulário diretamente
-        if (isEditMode) {
-            prepareFormData();
-            form.submit();
-            return;
-        }
-
-        // Se já foi confirmado, permite o envio
-        if (isConfirmed) {
-            prepareFormData();
-            form.submit();
-            return;
-        }
-
-        // Verifica se já existe registro para o mês/ano selecionado (apenas para novo registro)
-        const month = document.getElementById('month').value;
-        const year = document.getElementById('year').value;
-        
-        try {
-            const response = await fetch(`/basic-data/check/${year}/${month}`);
-            const data = await response.json();
-
-            if (data.exists) {
-                // Se existe, mostra o modal de confirmação
-                confirmModal.show();
-            } else {
-                // Se não existe, envia o formulário normalmente
-                prepareFormData();
-                form.submit();
-            }
-        } catch (error) {
-            console.error('Erro ao verificar dados existentes:', error);
-            prepareFormData();
-            form.submit(); // Em caso de erro, tenta enviar mesmo assim
-        }
-    });
 });
 </script>
 {% endblock %}
