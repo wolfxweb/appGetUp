@@ -169,7 +169,7 @@
                             <div class="card" style="background-color: #F0F0F0;">
                                 <div class="card-body">
                                     {% if user.activity_type == 'Serviços' %}
-                                    <form method="post" action="{% if edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
+                                    <form method="post" action="/basic-data/save" id="basicDataForm">
                                         {% if show_confirm %}
                                         <input type="hidden" name="confirm_update" value="true">
                                         {% endif %}
@@ -292,16 +292,17 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label for="demais_custos_fixos" class="form-label">
+                                                <label for="other_fixed_costs" class="form-label">
                                                     Demais Custos Fixos* 
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#otherFixedCostsHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
-                                                        <input type="text" class="form-control" id="demais_custos_fixos" name="demais_custos_fixos" required>
+                                                        <input type="text" class="form-control" id="other_fixed_costs" name="other_fixed_costs" 
+                                                            value="{{ (basic_data.other_fixed_costs/10)|round(2) if basic_data and basic_data.other_fixed_costs is not none else '' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
-                                                        <input type="text" class="form-control" id="demais_custos_fixos_percentual" name="demais_custos_fixos_percentual" readonly>
+                                                        <input type="text" class="form-control" id="other_fixed_costs_percentual" name="other_fixed_costs_percentual" readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -350,20 +351,20 @@
                                                     Limpar
                                                 </button>
                                                 <button type="submit" class="btn btn-secondary me-2" style="background-color: #6c757d; border-color: #6c757d;">
-                                                    Salvar
+                                                    {% if edit_mode %}Atualizar{% else %}Salvar{% endif %}
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12 text-center">
-                                                <a href="/basic-data/history" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
+                                                <a href="/basic-data/" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
                                                     Histórico
                                                 </a>
                                             </div>
                                         </div>
                                     </form>
                                     {% else %}
-                                    <form method="post" action="{% if edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
+                                    <form method="post" action="/basic-data/save" id="basicDataForm">
                                         {% if show_confirm %}
                                         <input type="hidden" name="confirm_update" value="true">
                                         {% endif %}
@@ -490,13 +491,13 @@
                                                     Limpar
                                                 </button>
                                                 <button type="submit" class="btn btn-secondary me-2" style="background-color: #6c757d; border-color: #6c757d;">
-                                                    Salvar
+                                                    {% if edit_mode %}Atualizar{% else %}Salvar{% endif %}
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12 text-center">
-                                                <a href="/basic-data/history" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
+                                                <a href="/basic-data/" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
                                                     Histórico
                                                 </a>
                                             </div>
@@ -849,14 +850,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         // Demais Custos Fixos
-        const demaisCustos = document.getElementById('demais_custos_fixos').value.replace(/[^\d,]/g, '').replace(',', '.');
+        const demaisCustos = document.getElementById('other_fixed_costs').value.replace(/[^\d,]/g, '').replace(',', '.');
         const porcentagemDemaisCustos = calcularPorcentagem(demaisCustos, receita);
-        document.getElementById('demais_custos_fixos_percentual').value = porcentagemDemaisCustos;
-        document.getElementById('demais_custos_fixos_percentual_hidden').value = porcentagemDemaisCustos.replace('%', '');
+        document.getElementById('other_fixed_costs_percentual').value = porcentagemDemaisCustos;
+        document.getElementById('other_fixed_costs_percentual_hidden').value = porcentagemDemaisCustos.replace('%', '');
         
         // Aplicar regra de cor para demais custos fixos
         const porcentagemDemaisCustosNum = parseFloat(porcentagemDemaisCustos);
-        const percentualDemaisCustosField = document.getElementById('demais_custos_fixos_percentual');
+        const percentualDemaisCustosField = document.getElementById('other_fixed_costs_percentual');
         if (porcentagemDemaisCustosNum < 0 || porcentagemDemaisCustosNum > 100) {
             percentualDemaisCustosField.classList.add('invalid-percentage');
         } else {
@@ -872,7 +873,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('sales_expenses_display').addEventListener('input', atualizarPorcentagens);
     document.getElementById('input_product_expenses_display').addEventListener('input', atualizarPorcentagens);
     document.getElementById('pro_labore').addEventListener('input', atualizarPorcentagens);
-    document.getElementById('demais_custos_fixos').addEventListener('input', atualizarPorcentagens);
+    document.getElementById('other_fixed_costs').addEventListener('input', atualizarPorcentagens);
 
     // Atualizar porcentagens ao carregar a página
     atualizarPorcentagens();

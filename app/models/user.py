@@ -38,7 +38,7 @@ class User(Base):
     
     # Relacionamento com Dados Básicos
     basic_data = relationship("BasicData", back_populates="user", cascade="all, delete-orphan")
-    basic_data_logs = relationship("BasicDataLog", back_populates="user", cascade="all, delete-orphan")
+    # basic_data_logs = relationship("BasicDataLog", back_populates="user", cascade="all, delete-orphan")
     
     # Relacionamento com registros da Calculadora
     calculator_records = relationship("Calculator", back_populates="user", cascade="all, delete-orphan") 

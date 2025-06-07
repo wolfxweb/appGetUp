@@ -37,24 +37,29 @@ content %}
 
         <div class="card-body">
           {% if basic_data %}
-          <!-- Nova linha com os 4 botões -->
-          <div class="row mb-4">
-            <div class="col-12 col-md-3 mb-2 mb-md-0">
+          <!-- Nova linha com os 5 botões -->
+          <div class="row mb-4 justify-content-center">
+            <div class="col-12 col-md-2 mb-2 mb-md-0">
               <a href="/dashboard" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
                 Índice
               </a>
             </div>
-            <div class="col-12 col-md-3 mb-2 mb-md-0">
+            <div class="col-12 col-md-2 mb-2 mb-md-0">
+              <a href="/basic-data/new" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+                Dados Básicos
+              </a>
+            </div>
+            <div class="col-12 col-md-2 mb-2 mb-md-0">
               <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
                 Diagnóstico
               </button>
             </div>
-            <div class="col-12 col-md-3 mb-2 mb-md-0">
+            <div class="col-12 col-md-2 mb-2 mb-md-0">
               <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
                 Simulador
               </button>
             </div>
-            <div class="col-12 col-md-3">
+            <div class="col-12 col-md-2 mb-2 mb-md-0">
               <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
                 Calculadora de preços
               </button>
@@ -75,19 +80,18 @@ content %}
             <table class="table table-hover" id="basicDataTable">
               <thead>
                 <tr>
-                  <th>Mês/Ano <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#monthYearHelpModal"></i></th>
-                  <th>Clientes <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#clientsHelpModal"></i></th>
-                  <th>Faturamento <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#revenueHelpModal"></i></th>
-                  <th>Gastos Vendas <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i></th>
-                  <th>Gastos Insumos <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#inputExpensesHelpModal"></i></th>
+                  <th>Mês</th>
+                  <th>Ano</th>
+                  <th>Clientes <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#clientsHelpModal"></i></th>
+                  <th>Faturamento <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#revenueHelpModal"></i></th>
+                  <th>Gastos Vendas <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i></th>
+                  <th>Gastos Insumos <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#inputExpensesHelpModal"></i></th>
                   {% if user.activity_type == 'Serviços' %}
-                  <th>Pró-labore <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal"></i></th>
-                  <th>Custos Fixos <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i></th>
-                  <th>Horas/Trab <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i></th>
-                  <th>Margem % <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#marginHelpModal"></i></th>
-                  {% elif user.activity_type in ['Comércio', 'Indústria'] %}
-                  <th>Custos Fixos <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i></th>
-                  <th>Margem % <i class="bi bi-question-circle-fill text-primary help-icon" data-bs-toggle="modal" data-bs-target="#marginHelpModal"></i></th>
+                  <th>Pró-labore <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal"></i></th>
+                  <th>Custos Fixos <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i></th>
+                  <th>Horas/Sem <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i></th>
+                  <th>Capacidade <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#capacityHelpModal"></i></th>
+                  <th>Margem % <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#marginHelpModal"></i></th>
                   {% endif %}
                   <th>Ações</th>
                 </tr>
@@ -96,50 +100,23 @@ content %}
               <tbody>
                 {% for data in basic_data %}
                 <tr>
-                  <td>
-                    {{ ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio',
-                    'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro',
-                    'Novembro', 'Dezembro'][data.month - 1] }} {{ data.year }}
-                  </td>
+                  <td>{{ ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'][data.month - 1] }}</td>
+                  <td>{{ data.year }}</td>
                   <td>{{ data.clients_served }}</td>
                   <td>R$ {{ "{:,.2f}".format(data.sales_revenue/10).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
-                  <td>
-                    {% set sales_expenses_percent = (data.sales_expenses / data.sales_revenue * 100) if data.sales_revenue else 0 %}
-                    <span class="{% if sales_expenses_percent > 30 %}value-critical{% elif sales_expenses_percent > 20 %}value-warning{% else %}value-good{% endif %}"
-                          data-bs-toggle="tooltip"
-                          title="{{ "%.1f"|format(sales_expenses_percent) }}% do faturamento">
-                      R$ {{ "{:,.2f}".format(data.sales_expenses/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
-                    </span>
-                  </td>
-                  <td>
-                    {% set input_expenses_percent = (data.input_product_expenses / data.sales_revenue * 100) if data.sales_revenue else 0 %}
-                    <span class="{% if input_expenses_percent > 30 %}value-critical{% elif input_expenses_percent > 20 %}value-warning{% else %}value-good{% endif %}"
-                          data-bs-toggle="tooltip"
-                          title="{{ "%.1f"|format(input_expenses_percent) }}% do faturamento">
-                      R$ {{ "{:,.2f}".format(data.input_product_expenses/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
-                    </span>
-                  </td>
+                  <td>R$ {{ "{:,.2f}".format(data.sales_expenses/10).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
+                  <td>R$ {{ "{:,.2f}".format(data.input_product_expenses/10).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
                   {% if user.activity_type == 'Serviços' %}
                   <td>
                     {% if data.pro_labore is not none %}
-                      {% set pro_labore_percent = (data.pro_labore / data.sales_revenue * 100) if data.sales_revenue else 0 %}
-                      <span class="{% if pro_labore_percent > 30 %}value-critical{% elif pro_labore_percent > 20 %}value-warning{% else %}value-good{% endif %}"
-                            data-bs-toggle="tooltip"
-                            title="{{ "%.1f"|format(pro_labore_percent) }}% do faturamento">
-                        R$ {{ "{:,.2f}".format(data.pro_labore/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
-                      </span>
+                      R$ {{ "{:,.2f}".format(data.pro_labore/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
                     {% else %}
                       N/A
                     {% endif %}
                   </td>
                   <td>
                     {% if data.other_fixed_costs is not none %}
-                      {% set fixed_costs_percent = (data.other_fixed_costs / data.sales_revenue * 100) if data.sales_revenue else 0 %}
-                      <span class="{% if fixed_costs_percent > 30 %}value-critical{% elif fixed_costs_percent > 20 %}value-warning{% else %}value-good{% endif %}"
-                            data-bs-toggle="tooltip"
-                            title="{{ "%.1f"|format(fixed_costs_percent) }}% do faturamento">
-                        R$ {{ "{:,.2f}".format(data.other_fixed_costs/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
-                      </span>
+                      R$ {{ "{:,.2f}".format(data.other_fixed_costs/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
                     {% else %}
                       N/A
                     {% endif %}
@@ -148,32 +125,11 @@ content %}
                     {{ "%.0f"|format(data.work_hours_per_week) if data.work_hours_per_week is not none else 'N/A' }}
                   </td>
                   <td>
+                    {{ data.service_capacity if data.service_capacity is not none else 'N/A' }}
+                  </td>
+                  <td>
                     {% if data.ideal_service_profit_margin is not none %}
-                      <span class="{% if data.ideal_service_profit_margin < 10 %}value-critical{% elif data.ideal_service_profit_margin < 20 %}value-warning{% else %}value-good{% endif %}">
-                        {{ "%.0f"|format(data.ideal_service_profit_margin) }}%
-                      </span>
-                    {% else %}
-                      N/A
-                    {% endif %}
-                  </td>
-                  {% elif user.activity_type in ['Comércio', 'Indústria'] %}
-                  <td>
-                    {% if data.fixed_costs is not none %}
-                      {% set fixed_costs_percent = (data.fixed_costs / data.sales_revenue * 100) if data.sales_revenue else 0 %}
-                      <span class="{% if fixed_costs_percent > 30 %}value-critical{% elif fixed_costs_percent > 20 %}value-warning{% else %}value-good{% endif %}"
-                            data-bs-toggle="tooltip"
-                            title="{{ "%.1f"|format(fixed_costs_percent) }}% do faturamento">
-                        R$ {{ "{:,.2f}".format(data.fixed_costs/10).replace(",", "X").replace(".", ",").replace("X", ".") }}
-                      </span>
-                    {% else %}
-                      N/A
-                    {% endif %}
-                  </td>
-                  <td>
-                    {% if data.ideal_profit_margin is not none %}
-                      <span class="{% if data.ideal_profit_margin < 10 %}value-critical{% elif data.ideal_profit_margin < 20 %}value-warning{% else %}value-good{% endif %}">
-                        {{ "%.0f"|format(data.ideal_profit_margin) }}%
-                      </span>
+                      {{ "%.0f"|format(data.ideal_service_profit_margin) }}%
                     {% else %}
                       N/A
                     {% endif %}
@@ -181,26 +137,11 @@ content %}
                   {% endif %}
                   <td>
                     <div class="d-flex gap-1">
-                      <a
-                        href="/basic-data/edit/{{ data.id }}"
-                        class="btn btn-primary btn-action"
-                        data-bs-toggle="tooltip"
-                        title="Editar"
-                      >
+                      <a href="/basic-data/edit/{{ data.id }}" class="btn btn-secondary btn-action" data-bs-toggle="tooltip" title="Editar">
                         <i class="bi bi-pencil text-white"></i>
                       </a>
-                      <form
-                        method="post"
-                        action="/basic-data/delete/{{ data.id }}"
-                        class="d-inline"
-                        onsubmit="return confirm('Tem certeza que deseja excluir este registro?');"
-                      >
-                        <button
-                          type="submit"
-                          class="btn btn-danger btn-action"
-                          data-bs-toggle="tooltip"
-                          title="Excluir"
-                        >
+                      <form method="post" action="/basic-data/delete/{{ data.id }}" class="d-inline" onsubmit="return confirm('Tem certeza que deseja excluir este registro?');">
+                        <button type="submit" class="btn btn-danger btn-action" data-bs-toggle="tooltip" title="Excluir">
                           <i class="bi bi-trash text-white"></i>
                         </button>
                       </form>
@@ -244,11 +185,11 @@ content %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Clientes</h5>
+                <h5 class="modal-title">Quantidade de Clientes Atendidos</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Número total de clientes atendidos no período. Representa a quantidade de pessoas ou empresas que receberam seus produtos ou serviços.</p>
+                <p>Número total de clientes atendidos no período. Representa a quantidade de pessoas ou empresas que receberam seus serviços.</p>
             </div>
         </div>
     </div>
@@ -258,7 +199,7 @@ content %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Faturamento</h5>
+                <h5 class="modal-title">Faturamento com Vendas</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -272,7 +213,7 @@ content %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Gastos com Vendas</h5>
+                <h5 class="modal-title">Gastos com Vendas</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -286,11 +227,11 @@ content %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Gastos com Insumos</h5>
+                <h5 class="modal-title">Gastos com Insumos e Produtos</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <p>Valor gasto em matérias-primas, produtos para revenda ou insumos necessários para a produção ou prestação de serviços.</p>
+                <p>Valor gasto em matérias-primas, produtos para revenda ou insumos necessários para a prestação de serviços.</p>
             </div>
         </div>
     </div>
@@ -300,7 +241,7 @@ content %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Pró-labore</h5>
+                <h5 class="modal-title">Pró-labore</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -314,7 +255,7 @@ content %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Custos Fixos</h5>
+                <h5 class="modal-title">Demais Custos Fixos</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -328,7 +269,7 @@ content %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Horas de Trabalho por Semana</h5>
+                <h5 class="modal-title">Horas de Trabalho por Semana</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -338,11 +279,25 @@ content %}
     </div>
 </div>
 
+<div class="modal fade" id="capacityHelpModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Capacidade de Atendimento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Capacidade máxima de atendimento de clientes baseada nas horas de trabalho disponíveis e na eficiência operacional.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="marginHelpModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"> Margem de Lucro Ideal</h5>
+                <h5 class="modal-title">Margem de Lucro Ideal (%)</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
@@ -363,11 +318,16 @@ content %}
     cursor: pointer;
     margin-left: 5px;
     opacity: 0.7;
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
   }
 
   .help-icon:hover {
     opacity: 1;
+    transform: scale(1.1);
+  }
+
+  .btn-action i {
+    color: white !important;
   }
 
   .table th {
@@ -377,21 +337,6 @@ content %}
 
   .table td {
     vertical-align: middle;
-  }
-
-  .value-critical {
-    color: #dc3545;
-    font-weight: bold;
-  }
-
-  .value-warning {
-    color: #ffc107;
-    font-weight: bold;
-  }
-
-  .value-good {
-    color: #198754;
-    font-weight: bold;
   }
 
   .btn-action {

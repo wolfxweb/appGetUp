@@ -94,27 +94,44 @@ async def delete_basic_data(
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    # Buscar o registro específico
-    result = await db.execute(
-        select(BasicData)
-        .filter(
-            BasicData.id == data_id,
-            BasicData.user_id == current_user.id
+    try:
+        # Verificar se o usuário está autenticado
+        if not current_user:
+            return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+
+        # Buscar o registro específico
+        result = await db.execute(
+            select(BasicData)
+            .filter(
+                BasicData.id == data_id,
+                BasicData.user_id == current_user.id
+            )
         )
-    )
-    basic_data = result.scalar_one_or_none()
-    
-    if not basic_data:
-        raise HTTPException(status_code=404, detail="Registro não encontrado")
-    
-    # Excluir o registro
-    await db.delete(basic_data)
-    await db.commit()
-    
-    return RedirectResponse(
-        url="/basic-data",
-        status_code=status.HTTP_303_SEE_OTHER
-    )
+        basic_data = result.scalar_one_or_none()
+        
+        if not basic_data:
+            logger.error(f"Registro não encontrado para deleção: ID {data_id}")
+            return RedirectResponse(
+                url="/basic-data",
+                status_code=status.HTTP_303_SEE_OTHER
+            )
+        
+        # Excluir o registro
+        await db.delete(basic_data)
+        await db.commit()
+        
+        logger.info(f"Registro ID {data_id} deletado com sucesso")
+        return RedirectResponse(
+            url="/basic-data",
+            status_code=status.HTTP_303_SEE_OTHER
+        )
+    except Exception as e:
+        logger.error(f"Erro ao deletar registro ID {data_id}: {str(e)}")
+        await db.rollback()
+        return RedirectResponse(
+            url="/basic-data",
+            status_code=status.HTTP_303_SEE_OTHER
+        )
 
 @router.post("/save", response_class=HTMLResponse)
 async def save_basic_data(

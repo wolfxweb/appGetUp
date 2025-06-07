@@ -9,9 +9,7 @@ class BasicDataLog(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     basic_data_id = Column(Integer, ForeignKey('basic_data.id', ondelete="CASCADE"))
-    user_id = Column(Integer, ForeignKey('users.id', ondelete="CASCADE"))
     change_description = Column(String)
     created_at = Column(DateTime, default=datetime.now)
     
     basic_data = relationship("BasicData", back_populates="logs")
-    user = relationship("User", back_populates="basic_data_logs")
