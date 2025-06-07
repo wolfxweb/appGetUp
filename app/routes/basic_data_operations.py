@@ -616,4 +616,133 @@ async def create_basic_data(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Erro ao criar dados"
+        )
+
+@router.post("/update/{data_id}")
+async def update_basic_data(
+    request: Request,
+    data_id: int,
+    current_user = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+    month: int = Form(...),
+    year: int = Form(...),
+    clients_served: int = Form(...),
+    sales_revenue: str = Form(...),
+    sales_expenses: str = Form(...),
+    input_product_expenses: str = Form(...),
+    fixed_costs: str = Form(None),
+    ideal_profit_margin: float = Form(None),
+    service_capacity: str = Form(None),
+    pro_labore: str = Form(None),
+    work_hours_per_week: float = Form(None),
+    other_fixed_costs: str = Form(None),
+    ideal_service_profit_margin: float = Form(None),
+    is_current: str = Form(False)
+):
+    try:
+        # Verificar se o usuário está autenticado
+        if not current_user:
+            return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+
+        # Buscar o registro existente
+        result = await db.execute(
+            select(BasicData)
+            .filter(
+                BasicData.id == data_id,
+                BasicData.user_id == current_user.id
+            )
+        )
+        existing_data = result.scalar_one_or_none()
+
+        if not existing_data:
+            return templates.TemplateResponse(
+                "basic_data_form.html",
+                {
+                    "request": request,
+                    "user": current_user,
+                    "error_message": "Registro não encontrado.",
+                    "current_month": month,
+                    "current_year": year
+                }
+            )
+
+        # Converter valores monetários
+        def convert_currency(value: str) -> float:
+            if not value:
+                return 0.0
+            value = value.replace('R$', '').replace('$', '').replace('.', '').replace(',', '.').strip()
+            return float(value) if value else 0.0
+
+        # Atualizar os campos
+        existing_data.clients_served = clients_served
+        existing_data.sales_revenue = int(convert_currency(sales_revenue) * 100)
+        existing_data.sales_expenses = int(convert_currency(sales_expenses) * 100)
+        existing_data.input_product_expenses = int(convert_currency(input_product_expenses) * 100)
+        existing_data.fixed_costs = int(convert_currency(fixed_costs) * 100) if fixed_costs else None
+        existing_data.ideal_profit_margin = float(ideal_profit_margin) if ideal_profit_margin else None
+        existing_data.service_capacity = service_capacity
+        existing_data.pro_labore = int(convert_currency(pro_labore) * 100) if pro_labore else None
+        existing_data.work_hours_per_week = float(work_hours_per_week) if work_hours_per_week else None
+        existing_data.other_fixed_costs = int(convert_currency(other_fixed_costs) * 100) if other_fixed_costs else None
+        existing_data.ideal_service_profit_margin = float(ideal_service_profit_margin) if ideal_service_profit_margin else None
+        existing_data.is_current = is_current.lower() == 'true' if isinstance(is_current, str) else bool(is_current)
+
+        # Registrar as alterações
+        changes = compare_and_log_changes(db, {
+            'clients_served': existing_data.clients_served,
+            'sales_revenue': existing_data.sales_revenue,
+            'sales_expenses': existing_data.sales_expenses,
+            'input_product_expenses': existing_data.input_product_expenses,
+            'fixed_costs': existing_data.fixed_costs,
+            'ideal_profit_margin': existing_data.ideal_profit_margin,
+            'service_capacity': existing_data.service_capacity,
+            'pro_labore': existing_data.pro_labore,
+            'work_hours_per_week': existing_data.work_hours_per_week,
+            'other_fixed_costs': existing_data.other_fixed_costs,
+            'ideal_service_profit_margin': existing_data.ideal_service_profit_margin,
+            'is_current': existing_data.is_current
+        }, {
+            'clients_served': clients_served,
+            'sales_revenue': int(convert_currency(sales_revenue) * 100),
+            'sales_expenses': int(convert_currency(sales_expenses) * 100),
+            'input_product_expenses': int(convert_currency(input_product_expenses) * 100),
+            'fixed_costs': int(convert_currency(fixed_costs) * 100) if fixed_costs else None,
+            'ideal_profit_margin': float(ideal_profit_margin) if ideal_profit_margin else None,
+            'service_capacity': service_capacity,
+            'pro_labore': int(convert_currency(pro_labore) * 100) if pro_labore else None,
+            'work_hours_per_week': float(work_hours_per_week) if work_hours_per_week else None,
+            'other_fixed_costs': int(convert_currency(other_fixed_costs) * 100) if other_fixed_costs else None,
+            'ideal_service_profit_margin': float(ideal_service_profit_margin) if ideal_service_profit_margin else None,
+            'is_current': is_current.lower() == 'true' if isinstance(is_current, str) else bool(is_current)
+        })
+
+        # Criar logs de alterações
+        if changes:
+            for change in changes:
+                log_entry = BasicDataLog(
+                    basic_data_id=existing_data.id,
+                    change_description=change,
+                    created_at=datetime.now()
+                )
+                db.add(log_entry)
+
+        await db.commit()
+        await db.refresh(existing_data)
+
+        return RedirectResponse(
+            url="/basic-data/",
+            status_code=status.HTTP_303_SEE_OTHER
+        )
+
+    except Exception as e:
+        logger.error(f"Erro ao atualizar dados básicos: {str(e)}")
+        return templates.TemplateResponse(
+            "basic_data_form.html",
+            {
+                "request": request,
+                "user": current_user,
+                "error_message": f"Erro ao atualizar dados: {str(e)}",
+                "basic_data": existing_data,
+                "edit_mode": True
+            }
         ) 

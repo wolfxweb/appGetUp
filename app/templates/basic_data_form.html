@@ -171,12 +171,15 @@
                             <div class="card" style="background-color: #F0F0F0;">
                                 <div class="card-body">
                                     {% if user.activity_type == 'Serviços' %}
-                                    <form method="post" action="/basic-data/save" id="basicDataForm">
+                                    <form method="post" action="{% if edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
                                         {% if show_confirm %}
                                         <input type="hidden" name="confirm_update" value="true">
                                         {% endif %}
                                       
                                         <input type="hidden" name="edit_mode" value="{{ 'true' if edit_mode else 'false' }}">
+                                        {% if basic_data %}
+                                        <input type="hidden" name="data_id" value="{{ basic_data.id }}">
+                                        {% endif %}
                                       
                                         <!-- Primeira linha: Mês e Ano -->
                                         <div class="row">
@@ -367,12 +370,15 @@
                                         </div>
                                     </form>
                                     {% else %}
-                                    <form method="post" action="/basic-data/save" id="basicDataForm">
+                                    <form method="post" action="{% if edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
                                         {% if show_confirm %}
                                         <input type="hidden" name="confirm_update" value="true">
                                         {% endif %}
                                       
                                         <input type="hidden" name="edit_mode" value="{{ 'true' if edit_mode else 'false' }}">
+                                        {% if basic_data %}
+                                        <input type="hidden" name="data_id" value="{{ basic_data.id }}">
+                                        {% endif %}
                                       
                                         <!-- Primeira linha: Mês e Ano -->
                                         <div class="row">
