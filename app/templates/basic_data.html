@@ -95,8 +95,12 @@ content %}
                 </select>
               </div>
               <div class="col-md-3 mb-3">
-                <label for="filterClients" class="form-label">Clientes (mín.)</label>
+                <label for="filterClients" class="form-label">{% if user.activity_type == 'Serviços' %}Clientes (mín.){% else %}Faturamento (mín.){% endif %}</label>
+                {% if user.activity_type == 'Serviços' %}
                 <input type="number" class="form-control" id="filterClients" placeholder="Número mínimo de clientes">
+                {% else %}
+                <input type="number" class="form-control" id="filterRevenue" placeholder="Faturamento mínimo">
+                {% endif %}
               </div>
               <div class="col-md-3 mb-3">
                 <label class="form-label">&nbsp;</label>
@@ -118,14 +122,23 @@ content %}
                 <tr>
                   <th>Mês</th>
                   <th>Ano</th>
+                  {% if user.activity_type == 'Serviços' %}
                   <th>Clientes <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#clientsHelpModal"></i></th>
+                  {% endif %}
                   <th>Faturamento <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#revenueHelpModal"></i></th>
+                  {% if user.activity_type != 'Serviços' %}
+                  <th>Clientes <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#clientsHelpModal"></i></th>
+                  {% endif %}
                   <th>Gastos Vendas <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i></th>
                   <th>Gastos Insumos <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#inputExpensesHelpModal"></i></th>
                   {% if user.activity_type == 'Serviços' %}
                   <th>Pró-labore <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal"></i></th>
                   <th>Custos Fixos <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i></th>
                   <th>Horas/Sem <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i></th>
+                  <th>Capacidade <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#capacityHelpModal"></i></th>
+                  <th>Margem % <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#marginHelpModal"></i></th>
+                  {% else %}
+                  <th>Custos Fixos <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i></th>
                   <th>Capacidade <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#capacityHelpModal"></i></th>
                   <th>Margem % <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#marginHelpModal"></i></th>
                   {% endif %}
@@ -138,14 +151,40 @@ content %}
                 <tr>
                   <td>{{ ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'][data.month - 1] }}</td>
                   <td>{{ data.year }}</td>
-                  <td>{{ data.clients_served }}</td>
+                  {% if user.activity_type == 'Serviços' %}
+                  <td>{{ data.clients_served if data.clients_served is not none else 'N/A' }}</td>
+                  {% endif %}
                   <td>R$ {{ "{:,.2f}".format(data.sales_revenue).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
-                  <td>R$ {{ "{:,.2f}".format(data.sales_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
-                  <td>R$ {{ "{:,.2f}".format(data.input_product_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}</td>
+                  {% if user.activity_type != 'Serviços' %}
+                  <td>{{ data.clients_served if data.clients_served is not none else 'N/A' }}</td>
+                  {% endif %}
+                  <td>
+                    {% if data.sales_expenses is not none %}
+                      R$ {{ "{:,.2f}".format(data.sales_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                      {% if data.sales_revenue > 0 %}
+                        <br><small class="text-muted">{{ "%.2f"|format((data.sales_expenses / data.sales_revenue) * 100) }}%</small>
+                      {% endif %}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if data.input_product_expenses is not none %}
+                      R$ {{ "{:,.2f}".format(data.input_product_expenses).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                      {% if data.sales_revenue > 0 %}
+                        <br><small class="text-muted">{{ "%.2f"|format((data.input_product_expenses / data.sales_revenue) * 100) }}%</small>
+                      {% endif %}
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
                   {% if user.activity_type == 'Serviços' %}
                   <td>
                     {% if data.pro_labore is not none %}
                       R$ {{ "{:,.2f}".format(data.pro_labore).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                      {% if data.sales_revenue > 0 %}
+                        <br><small class="text-muted">{{ "%.2f"|format((data.pro_labore / data.sales_revenue) * 100) }}%</small>
+                      {% endif %}
                     {% else %}
                       N/A
                     {% endif %}
@@ -153,12 +192,36 @@ content %}
                   <td>
                     {% if data.other_fixed_costs is not none %}
                       R$ {{ "{:,.2f}".format(data.other_fixed_costs).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                      {% if data.sales_revenue > 0 %}
+                        <br><small class="text-muted">{{ "%.2f"|format((data.other_fixed_costs / data.sales_revenue) * 100) }}%</small>
+                      {% endif %}
                     {% else %}
                       N/A
                     {% endif %}
                   </td>
                   <td>
                     {{ "%.0f"|format(data.work_hours_per_week) if data.work_hours_per_week is not none else 'N/A' }}
+                  </td>
+                  <td>
+                    {{ data.service_capacity if data.service_capacity is not none else 'N/A' }}
+                  </td>
+                  <td>
+                    {% if data.ideal_service_profit_margin is not none %}
+                      {{ "%.0f"|format(data.ideal_service_profit_margin) }}%
+                    {% else %}
+                      N/A
+                    {% endif %}
+                  </td>
+                  {% else %}
+                  <td>
+                    {% if data.other_fixed_costs is not none %}
+                      R$ {{ "{:,.2f}".format(data.other_fixed_costs).replace(",", "X").replace(".", ",").replace("X", ".") }}
+                      {% if data.sales_revenue > 0 %}
+                        <br><small class="text-muted">{{ "%.2f"|format((data.other_fixed_costs / data.sales_revenue) * 100) }}%</small>
+                      {% endif %}
+                    {% else %}
+                      N/A
+                    {% endif %}
                   </td>
                   <td>
                     {{ data.service_capacity if data.service_capacity is not none else 'N/A' }}
@@ -291,11 +354,15 @@ content %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Demais Custos Fixos</h5>
+                <h5 class="modal-title">{% if user.activity_type == 'Serviços' %}Demais Custos Fixos{% else %}Custos Fixos{% endif %}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
+                {% if user.activity_type == 'Serviços' %}
                 <p>Valor dos custos que permanecem constantes independentemente do volume de vendas, como aluguel, salários fixos, energia, água, etc.</p>
+                {% else %}
+                <p>Informe os custos que permanecem constantes independentemente do volume de vendas, como aluguel, salários fixos, energia, água, seguros, licenças, etc. Para Commerce e Industry, inclui também despesas administrativas e operacionais fixas.</p>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -444,6 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const filterMonth = document.getElementById('filterMonth');
     const filterYear = document.getElementById('filterYear');
     const filterClients = document.getElementById('filterClients');
+    const filterRevenue = document.getElementById('filterRevenue');
     const clearFiltersBtn = document.getElementById('clearFilters');
     const exportDataBtn = document.getElementById('exportData');
     const table = document.getElementById('basicDataTable');
@@ -456,6 +524,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (filterMonth) filterMonth.addEventListener('change', applyFilters);
         if (filterYear) filterYear.addEventListener('change', applyFilters);
         if (filterClients) filterClients.addEventListener('input', applyFilters);
+        if (filterRevenue) filterRevenue.addEventListener('input', applyFilters);
         
         // Botão limpar filtros
         if (clearFiltersBtn) {
@@ -463,6 +532,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (filterMonth) filterMonth.value = '';
                 if (filterYear) filterYear.value = '';
                 if (filterClients) filterClients.value = '';
+                if (filterRevenue) filterRevenue.value = '';
                 applyFilters();
             });
         }
@@ -508,9 +578,13 @@ document.addEventListener('DOMContentLoaded', function() {
         const monthFilter = filterMonth ? filterMonth.value.toLowerCase() : '';
         const yearFilter = filterYear ? filterYear.value : '';
         const clientsFilter = filterClients ? parseInt(filterClients.value) || 0 : 0;
+        const revenueFilter = filterRevenue ? parseFloat(filterRevenue.value) || 0 : 0;
         
         const rows = table.getElementsByTagName('tr');
         let visibleCount = 0;
+        
+        // Determinar o tipo de atividade baseado na existência dos elementos de filtro
+        const isServices = !!filterClients;
         
         // Aplicar filtros (começando do índice 1 para pular o header)
         for (let i = 1; i < rows.length; i++) {
@@ -520,14 +594,27 @@ document.addEventListener('DOMContentLoaded', function() {
             if (cells.length >= 3) {
                 const month = cells[0].textContent.toLowerCase().trim();
                 const year = cells[1].textContent.trim();
-                const clients = parseInt(cells[2].textContent.trim()) || 0;
+                
+                let clients = 0;
+                let revenue = 0;
+                
+                if (isServices) {
+                    // Para serviços: Mês, Ano, Clientes, Faturamento, ...
+                    clients = parseInt(cells[2].textContent.trim()) || 0;
+                    revenue = parseFloat(cells[3].textContent.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+                } else {
+                    // Para commerce/industry: Mês, Ano, Faturamento, Clientes, ...
+                    revenue = parseFloat(cells[2].textContent.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+                    clients = parseInt(cells[3].textContent.trim()) || 0;
+                }
                 
                 // Verificar se a linha atende aos critérios de filtro
                 const monthMatch = !monthFilter || month.includes(monthFilter);
                 const yearMatch = !yearFilter || year === yearFilter;
                 const clientsMatch = !clientsFilter || clients >= clientsFilter;
+                const revenueMatch = !revenueFilter || revenue >= revenueFilter;
                 
-                if (monthMatch && yearMatch && clientsMatch) {
+                if (monthMatch && yearMatch && clientsMatch && revenueMatch) {
                     row.style.display = '';
                     visibleCount++;
                 } else {
