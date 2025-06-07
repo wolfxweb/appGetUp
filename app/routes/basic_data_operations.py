@@ -674,16 +674,18 @@ async def update_basic_data(
             return float(value) if value else 0.0
 
         # Atualizar os campos
+        existing_data.month = month
+        existing_data.year = year
         existing_data.clients_served = clients_served
-        existing_data.sales_revenue = int(convert_currency(sales_revenue) * 100)
-        existing_data.sales_expenses = int(convert_currency(sales_expenses) * 100)
-        existing_data.input_product_expenses = int(convert_currency(input_product_expenses) * 100)
-        existing_data.fixed_costs = int(convert_currency(fixed_costs) * 100) if fixed_costs else None
+        existing_data.sales_revenue = convert_currency(sales_revenue)
+        existing_data.sales_expenses = convert_currency(sales_expenses)
+        existing_data.input_product_expenses = convert_currency(input_product_expenses)
+        existing_data.fixed_costs = convert_currency(fixed_costs) if fixed_costs else None
         existing_data.ideal_profit_margin = float(ideal_profit_margin) if ideal_profit_margin else None
         existing_data.service_capacity = service_capacity
-        existing_data.pro_labore = int(convert_currency(pro_labore) * 100) if pro_labore else None
+        existing_data.pro_labore = convert_currency(pro_labore) if pro_labore else None
         existing_data.work_hours_per_week = float(work_hours_per_week) if work_hours_per_week else None
-        existing_data.other_fixed_costs = int(convert_currency(other_fixed_costs) * 100) if other_fixed_costs else None
+        existing_data.other_fixed_costs = convert_currency(other_fixed_costs) if other_fixed_costs else None
         existing_data.ideal_service_profit_margin = float(ideal_service_profit_margin) if ideal_service_profit_margin else None
         existing_data.is_current = is_current.lower() == 'true' if isinstance(is_current, str) else bool(is_current)
 
@@ -703,15 +705,15 @@ async def update_basic_data(
             'is_current': existing_data.is_current
         }, {
             'clients_served': clients_served,
-            'sales_revenue': int(convert_currency(sales_revenue) * 100),
-            'sales_expenses': int(convert_currency(sales_expenses) * 100),
-            'input_product_expenses': int(convert_currency(input_product_expenses) * 100),
-            'fixed_costs': int(convert_currency(fixed_costs) * 100) if fixed_costs else None,
+            'sales_revenue': convert_currency(sales_revenue),
+            'sales_expenses': convert_currency(sales_expenses),
+            'input_product_expenses': convert_currency(input_product_expenses),
+            'fixed_costs': convert_currency(fixed_costs) if fixed_costs else None,
             'ideal_profit_margin': float(ideal_profit_margin) if ideal_profit_margin else None,
             'service_capacity': service_capacity,
-            'pro_labore': int(convert_currency(pro_labore) * 100) if pro_labore else None,
+            'pro_labore': convert_currency(pro_labore) if pro_labore else None,
             'work_hours_per_week': float(work_hours_per_week) if work_hours_per_week else None,
-            'other_fixed_costs': int(convert_currency(other_fixed_costs) * 100) if other_fixed_costs else None,
+            'other_fixed_costs': convert_currency(other_fixed_costs) if other_fixed_costs else None,
             'ideal_service_profit_margin': float(ideal_service_profit_margin) if ideal_service_profit_margin else None,
             'is_current': is_current.lower() == 'true' if isinstance(is_current, str) else bool(is_current)
         })

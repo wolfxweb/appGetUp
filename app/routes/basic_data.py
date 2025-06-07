@@ -197,15 +197,15 @@ async def save_basic_data(
             year=year,
             activity_type=current_user.activity_type,
             clients_served=clients_served,
-            sales_revenue=int(convert_currency(sales_revenue) * 100),  # Multiplicar por 100 para armazenar em centavos
-            sales_expenses=int(convert_currency(sales_expenses) * 100),
-            input_product_expenses=int(convert_currency(input_product_expenses) * 100),
-            fixed_costs=int(convert_currency(fixed_costs) * 100) if fixed_costs else None,
+            sales_revenue=convert_currency(sales_revenue),
+            sales_expenses=convert_currency(sales_expenses),
+            input_product_expenses=convert_currency(input_product_expenses),
+            fixed_costs=convert_currency(fixed_costs) if fixed_costs else None,
             ideal_profit_margin=float(ideal_profit_margin) if ideal_profit_margin else None,
             service_capacity=service_capacity,
-            pro_labore=int(convert_currency(pro_labore) * 100) if pro_labore else None,
+            pro_labore=convert_currency(pro_labore) if pro_labore else None,
             work_hours_per_week=float(work_hours_per_week) if work_hours_per_week else None,
-            other_fixed_costs=int(convert_currency(other_fixed_costs) * 100) if other_fixed_costs else None,
+            other_fixed_costs=convert_currency(other_fixed_costs) if other_fixed_costs else None,
             ideal_service_profit_margin=float(ideal_service_profit_margin) if ideal_service_profit_margin else None,
             is_current=True
         )
