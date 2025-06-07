@@ -743,3 +743,24 @@ WHERE ? = basic_data_logs.basic_data_id]
 2025-06-07 16:31:00,796 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=22.0, other_fixed_costs=222.0
 2025-06-07 16:31:00,796 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=7.389, sales_expenses=22000000.0, input_product_expenses=440020000.0
 2025-06-07 16:31:00,796 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=2.2, other_fixed_costs=22.2
+2025-06-07 16:36:13,359 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-06-07 16:36:13,360 - app.routes.basic_data - INFO - Registro ID 1: month=6, year=2025, clients_served=2
+2025-06-07 16:36:13,360 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=2.0, sales_expenses=0.0, input_product_expenses=0.0
+2025-06-07 16:36:13,361 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=2.0, other_fixed_costs=22.0
+2025-06-07 16:36:13,362 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=0.2, sales_expenses=0.0, input_product_expenses=0.0
+2025-06-07 16:36:13,363 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=0.2, other_fixed_costs=2.2
+2025-06-07 16:36:16,708 - app.routes.basic_data - INFO - Registro ID 1 deletado com sucesso
+2025-06-07 16:36:16,727 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-06-07 16:40:24,939 - app.routes.basic_data - INFO - Dados básicos encontrados: 0 registros
+2025-06-07 16:41:36,481 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-06-07 16:41:36,482 - app.routes.basic_data - INFO - Registro ID 1: month=6, year=2025, clients_served=2
+2025-06-07 16:41:36,482 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=555.0, sales_expenses=222.0, input_product_expenses=5502.0
+2025-06-07 16:41:36,482 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=222.22, other_fixed_costs=2.22
+2025-06-07 16:41:36,483 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=55.5, sales_expenses=22.2, input_product_expenses=550.2
+2025-06-07 16:41:36,483 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=22.222, other_fixed_costs=0.22200000000000003
+2025-06-07 16:42:30,113 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-06-07 16:42:30,118 - app.routes.basic_data - INFO - Registro ID 1: month=6, year=2025, clients_served=2
+2025-06-07 16:42:30,122 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=555.0, sales_expenses=222.0, input_product_expenses=5502.0
+2025-06-07 16:42:30,124 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=222.22, other_fixed_costs=222.22
+2025-06-07 16:42:30,125 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=55.5, sales_expenses=22.2, input_product_expenses=550.2
+2025-06-07 16:42:30,127 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=22.222, other_fixed_costs=22.222

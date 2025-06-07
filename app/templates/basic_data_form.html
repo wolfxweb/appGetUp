@@ -813,6 +813,17 @@
         return porcentagem.toFixed(2) + '%';
     }
 
+    // Função para verificar e aplicar cor na porcentagem
+    function verificarPorcentagem(campo) {
+        if (!campo.value) return;
+        const valor = parseFloat(campo.value);
+        if (valor > 100) {
+            campo.classList.add('invalid-percentage');
+        } else {
+            campo.classList.remove('invalid-percentage');
+        }
+    }
+
     // Função para atualizar campos hidden
     function updateHiddenFields() {
         // Sales Expenses
@@ -827,6 +838,43 @@
         const inputProductExpenses = document.getElementById('input_product_expenses');
         if (inputProductExpensesDisplay && inputProductExpenses) {
             inputProductExpenses.value = converterParaNumero(inputProductExpensesDisplay.value);
+        }
+    }
+
+    // Função para atualizar todas as porcentagens
+    function atualizarPorcentagens() {
+        const receita = document.getElementById('sales_revenue').value;
+        
+        // Atualizar porcentagem de gastos com vendas
+        const salesExpensesDisplay = document.getElementById('sales_expenses_display');
+        const salesExpensesPercentual = document.getElementById('sales_expenses_percentual');
+        if (salesExpensesDisplay && salesExpensesPercentual) {
+            salesExpensesPercentual.value = calcularPorcentagem(salesExpensesDisplay.value, receita);
+            verificarPorcentagem(salesExpensesPercentual);
+        }
+
+        // Atualizar porcentagem de gastos com insumos
+        const inputProductExpensesDisplay = document.getElementById('input_product_expenses_display');
+        const inputProductExpensesPercentual = document.getElementById('input_product_expenses_percentual');
+        if (inputProductExpensesDisplay && inputProductExpensesPercentual) {
+            inputProductExpensesPercentual.value = calcularPorcentagem(inputProductExpensesDisplay.value, receita);
+            verificarPorcentagem(inputProductExpensesPercentual);
+        }
+
+        // Atualizar porcentagem de pró-labore
+        const proLabore = document.getElementById('pro_labore');
+        const proLaborePercentual = document.getElementById('pro_labore_percentual');
+        if (proLabore && proLaborePercentual) {
+            proLaborePercentual.value = calcularPorcentagem(proLabore.value, receita);
+            verificarPorcentagem(proLaborePercentual);
+        }
+
+        // Atualizar porcentagem de custos fixos
+        const otherFixedCosts = document.getElementById('other_fixed_costs');
+        const otherFixedCostsPercentual = document.getElementById('other_fixed_costs_percentual');
+        if (otherFixedCosts && otherFixedCostsPercentual) {
+            otherFixedCostsPercentual.value = calcularPorcentagem(otherFixedCosts.value, receita);
+            verificarPorcentagem(otherFixedCostsPercentual);
         }
     }
 
@@ -896,6 +944,7 @@
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             updateHiddenFields();
+            atualizarPorcentagens();
             form.submit();
         });
     });
