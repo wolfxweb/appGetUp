@@ -178,7 +178,12 @@ async def save_basic_data(
                     "user": current_user,
                     "error_message": "Já existe um registro para este mês/ano. Por favor, edite o registro existente.",
                     "basic_data": existing_data,
-                    "edit_mode": True
+                    "edit_mode": True,
+                    "logs": [],
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "per_page": 10,
+                    "total_logs": 0
                 }
             )
         
@@ -238,6 +243,12 @@ async def save_basic_data(
             {
                 "request": request,
                 "user": current_user,
-                "error_message": f"Erro ao salvar dados: {str(e)}"
+                "error_message": f"Erro ao salvar dados: {str(e)}",
+                "edit_mode": False,
+                "logs": [],
+                "current_page": 1,
+                "total_pages": 1,
+                "per_page": 10,
+                "total_logs": 0
             }
         ) 
