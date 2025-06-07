@@ -171,7 +171,13 @@ async def new_basic_data_page(
             "user": current_user,
             "current_month": current_month,
             "current_year": current_year,
-            "existing_data": existing_data
+            "existing_data": existing_data,
+            "edit_mode": False,
+            "logs": [],
+            "current_page": 1,
+            "total_pages": 1,
+            "per_page": 10,
+            "total_logs": 0
         }
     )
 
@@ -350,7 +356,13 @@ async def save_basic_data(
                         "user": current_user,
                         "error_message": "Registro não encontrado para edição.",
                         "current_month": month,
-                        "current_year": year
+                        "current_year": year,
+                        "edit_mode": True,
+                        "logs": [],
+                        "current_page": 1,
+                        "total_pages": 1,
+                        "per_page": 10,
+                        "total_logs": 0
                     }
                 )
         else:
@@ -375,7 +387,13 @@ async def save_basic_data(
                         "user": current_user,
                         "error_message": f"Já existe um registro para {calendar.month_name[month]}/{year}. Use a opção de edição.",
                         "current_month": month,
-                        "current_year": year
+                        "current_year": year,
+                        "edit_mode": False,
+                        "logs": [],
+                        "current_page": 1,
+                        "total_pages": 1,
+                        "per_page": 10,
+                        "total_logs": 0
                     }
                 )
 
@@ -502,7 +520,13 @@ async def save_basic_data(
                 "user": current_user,
                 "error_message": f"Erro ao salvar dados: {str(e)}",
                 "current_month": month,
-                "current_year": year
+                "current_year": year,
+                "edit_mode": False,
+                "logs": [],
+                "current_page": 1,
+                "total_pages": 1,
+                "per_page": 10,
+                "total_logs": 0
             }
         )
 
@@ -672,7 +696,13 @@ async def update_basic_data(
                     "user": current_user,
                     "error_message": "Registro não encontrado.",
                     "current_month": month,
-                    "current_year": year
+                    "current_year": year,
+                    "edit_mode": True,
+                    "logs": [],
+                    "current_page": 1,
+                    "total_pages": 1,
+                    "per_page": 10,
+                    "total_logs": 0
                 }
             )
 
@@ -761,6 +791,11 @@ async def update_basic_data(
                 "user": current_user,
                 "error_message": f"Erro ao atualizar dados: {str(e)}",
                 "basic_data": existing_data,
-                "edit_mode": True
+                "edit_mode": True,
+                "logs": [],
+                "current_page": 1,
+                "total_pages": 1,
+                "per_page": 10,
+                "total_logs": 0
             }
         ) 
