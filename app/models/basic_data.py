@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime, Boolean
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime, Boolean, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database.db import Base
@@ -8,7 +8,7 @@ class BasicData(Base):
     __tablename__ = "basic_data"
     
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     month = Column(Integer, nullable=False)
     year = Column(Integer, nullable=False)
     activity_type = Column(String, nullable=False)
@@ -31,16 +31,16 @@ class BasicData(Base):
     ideal_service_profit_margin = Column(Float, nullable=True)
     
     # Campo para indicar se é o registro atual
-    is_current = Column(Boolean, nullable=True)
+    is_current = Column(Boolean, default=False)
     
     # Campos de controle
-    created_at = Column(DateTime, default=datetime.now)
-    updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # Relacionamento
     user = relationship("User", back_populates="basic_data")
-    logs = relationship("BasicDataLog", back_populates="basic_data", cascade="all, delete-orphan")
+    logs = relationship("BasicDataLog", back_populates="basic_data")
     calculator_records = relationship("Calculator", back_populates="basic_data", cascade="all, delete-orphan")
     
     def __repr__(self):
-        return f"<BasicData(user_id={self.user_id}, month={self.month}, year={self.year}, activity_type={self.activity_type})>" 
+        return f"<BasicData(user_id={self.user_id}, month={self.month}, year={self.year})>" 

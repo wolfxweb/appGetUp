@@ -82,6 +82,11 @@
     .input-group-text {
         background-color: #F5F5F5 !important;
     }
+
+    .invalid-percentage {
+        background-color: #ffebee !important;
+        border-color: #dc3545 !important;
+    }
 </style>
 {% endblock %}
 
@@ -235,7 +240,8 @@
                                                         <input type="text" class="form-control" id="gastos_vendas" name="gastos_vendas" required>
                                                     </div>
                                                     <div class="col-3 p-0">
-                                                        <input type="text" class="form-control" id="gastos_vendas_percentual" name="gastos_vendas_percentual" readonly>
+                                                        <input type="text" class="form-control" id="gastos_vendas_percentual" readonly>
+                                                        <input type="hidden" id="gastos_vendas_percentual_hidden" name="gastos_vendas_percentual">
                                                     </div>
                                                 </div>
                                             </div>
@@ -249,7 +255,8 @@
                                                         <input type="text" class="form-control" id="gastos_insumos" name="gastos_insumos" required>
                                                     </div>
                                                     <div class="col-3 p-0">
-                                                        <input type="text" class="form-control" id="gastos_insumos_percentual" name="gastos_insumos_percentual" readonly>
+                                                        <input type="text" class="form-control" id="gastos_insumos_percentual" readonly>
+                                                        <input type="hidden" id="gastos_insumos_percentual_hidden" name="gastos_insumos_percentual">
                                                     </div>
                                                 </div>
                                             </div>
@@ -268,7 +275,8 @@
                                                             value="{{ (basic_data.pro_labore/10)|round(2) if basic_data and basic_data.pro_labore is not none else '' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
-                                                        <input type="text" class="form-control" placeholder="" name="pro_labore_percentual">
+                                                        <input type="text" class="form-control" id="pro_labore_percentual" readonly>
+                                                        <input type="hidden" id="pro_labore_percentual_hidden" name="pro_labore_percentual">
                                                     </div>
                                                 </div>
                                             </div>
@@ -416,7 +424,13 @@
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="gastos_vendas" name="gastos_vendas" required>
+                                                    <div class="col-9 p-0">
+                                                        <input type="text" class="form-control" id="gastos_vendas" name="gastos_vendas" required>
+                                                    </div>
+                                                    <div class="col-3 p-0">
+                                                        <input type="text" class="form-control" id="gastos_vendas_percentual" readonly>
+                                                        <input type="hidden" id="gastos_vendas_percentual_hidden" name="gastos_vendas_percentual">
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-6 mb-3">
@@ -425,7 +439,13 @@
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#inputProductExpensesHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="gastos_insumos" name="gastos_insumos" required>
+                                                    <div class="col-9 p-0">
+                                                        <input type="text" class="form-control" id="gastos_insumos" name="gastos_insumos" required>
+                                                    </div>
+                                                    <div class="col-3 p-0">
+                                                        <input type="text" class="form-control" id="gastos_insumos_percentual" readonly>
+                                                        <input type="hidden" id="gastos_insumos_percentual_hidden" name="gastos_insumos_percentual">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -531,15 +551,16 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmReplaceModalLabel">Confirmar Substituição</h5>
+                <h5 class="modal-title" id="confirmReplaceModalLabel">Registro Existente</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
-                Já existe um registro para este mês. Deseja substituir?
+                <p>Já existe um registro para o período selecionado. Deseja atualizar os dados existentes?</p>
+                <p class="text-muted small">Ao confirmar, as alterações serão registradas no histórico de mudanças.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Não</button>
-                <button type="button" class="btn btn-primary" id="confirmReplace">Sim</button>
+                <button type="button" class="btn btn-primary" id="confirmReplace">Sim, Atualizar</button>
             </div>
         </div>
     </div>
@@ -1138,7 +1159,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return isValid;
     }
 
-    // Modificar o evento de submit do formulário
+    // Manipulador do envio do formulário
     form.addEventListener('submit', async function(e) {
         e.preventDefault();
 
@@ -1162,7 +1183,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Verifica se já existe registro para o mês/ano selecionado (apenas para novo registro)
+        // Verificar se já existe registro para o mês/ano selecionado
         const month = document.getElementById('month').value;
         const year = document.getElementById('year').value;
         
@@ -1181,7 +1202,7 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Erro ao verificar dados existentes:', error);
             prepareFormData();
-            form.submit(); // Em caso de erro, tenta enviar mesmo assim
+            form.submit();
         }
     });
 
@@ -1189,67 +1210,15 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('confirmReplace').addEventListener('click', function() {
         isConfirmed = true;
         confirmModal.hide();
-        
-        // Remover qualquer backdrop residual
-        const backdrops = document.querySelectorAll('.modal-backdrop');
-        backdrops.forEach(backdrop => {
-            backdrop.parentNode.removeChild(backdrop);
-        });
-        
-        // Remover classes que o Bootstrap adiciona ao body
-        document.body.classList.remove('modal-open');
-        document.body.style.removeProperty('padding-right');
-        
-        // Submeter o formulário após um breve delay
-        setTimeout(() => {
-            prepareFormData();
-            form.submit();
-        }, 100);
+        prepareFormData();
+        form.submit();
     });
 
     // Reset da confirmação quando o modal é fechado
     confirmReplaceModal.addEventListener('hidden.bs.modal', function() {
-        if (!isConfirmed) {
-            isConfirmed = false;
-        }
-        
-        // Remover qualquer backdrop residual quando o modal é fechado por qualquer razão
-        const backdrops = document.querySelectorAll('.modal-backdrop');
-        backdrops.forEach(backdrop => {
-            backdrop.parentNode.removeChild(backdrop);
-        });
-        
-        // Remover classes que o Bootstrap adiciona ao body
-        document.body.classList.remove('modal-open');
-        document.body.style.removeProperty('padding-right');
+        isConfirmed = false;
     });
 
-    // Modificar o evento do botão de atualizar
-    document.getElementById('updateButton')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Validar campos obrigatórios
-        if (!validateRequiredFields()) {
-            return;
-        }
-        
-        prepareFormData();
-        form.submit();
-    });
-
-    // Modificar o evento do botão de salvar
-    document.getElementById('saveButton')?.addEventListener('click', function(e) {
-        e.preventDefault();
-        
-        // Validar campos obrigatórios
-        if (!validateRequiredFields()) {
-            return;
-        }
-        
-        prepareFormData();
-        form.submit();
-    });
-    
     // Implementação do filtro para a tabela de logs
     const logFilter = document.getElementById('logFilter');
     const dateFilter = document.getElementById('dateFilter');
@@ -1315,36 +1284,57 @@ document.addEventListener('DOMContentLoaded', function() {
         return porcentagem.toFixed(2) + '%';
     }
 
+    // Função para validar e formatar porcentagem
+    function validarPorcentagem(valor, receita) {
+        if (!valor || !receita || receita === 0) return { value: '0%', isValid: true };
+        const porcentagem = (parseFloat(valor) / parseFloat(receita)) * 100;
+        return {
+            value: porcentagem.toFixed(2) + '%',
+            isValid: porcentagem >= 0 && porcentagem <= 100
+        };
+    }
+
     // Função para atualizar todas as porcentagens
     function atualizarPorcentagens() {
         const receita = document.getElementById('sales_revenue').value.replace(/[^\d,]/g, '').replace(',', '.');
         
-        // Pro-labore
-        const proLabore = document.getElementById('pro_labore').value.replace(/[^\d,]/g, '').replace(',', '.');
-        document.getElementById('pro_labore_percentual').value = calcularPorcentagem(proLabore, receita);
-        
         // Gastos com Vendas
         const gastosVendas = document.getElementById('gastos_vendas').value.replace(/[^\d,]/g, '').replace(',', '.');
-        document.getElementById('gastos_vendas_percentual').value = calcularPorcentagem(gastosVendas, receita);
+        const gastosVendasResult = validarPorcentagem(gastosVendas, receita);
+        document.getElementById('gastos_vendas_percentual').value = gastosVendasResult.value;
+        document.getElementById('gastos_vendas_percentual_hidden').value = gastosVendasResult.value.replace('%', '');
+        document.getElementById('gastos_vendas_percentual').classList.toggle('invalid-percentage', !gastosVendasResult.isValid);
         
         // Gastos com Insumos
         const gastosInsumos = document.getElementById('gastos_insumos').value.replace(/[^\d,]/g, '').replace(',', '.');
-        document.getElementById('gastos_insumos_percentual').value = calcularPorcentagem(gastosInsumos, receita);
+        const gastosInsumosResult = validarPorcentagem(gastosInsumos, receita);
+        document.getElementById('gastos_insumos_percentual').value = gastosInsumosResult.value;
+        document.getElementById('gastos_insumos_percentual_hidden').value = gastosInsumosResult.value.replace('%', '');
+        document.getElementById('gastos_insumos_percentual').classList.toggle('invalid-percentage', !gastosInsumosResult.isValid);
+        
+        // Pro-labore
+        const proLabore = document.getElementById('pro_labore').value.replace(/[^\d,]/g, '').replace(',', '.');
+        const proLaboreResult = validarPorcentagem(proLabore, receita);
+        document.getElementById('pro_labore_percentual').value = proLaboreResult.value;
+        document.getElementById('pro_labore_percentual_hidden').value = proLaboreResult.value.replace('%', '');
+        document.getElementById('pro_labore_percentual').classList.toggle('invalid-percentage', !proLaboreResult.isValid);
         
         // Demais Custos Fixos
         const demaisCustos = document.getElementById('demais_custos_fixos').value.replace(/[^\d,]/g, '').replace(',', '.');
-        document.getElementById('demais_custos_fixos_percentual').value = calcularPorcentagem(demaisCustos, receita);
+        const demaisCustosResult = validarPorcentagem(demaisCustos, receita);
+        document.getElementById('demais_custos_fixos_percentual').value = demaisCustosResult.value;
+        document.getElementById('demais_custos_fixos_percentual').classList.toggle('invalid-percentage', !demaisCustosResult.isValid);
     }
 
     // Adicionar event listeners para os campos
     document.getElementById('sales_revenue').addEventListener('input', atualizarPorcentagens);
-    document.getElementById('pro_labore').addEventListener('input', atualizarPorcentagens);
     document.getElementById('gastos_vendas').addEventListener('input', atualizarPorcentagens);
     document.getElementById('gastos_insumos').addEventListener('input', atualizarPorcentagens);
+    document.getElementById('pro_labore').addEventListener('input', atualizarPorcentagens);
     document.getElementById('demais_custos_fixos').addEventListener('input', atualizarPorcentagens);
 
     // Atualizar porcentagens ao carregar a página
-    document.addEventListener('DOMContentLoaded', atualizarPorcentagens);
+    atualizarPorcentagens();
 });
 </script>
 {% endblock %}

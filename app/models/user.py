@@ -2,13 +2,14 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, Foreign
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database.db import Base
+from app.models.basic_data_log import BasicDataLog
 
 class User(Base):
     __tablename__ = "users"
     
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
-    email = Column(String, unique=True, nullable=False)
+    email = Column(String, unique=True, index=True)
     whatsapp = Column(String)
     activity_type = Column(String, nullable=False) # Serviços, Comércio ou Indústria
     password = Column(String, nullable=False)
@@ -37,6 +38,10 @@ class User(Base):
     
     # Relacionamento com Dados Básicos
     basic_data = relationship("BasicData", back_populates="user", cascade="all, delete-orphan")
+    basic_data_logs = relationship("BasicDataLog", back_populates="user", cascade="all, delete-orphan")
     
     # Relacionamento com registros da Calculadora
     calculator_records = relationship("Calculator", back_populates="user", cascade="all, delete-orphan") 
+
+    def __repr__(self):
+        return f"<User(id={self.id}, email={self.email})>" 

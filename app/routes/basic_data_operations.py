@@ -15,6 +15,7 @@ from app.models.user import User
 from app.models.basic_data import BasicData
 from app.models.basic_data_log import BasicDataLog
 from app.routes.auth import get_current_user
+from app.schemas.basic_data import BasicDataForm
 
 router = APIRouter(prefix="/basic-data")
 
@@ -559,61 +560,43 @@ async def edit_basic_data_page(
     )
 
 @router.get("/check/{year}/{month}")
-async def check_basic_data_exists(
+async def check_basic_data(
     year: int,
     month: int,
-    current_user: User = Depends(get_current_user),
+    current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    # Verificar se o usuário está autenticado
-    if not current_user:
-        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
-
-    # Verificar se já existe um registro para o mesmo mês/ano
-    result = await db.execute(
-        select(BasicData)
-        .filter(
-            BasicData.user_id == current_user.id,
-            BasicData.month == month,
-            BasicData.year == year
+    try:
+        # Verificar se já existe registro para o mês/ano
+        result = await db.execute(
+            select(BasicData)
+            .filter(
+                BasicData.user_id == current_user.id,
+                BasicData.month == month,
+                BasicData.year == year
+            )
         )
-    )
-    existing_data = result.scalar_one_or_none()
-    
-    return {"exists": existing_data is not None} 
+        existing_data = result.scalar_one_or_none()
+
+        return {
+            "exists": existing_data is not None,
+            "data_id": existing_data.id if existing_data else None
+        }
+    except Exception as e:
+        logger.error(f"Erro ao verificar dados existentes: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erro ao verificar dados existentes"
+        )
 
 @router.post("/update/{data_id}")
 async def update_basic_data(
-    request: Request,
     data_id: int,
+    form_data: BasicDataForm,
     current_user = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db),
-    month: int = Form(...),
-    year: int = Form(...),
-    clients_served: int = Form(...),
-    sales_revenue: str = Form(...),
-    sales_expenses: str = Form(...),
-    input_product_expenses: str = Form(...),
-    fixed_costs: str = Form(None),
-    ideal_profit_margin: float = Form(None),
-    service_capacity: str = Form(None),
-    pro_labore: str = Form(None),
-    work_hours_per_week: float = Form(None),
-    other_fixed_costs: str = Form(None),
-    ideal_service_profit_margin: float = Form(None),
-    is_current: str = Form(False)
+    db: AsyncSession = Depends(get_db)
 ):
-    # Verificar se o usuário está autenticado
-    if not current_user:
-        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
-
     try:
-        # Verificar se is_current é uma string ou um booleano
-        if isinstance(is_current, str):
-            is_current_bool = is_current.lower() == 'true'
-        else:
-            is_current_bool = bool(is_current)
-
         # Buscar o registro existente
         result = await db.execute(
             select(BasicData)
@@ -623,103 +606,78 @@ async def update_basic_data(
             )
         )
         existing_data = result.scalar_one_or_none()
-
-        if not existing_data:
-            raise HTTPException(status_code=404, detail="Registro não encontrado")
-
-        # Converter valores monetários
-        sales_revenue_float = float(sales_revenue.replace('R$', '').replace('.', '').replace(',', '.').strip())
-        sales_expenses_float = float(sales_expenses.replace('R$', '').replace('.', '').replace(',', '.').strip())
-        input_product_expenses_float = float(input_product_expenses.replace('R$', '').replace('.', '').replace(',', '.').strip())
         
-        # Converter outros valores monetários se fornecidos
-        fixed_costs_float = None
-        if fixed_costs:
-            fixed_costs_float = float(fixed_costs.replace('R$', '').replace('.', '').replace(',', '.').strip())
-            
-        pro_labore_float = None
-        if pro_labore:
-            pro_labore_float = float(pro_labore.replace('R$', '').replace('.', '').replace(',', '.').strip())
-            
-        other_fixed_costs_float = None
-        if other_fixed_costs:
-            other_fixed_costs_float = float(other_fixed_costs.replace('R$', '').replace('.', '').replace(',', '.').strip())
+        if not existing_data:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Registro não encontrado"
+            )
 
-        # Armazenar dados antigos para log
-        old_data_dict = {
-            'clients_served': existing_data.clients_served,
-            'sales_revenue': existing_data.sales_revenue,
-            'sales_expenses': existing_data.sales_expenses,
-            'input_product_expenses': existing_data.input_product_expenses,
-            'fixed_costs': existing_data.fixed_costs,
-            'ideal_profit_margin': existing_data.ideal_profit_margin,
-            'service_capacity': existing_data.service_capacity,
-            'pro_labore': existing_data.pro_labore,
-            'work_hours_per_week': existing_data.work_hours_per_week,
-            'other_fixed_costs': existing_data.other_fixed_costs,
-            'ideal_service_profit_margin': existing_data.ideal_service_profit_margin,
-            'is_current': existing_data.is_current
-        }
+        # Criar log das alterações
+        changes = []
+        for field in form_data.__fields__:
+            old_value = getattr(existing_data, field)
+            new_value = getattr(form_data, field)
+            if old_value != new_value:
+                changes.append({
+                    "field": field,
+                    "old_value": old_value,
+                    "new_value": new_value
+                })
 
-        # Atualizar os campos
-        existing_data.month = month
-        existing_data.year = year
-        existing_data.clients_served = clients_served
-        existing_data.sales_revenue = sales_revenue_float
-        existing_data.sales_expenses = sales_expenses_float
-        existing_data.input_product_expenses = input_product_expenses_float
-        existing_data.fixed_costs = fixed_costs_float
-        existing_data.ideal_profit_margin = ideal_profit_margin
-        existing_data.service_capacity = service_capacity
-        existing_data.pro_labore = pro_labore_float
-        existing_data.work_hours_per_week = work_hours_per_week
-        existing_data.other_fixed_costs = other_fixed_costs_float
-        existing_data.ideal_service_profit_margin = ideal_service_profit_margin
-        existing_data.is_current = is_current_bool
+        # Atualizar os dados
+        for field, value in form_data.dict().items():
+            setattr(existing_data, field, value)
 
-        # Registrar as alterações
-        changes = compare_and_log_changes(db, old_data_dict, {
-            'clients_served': clients_served,
-            'sales_revenue': sales_revenue_float,
-            'sales_expenses': sales_expenses_float,
-            'input_product_expenses': input_product_expenses_float,
-            'fixed_costs': fixed_costs_float,
-            'ideal_profit_margin': ideal_profit_margin,
-            'service_capacity': service_capacity,
-            'pro_labore': pro_labore_float,
-            'work_hours_per_week': work_hours_per_week,
-            'other_fixed_costs': other_fixed_costs_float,
-            'ideal_service_profit_margin': ideal_service_profit_margin,
-            'is_current': existing_data.is_current
-        })
-
-        # Criar log de alterações
-        if changes:
-            for change in changes:
-                log_entry = BasicDataLog(
-                    basic_data_id=existing_data.id,
-                    change_description=change,
-                    created_at=datetime.now()
-                )
-                db.add(log_entry)
+        # Criar registro de log
+        log_entry = BasicDataLog(
+            user_id=current_user.id,
+            data_id=data_id,
+            changes=changes,
+            timestamp=datetime.utcnow()
+        )
+        db.add(log_entry)
 
         await db.commit()
         await db.refresh(existing_data)
 
-        return RedirectResponse(
-            url="/basic-data/",
-            status_code=status.HTTP_303_SEE_OTHER
+        return {
+            "message": "Dados atualizados com sucesso",
+            "data": existing_data
+        }
+    except Exception as e:
+        await db.rollback()
+        logger.error(f"Erro ao atualizar dados: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erro ao atualizar dados"
         )
 
+@router.post("/create")
+async def create_basic_data(
+    form_data: BasicDataForm,
+    current_user = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    try:
+        # Criar novo registro
+        new_data = BasicData(
+            user_id=current_user.id,
+            **form_data.dict()
+        )
+        
+        db.add(new_data)
+        await db.commit()
+        await db.refresh(new_data)
+
+        return {
+            "message": "Dados criados com sucesso",
+            "data": new_data
+        }
     except Exception as e:
-        logger.error(f"Erro ao atualizar dados básicos: {str(e)}")
-        return templates.TemplateResponse(
-            "basic_data_form.html",
-            {
-                "request": request,
-                "user": current_user,
-                "error_message": f"Erro ao atualizar dados: {str(e)}",
-                "basic_data": existing_data,
-                "edit_mode": True
-            }
+        await db.rollback()
+        logger.error(f"Erro ao criar dados: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Erro ao criar dados"
         ) 

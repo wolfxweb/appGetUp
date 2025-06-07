@@ -6,6 +6,7 @@ from sqlalchemy import select
 from datetime import datetime, timedelta
 import secrets
 from jose import jwt, JWTError
+from sqlalchemy.orm import Session
 
 from app.database.db import get_db
 from app.models.user import User
@@ -13,6 +14,8 @@ from app.utils.auth import verify_password, get_password_hash, create_access_tok
 from app.utils.email import send_password_reset_email
 from app.models.basic_data import BasicData
 from app.models.basic_data_log import BasicDataLog
+from app.core.auth import get_current_user
+import bcrypt
 
 router = APIRouter()
 
@@ -370,4 +373,70 @@ async def dashboard_page(request: Request, current_user = Depends(get_current_us
         "request": request,
         "user": current_user,
         "now": datetime.now()
-    }) 
+    })
+
+@router.get("/profile")
+async def profile(request: Request, current_user: User = Depends(get_current_user)):
+    return templates.TemplateResponse("profile.html", {
+        "request": request,
+        "user": current_user
+    })
+
+@router.post("/profile")
+async def update_profile(
+    request: Request,
+    name: str = Form(...),
+    email: str = Form(...),
+    whatsapp: str = Form(None),
+    activity_type: str = Form(...),
+    gender: str = Form(None),
+    birth_day: int = Form(None),
+    birth_month: int = Form(None),
+    married: str = Form(None),
+    children: str = Form(None),
+    grandchildren: str = Form(None),
+    cep: str = Form(None),
+    street: str = Form(None),
+    neighborhood: str = Form(None),
+    city: str = Form(None),
+    state: str = Form(None),
+    complement: str = Form(None),
+    company_activity: str = Form(None),
+    specialty_area: str = Form(None),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    try:
+        # Atualizar os dados do usuário
+        current_user.name = name
+        current_user.email = email
+        current_user.whatsapp = whatsapp
+        current_user.activity_type = activity_type
+        current_user.gender = gender
+        current_user.birth_day = birth_day
+        current_user.birth_month = birth_month
+        current_user.married = married
+        current_user.children = children
+        current_user.grandchildren = grandchildren
+        current_user.cep = cep
+        current_user.street = street
+        current_user.neighborhood = neighborhood
+        current_user.city = city
+        current_user.state = state
+        current_user.complement = complement
+        current_user.company_activity = company_activity
+        current_user.specialty_area = specialty_area
+
+        db.commit()
+
+        return templates.TemplateResponse("profile.html", {
+            "request": request,
+            "user": current_user,
+            "success_message": "Perfil atualizado com sucesso!"
+        })
+    except Exception as e:
+        return templates.TemplateResponse("profile.html", {
+            "request": request,
+            "user": current_user,
+            "error_message": f"Erro ao atualizar perfil: {str(e)}"
+        }) 
