@@ -232,7 +232,7 @@
                                                 </label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="sales_revenue" name="sales_revenue" 
-                                                        value="{{ (basic_data.sales_revenue/10)|round(2) if basic_data and basic_data.sales_revenue is not none else '' }}" 
+                                                        value="{{ basic_data.sales_revenue|float if basic_data and basic_data.sales_revenue is not none else '' }}" 
                                                         required pattern="^R?\$?\s*[\d.,]+$">
                                                 </div>
                                             </div>
@@ -248,9 +248,9 @@
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
                                                         <input type="text" class="form-control" id="sales_expenses_display" 
-                                                            value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '' }}" 
+                                                            value="{{ basic_data.sales_expenses|float if basic_data and basic_data.sales_expenses is not none else '' }}" 
                                                             required pattern="^R?\$?\s*[\d.,]+$">
-                                                        <input type="hidden" id="sales_expenses" name="sales_expenses" value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '0' }}">
+                                                        <input type="hidden" id="sales_expenses" name="sales_expenses" value="{{ basic_data.sales_expenses|float if basic_data and basic_data.sales_expenses is not none else '0' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
                                                         <input type="text" class="form-control" id="sales_expenses_percentual" readonly>
@@ -266,9 +266,9 @@
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
                                                         <input type="text" class="form-control" id="input_product_expenses_display" 
-                                                            value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '' }}" 
+                                                            value="{{ basic_data.input_product_expenses|float if basic_data and basic_data.input_product_expenses is not none else '' }}" 
                                                             required pattern="^R?\$?\s*[\d.,]+$">
-                                                        <input type="hidden" id="input_product_expenses" name="input_product_expenses" value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '0' }}">
+                                                        <input type="hidden" id="input_product_expenses" name="input_product_expenses" value="{{ basic_data.input_product_expenses|float if basic_data and basic_data.input_product_expenses is not none else '0' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
                                                         <input type="text" class="form-control" id="input_product_expenses_percentual" readonly>
@@ -288,7 +288,7 @@
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
                                                         <input type="text" class="form-control" id="pro_labore" name="pro_labore" 
-                                                            value="{{ (basic_data.pro_labore/10)|round(2) if basic_data and basic_data.pro_labore is not none else '' }}">
+                                                            value="{{ basic_data.pro_labore|round(2) if basic_data and basic_data.pro_labore is not none else '' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
                                                         <input type="text" class="form-control" id="pro_labore_percentual" readonly>
@@ -304,7 +304,7 @@
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
                                                         <input type="text" class="form-control" id="other_fixed_costs" name="other_fixed_costs" 
-                                                            value="{{ (basic_data.other_fixed_costs/10)|round(2) if basic_data and basic_data.other_fixed_costs is not none else '' }}">
+                                                            value="{{ basic_data.other_fixed_costs|round(2) if basic_data and basic_data.other_fixed_costs is not none else '' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
                                                         <input type="text" class="form-control" id="other_fixed_costs_percentual" name="other_fixed_costs_percentual" readonly>
@@ -431,7 +431,7 @@
                                                 </label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="sales_revenue" name="sales_revenue" 
-                                                        value="{{ (basic_data.sales_revenue/10)|round(2) if basic_data and basic_data.sales_revenue is not none else '' }}" 
+                                                        value="{{ basic_data.sales_revenue|float if basic_data and basic_data.sales_revenue is not none else '' }}" 
                                                         required pattern="^R?\$?\s*[\d.,]+$">
                                                 </div>
                                             </div>
@@ -447,9 +447,9 @@
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
                                                         <input type="text" class="form-control" id="sales_expenses_display" 
-                                                            value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '' }}" 
+                                                            value="{{ basic_data.sales_expenses|float if basic_data and basic_data.sales_expenses is not none else '' }}" 
                                                             required pattern="^R?\$?\s*[\d.,]+$">
-                                                        <input type="hidden" id="sales_expenses" name="sales_expenses" value="{{ (basic_data.sales_expenses/10)|round(2) if basic_data and basic_data.sales_expenses is not none else '0' }}">
+                                                        <input type="hidden" id="sales_expenses" name="sales_expenses" value="{{ basic_data.sales_expenses|float if basic_data and basic_data.sales_expenses is not none else '0' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
                                                         <input type="text" class="form-control" id="sales_expenses_percentual" readonly>
@@ -465,9 +465,9 @@
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
                                                         <input type="text" class="form-control" id="input_product_expenses_display" 
-                                                            value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '' }}" 
+                                                            value="{{ basic_data.input_product_expenses|float if basic_data and basic_data.input_product_expenses is not none else '' }}" 
                                                             required pattern="^R?\$?\s*[\d.,]+$">
-                                                        <input type="hidden" id="input_product_expenses" name="input_product_expenses" value="{{ (basic_data.input_product_expenses/10)|round(2) if basic_data and basic_data.input_product_expenses is not none else '0' }}">
+                                                        <input type="hidden" id="input_product_expenses" name="input_product_expenses" value="{{ basic_data.input_product_expenses|float if basic_data and basic_data.input_product_expenses is not none else '0' }}">
                                                     </div>
                                                     <div class="col-3 p-0">
                                                         <input type="text" class="form-control" id="input_product_expenses_percentual" readonly>
@@ -783,10 +783,10 @@
     // Função para formatar valores monetários
     function formatarMoeda(valor) {
         if (!valor) return '';
-        // Remove caracteres não numéricos
-        valor = valor.replace(/\D/g, '');
-        // Converte para número e divide por 100 para obter os centavos
-        const numero = parseInt(valor) / 100;
+        // Remove caracteres não numéricos exceto ponto e vírgula
+        valor = valor.toString().replace(/[^\d.,]/g, '');
+        // Converte para número
+        const numero = parseFloat(valor.replace(',', '.'));
         if (isNaN(numero)) return '';
         // Formata como moeda brasileira
         return numero.toLocaleString('pt-BR', {
@@ -797,10 +797,19 @@
         });
     }
 
+    // Função para converter valor formatado para número
+    function converterParaNumero(valor) {
+        if (!valor) return 0;
+        // Remove caracteres não numéricos exceto ponto e vírgula
+        valor = valor.toString().replace(/[^\d.,]/g, '');
+        // Converte para número
+        return parseFloat(valor.replace(',', '.'));
+    }
+
     // Função para calcular porcentagem
     function calcularPorcentagem(valor, receita) {
         if (!valor || !receita || receita === 0) return '';
-        const porcentagem = (parseFloat(valor) / parseFloat(receita)) * 100;
+        const porcentagem = (converterParaNumero(valor) / converterParaNumero(receita)) * 100;
         return porcentagem.toFixed(2) + '%';
     }
 
@@ -810,85 +819,15 @@
         const salesExpensesDisplay = document.getElementById('sales_expenses_display');
         const salesExpenses = document.getElementById('sales_expenses');
         if (salesExpensesDisplay && salesExpenses) {
-            const value = salesExpensesDisplay.value.replace(/\D/g, '');
-            salesExpenses.value = value;
+            salesExpenses.value = converterParaNumero(salesExpensesDisplay.value);
         }
 
         // Input Product Expenses
         const inputProductExpensesDisplay = document.getElementById('input_product_expenses_display');
         const inputProductExpenses = document.getElementById('input_product_expenses');
         if (inputProductExpensesDisplay && inputProductExpenses) {
-            const value = inputProductExpensesDisplay.value.replace(/\D/g, '');
-            inputProductExpenses.value = value;
+            inputProductExpenses.value = converterParaNumero(inputProductExpensesDisplay.value);
         }
-    }
-
-    // Função para atualizar porcentagens
-    function atualizarPorcentagens() {
-        const receita = document.getElementById('sales_revenue').value.replace(/\D/g, '');
-        
-        // Gastos com Vendas
-        const gastosVendas = document.getElementById('sales_expenses_display').value.replace(/\D/g, '');
-        const porcentagemVendas = calcularPorcentagem(gastosVendas, receita);
-        document.getElementById('sales_expenses_percentual').value = porcentagemVendas;
-        document.getElementById('sales_expenses_percentual_hidden').value = porcentagemVendas.replace('%', '');
-        
-        // Aplicar regra de cor para gastos com vendas
-        const porcentagemVendasNum = parseFloat(porcentagemVendas);
-        const percentualVendasField = document.getElementById('sales_expenses_percentual');
-        if (porcentagemVendasNum < 0 || porcentagemVendasNum > 100) {
-            percentualVendasField.classList.add('invalid-percentage');
-        } else {
-            percentualVendasField.classList.remove('invalid-percentage');
-        }
-
-        // Gastos com Insumos
-        const gastosInsumos = document.getElementById('input_product_expenses_display').value.replace(/\D/g, '');
-        const porcentagemInsumos = calcularPorcentagem(gastosInsumos, receita);
-        document.getElementById('input_product_expenses_percentual').value = porcentagemInsumos;
-        document.getElementById('input_product_expenses_percentual_hidden').value = porcentagemInsumos.replace('%', '');
-        
-        // Aplicar regra de cor para gastos com insumos
-        const porcentagemInsumosNum = parseFloat(porcentagemInsumos);
-        const percentualInsumosField = document.getElementById('input_product_expenses_percentual');
-        if (porcentagemInsumosNum < 0 || porcentagemInsumosNum > 100) {
-            percentualInsumosField.classList.add('invalid-percentage');
-        } else {
-            percentualInsumosField.classList.remove('invalid-percentage');
-        }
-
-        // Pro-labore
-        const proLabore = document.getElementById('pro_labore').value.replace(/\D/g, '');
-        const porcentagemProLabore = calcularPorcentagem(proLabore, receita);
-        document.getElementById('pro_labore_percentual').value = porcentagemProLabore;
-        document.getElementById('pro_labore_percentual_hidden').value = porcentagemProLabore.replace('%', '');
-        
-        // Aplicar regra de cor para pró-labore
-        const porcentagemProLaboreNum = parseFloat(porcentagemProLabore);
-        const percentualProLaboreField = document.getElementById('pro_labore_percentual');
-        if (porcentagemProLaboreNum < 0 || porcentagemProLaboreNum > 100) {
-            percentualProLaboreField.classList.add('invalid-percentage');
-        } else {
-            percentualProLaboreField.classList.remove('invalid-percentage');
-        }
-
-        // Demais Custos Fixos
-        const demaisCustos = document.getElementById('other_fixed_costs').value.replace(/\D/g, '');
-        const porcentagemDemaisCustos = calcularPorcentagem(demaisCustos, receita);
-        const percentualDemaisCustosField = document.getElementById('other_fixed_costs_percentual');
-        percentualDemaisCustosField.value = porcentagemDemaisCustos;
-        document.getElementById('other_fixed_costs_percentual_hidden').value = porcentagemDemaisCustos.replace('%', '');
-        
-        // Aplicar regra de cor para demais custos fixos
-        const porcentagemDemaisCustosNum = parseFloat(porcentagemDemaisCustos);
-        if (porcentagemDemaisCustosNum < 0 || porcentagemDemaisCustosNum > 100) {
-            percentualDemaisCustosField.classList.add('invalid-percentage');
-        } else {
-            percentualDemaisCustosField.classList.remove('invalid-percentage');
-        }
-
-        // Atualizar campos hidden
-        updateHiddenFields();
     }
 
     document.addEventListener('DOMContentLoaded', function() {
@@ -907,8 +846,7 @@
             fields.forEach(fieldId => {
                 const field = document.getElementById(fieldId);
                 if (field && field.value) {
-                    const value = field.value.replace(/\D/g, '');
-                    field.value = formatarMoeda(value);
+                    field.value = formatarMoeda(field.value);
                 }
             });
         }
@@ -934,8 +872,7 @@
                     const end = this.selectionEnd;
                     
                     // Formata o valor
-                    const value = this.value.replace(/\D/g, '');
-                    this.value = formatarMoeda(value);
+                    this.value = formatarMoeda(this.value);
                     
                     // Restaura a posição do cursor
                     const newLength = this.value.length;
@@ -947,8 +884,7 @@
                 });
 
                 field.addEventListener('blur', function() {
-                    const value = this.value.replace(/\D/g, '');
-                    this.value = formatarMoeda(value);
+                    this.value = formatarMoeda(this.value);
                     atualizarPorcentagens();
                 });
             }
