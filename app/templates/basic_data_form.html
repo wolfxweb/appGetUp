@@ -86,11 +86,13 @@
     .invalid-percentage {
         background-color: #ffebee !important;
         border-color: #dc3545 !important;
+        color: #dc3545 !important;
     }
 
-    #demais_custos_fixos_percentual.invalid-percentage {
+    #other_fixed_costs_percentual.invalid-percentage {
         background-color: #ffebee !important;
         border-color: #dc3545 !important;
+        color: #dc3545 !important;
     }
 </style>
 {% endblock %}
@@ -303,6 +305,7 @@
                                                     </div>
                                                     <div class="col-3 p-0">
                                                         <input type="text" class="form-control" id="other_fixed_costs_percentual" name="other_fixed_costs_percentual" readonly>
+                                                        <input type="hidden" id="other_fixed_costs_percentual_hidden" name="other_fixed_costs_percentual_hidden">
                                                     </div>
                                                 </div>
                                             </div>
@@ -827,7 +830,7 @@
         // Aplicar regra de cor para gastos com vendas
         const porcentagemVendasNum = parseFloat(porcentagemVendas);
         const percentualVendasField = document.getElementById('sales_expenses_percentual');
-        if (porcentagemVendasNum > 30) {
+        if (porcentagemVendasNum < 0 || porcentagemVendasNum > 100) {
             percentualVendasField.classList.add('invalid-percentage');
         } else {
             percentualVendasField.classList.remove('invalid-percentage');
@@ -842,7 +845,7 @@
         // Aplicar regra de cor para gastos com insumos
         const porcentagemInsumosNum = parseFloat(porcentagemInsumos);
         const percentualInsumosField = document.getElementById('input_product_expenses_percentual');
-        if (porcentagemInsumosNum > 30) {
+        if (porcentagemInsumosNum < 0 || porcentagemInsumosNum > 100) {
             percentualInsumosField.classList.add('invalid-percentage');
         } else {
             percentualInsumosField.classList.remove('invalid-percentage');
@@ -857,7 +860,7 @@
         // Aplicar regra de cor para pró-labore
         const porcentagemProLaboreNum = parseFloat(porcentagemProLabore);
         const percentualProLaboreField = document.getElementById('pro_labore_percentual');
-        if (porcentagemProLaboreNum > 30) {
+        if (porcentagemProLaboreNum < 0 || porcentagemProLaboreNum > 100) {
             percentualProLaboreField.classList.add('invalid-percentage');
         } else {
             percentualProLaboreField.classList.remove('invalid-percentage');
@@ -866,12 +869,12 @@
         // Demais Custos Fixos
         const demaisCustos = document.getElementById('other_fixed_costs').value.replace(/\D/g, '');
         const porcentagemDemaisCustos = calcularPorcentagem(demaisCustos, receita);
-        document.getElementById('other_fixed_costs_percentual').value = porcentagemDemaisCustos;
+        const percentualDemaisCustosField = document.getElementById('other_fixed_costs_percentual');
+        percentualDemaisCustosField.value = porcentagemDemaisCustos;
         document.getElementById('other_fixed_costs_percentual_hidden').value = porcentagemDemaisCustos.replace('%', '');
         
         // Aplicar regra de cor para demais custos fixos
         const porcentagemDemaisCustosNum = parseFloat(porcentagemDemaisCustos);
-        const percentualDemaisCustosField = document.getElementById('other_fixed_costs_percentual');
         if (porcentagemDemaisCustosNum < 0 || porcentagemDemaisCustosNum > 100) {
             percentualDemaisCustosField.classList.add('invalid-percentage');
         } else {
