@@ -69,9 +69,45 @@ content %}
           <!-- Filtros -->
           <div class="filter-section">
             <div class="row">
-              <div class="col-md-4">
-                <label for="filterMonth" class="form-label">Mês/Ano</label>
-                <input type="text" class="form-control" id="filterMonth" placeholder="Filtrar por mês/ano">
+              <div class="col-md-3 mb-3">
+                <label for="filterMonth" class="form-label">Mês</label>
+                <select class="form-select" id="filterMonth">
+                  <option value="">Todos os meses</option>
+                  <option value="Janeiro">Janeiro</option>
+                  <option value="Fevereiro">Fevereiro</option>
+                  <option value="Março">Março</option>
+                  <option value="Abril">Abril</option>
+                  <option value="Maio">Maio</option>
+                  <option value="Junho">Junho</option>
+                  <option value="Julho">Julho</option>
+                  <option value="Agosto">Agosto</option>
+                  <option value="Setembro">Setembro</option>
+                  <option value="Outubro">Outubro</option>
+                  <option value="Novembro">Novembro</option>
+                  <option value="Dezembro">Dezembro</option>
+                </select>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="filterYear" class="form-label">Ano</label>
+                <select class="form-select" id="filterYear">
+                  <option value="">Todos os anos</option>
+                  <!-- Anos serão preenchidos dinamicamente pelo JavaScript -->
+                </select>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="filterClients" class="form-label">Clientes (mín.)</label>
+                <input type="number" class="form-control" id="filterClients" placeholder="Número mínimo de clientes">
+              </div>
+              <div class="col-md-3 mb-3">
+                <label class="form-label">&nbsp;</label>
+                <div class="d-flex gap-2 justify-content-end">
+                  <button type="button" class="btn btn-secondary" id="clearFilters">
+                    <i class="bi bi-x-circle"></i> Limpar Filtros
+                  </button>
+                  <button type="button" class="btn btn-secondary" id="exportData">
+                    <i class="bi bi-download"></i> Exportar
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -361,6 +397,26 @@ content %}
     padding: 1rem;
     border-radius: 0.25rem;
     margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+  }
+
+  .filter-section .form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+  }
+
+  .filter-section .btn {
+    font-size: 0.875rem;
+  }
+
+  .filter-section .btn i {
+    color: white !important;
+  }
+
+  .no-results-message td {
+    padding: 2rem !important;
+    font-style: italic;
   }
 
   .card {
@@ -384,23 +440,170 @@ document.addEventListener('DOMContentLoaded', function() {
         return new bootstrap.Tooltip(tooltipTriggerEl)
     });
 
-    // Filtro da tabela
+    // Elementos dos filtros
     const filterMonth = document.getElementById('filterMonth');
+    const filterYear = document.getElementById('filterYear');
+    const filterClients = document.getElementById('filterClients');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    const exportDataBtn = document.getElementById('exportData');
     const table = document.getElementById('basicDataTable');
     
-    if (filterMonth && table) {
-        filterMonth.addEventListener('keyup', function() {
-            const filter = this.value.toLowerCase();
-            const rows = table.getElementsByTagName('tr');
+    if (table) {
+        // Preencher anos dinamicamente
+        populateYearFilter();
+        
+        // Adicionar event listeners para os filtros
+        if (filterMonth) filterMonth.addEventListener('change', applyFilters);
+        if (filterYear) filterYear.addEventListener('change', applyFilters);
+        if (filterClients) filterClients.addEventListener('input', applyFilters);
+        
+        // Botão limpar filtros
+        if (clearFiltersBtn) {
+            clearFiltersBtn.addEventListener('click', function() {
+                if (filterMonth) filterMonth.value = '';
+                if (filterYear) filterYear.value = '';
+                if (filterClients) filterClients.value = '';
+                applyFilters();
+            });
+        }
+        
+        // Botão exportar dados
+        if (exportDataBtn) {
+            exportDataBtn.addEventListener('click', exportToCSV);
+        }
+    }
+    
+    // Função para preencher anos dinamicamente
+    function populateYearFilter() {
+        if (!filterYear || !table) return;
+        
+        const rows = table.getElementsByTagName('tr');
+        const years = new Set();
+        
+        // Extrair anos da tabela (começando do índice 1 para pular o header)
+        for (let i = 1; i < rows.length; i++) {
+            const yearCell = rows[i].getElementsByTagName('td')[1]; // Segunda coluna é o ano
+            if (yearCell) {
+                const year = yearCell.textContent.trim();
+                if (year) years.add(year);
+            }
+        }
+        
+        // Ordenar anos em ordem decrescente
+        const sortedYears = Array.from(years).sort((a, b) => b - a);
+        
+        // Adicionar opções ao select
+        sortedYears.forEach(year => {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            filterYear.appendChild(option);
+        });
+    }
+    
+    // Função para aplicar todos os filtros
+    function applyFilters() {
+        if (!table) return;
+        
+        const monthFilter = filterMonth ? filterMonth.value.toLowerCase() : '';
+        const yearFilter = filterYear ? filterYear.value : '';
+        const clientsFilter = filterClients ? parseInt(filterClients.value) || 0 : 0;
+        
+        const rows = table.getElementsByTagName('tr');
+        let visibleCount = 0;
+        
+        // Aplicar filtros (começando do índice 1 para pular o header)
+        for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            const cells = row.getElementsByTagName('td');
             
-            for (let i = 1; i < rows.length; i++) {
-                const cell = rows[i].getElementsByTagName('td')[0];
-                if (cell) {
-                    const text = cell.textContent || cell.innerText;
-                    rows[i].style.display = text.toLowerCase().indexOf(filter) > -1 ? '' : 'none';
+            if (cells.length >= 3) {
+                const month = cells[0].textContent.toLowerCase().trim();
+                const year = cells[1].textContent.trim();
+                const clients = parseInt(cells[2].textContent.trim()) || 0;
+                
+                // Verificar se a linha atende aos critérios de filtro
+                const monthMatch = !monthFilter || month.includes(monthFilter);
+                const yearMatch = !yearFilter || year === yearFilter;
+                const clientsMatch = !clientsFilter || clients >= clientsFilter;
+                
+                if (monthMatch && yearMatch && clientsMatch) {
+                    row.style.display = '';
+                    visibleCount++;
+                } else {
+                    row.style.display = 'none';
                 }
             }
-        });
+        }
+        
+        // Mostrar mensagem se nenhum resultado for encontrado
+        updateNoResultsMessage(visibleCount);
+    }
+    
+    // Função para mostrar/esconder mensagem de "nenhum resultado"
+    function updateNoResultsMessage(visibleCount) {
+        if (!table) return;
+        
+        const tbody = table.getElementsByTagName('tbody')[0];
+        let messageRow = tbody.querySelector('.no-results-message');
+        
+        // Remover mensagem existente
+        if (messageRow) {
+            messageRow.remove();
+        }
+        
+        // Adicionar mensagem se não há resultados visíveis
+        if (visibleCount === 0) {
+            const totalRows = tbody.getElementsByTagName('tr').length;
+            if (totalRows > 0) { // Só mostra se existem dados, mas estão filtrados
+                messageRow = document.createElement('tr');
+                messageRow.className = 'no-results-message';
+                const colCount = table.getElementsByTagName('thead')[0].getElementsByTagName('th').length;
+                messageRow.innerHTML = `<td colspan="${colCount}" class="text-center text-muted py-4">
+                    <i class="bi bi-search"></i> Nenhum registro encontrado com os filtros aplicados.
+                </td>`;
+                tbody.appendChild(messageRow);
+            }
+        }
+    }
+    
+    // Função para exportar dados para CSV
+    function exportToCSV() {
+        if (!table) return;
+        
+        const rows = table.getElementsByTagName('tr');
+        const csvContent = [];
+        
+        // Adicionar cabeçalho
+        const headerCells = rows[0].getElementsByTagName('th');
+        const headerRow = [];
+        for (let j = 0; j < headerCells.length - 1; j++) { // -1 para excluir coluna "Ações"
+            headerRow.push(headerCells[j].textContent.replace(/\s+/g, ' ').trim());
+        }
+        csvContent.push(headerRow.join(';'));
+        
+        // Adicionar dados (apenas linhas visíveis)
+        for (let i = 1; i < rows.length; i++) {
+            if (rows[i].style.display !== 'none' && !rows[i].classList.contains('no-results-message')) {
+                const cells = rows[i].getElementsByTagName('td');
+                const dataRow = [];
+                for (let j = 0; j < cells.length - 1; j++) { // -1 para excluir coluna "Ações"
+                    dataRow.push(cells[j].textContent.replace(/\s+/g, ' ').trim());
+                }
+                csvContent.push(dataRow.join(';'));
+            }
+        }
+        
+        // Criar e baixar arquivo
+        const csvBlob = new Blob([csvContent.join('\n')], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(csvBlob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `dados_basicos_${new Date().toISOString().split('T')[0]}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 });
 </script>
