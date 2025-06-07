@@ -219,23 +219,33 @@ async def save_basic_data(
         logger.info(f"- pro_labore: '{pro_labore}'")
         logger.info(f"- other_fixed_costs: '{other_fixed_costs}'")
         
+        # Converter valores monetários
+        def convert_currency(value: str) -> float:
+            if not value:
+                return 0.0
+            # Remove pontos (separadores de milhares) e substitui vírgulas por pontos (separador decimal)
+            value = value.replace('.', '').replace(',', '.').strip()
+            # Remove qualquer outro caractere não numérico exceto o ponto decimal
+            value = ''.join(c for c in value if c.isdigit() or c == '.')
+            return float(value) if value else 0.0
+        
         # Converter valores monetários de string para float
-        sales_revenue_float = float(sales_revenue.replace('R$', '').replace('.', '').replace(',', '.').strip())
-        sales_expenses_float = float(sales_expenses.replace('R$', '').replace('.', '').replace(',', '.').strip())
-        input_product_expenses_float = float(input_product_expenses.replace('R$', '').replace('.', '').replace(',', '.').strip())
+        sales_revenue_float = convert_currency(sales_revenue)
+        sales_expenses_float = convert_currency(sales_expenses)
+        input_product_expenses_float = convert_currency(input_product_expenses)
         
         # Converter outros valores monetários se fornecidos
         fixed_costs_float = None
         if fixed_costs:
-            fixed_costs_float = float(fixed_costs.replace('R$', '').replace('.', '').replace(',', '.').strip())
+            fixed_costs_float = convert_currency(fixed_costs)
             
         pro_labore_float = None
         if pro_labore:
-            pro_labore_float = float(pro_labore.replace('R$', '').replace('.', '').replace(',', '.').strip())
+            pro_labore_float = convert_currency(pro_labore)
             
         other_fixed_costs_float = None
         if other_fixed_costs:
-            other_fixed_costs_float = float(other_fixed_costs.replace('R$', '').replace('.', '').replace(',', '.').strip())
+            other_fixed_costs_float = convert_currency(other_fixed_costs)
         
         # Log dos valores após a conversão
         logger.info(f"Valores convertidos (após a conversão):")
@@ -670,8 +680,27 @@ async def update_basic_data(
         def convert_currency(value: str) -> float:
             if not value:
                 return 0.0
-            value = value.replace('R$', '').replace('$', '').replace('.', '').replace(',', '.').strip()
+            # Remove pontos (separadores de milhares) e substitui vírgulas por pontos (separador decimal)
+            value = value.replace('.', '').replace(',', '.').strip()
+            # Remove qualquer outro caractere não numérico exceto o ponto decimal
+            value = ''.join(c for c in value if c.isdigit() or c == '.')
             return float(value) if value else 0.0
+
+        # Salvar valores antigos ANTES de atualizar
+        old_data_dict = {
+            'clients_served': existing_data.clients_served,
+            'sales_revenue': existing_data.sales_revenue,
+            'sales_expenses': existing_data.sales_expenses,
+            'input_product_expenses': existing_data.input_product_expenses,
+            'fixed_costs': existing_data.fixed_costs,
+            'ideal_profit_margin': existing_data.ideal_profit_margin,
+            'service_capacity': existing_data.service_capacity,
+            'pro_labore': existing_data.pro_labore,
+            'work_hours_per_week': existing_data.work_hours_per_week,
+            'other_fixed_costs': existing_data.other_fixed_costs,
+            'ideal_service_profit_margin': existing_data.ideal_service_profit_margin,
+            'is_current': existing_data.is_current
+        }
 
         # Atualizar os campos
         existing_data.month = month
@@ -689,21 +718,8 @@ async def update_basic_data(
         existing_data.ideal_service_profit_margin = float(ideal_service_profit_margin) if ideal_service_profit_margin else None
         existing_data.is_current = is_current.lower() == 'true' if isinstance(is_current, str) else bool(is_current)
 
-        # Registrar as alterações
-        changes = compare_and_log_changes(db, {
-            'clients_served': existing_data.clients_served,
-            'sales_revenue': existing_data.sales_revenue,
-            'sales_expenses': existing_data.sales_expenses,
-            'input_product_expenses': existing_data.input_product_expenses,
-            'fixed_costs': existing_data.fixed_costs,
-            'ideal_profit_margin': existing_data.ideal_profit_margin,
-            'service_capacity': existing_data.service_capacity,
-            'pro_labore': existing_data.pro_labore,
-            'work_hours_per_week': existing_data.work_hours_per_week,
-            'other_fixed_costs': existing_data.other_fixed_costs,
-            'ideal_service_profit_margin': existing_data.ideal_service_profit_margin,
-            'is_current': existing_data.is_current
-        }, {
+        # Registrar as alterações comparando valores antigos com os novos
+        changes = compare_and_log_changes(db, old_data_dict, {
             'clients_served': clients_served,
             'sales_revenue': convert_currency(sales_revenue),
             'sales_expenses': convert_currency(sales_expenses),
