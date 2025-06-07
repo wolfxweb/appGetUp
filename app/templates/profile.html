@@ -323,11 +323,27 @@
 </script>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    body {
+        background-color: #F5F5F5;
+    }
+
+    .form-control, .form-select {
+        background-color: #F5F5F5 !important;
+    }
+
+    .input-group-text {
+        background-color: #F5F5F5 !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container p-5" style="background-color: #F5F5F5; min-height: 100vh;">
     <div class="row">
         <div class="col-md-12">
-            <div class="card shadow-sm mb-4" style="background-color: #F5F5F5;">
+            <div class="card shadow-sm mb-4" style="background-color: #F0F0F0;">
                 <div class="card-body p-3">
                     <div class="row align-items-center mb-4">
                         <div class="col-md-6">
@@ -354,133 +370,117 @@
                     </div>
                     {% endif %}
 
-                    <div class="card shadow-sm mb-4">
+                    <div class="card shadow-sm mb-4" style="background-color: #F0F0F0;">
                         <div class="card-body">
                             <form method="POST" action="/profile">
                                 <div class="row">
-                                    <!-- Dados Pessoais -->
+                                    <!-- Primeira linha: Nome e Email -->
                                     <div class="col-md-6 mb-3">
-                                        <h5 class="mb-3">Dados Pessoais</h5>
-                                        <div class="mb-3">
-                                            <label for="name" class="form-label">Nome</label>
-                                            <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="email" class="form-label">E-mail</label>
-                                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="whatsapp" class="form-label">WhatsApp</label>
-                                            <input type="text" class="form-control" id="whatsapp" name="whatsapp" value="{{ user.whatsapp }}">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="activity_type" class="form-label">Tipo de Atividade</label>
-                                            <select class="form-select" id="activity_type" name="activity_type" required>
-                                                <option value="Serviços" {% if user.activity_type == 'Serviços' %}selected{% endif %}>Serviços</option>
-                                                <option value="Comércio" {% if user.activity_type == 'Comércio' %}selected{% endif %}>Comércio</option>
-                                                <option value="Indústria" {% if user.activity_type == 'Indústria' %}selected{% endif %}>Indústria</option>
-                                            </select>
-                                        </div>
+                                        <label for="name" class="form-label">Como gosta de ser chamado(a)?</label>
+                                        <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" required>
                                     </div>
-
-                                    <!-- Dados Adicionais -->
                                     <div class="col-md-6 mb-3">
-                                        <h5 class="mb-3">Dados Adicionais</h5>
-                                        <div class="mb-3">
-                                            <label for="gender" class="form-label">Gênero</label>
-                                            <select class="form-select" id="gender" name="gender">
-                                                <option value="">Selecione...</option>
-                                                <option value="Masculino" {% if user.gender == 'Masculino' %}selected{% endif %}>Masculino</option>
-                                                <option value="Feminino" {% if user.gender == 'Feminino' %}selected{% endif %}>Feminino</option>
-                                            </select>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="birth_day" class="form-label">Dia do Aniversário</label>
-                                                <input type="number" class="form-control" id="birth_day" name="birth_day" min="1" max="31" value="{{ user.birth_day }}">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="birth_month" class="form-label">Mês do Aniversário</label>
-                                                <input type="number" class="form-control" id="birth_month" name="birth_month" min="1" max="12" value="{{ user.birth_month }}">
-                                            </div>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="married" class="form-label">Estado Civil</label>
-                                            <select class="form-select" id="married" name="married">
-                                                <option value="">Selecione...</option>
-                                                <option value="Sim" {% if user.married == 'Sim' %}selected{% endif %}>Sim</option>
-                                                <option value="Não" {% if user.married == 'Não' %}selected{% endif %}>Não</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="children" class="form-label">Tem Filhos?</label>
-                                            <select class="form-select" id="children" name="children">
-                                                <option value="">Selecione...</option>
-                                                <option value="Sim" {% if user.children == 'Sim' %}selected{% endif %}>Sim</option>
-                                                <option value="Não" {% if user.children == 'Não' %}selected{% endif %}>Não</option>
-                                            </select>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="grandchildren" class="form-label">Tem Netos?</label>
-                                            <select class="form-select" id="grandchildren" name="grandchildren">
-                                                <option value="">Selecione...</option>
-                                                <option value="Sim" {% if user.grandchildren == 'Sim' %}selected{% endif %}>Sim</option>
-                                                <option value="Não" {% if user.grandchildren == 'Não' %}selected{% endif %}>Não</option>
-                                            </select>
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Segunda linha: Estado e Cidade -->
+                                    <div class="col-md-2 mb-3">
+                                        <label for="state" class="form-label">Estado</label>
+                                        <select class="form-select" id="state" name="state" required>
+                                            <option value="" disabled>Selecione</option>
+                                            <option value="AC" {% if user.state == 'AC' %}selected{% endif %}>Acre</option>
+                                            <option value="AL" {% if user.state == 'AL' %}selected{% endif %}>Alagoas</option>
+                                            <option value="AP" {% if user.state == 'AP' %}selected{% endif %}>Amapá</option>
+                                            <option value="AM" {% if user.state == 'AM' %}selected{% endif %}>Amazonas</option>
+                                            <option value="BA" {% if user.state == 'BA' %}selected{% endif %}>Bahia</option>
+                                            <option value="CE" {% if user.state == 'CE' %}selected{% endif %}>Ceará</option>
+                                            <option value="DF" {% if user.state == 'DF' %}selected{% endif %}>Distrito Federal</option>
+                                            <option value="ES" {% if user.state == 'ES' %}selected{% endif %}>Espírito Santo</option>
+                                            <option value="GO" {% if user.state == 'GO' %}selected{% endif %}>Goiás</option>
+                                            <option value="MA" {% if user.state == 'MA' %}selected{% endif %}>Maranhão</option>
+                                            <option value="MT" {% if user.state == 'MT' %}selected{% endif %}>Mato Grosso</option>
+                                            <option value="MS" {% if user.state == 'MS' %}selected{% endif %}>Mato Grosso do Sul</option>
+                                            <option value="MG" {% if user.state == 'MG' %}selected{% endif %}>Minas Gerais</option>
+                                            <option value="PA" {% if user.state == 'PA' %}selected{% endif %}>Pará</option>
+                                            <option value="PB" {% if user.state == 'PB' %}selected{% endif %}>Paraíba</option>
+                                            <option value="PR" {% if user.state == 'PR' %}selected{% endif %}>Paraná</option>
+                                            <option value="PE" {% if user.state == 'PE' %}selected{% endif %}>Pernambuco</option>
+                                            <option value="PI" {% if user.state == 'PI' %}selected{% endif %}>Piauí</option>
+                                            <option value="RJ" {% if user.state == 'RJ' %}selected{% endif %}>Rio de Janeiro</option>
+                                            <option value="RN" {% if user.state == 'RN' %}selected{% endif %}>Rio Grande do Norte</option>
+                                            <option value="RS" {% if user.state == 'RS' %}selected{% endif %}>Rio Grande do Sul</option>
+                                            <option value="RO" {% if user.state == 'RO' %}selected{% endif %}>Rondônia</option>
+                                            <option value="RR" {% if user.state == 'RR' %}selected{% endif %}>Roraima</option>
+                                            <option value="SC" {% if user.state == 'SC' %}selected{% endif %}>Santa Catarina</option>
+                                            <option value="SP" {% if user.state == 'SP' %}selected{% endif %}>São Paulo</option>
+                                            <option value="SE" {% if user.state == 'SE' %}selected{% endif %}>Sergipe</option>
+                                            <option value="TO" {% if user.state == 'TO' %}selected{% endif %}>Tocantins</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="city" class="form-label">Cidade</label>
+                                        <input type="text" class="form-control" id="city" name="city" value="{{ user.city }}" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="activity_type" class="form-label">Área de atuação</label>
+                                        <select class="form-select" id="activity_type" name="activity_type" required>
+                                            <option value="" disabled>Selecione o tipo de atividade</option>
+                                            <option value="Serviços" {% if user.activity_type == 'Serviços' %}selected{% endif %}>Serviços</option>
+                                            <option value="Comércio" {% if user.activity_type == 'Comércio' %}selected{% endif %}>Comércio</option>
+                                            <option value="Indústria" {% if user.activity_type == 'Indústria' %}selected{% endif %}>Indústria</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Terceira linha: Ramo de atuação e Atividade da empresa -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="company_activity" class="form-label">Ramo de atuação</label>
+                                        <select class="form-select" id="company_activity" name="company_activity" required>
+                                            <option value="" disabled>Selecione o ramo de atuação</option>
+                                            <option value="AMBULANTE" {% if user.company_activity == 'AMBULANTE' %}selected{% endif %}>AMBULANTE</option>
+                                            <option value="ATACADO" {% if user.company_activity == 'ATACADO' %}selected{% endif %}>ATACADO</option>
+                                            <option value="AUTOMOTORES" {% if user.company_activity == 'AUTOMOTORES' %}selected{% endif %}>AUTOMOTORES</option>
+                                            <option value="VAREJO - Alimentação fora do Lar" {% if user.company_activity == 'VAREJO - Alimentação fora do Lar' %}selected{% endif %}>VAREJO - Alimentação fora do Lar</option>
+                                            <option value="Varejo - Animais domesticos" {% if user.company_activity == 'Varejo - Animais domesticos' %}selected{% endif %}>Varejo - Animais domesticos</option>
+                                            <option value="Varejo - Arte, decoração e utilidades para o Lar" {% if user.company_activity == 'Varejo - Arte, decoração e utilidades para o Lar' %}selected{% endif %}>Varejo - Arte, decoração e utilidades para o Lar</option>
+                                            <option value="Varejo - Bebidas e produtos alimentícios" {% if user.company_activity == 'Varejo - Bebidas e produtos alimentícios' %}selected{% endif %}>Varejo - Bebidas e produtos alimentícios</option>
+                                            <option value="Varejo - Copa e cozinha" {% if user.company_activity == 'Varejo - Copa e cozinha' %}selected{% endif %}>Varejo - Copa e cozinha</option>
+                                            <option value="Varejo - Eletroeletrônicos e informática" {% if user.company_activity == 'Varejo - Eletroeletrônicos e informática' %}selected{% endif %}>Varejo - Eletroeletrônicos e informática</option>
+                                            <option value="Varejo - Festas, leitura, música, esporte e lazer" {% if user.company_activity == 'Varejo - Festas, leitura, música, esporte e lazer' %}selected{% endif %}>Varejo - Festas, leitura, música, esporte e lazer</option>
+                                            <option value="Varejo - Jardinagem" {% if user.company_activity == 'Varejo - Jardinagem' %}selected{% endif %}>Varejo - Jardinagem</option>
+                                            <option value="Varejo - Materiais de construção" {% if user.company_activity == 'Varejo - Materiais de construção' %}selected{% endif %}>Varejo - Materiais de construção</option>
+                                            <option value="Varejo - Papéis e utilidades para escritórios" {% if user.company_activity == 'Varejo - Papéis e utilidades para escritórios' %}selected{% endif %}>Varejo - Papéis e utilidades para escritórios</option>
+                                            <option value="Varejo - Saúde e bem-estar" {% if user.company_activity == 'Varejo - Saúde e bem-estar' %}selected{% endif %}>Varejo - Saúde e bem-estar</option>
+                                            <option value="Varejo - Vestuário,calçados e complementos" {% if user.company_activity == 'Varejo - Vestuário,calçados e complementos' %}selected{% endif %}>Varejo - Vestuário,calçados e complementos</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="specialty_area" class="form-label">Atividade da empresa</label>
+                                        <select class="form-select" id="specialty_area" name="specialty_area" required data-saved-value="{{ user.specialty_area }}">
+                                            <option value="" disabled>Selecione a atividade da empresa</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <!-- Quarta linha: Chave de Ativação -->
+                                    <div class="col-md-6 mb-3">
+                                        <label for="activation_key" class="form-label">Chave de Ativação</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" value="{{ user.activation_key if user.activation_key else '' }}">
+                                            <button type="button" class="btn btn-secondary" id="activateBtn">Ativar Licença</button>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <!-- Endereço -->
-                                    <div class="col-md-12 mb-3">
-                                        <h5 class="mb-3">Endereço</h5>
-                                        <div class="row">
-                                            <div class="col-md-2 mb-3">
-                                                <label for="cep" class="form-label">CEP</label>
-                                                <input type="text" class="form-control" id="cep" name="cep" value="{{ user.cep }}">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="street" class="form-label">Logradouro</label>
-                                                <input type="text" class="form-control" id="street" name="street" value="{{ user.street }}">
-                                            </div>
-                                            <div class="col-md-4 mb-3">
-                                                <label for="neighborhood" class="form-label">Bairro</label>
-                                                <input type="text" class="form-control" id="neighborhood" name="neighborhood" value="{{ user.neighborhood }}">
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-4 mb-3">
-                                                <label for="city" class="form-label">Cidade</label>
-                                                <input type="text" class="form-control" id="city" name="city" value="{{ user.city }}">
-                                            </div>
-                                            <div class="col-md-2 mb-3">
-                                                <label for="state" class="form-label">Estado</label>
-                                                <input type="text" class="form-control" id="state" name="state" value="{{ user.state }}">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="complement" class="form-label">Complemento</label>
-                                                <input type="text" class="form-control" id="complement" name="complement" value="{{ user.complement }}">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Dados Profissionais -->
-                                    <div class="col-md-12 mb-3">
-                                        <h5 class="mb-3">Dados Profissionais</h5>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="company_activity" class="form-label">Atividade da Empresa</label>
-                                                <input type="text" class="form-control" id="company_activity" name="company_activity" value="{{ user.company_activity }}">
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="specialty_area" class="form-label">Área de Especialidade</label>
-                                                <input type="text" class="form-control" id="specialty_area" name="specialty_area" value="{{ user.specialty_area }}">
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Botões -->
+                                <!-- Botões -->
+                                <div class="row">
                                     <div class="col-md-12 text-end">
-                                        <button type="submit" class="btn btn-primary">
+                                        <button type="submit" class="btn btn-secondary">
                                             <i class="bi bi-save"></i> Salvar Alterações
                                         </button>
                                     </div>
@@ -498,33 +498,9 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Máscara para o campo de WhatsApp
-    const whatsappInput = document.getElementById('whatsapp');
-    if (whatsappInput) {
-        whatsappInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 11) value = value.slice(0, 11);
-            if (value.length > 2) {
-                value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
-            }
-            if (value.length > 9) {
-                value = `${value.slice(0, 9)}-${value.slice(9)}`;
-            }
-            e.target.value = value;
-        });
-    }
-
-    // Máscara para o campo de CEP
-    const cepInput = document.getElementById('cep');
-    if (cepInput) {
-        cepInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 8) value = value.slice(0, 8);
-            if (value.length > 5) {
-                value = `${value.slice(0, 5)}-${value.slice(5)}`;
-            }
-            e.target.value = value;
-        });
+    // Carregar áreas de especialidade se já houver uma atividade selecionada
+    if (document.getElementById('company_activity').value) {
+        loadSpecialtyAreas();
     }
 });
 </script>
