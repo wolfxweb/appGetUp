@@ -4,7 +4,7 @@ content %}
 <div class="container-fluid mt-5 pt-5" style="background-color: #F5F5F5; min-height: 100vh;">
   <div class="row">
     <div class="col-md-12">
-      <div class="card" style="background-color: #F0F0F0;">
+      <div class="card" style="background-color: #F5F5F5;">
         {% if error_message %}
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
           {{ error_message }}
@@ -36,7 +36,6 @@ content %}
         </div>
 
         <div class="card-body">
-          {% if basic_data %}
           <!-- Nova linha com os 5 botões -->
           <div class="row mb-4 justify-content-center">
             <div class="col-12 col-md-2 mb-2 mb-md-0">
@@ -123,24 +122,24 @@ content %}
                   <th>Mês</th>
                   <th>Ano</th>
                   {% if user.activity_type == 'Serviços' %}
-                  <th>Clientes <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#clientsHelpModal"></i></th>
+                  <th>Clientes <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#clientsHelpModal" /></th>
                   {% endif %}
-                  <th>Faturamento <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#revenueHelpModal"></i></th>
+                  <th>Faturamento <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#revenueHelpModal" /></th>
                   {% if user.activity_type != 'Serviços' %}
-                  <th>Clientes <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#clientsHelpModal"></i></th>
+                  <th>Clientes <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#clientsHelpModal" /></th>
                   {% endif %}
-                  <th>Gastos Vendas <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i></th>
-                  <th>Gastos Insumos <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#inputExpensesHelpModal"></i></th>
+                  <th>Gastos Vendas <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal" /></th>
+                  <th>Gastos Insumos <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#inputExpensesHelpModal" /></th>
                   {% if user.activity_type == 'Serviços' %}
-                  <th>Pró-labore <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal"></i></th>
-                  <th>Custos Fixos <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i></th>
-                  <th>Horas/Sem <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i></th>
-                  <th>Capacidade <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#capacityHelpModal"></i></th>
-                  <th>Margem % <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#marginHelpModal"></i></th>
+                  <th>Pró-labore <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal" /></th>
+                  <th>Custos Fixos <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal" /></th>
+                  <th>Horas/Sem <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal" /></th>
+                  <th>Capacidade <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#capacityHelpModal" /></th>
+                  <th>Margem % <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#marginHelpModal" /></th>
                   {% else %}
-                  <th>Custos Fixos <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i></th>
-                  <th>Capacidade <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#capacityHelpModal"></i></th>
-                  <th>Margem % <i class="bi bi-lightbulb-fill help-icon" style="color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#marginHelpModal"></i></th>
+                  <th>Custos Fixos <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal" /></th>
+                  <th>Capacidade <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#capacityHelpModal" /></th>
+                  <th>Margem % <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#marginHelpModal" /></th>
                   {% endif %}
                   <th>Ações</th>
                 </tr>

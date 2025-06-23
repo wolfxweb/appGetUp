@@ -143,10 +143,10 @@
                 <div class="card-body">
                     <!-- Logo alinhada à esquerda dentro do card -->
                     <div class="mb-4">
-                        <p>Cliente tem que enviar logo</p>
-                        <!--
-                        <img src="{{ url_for('static', path='images/Wolfx-Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 150px;">
-                        -->
+                        
+                        
+                        <img src="{{ url_for('static', path='images/Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 150px;">
+                        
                         </div>
 
                     <div class="row">
@@ -209,7 +209,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="month" class="form-label">
                                                     Mês* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#monthHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#monthHelpModal" />
                                                 </label>
                                                 <select class="form-select" id="month" name="month" required {% if edit_mode %}disabled{% endif %}>
                                                     {% for month in range(1, 13) %}
@@ -227,7 +227,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="year" class="form-label">
                                                     Ano* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#yearHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#yearHelpModal" />
                                                 </label>
                                                 <input type="number" class="form-control" id="year" name="year" 
                                                     value="{{ basic_data.year if basic_data else current_year }}" 
@@ -243,7 +243,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="clients_served" class="form-label">
                                                     Quantidade de Clientes Atendidos* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#clientsServedHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#clientsServedHelpModal" />
                                                 </label>
                                                 <input type="number" class="form-control" id="clients_served" name="clients_served" 
                                                     value="{{ basic_data.clients_served if basic_data else '' }}" required min="0">
@@ -251,7 +251,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="sales_revenue" class="form-label">
                                                     Faturamento com Vendas* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesRevenueHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#salesRevenueHelpModal" />
                                                 </label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="sales_revenue" name="sales_revenue" 
@@ -266,7 +266,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="sales_expenses" class="form-label">
                                                     Gastos com Vendas* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal" />
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
@@ -284,7 +284,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="input_product_expenses" class="form-label">
                                                     Gastos com Insumos e Produtos* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#inputProductExpensesHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#inputProductExpensesHelpModal" />
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
@@ -306,7 +306,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="pro_labore" class="form-label">
                                                     Pró-labore 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#proLaboreHelpModal" />
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
@@ -322,7 +322,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="other_fixed_costs" class="form-label">
                                                     Demais Custos Fixos* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#otherFixedCostsHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#otherFixedCostsHelpModal" />
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
@@ -342,7 +342,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="work_hours_per_week" class="form-label">
                                                     Horas de Trabalho por Semana 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#workHoursHelpModal" />
                                                 </label>
                                                 <input type="number" step="1" class="form-control" id="work_hours_per_week" name="work_hours_per_week" 
                                                     value="{{ basic_data.work_hours_per_week|int if basic_data and basic_data.work_hours_per_week else '' }}" min="0" max="168">
@@ -350,7 +350,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="service_capacity" class="form-label">
                                                     Capacidade de Atendimento 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#serviceCapacityHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#serviceCapacityHelpModal" />
                                                 </label>
                                                 <input type="text" class="form-control" id="service_capacity" name="service_capacity" 
                                                     value="{{ basic_data.service_capacity if basic_data else '' }}">
@@ -363,7 +363,7 @@
                                                 <div class="text-center mb-2">
                                                     <label for="ideal_service_profit_margin" class="form-label">
                                                         Margem de Lucro Ideal (%)
-                                                        <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#idealServiceProfitMarginHelpModal"></i>
+                                                        <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#idealServiceProfitMarginHelpModal" />
                                                     </label>
                                                 </div>
                                                 <div class="input-group">
@@ -409,7 +409,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="month" class="form-label">
                                                     Mês* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#monthHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#monthHelpModal" />
                                                 </label>
                                                 <select class="form-select" id="month" name="month" required {% if edit_mode %}disabled{% endif %}>
                                                     {% for month in range(1, 13) %}
@@ -427,7 +427,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="year" class="form-label">
                                                     Ano* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#yearHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#yearHelpModal" />
                                                 </label>
                                                 <input type="number" class="form-control" id="year" name="year" 
                                                     value="{{ basic_data.year if basic_data else current_year }}" 
@@ -443,7 +443,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="sales_revenue" class="form-label">
                                                     Faturamento com Vendas* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesRevenueHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#salesRevenueHelpModal" />
                                                 </label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="sales_revenue" name="sales_revenue" 
@@ -454,7 +454,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="clients_served" class="form-label">
                                                     Quantidade de Clientes Atendidos
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#clientsServedHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#clientsServedHelpModal" />
                                                 </label>
                                                 <input type="number" class="form-control" id="clients_served" name="clients_served" 
                                                     value="{{ basic_data.clients_served if basic_data else '' }}" min="0">
@@ -466,7 +466,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="sales_expenses" class="form-label">
                                                     Gastos com Vendas* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#salesExpensesHelpModal" />
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
@@ -484,7 +484,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="input_product_expenses" class="form-label">
                                                     Gastos com Insumos e Produtos* 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#inputProductExpensesHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#inputProductExpensesHelpModal" />
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
@@ -506,7 +506,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="other_fixed_costs" class="form-label">
                                                     Custos Fixos 
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#fixedCostsHelpModal" />
                                                 </label>
                                                 <div class="input-group">
                                                     <div class="col-9 p-0">
@@ -522,7 +522,7 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="service_capacity" class="form-label">
                                                     Capacidade de Atendimento
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#serviceCapacityHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#serviceCapacityHelpModal" />
                                                 </label>
                                                 <input type="text" class="form-control" id="service_capacity" name="service_capacity" 
                                                     value="{{ basic_data.service_capacity if basic_data else '' }}">
@@ -535,7 +535,7 @@
                                                 <div class="text-center mb-2">
                                                     <label for="ideal_service_profit_margin" class="form-label">
                                                         Margem de Lucro Ideal (%)
-                                                        <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#idealProfitMarginHelpModal"></i>
+                                                        <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="width: 22px; height: 22px; cursor: pointer; margin-left: 5px;" data-bs-toggle="modal" data-bs-target="#idealProfitMarginHelpModal" />
                                                     </label>
                                                 </div>
                                                 <div class="input-group">
