@@ -6,38 +6,98 @@
 <script>
     // Definir as áreas de especialidade para cada atividade
     const specialtyAreas = {
-        'Serviços': [
-            'Açaí', 'Algodão doce', 'Artesanato', 'Balas, bombons e chocolates', 'Barraca de pastel',
-            'Bebidas e refresco', 'Bijuterias', 'Cachorro-quente', 'Calçados', 'Caldo de cana',
-            'Churrasquinho', 'Churros', 'Crepe', 'Doces', 'Eletrônicos', 'Ervas medicinais',
-            'Sanduiches', 'Mate', 'Milho cozido', 'Óculos', 'Pipoca', 'Relógios',
-            'Revenda de bijuterias e semi-jóias', 'Roupas e/ou acessórios', 'Sorvete',
-            'Souvenirs temáticos e lembranças', 'Tapioca', 'Outra area serviços'
+        'Alimentação fora do Lar': [
+            'Bar', 'Bistrô', 'Boteco', 'Buffet', 'Cafeteria', 'Chef independente',
+            'Churrascaria', 'Confeitaria', 'Costelaria', 'Cozinheiro(a) independente',
+            'Delivery (dark kitchens)', 'Doceria', 'Fast food (em shopping center)',
+            'Food truck', 'Hamburgueria', 'Lanches de rua (ambulante)', 'Lanchonete',
+            'Loja de conveniência', 'Marmitex (Grab and Go)', 'Padaria', 'Padaria artesanal',
+            'Pastelaria', 'Pizzaria', 'Queijos e frios', 'Quiosque', 'Restaurante à lá carte',
+            'Restaurante self service', 'Salgadinhos', 'Sorveteria', 'Temakeria',
+            'Varejo alimentar', 'Outra atividade'
         ],
-        'Comércio': [
-            'Acessórios para aparelhos celulares', 'Adubos e defensivos agrícolas',
-            'Alimentos congelados', 'Artigos de decoração', 'Artigos esportivos',
-            'Artigos para festas', 'Autopeças e acessórios', 'Bebidas',
-            'Bolsas, carteiras, cintos, malas, etc.', 'Brinquedos e jogos',
-            'Calçados atacado', 'Cama, mesa e banho', 'Cereais', 'Doces atacado',
-            'Eletrodomésticos atacado', 'Eletro-eletrônicos e informática',
-            'Equipamentos de sinalização e segurança', 'Equipamentos e acessórios para a área da saúde',
-            'Equipamentos e utensílios para copa e cozinha', 'Fantasias',
-            'Implementos agrícolas', 'Instrumentos musicais', 'Livros, revistas, jornais',
-            'Materiais de construção', 'Materiais de escritório',
-            'Materiais de higiene e limpeza', 'Medicamentos',
-            'Medicamentos e produtos veterinários', 'Produtos alimentícios',
-            'Produtos e implementos de jardinagem', 'Roupas', 'Sorvetes',
-            'Uniformes atacado', 'Vestuário', 'Outra área comércio'
+        'Comércio atacadista': [
+            'Artigos para deficiências físicas', 'Bebidas', 'Distribuidores de Alimentos',
+            'Eletrônicos', 'Equipamentos cirúrgicos', 'Equipamentos de Proteção Individual (EPIs)',
+            'Equipamentos para cozinhas industriais', 'Ferramentas e Ferragens',
+            'Materiais de Construção', 'Papelaria e Escritório', 'Produtos Agropecuários',
+            'Produtos de Autopeças', 'Produtos de Higiene Pessoal', 'Produtos de Iluminação',
+            'Produtos de Informática', 'Produtos de Limpeza', 'Produtos de Papel e Embalagens',
+            'Produtos Farmacêuticos', 'Produtos para Hotelaria e Restaurantes',
+            'Produtos para Panificação', 'Produtos para Pet Shops', 'Produtos Químicos',
+            'Produtos Têxteis', 'Outra atividade'
+        ],
+        'Comércio varejista': [
+            'Açougue', 'Adega', 'Armazém', 'Artigos para festas e eventos', 'Atelier de artes',
+            'Bicicletaria', 'Brechó de móveis usados', 'Brechó de roupas', 'Colchões',
+            'Farmácia de manipulação', 'Farmácia e drogaria', 'Floricultura',
+            'Lavanderia / tinturaria', 'Livraria e papelaria', 'Loja de antiguidades',
+            'Loja de artefatos de borracha', 'Loja de artigos de cama, mesa e banho',
+            'Loja de artigos decorativos', 'Loja de artigos para festas', 'Loja de artigos religiosos',
+            'Loja de bijuterias', 'Loja de brinquedos', 'Loja de calçados e acessórios',
+            'Loja de cosméticos', 'Loja de eletrônicos', 'Loja de equipamentos esportivos',
+            'Loja de ferragens e materiais de construção', 'Loja de flores e plantas artificiais',
+            'Loja de Instrumentos musicais', 'Loja de materiais esportivos', 'Loja de móveis e decoração',
+            'Loja de peças automotivas usadas', 'Loja de pisos e/ou tapetes', 'Loja de produtos Automotivos',
+            'Loja de produtos de Informática', 'Loja de produtos de limpeza e higiene',
+            'Loja de produtos Naturais e Suplementos', 'Loja de produtos para artesanato',
+            'Loja de produtos para Bebês', 'Loja de produtos para Jardinagem', 'Loja de rações',
+            'Loja de roupas e acessórios', 'Loja de suvenires', 'Loja de tintas',
+            'Loja de uniformes', 'Loja de utilidades para o Lar', 'Minimercados',
+            'Perfumaria', 'Persianas e cortinas', 'Pet Shops', 'Quitanda / frutaria',
+            'Tabacaria', 'Tinturaria', 'Venda de lanchas', 'Venda de motocicletas',
+            'Venda de produtos de defesa pessoal', 'Venda de produtos esportivos',
+            'Venda de produtos náuticos', 'Venda de veículos automotores', 'Outra atividade'
         ],
         'Indústria': [
-            'Automóveis e utilitários', 'Autopeças e acessórios',
-            'Barcos, botes, lanchas, jet-skis', 'Baterias', 'Bicicletas',
-            'Caminhões', 'Caminhões, ônibus e vans', 'Carrocerias e baús',
-            'Carrocerias para ônibus e vans', 'Combustíveis e lubrificantes',
-            'Equipamentos para transporte coletivo', 'Equipamentos para transporte de cargas',
-            'Máquinas e implementos agrícolas', 'Motocicletas', 'Ônibus e vans',
-            'Pneus', 'Outra área indústria'
+            'Água mineral', 'Artefatos de borracha', 'Artefatos de cimento', 'Artefatos religiosos',
+            'Artigos decorativos', 'Artigos para exercícios físicos e atividades esportivas',
+            'Artigos para festas e eventos', 'Ateliês de estamparia/serigrafia', 'Balas, pirulitos',
+            'Bebidas artesanais', 'Bijuterias', 'Biscoitos', 'Bombons e chocolates',
+            'Bordados e/ou crochê', 'Brindes', 'Brinquedos', 'Calçadista', 'Carpintaria',
+            'Cerâmica', 'Cervejas e outras bebidas alcoólicas', 'Confecção de roupas e/ou uniformes',
+            'Construtora', 'Cosméticos', 'Doces e conservas', 'Editora', 'Embalagens',
+            'Empreiteira', 'Equipamentos para ginástica e esportes', 'Estruturas metálicas',
+            'Facções têxteis', 'Fundição', 'Gelo', 'Gráfica', 'Gráfica rápida',
+            'Instrumentos musicais', 'Laticínio', 'Madeireira/serraria', 'Malharia',
+            'Marcenaria', 'Massas', 'Mineradora (extração de areia, brita, argila, pedra para construção)',
+            'Móveis de aço inox e/ou ferro e/ou alumínio', 'Móveis planejados', 'Olaria',
+            'Panificadora', 'Papelaria artesanal', 'Produtos de higiene pessoal',
+            'Produtos de limpeza', 'Queijos artesanais', 'Reciclagem', 'Refrigerantes e/ou sucos',
+            'Roupas de cama, mesa e banho', 'Serralheria', 'Sorvetes', 'Tecelagem',
+            'Têxteis técnicos', 'Usinagem', 'Utensílios domésticos', 'Velas', 'Outra atividade'
+        ],
+        'Prestação de serviços': [
+            'Academia de artes marciais', 'Academias de ginástica', 'Adestrador', 'Alfaiataria',
+            'Assistência técnica (eletrodomésticos, celulares, eletrônicos)', 'Ateliê de costuras',
+            'Aulas particulares', 'Aulas particulares e tutoria', 'Auto elétrica', 'Auto escola',
+            'Avaliação e consultoria imobiliária', 'Babás, cuidadores e diaristas',
+            'Bancos e cooperativas de crédito', 'Barbearia', 'Baterias automotivas', 'Berçário',
+            'Borracharia', 'Cabelereiro', 'Carpinteiro', 'Casa de eventos, buffet e festas',
+            'Centro de estética e spas', 'Chaveiro', 'Clínica de fisioterapia', 'Clínica de imagens',
+            'Clínica médica', 'Clínica odontológica', 'Clínica veterinária', 'Concerto de eletrônicos',
+            'Concerto de linha branca', 'Consultor(a)', 'Consultório médico', 'Consultório odontológico',
+            'Corretor(a) de imóveis', 'Cozinheiro(a)', 'Criação, edição e publicação de Web Sites',
+            'Cursos de idiomas', 'Decorador(a)', 'Desenvolvimento de software e aplicativos',
+            'Eletricista', 'Encanador', 'Enfermeira', 'Engenharia civil, elétrica, mecânica etc.',
+            'Engenharia de prompt (IA)', 'Escola profissionalizante e técnica', 'Escolas',
+            'Escritórios de advocacia', 'Esteticista', 'Faxineiro', 'Filmagem e edição de vídeo',
+            'Fisioterapeuta', 'Food truck', 'Fotógrafo(a)', 'Funerária', 'Gestão de resíduos',
+            'Guia turístico', 'Guincho', 'Jardineiro', 'Laboratório de diagnósticos',
+            'Lavanderia', 'Limpeza residencial e empresarial', 'Logística e armazenagem',
+            'Manicure', 'Manutenção predial e residencial', 'Marido de aluguel', 'Marketing digital',
+            'Massagista', 'Médico', 'Monitoramento e vigilância', 'Montador de móveis',
+            'Motorista de aplicativo', 'Mudanças e fretes', 'Oficina mecânica', 'Pedreiro',
+            'Personal trainer e fisioterapeuta', 'Pintor', 'Planejamento estratégico de conteúdo',
+            'Produção de conteúdo e design gráfico', 'Programador (TI)', 'Provedores de internet',
+            'Reformas e construção civil', 'Relações públicas e assessoria de imprensa',
+            'Restaurantes, bares e lanchonetes', 'Salão de beleza', 'Salões de beleza e barbearias',
+            'Saneamento', 'Segurança patrimonial e pessoal', 'Serviços de catering e buffet',
+            'Serviços de cobrança', 'Serviços de contabilidade', 'Serviços de diagnóstico por imagem',
+            'Serviços de enfermagem e homecare', 'Serviços de entregas', 'Serviços de massagem',
+            'Serviços de mediação e arbitragem', 'Suporte técnico e help desk', 'Tradutor',
+            'Transporte de mudanças', 'Transporte escolar', 'Universidades e faculdades',
+            'Veterinário', 'Outra atividade'
         ]
     };
 
@@ -330,8 +390,7 @@
                     <!-- Logo dentro do card -->
                     <div class="row mb-4">
                         <div class="col-12">
-                            <p>Logo envida e no formato post instrgram, deve ser envida a logo de 150px x 300px fundo transparente </p>
-                            <img src="{{ url_for('static', path='images/Wolfx-Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
+                             <img src="{{ url_for('static', path='images/Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
                         </div>
                     </div>
 
@@ -399,7 +458,7 @@
                                                     Como gosta de ser chamado(a)?
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#nameHelpModal"></i>
                                                 </label>
-                                                <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default('', true) }}" required style="background-color: #D3D3D3;" autocomplete="name">
+                                                <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default('', true) }}" required style="background-color: #F5F5F5;" autocomplete="name">
                                                 <div class="invalid-feedback">
                                                     Por favor, informe seu nome.
                                                 </div>
@@ -410,7 +469,7 @@
                                                     Email
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#emailHelpModal"></i>
                                                 </label>
-                                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default('', true) }}" required style="background-color: #D3D3D3;" autocomplete="email">
+                                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default('', true) }}" required style="background-color: #F5F5F5;" autocomplete="email">
                                                 <div class="invalid-feedback">
                                                     Por favor, informe um email válido.
                                                 </div>
@@ -425,7 +484,7 @@
                                                     CEP
                                                 </label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" style="background-color: #D3D3D3;" autocomplete="postal-code">
+                                                    <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" style="background-color: #F5F5F5;" autocomplete="postal-code">
                                                     <button type="button" class="btn btn-outline-secondary" onclick="buscarEnderecoPorCEP()">
                                                         <i class="bi bi-search"></i> Buscar
                                                     </button>
@@ -439,7 +498,7 @@
                                                 <label for="state" class="form-label">
                                                     Estado
                                                 </label>
-                                                <select class="form-select" id="state" name="state" required style="background-color: #D3D3D3;">
+                                                <select class="form-select" id="state" name="state" required style="background-color: #F5F5F5;">
                                                     <option value="" selected disabled>Selecione</option>
                                                     <option value="AC">Acre</option>
                                                     <option value="AL">Alagoas</option>
@@ -475,7 +534,7 @@
                                                 <label for="city" class="form-label">
                                                     Cidade
                                                 </label>
-                                                <input type="text" class="form-control" id="city" name="city" value="{{ user.city|default('', true) }}" required style="background-color: #D3D3D3;" autocomplete="address-level2">
+                                                <input type="text" class="form-control" id="city" name="city" value="{{ user.city|default('', true) }}" required style="background-color: #F5F5F5;" autocomplete="address-level2">
                                                 <div class="invalid-feedback">
                                                     Por favor, informe a cidade.
                                                 </div>
@@ -487,11 +546,13 @@
                                                 <label for="activity_type" class="form-label">
                                                     Área de atuação
                                                 </label>
-                                                <select class="form-select" id="activity_type" name="activity_type" required style="background-color: #D3D3D3;">
+                                                <select class="form-select" id="activity_type" name="activity_type" required style="background-color: #F5F5F5;">
                                                     <option value="" selected disabled>Selecione o tipo de atividade</option>
-                                                    <option value="Serviços">Serviços</option>
-                                                    <option value="Comércio">Comércio</option>
+                                                    <option value="Alimentação fora do Lar">Alimentação fora do Lar</option>
+                                                    <option value="Comércio atacadista">Comércio atacadista</option>
+                                                    <option value="Comércio varejista">Comércio varejista</option>
                                                     <option value="Indústria">Indústria</option>
+                                                    <option value="Prestação de serviços">Prestação de serviços</option>
                                                 </select>
                                             </div>
 
@@ -499,7 +560,7 @@
                                                 <label for="specialty_area" class="form-label">
                                                     Atividade da empresa
                                                 </label>
-                                                <select class="form-select" id="specialty_area" name="specialty_area" required disabled style="background-color: #D3D3D3;">
+                                                <select class="form-select" id="specialty_area" name="specialty_area" required disabled style="background-color: #F5F5F5;">
                                                     <option value="" selected disabled>Selecione a atividade da empresa</option>
                                                 </select>
                                             </div>
@@ -511,7 +572,7 @@
                                                     Senha
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#passwordHelpModal"></i>
                                                 </label>
-                                                <input type="password" class="form-control" id="password" name="password" required style="background-color: #D3D3D3;" autocomplete="new-password">
+                                                <input type="password" class="form-control" id="password" name="password" required style="background-color: #F5F5F5;" autocomplete="new-password">
                                                 <div class="invalid-feedback">
                                                     A senha deve ter pelo menos 6 caracteres.
                                                 </div>
@@ -523,7 +584,7 @@
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#activationKeyHelpModal"></i>
                                                 </label>
                                                 <div class="input-group">
-                                                    <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" style="background-color: #D3D3D3;">
+                                                    <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" style="background-color: #F5F5F5;">
                                                 </div>
                                             </div>
                                         </div>
