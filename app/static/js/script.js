@@ -1,5 +1,104 @@
 // Script personalizado
 
+// Mapeamento de estados
+const estadosMap = {
+    'AC': 'Acre',
+    'AL': 'Alagoas',
+    'AP': 'Amapá',
+    'AM': 'Amazonas',
+    'BA': 'Bahia',
+    'CE': 'Ceará',
+    'DF': 'Distrito Federal',
+    'ES': 'Espírito Santo',
+    'GO': 'Goiás',
+    'MA': 'Maranhão',
+    'MT': 'Mato Grosso',
+    'MS': 'Mato Grosso do Sul',
+    'MG': 'Minas Gerais',
+    'PA': 'Pará',
+    'PB': 'Paraíba',
+    'PR': 'Paraná',
+    'PE': 'Pernambuco',
+    'PI': 'Piauí',
+    'RJ': 'Rio de Janeiro',
+    'RN': 'Rio Grande do Norte',
+    'RS': 'Rio Grande do Sul',
+    'RO': 'Rondônia',
+    'RR': 'Roraima',
+    'SC': 'Santa Catarina',
+    'SP': 'São Paulo',
+    'SE': 'Sergipe',
+    'TO': 'Tocantins'
+};
+
+// Função para buscar endereço por CEP
+function buscarEnderecoPorCEP() {
+    const cepInput = document.getElementById('cep');
+    const stateSelect = document.getElementById('state');
+    const cityInput = document.getElementById('city');
+    
+    if (!cepInput || !stateSelect || !cityInput) {
+        console.error('Elementos não encontrados');
+        return;
+    }
+    
+    const cep = cepInput.value.replace(/\D/g, '');
+    
+    if (cep.length !== 8) {
+        alert('Por favor, informe um CEP válido com 8 dígitos.');
+        return;
+    }
+    
+    // Mostrar loading
+    cepInput.disabled = true;
+    stateSelect.disabled = true;
+    cityInput.disabled = true;
+    
+    fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.erro) {
+                alert('CEP não encontrado. Verifique o número informado.');
+                return;
+            }
+            
+            // Preencher os campos
+            if (data.uf && estadosMap[data.uf]) {
+                stateSelect.value = data.uf;
+            }
+            
+            if (data.localidade) {
+                cityInput.value = data.localidade;
+            }
+            
+            // Mostrar mensagem de sucesso
+            const successAlert = document.createElement('div');
+            successAlert.className = 'alert alert-success alert-dismissible fade show';
+            successAlert.innerHTML = `
+                <strong>Endereço encontrado!</strong> Estado e cidade preenchidos automaticamente.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            const form = document.querySelector('form');
+            if (form) {
+                form.insertBefore(successAlert, form.firstChild);
+            }
+        })
+        .catch(error => {
+            console.error('Erro ao buscar CEP:', error);
+            alert('Erro ao buscar o CEP. Verifique sua conexão com a internet e tente novamente.');
+        })
+        .finally(() => {
+            // Reabilitar campos
+            cepInput.disabled = false;
+            stateSelect.disabled = false;
+            cityInput.disabled = false;
+        });
+}
+
+// Tornar a função disponível globalmente
+window.buscarEnderecoPorCEP = buscarEnderecoPorCEP;
+
 // Função para formatar o campo de WhatsApp
 document.addEventListener('DOMContentLoaded', function() {
     const whatsappInput = document.getElementById('whatsapp');
@@ -37,10 +136,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     });
 
-
-    // Tornar a função disponível globalmente
-    window.buscarEnderecoPorCEP = buscarEnderecoPorCEP;
-
     // Formatar CEP
     const cepInput = document.getElementById('cep');
     if (cepInput) {
@@ -58,7 +153,11 @@ document.addEventListener('DOMContentLoaded', function() {
         cepInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                buscarEnderecoPorCEP();
+                if (typeof window.buscarEnderecoPorCEP === 'function') {
+                    window.buscarEnderecoPorCEP();
+                } else {
+                    console.error('Função buscarEnderecoPorCEP não está disponível');
+                }
             }
         });
     }

@@ -6,15 +6,15 @@
 <script>
     // Definir as áreas de especialidade para cada atividade
     const specialtyAreas = {
-        'AMBULANTE': [
+        'Serviços': [
             'Açaí', 'Algodão doce', 'Artesanato', 'Balas, bombons e chocolates', 'Barraca de pastel',
             'Bebidas e refresco', 'Bijuterias', 'Cachorro-quente', 'Calçados', 'Caldo de cana',
             'Churrasquinho', 'Churros', 'Crepe', 'Doces', 'Eletrônicos', 'Ervas medicinais',
             'Sanduiches', 'Mate', 'Milho cozido', 'Óculos', 'Pipoca', 'Relógios',
             'Revenda de bijuterias e semi-jóias', 'Roupas e/ou acessórios', 'Sorvete',
-            'Souvenirs temáticos e lembranças', 'Tapioca', 'Outra area ambulante'
+            'Souvenirs temáticos e lembranças', 'Tapioca', 'Outra area serviços'
         ],
-        'ATACADO': [
+        'Comércio': [
             'Acessórios para aparelhos celulares', 'Adubos e defensivos agrícolas',
             'Alimentos congelados', 'Artigos de decoração', 'Artigos esportivos',
             'Artigos para festas', 'Autopeças e acessórios', 'Bebidas',
@@ -28,139 +28,53 @@
             'Materiais de higiene e limpeza', 'Medicamentos',
             'Medicamentos e produtos veterinários', 'Produtos alimentícios',
             'Produtos e implementos de jardinagem', 'Roupas', 'Sorvetes',
-            'Uniformes atacado', 'Vestuário', 'Outra área atacado'
+            'Uniformes atacado', 'Vestuário', 'Outra área comércio'
         ],
-        'AUTOMOTORES': [
+        'Indústria': [
             'Automóveis e utilitários', 'Autopeças e acessórios',
             'Barcos, botes, lanchas, jet-skis', 'Baterias', 'Bicicletas',
             'Caminhões', 'Caminhões, ônibus e vans', 'Carrocerias e baús',
             'Carrocerias para ônibus e vans', 'Combustíveis e lubrificantes',
             'Equipamentos para transporte coletivo', 'Equipamentos para transporte de cargas',
             'Máquinas e implementos agrícolas', 'Motocicletas', 'Ônibus e vans',
-            'Pneus', 'Outra área automotores'
-        ],
-        'VAREJO - Alimentação fora do Lar': [
-            'Bar/Boteco', 'Açaiteria', 'Biscoitos', 'Bistrô', 'Bomboniere',
-            'Boulangerie', 'Cachaçaria', 'Café colonial', 'Cafeteria - café expresso',
-            'Cantina Italiana', 'Casa de chá', 'Casa de sucos', 'Cervejaria',
-            'Chocolates', 'Choperia', 'Churrascaria', 'Comidas delivery',
-            'Confeitaria', 'Creperia', 'Delicatessen', 'Doceria', 'Fast food',
-            'Food truck', 'Gelateria', 'Hamburgueria', 'Lanchonete',
-            'Loja de bolos e tortas', 'Loja de conveniências',
-            'Loja de sanduíches naturais', 'Loja de vinhos e destilados',
-            'Mate e salgados', 'Padaria', 'Pamonharia', 'Panificadora',
-            'Pastelaria', 'Petisqueria', 'Pizzaria', 'Quiosque de praia',
-            'Quiosque de Shopping', 'Refeições industriais',
-            'Refeições prontas ("marmitex")', 'Restaurante à la carte',
-            'Restaurante árabe', 'Restaurante chinês', 'Restaurante coreano',
-            'Restaurante culinária baiana', 'Restaurante culinária capixaba',
-            'Restaurante culinária goiana', 'Restaurante culinária internacional',
-            'Restaurante culinária mineira', 'Restaurante culinária nordestina',
-            'Restaurante culinária portuguesa', 'Restaurante de alta gastronomia',
-            'Restaurante de caldos e saladas', 'Restaurante de frutos do mar',
-            'Restaurante frango assado - galeteria', 'Restaurante japonês',
-            'Restaurante regional', 'Restaurante self-service',
-            'Restaurante temático', 'Restaurante vegano',
-            'Restaurante vegetariano', 'Rotisserie', 'Snack-bar',
-            'Sorveteria', 'Sucos', 'Tapiocaria', 'Temakeria',
-            'Outra área varejo alimentação'
-        ],
-        'Varejo - Animais domesticos': [
-            'Medicamentos veterinários', 'Pet shop', 'Rações',
-            'Outra área animais domesticos'
-        ],
-        'Varejo - Arte, decoração e utilidades para o Lar': [
-            'Antiquário', 'Aquários e peixes ornamentais', 'Arte e artesanato',
-            'Artigos de cama, mesa e banho', 'Colchões',
-            'Cortinas, tapetes e carpetes', 'Eletrodomésticos',
-            'Equipamentos e utensílios para copa e cozinha',
-            'Flores e plantas artificiais', 'Floricultura - flores naturais',
-            'Gás de cozinha', 'Louças', 'Lustres e iluminação',
-            'Materiais e peças para artesanato', 'Móveis',
-            'Móveis de aço', 'Móveis e estofados', 'Móveis planejados',
-            'Móveis rústicos', 'Móveis usados', 'Persianas e cortinas',
-            'Plantas ornamentais', 'Presentes e artigos de decoração',
-            'Quadros e molduras', 'Tapetes',
-            'Outra área varejo utilizadades e decoração'
-        ],
-        'Varejo - Bebidas e produtos alimentícios': [
-            'Açougue', 'Adega', 'Armazém', 'Embalagens', 'Frutaria',
-            'Minimercado', 'Padarias', 'Peixaria', 'Quitanda',
-            'Supermercado', 'Outra área varejo alimenticío'
-        ],
-        'Varejo - Copa e cozinha': [
-            'Equipamentos de refrigeração', 'Máquinas e equipamentos',
-            'Materiais de limpeza e higiene', 'Mobiliário',
-            'Uniformes para cozinha',
-            'Utensílios, louças, talheres e acessórios',
-            'Outra área varejo copa cozinha'
-        ],
-        'Varejo - Eletroeletrônicos e informática': [
-            'Acessórios para celulares', 'Computadores e acessórios',
-            'Equipamentos de som', 'Equipamentos e materiais de Informática',
-            'Materiais de informática', 'Telefones celulares e tablets',
-            'Outra área eletronicos e imformática'
-        ],
-        'Varejo - Festas, leitura, música, esporte e lazer': [
-            'Barcos e artigos náuticos', 'Brinquedos e jogos infantis',
-            'Caça e pesca', 'Camping', 'Discos para colecionadores',
-            'Equipamentos de ginástica', 'Equipamentos de salvatagem',
-            'Equipamentos para esportes', 'Esportes náuticos',
-            'Esportes radicais', 'Fantasias para festas',
-            'Instrumentos musicais para festas', 'Livraria',
-            'Loja de roupas e acessórios para surfistas', 'Moda praia',
-            'Piano', 'Roupas, uniformes e calçados esportivos',
-            'Suplementos nutricionais e vitaminas', 'Outra área varejo festas'
-        ],
-        'Varejo - Jardinagem': [
-            'Adubos, sementes e defensivos', 'Árvores adultas',
-            'Máquinas, equipamentos e acessórios', 'Móveis para exteriores',
-            'Plantas ornamentais', 'Sementes e mudas', 'Viveiro de mudas',
-            'Outra área varejo jardinagem'
-        ],
-        'Varejo - Materiais de construção': [
-            'Aquecedor solar', 'Brita', 'Carpintaria', 'Cimento',
-            'Equipamentos de segurança', 'Esquadrias',
-            'Exploração e comércio de areia', 'Ferragens',
-            'Ferramentas, máquinas e equipamentos',
-            'Ferro e aço para construção', 'Laje pré-moldada',
-            'Loja de ferragens', 'Loja de tintas', 'Louças sanitárias',
-            'Madeireira', 'Máquinas, implementos e acessórios',
-            'Materiais de construção', 'Materiais elétricos',
-            'Peças para refrigeração', 'Pisos e revestimentos',
-            'Portas e janelas', 'Serralheria', 'Telhas e tijolos',
-            'Tintas e materias para pintura', 'Vidraçaria',
-            'Outra área varejo materiais construcao'
-        ],
-        'Varejo - Papéis e utilidades para escritórios': [
-            'Materiais de escritório', 'Papelaria',
-            'Outra área varejo utilidades escritório'
-        ],
-        'Varejo - Saúde e bem-estar': [
-            'Aparelhos auditivos', 'Aparelhos ortopédicos', 'Drogaria',
-            'Ervas medicinais e homeopatia', 'Farmácia',
-            'Farmácia de manipulação', 'Ótica', 'Produtos fitness',
-            'Produtos naturais', 'Outra área varejo saúde e bem estar'
-        ],
-        'Varejo - Vestuário,calçados e complementos': [
-            'Armarinho', 'Aviamentos', 'Bijuterias e semi-jóias',
-            'Bolsas e calçados', 'Calçados e acessórios',
-            'Calçados e acessórios femininos', 'Calçados e acessórios infantis',
-            'Calçados e acessórios masculinos',
-            'Cosméticos, perfumes e acessórios', 'Joalheria',
-            'Loja de departamentos', 'Moda feminina', 'Moda infantil',
-            'Moda íntima', 'Moda jovem', 'Moda masculina', 'Moda praia',
-            'Perfumaria', 'Roupas e acessórios plus size',
-            'Roupas usadas (Brechó)',
-            'Roupas, acessórios e produtos para bebês', 'Sex shop',
-            'Tecidos', 'Uniformes', 'Vestidos de noiva',
-            'Outra área vestuário e calçados'
+            'Pneus', 'Outra área indústria'
         ]
+    };
+
+    // Mapeamento de estados
+    const estadosMap = {
+        'AC': 'Acre',
+        'AL': 'Alagoas',
+        'AP': 'Amapá',
+        'AM': 'Amazonas',
+        'BA': 'Bahia',
+        'CE': 'Ceará',
+        'DF': 'Distrito Federal',
+        'ES': 'Espírito Santo',
+        'GO': 'Goiás',
+        'MA': 'Maranhão',
+        'MT': 'Mato Grosso',
+        'MS': 'Mato Grosso do Sul',
+        'MG': 'Minas Gerais',
+        'PA': 'Pará',
+        'PB': 'Paraíba',
+        'PR': 'Paraná',
+        'PE': 'Pernambuco',
+        'PI': 'Piauí',
+        'RJ': 'Rio de Janeiro',
+        'RN': 'Rio Grande do Norte',
+        'RS': 'Rio Grande do Sul',
+        'RO': 'Rondônia',
+        'RR': 'Roraima',
+        'SC': 'Santa Catarina',
+        'SP': 'São Paulo',
+        'SE': 'Sergipe',
+        'TO': 'Tocantins'
     };
 
     // Função para carregar as áreas de especialidade
     function loadSpecialtyAreas() {
-        const activityType = document.getElementById('company_activity').value;
+        const activityType = document.getElementById('activity_type').value;
         const specialtyAreaSelect = document.getElementById('specialty_area');
         
         // Limpar opções existentes
@@ -180,11 +94,76 @@
         }
     }
 
+    // Função para buscar endereço por CEP
+    function buscarEnderecoPorCEP() {
+        const cepInput = document.getElementById('cep');
+        const stateSelect = document.getElementById('state');
+        const cityInput = document.getElementById('city');
+        
+        if (!cepInput || !stateSelect || !cityInput) {
+            console.error('Elementos não encontrados');
+            return;
+        }
+        
+        const cep = cepInput.value.replace(/\D/g, '');
+        
+        if (cep.length !== 8) {
+            alert('Por favor, informe um CEP válido com 8 dígitos.');
+            return;
+        }
+        
+        // Mostrar loading
+        cepInput.disabled = true;
+        stateSelect.disabled = true;
+        cityInput.disabled = true;
+        
+        fetch(`https://viacep.com.br/ws/${cep}/json/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.erro) {
+                    alert('CEP não encontrado. Verifique o número informado.');
+                    return;
+                }
+                
+                // Preencher os campos
+                if (data.uf && estadosMap[data.uf]) {
+                    stateSelect.value = data.uf;
+                }
+                
+                if (data.localidade) {
+                    cityInput.value = data.localidade;
+                }
+                
+                // Mostrar mensagem de sucesso
+                const successAlert = document.createElement('div');
+                successAlert.className = 'alert alert-success alert-dismissible fade show';
+                successAlert.innerHTML = `
+                    <strong>Endereço encontrado!</strong> Estado e cidade preenchidos automaticamente.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                
+                const form = document.querySelector('form');
+                if (form) {
+                    form.insertBefore(successAlert, form.firstChild);
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao buscar CEP:', error);
+                alert('Erro ao buscar o CEP. Verifique sua conexão com a internet e tente novamente.');
+            })
+            .finally(() => {
+                // Reabilitar campos
+                cepInput.disabled = false;
+                stateSelect.disabled = false;
+                cityInput.disabled = false;
+            });
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-        const companyActivitySelect = document.getElementById('company_activity');
-        if (companyActivitySelect) {
-            companyActivitySelect.addEventListener('change', loadSpecialtyAreas);
-            if (companyActivitySelect.value) {
+        const activityTypeSelect = document.getElementById('activity_type');
+        if (activityTypeSelect) {
+            activityTypeSelect.addEventListener('change', loadSpecialtyAreas);
+            if (activityTypeSelect.value) {
                 loadSpecialtyAreas();
             }
         }
@@ -207,6 +186,28 @@
                 }
                 
                 e.target.value = value;
+            });
+        }
+
+        // Formatar CEP
+        const cepInput = document.getElementById('cep');
+        if (cepInput) {
+            cepInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length <= 8) {
+                    if (value.length > 5) {
+                        value = value.substring(0,5) + '-' + value.substring(5);
+                    }
+                    e.target.value = value;
+                }
+            });
+
+            // Buscar CEP ao pressionar Enter no campo
+            cepInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    buscarEnderecoPorCEP();
+                }
             });
         }
 
@@ -240,11 +241,11 @@
                                             case 'name': fieldLabel = 'Nome'; break;
                                             case 'email': fieldLabel = 'Email'; break;
                                             case 'whatsapp': fieldLabel = 'WhatsApp'; break;
+                                            case 'cep': fieldLabel = 'CEP'; break;
                                             case 'password': fieldLabel = 'Senha'; break;
                                             case 'state': fieldLabel = 'Estado'; break;
                                             case 'city': fieldLabel = 'Cidade'; break;
                                             case 'activity_type': fieldLabel = 'Área de atuação'; break;
-                                            case 'company_activity': fieldLabel = 'Ramo de atuação'; break;
                                             case 'specialty_area': fieldLabel = 'Atividade da empresa'; break;
                                             case 'terms_accepted': fieldLabel = 'Termos e condições'; break;
                                             default: fieldLabel = fieldName;
@@ -398,7 +399,7 @@
                                                     Como gosta de ser chamado(a)?
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#nameHelpModal"></i>
                                                 </label>
-                                                <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default('', true) }}" required style="background-color: #D3D3D3;">
+                                                <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default('', true) }}" required style="background-color: #D3D3D3;" autocomplete="name">
                                                 <div class="invalid-feedback">
                                                     Por favor, informe seu nome.
                                                 </div>
@@ -409,7 +410,7 @@
                                                     Email
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#emailHelpModal"></i>
                                                 </label>
-                                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default('', true) }}" required style="background-color: #D3D3D3;">
+                                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default('', true) }}" required style="background-color: #D3D3D3;" autocomplete="email">
                                                 <div class="invalid-feedback">
                                                     Por favor, informe um email válido.
                                                 </div>
@@ -418,6 +419,21 @@
 
                                         <div class="row">
                                             <input type="hidden" id="whatsapp" name="whatsapp" value="9999-9999">
+
+                                            <div class="col-md-4 mb-3">
+                                                <label for="cep" class="form-label">
+                                                    CEP
+                                                </label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" style="background-color: #D3D3D3;" autocomplete="postal-code">
+                                                    <button type="button" class="btn btn-outline-secondary" onclick="buscarEnderecoPorCEP()">
+                                                        <i class="bi bi-search"></i> Buscar
+                                                    </button>
+                                                </div>
+                                                <div class="invalid-feedback">
+                                                    Por favor, informe um CEP válido.
+                                                </div>
+                                            </div>
 
                                             <div class="col-md-2 mb-3">
                                                 <label for="state" class="form-label">
@@ -455,16 +471,18 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-md-4 mb-3">
+                                            <div class="col-md-6 mb-3">
                                                 <label for="city" class="form-label">
                                                     Cidade
                                                 </label>
-                                                <input type="text" class="form-control" id="city" name="city" value="{{ user.city|default('', true) }}" required style="background-color: #D3D3D3;">
+                                                <input type="text" class="form-control" id="city" name="city" value="{{ user.city|default('', true) }}" required style="background-color: #D3D3D3;" autocomplete="address-level2">
                                                 <div class="invalid-feedback">
                                                     Por favor, informe a cidade.
                                                 </div>
                                             </div>
+                                        </div>
 
+                                        <div class="row">
                                             <div class="col-md-6 mb-3">
                                                 <label for="activity_type" class="form-label">
                                                     Área de atuação
@@ -474,32 +492,6 @@
                                                     <option value="Serviços">Serviços</option>
                                                     <option value="Comércio">Comércio</option>
                                                     <option value="Indústria">Indústria</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="company_activity" class="form-label">
-                                                    Ramo de atuação
-                                                </label>
-                                                <select class="form-select" id="company_activity" name="company_activity" required style="background-color: #D3D3D3;">
-                                                    <option value="" selected disabled>Selecione o ramo de atuação</option>
-                                                    <option value="AMBULANTE">AMBULANTE</option>
-                                                    <option value="ATACADO">ATACADO</option>
-                                                    <option value="AUTOMOTORES">AUTOMOTORES</option>
-                                                    <option value="VAREJO - Alimentação fora do Lar">VAREJO - Alimentação fora do Lar</option>
-                                                    <option value="Varejo - Animais domesticos">Varejo - Animais domesticos</option>
-                                                    <option value="Varejo - Arte, decoração e utilidades para o Lar">Varejo - Arte, decoração e utilidades para o Lar</option>
-                                                    <option value="Varejo - Bebidas e produtos alimentícios">Varejo - Bebidas e produtos alimentícios</option>
-                                                    <option value="Varejo - Copa e cozinha">Varejo - Copa e cozinha</option>
-                                                    <option value="Varejo - Eletroeletrônicos e informática">Varejo - Eletroeletrônicos e informática</option>
-                                                    <option value="Varejo - Festas, leitura, música, esporte e lazer">Varejo - Festas, leitura, música, esporte e lazer</option>
-                                                    <option value="Varejo - Jardinagem">Varejo - Jardinagem</option>
-                                                    <option value="Varejo - Materiais de construção">Varejo - Materiais de construção</option>
-                                                    <option value="Varejo - Papéis e utilidades para escritórios">Varejo - Papéis e utilidades para escritórios</option>
-                                                    <option value="Varejo - Saúde e bem-estar">Varejo - Saúde e bem-estar</option>
-                                                    <option value="Varejo - Vestuário,calçados e complementos">Varejo - Vestuário,calçados e complementos</option>
                                                 </select>
                                             </div>
 
@@ -519,7 +511,7 @@
                                                     Senha
                                                     <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#passwordHelpModal"></i>
                                                 </label>
-                                                <input type="password" class="form-control" id="password" name="password" required style="background-color: #D3D3D3;">
+                                                <input type="password" class="form-control" id="password" name="password" required style="background-color: #D3D3D3;" autocomplete="new-password">
                                                 <div class="invalid-feedback">
                                                     A senha deve ter pelo menos 6 caracteres.
                                                 </div>
