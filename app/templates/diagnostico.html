@@ -49,7 +49,7 @@
 
                         <!-- Dados Básicos em formato de texto -->
                         <div class="row">
-                            {% if user.activity_type != 'Serviços' %}
+                            {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
                                 <div class="col-md-6 mb-3">
                                     <p><strong>Quantidade de Clientes Atendidos:</strong> <span id="clientsServed">-</span></p>
                                     <p><strong>Capacidade de Atendimento:</strong> <span id="capacidadeAtendimento">-</span></p>
@@ -66,7 +66,7 @@
                     </div>
                                             {% endif %}
                             
-                            {% if user.activity_type == 'Serviços' %}
+                            {% if user.activity_type == 'Prestação de serviços' %}
                                 <div class="col-md-6 mb-3">
                                     <p><strong>Quantidade de Clientes Atendidos:</strong> <span id="clientsServed">-</span></p>
                                     <p><strong>Faturamento:</strong> <span id="salesRevenue">-</span></p>
@@ -162,12 +162,12 @@
                                 <h5 class="card-title mb-0">Distribuição de Despesas</h5>
                             </div>
                             <div class="card-body">
-                                {% if user.activity_type != 'Serviços' %}
+                                {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
                                 <div style="height: 400px;">
                                     <canvas id="expensesPieChart"></canvas>
                                 </div>
                                 {% endif %}
-                                {% if user.activity_type == 'Serviços' %}
+                                {% if user.activity_type == 'Prestação de serviços' %}
                                 <div style="height: 400px;">
                                     <canvas id="expensesPieChart"></canvas>
                                 </div>
@@ -299,10 +299,10 @@
 
 document.addEventListener('DOMContentLoaded', function() {
  
-    {% if user.activity_type != 'Serviços' %}
+    {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
     typeActivity()
     {% endif %} 
-    {% if user.activity_type == 'Serviços' %}
+    {% if user.activity_type == 'Prestação de serviços' %}
     typeActivityService()
     {% endif %}  
 });
@@ -701,7 +701,7 @@ function typeActivity() {
         }
     });
 
-    {% if user.activity_type != 'Serviços' %}
+    {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
     // Inicializar o gráfico de pizza de despesas
     const pieCtx = document.getElementById('expensesPieChart').getContext('2d');
     window.expensesPieChart = new Chart(pieCtx, {
@@ -753,7 +753,7 @@ function typeActivity() {
             clientsServed
         } = window.rawData;
         
-        {% if user.activity_type != 'Serviços' %}
+        {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
         // Calcular Lucro em Reais (F11-(F12+F13+F14))
         const lucroReais = salesRevenue - (salesExpenses + operationalExpenses + fixedCosts);
         
@@ -995,11 +995,11 @@ Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de cliente
                 document.getElementById('capacidadeAtendimento').textContent = `${capacidade} clientes`;
                 document.getElementById('salesRevenue').textContent = formatMoney(data.sales_revenue);
                 document.getElementById('salesExpenses').textContent = formatMoney(data.sales_expenses);
-                {% if user.activity_type != 'Serviços' %}
+                {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
                 document.getElementById('fixedCosts').textContent = formatMoney(data.fixed_costs);
                 {% endif %}
                 document.getElementById('operationalExpenses').textContent = formatMoney(data.operational_expenses);
-                {% if user.activity_type == 'Serviços' %}
+                {% if user.activity_type == 'Prestação de serviços' %}
                 document.getElementById('proLabore').textContent = formatMoney(data.pro_labore);
                 document.getElementById('weeklyHours').textContent = `${data.weekly_hours}h`;
                 {% endif %}

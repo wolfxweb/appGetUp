@@ -200,7 +200,7 @@
                             </div>
                             <div class="card" style="background-color: #F0F0F0;">
                                 <div class="card-body">
-                                    {% if user.activity_type == 'Serviços' %}
+                                    {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
                                     <form method="post" action="{% if edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
                                         {% if show_confirm %}
                                         <input type="hidden" name="confirm_update" value="true">
@@ -821,7 +821,7 @@
     </div>
 </div>
 
-{% if user.activity_type in ['Comércio', 'Indústria'] %}
+{% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
 <div class="modal fade" id="fixedCostsHelpModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -865,7 +865,7 @@
 </div>
 {% endif %}
 
-{% if user.activity_type == 'Serviços' %}
+{% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
 <div class="modal fade" id="proLaboreHelpModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
