@@ -130,6 +130,7 @@
 <div class="container mt-5" style="background-color: #F5F5F5; min-height: 100vh;">
     <div class="row">
         <div class="col-12">
+            <!--
             {% if error_message %}
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ error_message }}
@@ -143,7 +144,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
             </div>
             {% endif %}
-
+            -->
            
             <div class="card shadow-sm" style="background-color: #F5F5F5;">
                 <div class="card-body">
@@ -551,7 +552,13 @@
                                                 </div>
                                             </div>
                                         </div>
-                
+                                        <div class="row mt-4">
+                                        {% if error_message and edit_mode %}
+                                        <div class="col-12 text-center bg-warning text-white p-2">
+                                          <b>Para o mesmo mês/ano selecionado já existe um registro. Deseja atualizar os dados existentes?</b>
+                                        </div>
+                                        {% endif %}
+                                        </div>
                                         <div class="row mt-4">
                                             <div class="col-12 text-center">
                                                 <button type="button" class="btn btn-secondary me-2" style="background-color: #6c757d; border-color: #6c757d;" onclick="document.getElementById('basicDataForm').reset();">

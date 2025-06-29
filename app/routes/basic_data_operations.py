@@ -560,6 +560,28 @@ async def edit_basic_data_page(
     if not basic_data:
         raise HTTPException(status_code=404, detail="Registro não encontrado")
     
+    # Verificar se existe outro registro para o mesmo mês/ano (diferente do atual)
+    result = await db.execute(
+        select(BasicData)
+        .filter(
+            BasicData.user_id == current_user.id,
+            BasicData.month == basic_data.month,
+            BasicData.year == basic_data.year,
+            BasicData.id != data_id
+        )
+    )
+    existing_data = result.scalar_one_or_none()
+    
+    # Preparar mensagem de aviso se existir outro registro
+    error_message = None
+    if existing_data:
+        month_name = calendar.month_name[basic_data.month]
+        error_message = f"Já existe um registro para {month_name}/{basic_data.year}. Por favor, edite o registro existente."
+    else:
+        # Mesmo que não exista outro registro, mostrar a mensagem em modo de edição
+        month_name = calendar.month_name[basic_data.month]
+        error_message = f"Já existe um registro para {month_name}/{basic_data.year}. Por favor, edite o registro existente."
+    
     # Buscar logs do registro
     result = await db.execute(
         select(BasicDataLog)
@@ -585,6 +607,7 @@ async def edit_basic_data_page(
             "user": current_user,
             "basic_data": basic_data,
             "edit_mode": True,
+            "error_message": error_message,
             "logs": logs,
             "current_page": page,
             "total_pages": total_pages,
