@@ -355,14 +355,14 @@ content %}
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">{% if user.activity_type == 'Prestação de serviços' %}Demais Custos Fixos{% else %}Custos Fixos{% endif %}</h5>
+                <h5 class="modal-title">{% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}Demais Custos Fixos{% else %}Custos Fixos{% endif %}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                {% if user.activity_type == 'Prestação de serviços' %}
+                {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
                 <p>Valor dos custos que permanecem constantes independentemente do volume de vendas, como aluguel, salários fixos, energia, água, etc.</p>
                 {% else %}
-                <p>Informe os custos que permanecem constantes independentemente do volume de vendas, como aluguel, salários fixos, energia, água, seguros, licenças, etc. Para Commerce e Industry, inclui também despesas administrativas e operacionais fixas.</p>
+                <p>Valor dos custos que permanecem constantes independentemente do volume de vendas, como aluguel, salários fixos, energia, água, etc.</p>
                 {% endif %}
             </div>
         </div>
