@@ -60,3 +60,6 @@
 2025-06-29 12:19:39,967 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=3.0
 2025-06-29 12:19:39,967 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=0.3, sales_expenses=0.3, input_product_expenses=0.3
 2025-06-29 12:19:39,967 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=0.3
+2025-06-29 18:28:41,500 - app.routes.basic_data - ERROR - Erro ao salvar dados básicos: 'NoneType' object has no attribute 'id'
+2025-06-29 18:28:58,338 - app.routes.basic_data - ERROR - Erro ao salvar dados básicos: 'NoneType' object has no attribute 'id'
+2025-06-29 18:29:01,856 - app.routes.basic_data - ERROR - Erro ao buscar dados básicos: 'NoneType' object has no attribute 'id'
