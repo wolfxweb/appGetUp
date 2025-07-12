@@ -2,35 +2,94 @@
 
 {% block title %}Diagnóstico - GetUp Gestão{% endblock %}
 
-{% block content %}
-    {% include "components/navbar.html" %}
-    <div class="container-fluid p-1">
-        <!-- Card Principal -->
-        <div class="card shadow mb-4">
-            <div class="card-header bg-primary text-white">
-                <h4 class="card-title mb-0">Diagnóstico</h4>
-            </div>
-            <div class="card-body">
-                <!-- Descrição do diagnóstico -->
-                <div class="mb-4">
-                    <p>Esta tela permite que o gestor ou empreendedor:</p>
-                    <ul>
-                        <li>Tenha uma visão holística da saúde financeira do negócio</li>
-                        <li>Identifique rapidamente se está operando com lucro ou prejuízo</li>
-                        <li>Entenda quais custos estão impactando mais o resultado</li>
-                        <li>Monitore se está utilizando sua capacidade de forma eficiente</li>
-                        <li>Tome decisões baseadas em métricas financeiras importantes</li>
-                        <li>Compare desempenho entre diferentes períodos</li>
-                    </ul>
-                    <p>A organização em cards com informações relacionadas e a disponibilidade de modais explicativos (ícones de engrenagem) para cada métrica demonstra uma preocupação em tornar dados financeiros complexos mais acessíveis e compreensíveis para o usuário.</p>
-                </div>
+{% block extra_css %}
+<style>
+    body {
+        background-color: #F5F5F5 !important;
+    }
+    .container-fluid, .container {
+        background-color: #F5F5F5 !important;
+    }
+    .card, .card-body {
+        background-color: #F0F0F0 !important;
+    }
+    .card-header.bg-secondary {
+        background-color: #6c757d !important;
+        color: white !important;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: white;
+    }
+    .form-control, .form-select {
+        background-color: #F5F5F5 !important;
+    }
+</style>
+{% endblock %}
 
-                <!-- Dados Básicos -->
-                <div class="card mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <h5 class="card-title mb-0">Dados Básicos</h5>
-                    </div>
-                    <div class="card-body p-4">
+{% block content %}
+<div class="container" style="background-color: #F5F5F5; min-height: 100vh;">
+  <div class="row">
+    <div class="col-md-12 mt-5">
+        <div class="col-md-12 mb-4">
+            <img src="/static/images/Logo.png" alt="Logo" height="40">
+         </div>
+      <!-- Botões de navegação -->
+      <div class="row mb-4 justify-content-center">
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/dashboard" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Índice
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/basic-data/new" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Dados Básicos
+          </a>
+        </div>
+
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Simulador
+          </button>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Calculadora de preços
+          </button>
+        </div>
+      </div>
+      <!-- Card principal Diagnóstico -->
+      <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+        <div class="card-header d-flex justify-content-between align-items-center bg-secondary text-white">
+          <h4 class="card-title mb-0">Diagnóstico</h4>
+        </div>
+        <div class="card-body">
+          <!-- Descrição do diagnóstico -->
+          <div class="mb-4">
+            <p>Esta tela permite que o gestor ou empreendedor:</p>
+            <ul>
+              <li>Tenha uma visão holística da saúde financeira do negócio</li>
+              <li>Identifique rapidamente se está operando com lucro ou prejuízo</li>
+              <li>Entenda quais custos estão impactando mais o resultado</li>
+              <li>Monitore se está utilizando sua capacidade de forma eficiente</li>
+              <li>Tome decisões baseadas em métricas financeiras importantes</li>
+              <li>Compare desempenho entre diferentes períodos</li>
+            </ul>
+            <p>A organização em cards com informações relacionadas e a disponibilidade de modais explicativos (ícones de engrenagem) para cada métrica demonstra uma preocupação em tornar dados financeiros complexos mais acessíveis e compreensíveis para o usuário.</p>
+          </div>
+
+          <!-- Dados Básicos -->
+          <div class="card mb-4 shadow" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+              <h5 class="card-title mb-0">Dados Básicos</h5>
+            </div>
+            <div class="card-body p-4">
     <!-- Select Box -->
     <div class="row mb-4">
         <div class="col-md-6">
@@ -88,8 +147,8 @@
                 <div class="row mb-4">
                     <!-- Custos e Faturamento -->
                     <div class="col-md-4">
-            <div class="card h-100">
-                            <div class="card-header bg-primary text-white">
+            <div class="card h-100 shadow" style="background-color: #F0F0F0;">
+                            <div class="card-header bg-secondary text-white">
                     <h5 class="card-title mb-0">Custos e Faturamento</h5>
                 </div>
                 <div class="card-body">
@@ -102,8 +161,8 @@
 
                     <!-- Métricas Financeiras -->
                     <div class="col-md-4">
-            <div class="card h-100">
-                            <div class="card-header bg-primary text-white">
+            <div class="card h-100 shadow" style="background-color: #F0F0F0;">
+                            <div class="card-header bg-secondary text-white">
                     <h5 class="card-title mb-0">Métricas Financeiras</h5>
                 </div>
                 <div class="card-body">
@@ -157,8 +216,8 @@
 
                     <!-- Distribuição de Despesas -->
                     <div class="col-md-4">
-                        <div class="card h-100">
-                            <div class="card-header bg-primary text-white">
+                        <div class="card h-100 shadow" style="background-color: #F0F0F0;">
+                            <div class="card-header bg-secondary text-white">
                                 <h5 class="card-title mb-0">Distribuição de Despesas</h5>
                             </div>
                             <div class="card-body">
@@ -180,8 +239,8 @@
                 <!-- Análise do Cálculo -->
                 <div class="row mb-4">
                     <div class="col-12">
-                        <div class="card h-100">
-                            <div class="card-header bg-primary text-white">
+                        <div class="card h-100 shadow" style="background-color: #F0F0F0;">
+                            <div class="card-header bg-secondary text-white">
                                 <h5 class="card-title mb-0">Análise do Cálculo</h5>
                             </div>
                             <div class="card-body">
