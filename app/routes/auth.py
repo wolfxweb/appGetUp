@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 import secrets
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from app.database.db import get_db
 from app.models.user import User
@@ -368,11 +370,11 @@ async def edit_basic_data_page(
 async def dashboard_page(request: Request, current_user = Depends(get_current_user)):
     if not current_user:
         return RedirectResponse(url="/login")
-    
+    now = datetime.now(ZoneInfo("America/Sao_Paulo"))
     return templates.TemplateResponse("dashboard.html", {
         "request": request,
         "user": current_user,
-        "now": datetime.now()
+        "now": now
     })
 
 @router.get("/profile")
