@@ -11,22 +11,12 @@
                     <div class="row align-items-center mb-4">
                         <div class="col-md-6">
                             <p>Aguarando logo do cliente</p>
-                           <!--<img src="/static/images/Wolfx-Logo.png" alt="Logo" height="40">-->
+                           <img src="/static/images/Logo.png" alt="Logo" height="40">
                         </div>
                         <div class="col-md-6 text-end">
-                            <div class="mb-2">
-                                <a href="/profile" class="btn btn-secondary me-2">
-                                    <i class="bi bi-person-circle"></i> Meus Dados
-                                </a>
-                                <a href="/logout" class="btn btn-secondary">
-                                    <i class="bi bi-box-arrow-right"></i> Sair
-                                </a>
-                            </div>
                             <div>
                                 <h6 class="mb-0">{{ now.strftime('%d/%m/%Y') }}</h6>
-                                <a href="https://www.climatempo.com.br/" target="_blank" class="text-decoration-none">
-                                    <small><i class="bi bi-cloud-sun"></i> Previsão do Tempo</small>
-                                </a>
+
                             </div>
                         </div>
                     </div>
@@ -45,8 +35,11 @@
                             <div class="row">
                                 <!-- Índice -->
                                 <div class="col-12 col-md-2-4 mb-3">
-                                    <div class="d-grid">
+                                    <div class="d-grid gap-2">
                                         <a href="/dashboard" class="btn btn-secondary">Índice</a>
+                                        <a href="/profile" class="btn btn-secondary me-2">
+                                            <i class="bi bi-person-circle"></i> Meus Dados
+                                        </a>
                                     </div>
                                 </div>
 
@@ -97,6 +90,13 @@
                                 <h5 class="mb-0" style="color: #000000;">ESPAÇO PARA AS MENSAGENS QUE FOREM ENVIADAS PELO ADMINISTRADOR</h5>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-12 text-end">
+                        <div class="mb-2">
+                            <a href="/logout" class="btn btn-secondary">
+                                <i class="bi bi-box-arrow-right"></i> Sair
+                            </a>
+                        </div>    
                     </div>
                 </div>
             </div>
