@@ -15,7 +15,10 @@
                         </div>
                         <div class="col-md-6 text-end">
                             <div>
-                                <h6 class="mb-0">{{ now.strftime('%d/%m/%Y') }}</h6>
+                                {# Importar locale para pt_BR e exibir dia da semana em português #}
+                                {% set weekday_pt = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'] %}
+                                {% set weekday = now.weekday() %}
+                                <h6 class="mb-0">{{ weekday_pt[weekday] }}, {{ now.strftime('%d/%m/%Y') }}</h6>
 
                             </div>
                         </div>
