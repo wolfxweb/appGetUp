@@ -130,32 +130,37 @@
 <div class="container mt-5" style="background-color: #F5F5F5; min-height: 100vh;">
     <div class="row">
         <div class="col-12">
-            <!--
+           
             {% if error_message %}
+            <!--
             <div class="alert alert-danger alert-dismissible fade show" role="alert">
                 {{ error_message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
             </div>
+            -->
+         
+            
             {% endif %}
 
             {% if warning_message %}
+            <!--
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 {{ warning_message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
             </div>
-            {% endif %}
             -->
+
+                <b>{{ warning_message }}</b>
+              </div>
+            {% endif %}
+            
            
             <div class="card shadow-sm" style="background-color: #F5F5F5;">
                 <div class="card-body">
                     <!-- Logo alinhada à esquerda dentro do card -->
                     <div class="mb-4">
-                        
-                        
-                        <img src="{{ url_for('static', path='images/Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 150px;">
-                        
-                        </div>
-
+                        <img src="{{ url_for('static', path='images/Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 150px;">                    
+                    </div>
                     <div class="row">
                         <!-- Coluna da Logo e Texto (3 colunas) -->
                         <div class="col-md-3">
@@ -380,6 +385,19 @@
                                                 </div>
                                             </div>
                                         </div>
+                                            
+            {% if error_message %}
+            <!--
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ error_message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+            </div>
+            -->
+            <div class="col-12 text-center bg-warning text-secondary p-2 mt-4">
+                <b>{{ error_message }}</b>
+              </div>
+            
+            {% endif %}
 
                                         <div class="row mt-4">
                                             <div class="col-12 text-center">
@@ -555,7 +573,7 @@
                                         <div class="row mt-4">
                                         {% if error_message and edit_mode %}
                                         <div class="col-12 text-center bg-warning text-white p-2">
-                                          <b>Para o mesmo mês/ano selecionado já existe um registro. Deseja atualizar os dados existentes?</b>
+                                          <b>{{ error_message }}</b>
                                         </div>
                                         {% endif %}
                                         </div>

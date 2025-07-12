@@ -366,36 +366,33 @@ async def save_basic_data(
                     }
                 )
         else:
-            # Se não estiver em modo de edição, verificar se já existe registro
-            logger.info(f"Verificando se já existe registro para mês {month}/{year}")
-            result = await db.execute(
-                select(BasicData)
-                .filter(
-                    BasicData.user_id == current_user.id,
-                    BasicData.month == month,
-                    BasicData.year == year
+            # Verificar se já existe um registro para o mesmo mês/ano antes de criar
+            if not edit_mode:
+                result = await db.execute(
+                    select(BasicData)
+                    .filter(
+                        BasicData.user_id == current_user.id,
+                        BasicData.month == month,
+                        BasicData.year == year
+                    )
                 )
-            )
-            existing_data = result.scalar_one_or_none()
-
-            if existing_data:
-                logger.warning(f"Já existe registro para mês {month}/{year}")
-                return templates.TemplateResponse(
-                    "basic_data_form.html",
-                    {
-                        "request": request,
-                        "user": current_user,
-                        "error_message": f"Já existe um registro para {calendar.month_name[month]}/{year}. Use a opção de edição.",
-                        "current_month": month,
-                        "current_year": year,
-                        "edit_mode": False,
-                        "logs": [],
-                        "current_page": 1,
-                        "total_pages": 1,
-                        "per_page": 10,
-                        "total_logs": 0
-                    }
-                )
+                existing_data = result.scalar_one_or_none()
+                if existing_data:
+                    return templates.TemplateResponse(
+                        "basic_data_form.html",
+                        {
+                            "request": request,
+                            "user": current_user,
+                            "error_message": "Já existe um registro para este mês/ano. Por favor, edite o registro existente.",
+                            "basic_data": existing_data,
+                            "edit_mode": True,
+                            "logs": [],
+                            "current_page": 1,
+                            "total_pages": 1,
+                            "per_page": 10,
+                            "total_logs": 0
+                        }
+                    )
 
             # Criar novo registro
             logger.info(f"Criando novo registro para mês {month}/{year}")
