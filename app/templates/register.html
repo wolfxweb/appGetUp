@@ -409,7 +409,7 @@
                    
                             <div class="mb-4">
                                 <p class="mb-2" style="font-size: 1.2rem;">É uma grande satisfação ter você aqui conosco! Para começar vamos precisar de algumas informações.</p>
-                                <p class="mb-0" style="font-size: 1.2rem;">Qualquer dúvida é só clicar <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.3rem; color: #FFD700 !important;"></i></p>
+                                <p class="mb-0" style="font-size: 1.2rem;">Qualquer dúvida é só clicar <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="cursor: pointer; margin-left: 5px; height: 1.3rem; vertical-align: middle;" data-bs-toggle="modal" data-bs-target="#nameHelpModal"></p>
                                 <p class="mt-2" style="font-size: 1.2rem;">Recomendamos que leia o <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" class="text-primary">Termo de uso e confidencialidade</a>.</p>
                             </div>
 
@@ -456,7 +456,11 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="name" class="form-label">
                                                     Como gosta de ser chamado(a)?
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#nameHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" 
+                                                         alt="Ajuda" 
+                                                         style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; height: 1.1rem; color: #FFD700 !important;" 
+                                                         data-bs-toggle="modal" 
+                                                         data-bs-target="#nameHelpModal">
                                                 </label>
                                                 <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default('', true) }}" required style="background-color: #F5F5F5;" autocomplete="name">
                                                 <div class="invalid-feedback">
@@ -467,7 +471,11 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="email" class="form-label">
                                                     Email
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#emailHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" 
+                                                         alt="Ajuda" 
+                                                         style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; height: 1.1rem; color: #FFD700 !important;" 
+                                                         data-bs-toggle="modal" 
+                                                         data-bs-target="#emailHelpModal">
                                                 </label>
                                                 <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default('', true) }}" required style="background-color: #F5F5F5;" autocomplete="email">
                                                 <div class="invalid-feedback">
@@ -570,7 +578,11 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="password" class="form-label">
                                                     Senha
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#passwordHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" 
+                                                         alt="Ajuda" 
+                                                         style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; height: 1.1rem; color: #FFD700 !important;" 
+                                                         data-bs-toggle="modal" 
+                                                         data-bs-target="#passwordHelpModal">
                                                 </label>
                                                 <input type="password" class="form-control" id="password" name="password" required style="background-color: #F5F5F5;" autocomplete="new-password">
                                                 <div class="invalid-feedback">
@@ -581,7 +593,11 @@
                                             <div class="col-md-6 mb-3">
                                                 <label for="activation_key" class="form-label">
                                                     Chave de Ativação
-                                                    <i class="bi bi-lightbulb-fill" style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; color: #FFD700 !important;" data-bs-toggle="modal" data-bs-target="#activationKeyHelpModal"></i>
+                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" 
+                                                         alt="Ajuda" 
+                                                         style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; height: 1.1rem; color: #FFD700 !important;" 
+                                                         data-bs-toggle="modal" 
+                                                         data-bs-target="#activationKeyHelpModal">
                                                 </label>
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" style="background-color: #F5F5F5;">
@@ -627,7 +643,7 @@
 <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color: #F5F5F5 !important; border-bottom: 1px solid #dee2e6;    ">
                 <h5 class="modal-title" id="termsModalLabel">Termo de Uso e Confidencialidade</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
@@ -645,7 +661,7 @@
 <div class="modal fade" id="nameHelpModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color: #F5F5F5 !important; border-bottom: 1px solid #dee2e6;    ">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
@@ -658,7 +674,7 @@
 <div class="modal fade" id="emailHelpModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color: #F5F5F5 !important; border-bottom: 1px solid #dee2e6;    ">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
@@ -671,7 +687,7 @@
 <div class="modal fade" id="passwordHelpModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color: #F5F5F5 !important; border-bottom: 1px solid #dee2e6;">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
@@ -684,7 +700,7 @@
 <div class="modal fade" id="activationKeyHelpModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style="background-color: #F5F5F5 !important; border-bottom: 1px solid #dee2e6;">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
