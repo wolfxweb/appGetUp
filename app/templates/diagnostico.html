@@ -86,7 +86,7 @@
     <div class="col-md-12 mt-5">
         <div class="col-md-12 mb-4">
             <img src="/static/images/Logo.png" alt="Logo" height="40">
-         </div>
+            </div>
       <!-- Botões de navegação -->
       <div class="row mb-4 justify-content-center">
         <div class="col-12 col-md-2 mb-2 mb-md-0">
@@ -109,13 +109,13 @@
             Calculadora de preços
           </button>
         </div>
-      </div>
-      
+                </div>
+
       <!-- Card com seleção de período -->
       <div class="card shadow mb-4" style="background-color: #F0F0F0;">
         <div class="card-header bg-secondary text-white">
                 <h4 class="card-title mb-0">Diagnóstico</h4>
-            </div>
+                    </div>
             <div class="card-body">
     <div class="row mb-4">
         <div class="col-md-6">
@@ -131,8 +131,8 @@
                 </select>
             </div>
         </div>
-            </div>
-        </div>
+    </div>
+                </div>
     </div>
 
       <!-- Conteúdo do diagnóstico (inicialmente oculto) -->
@@ -141,28 +141,28 @@
         {% if user.activity_type in ['Comércio varejista', 'Comércio atacadista', 'Comércio Varejista', 'Comércio Atacadista'] %}
         <div class="alert alert-info mb-4">
             <strong>Informações para os cálculos:</strong> todas as informações necessárias estão nos dados básicos.
-        </div>
+                    </div>
         
         <!-- Resultado Principal -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
                 <h5 class="mb-0">Resultado do Período</h5>
-            </div>
+                                </div>
             <div class="card-body">
                 <div id="mainResult" class="mb-3"></div>
                 <div id="criticalStatus" class="mb-3"></div>
                 <div id="salesCapacityAnalysis" class="mb-3"></div>
-            </div>
         </div>
-        
+    </div>
+
         <!-- Análises Detalhadas -->
-        <div class="row mb-4">
+                <div class="row mb-4">
             <div class="col-md-6">
                 <div class="card h-100 shadow" style="background-color: #F0F0F0;">
                     <div class="card-header bg-secondary text-white">
                         <h5 class="mb-0">Margem de Contribuição</h5>
-                    </div>
-                    <div class="card-body">
+                </div>
+                <div class="card-body">
                         <div id="contributionMarginAnalysis"></div>
                     </div>
                 </div>
@@ -174,45 +174,45 @@
                     </div>
                     <div class="card-body">
                         <div id="breakEvenAnalysis"></div>
-                    </div>
+                                </div>
                 </div>
             </div>
         </div>
-        
+
         <!-- Resumo e Recomendações -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
                 <h5 class="mb-0">Resumo e Próximos Passos</h5>
-            </div>
-            <div class="card-body">
+                </div>
+                <div class="card-body">
                 <div id="summaryAnalysis"></div>
-            </div>
-        </div>
-        
+                        </div>
+                    </div>
+
         {% elif user.activity_type in ['Alimentação fora do Lar', 'Alimentação Fora do Lar', 'Alimentação fora do lar'] %}
         <div class="alert alert-info mb-4">
             <strong>Diagnóstico para Alimentação fora do lar:</strong> análise específica incluindo pró-labore e custo MOD.
-        </div>
-        
+                    </div>
+
         <!-- Resultado Principal -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
                 <h5 class="mb-0">Resultado do Período</h5>
-            </div>
+                    </div>
             <div class="card-body">
                 <div id="mainResultAlimentacao" class="mb-3"></div>
                 <div id="criticalStatusAlimentacao" class="mb-3"></div>
                 <div id="salesCapacityAnalysisAlimentacao" class="mb-3"></div>
             </div>
-        </div>
-        
+                    </div>
+
         <!-- Análises Detalhadas -->
         <div class="row mb-4">
             <div class="col-md-6">
                 <div class="card h-100 shadow" style="background-color: #F0F0F0;">
                     <div class="card-header bg-secondary text-white">
                         <h5 class="mb-0">Ticket Médio e Margem de Contribuição</h5>
-                    </div>
+                                    </div>
                     <div class="card-body">
                         <div id="ticketMarginAnalysisAlimentacao"></div>
                     </div>
@@ -225,29 +225,29 @@
                     </div>
                     <div class="card-body">
                         <div id="breakEvenAnalysisAlimentacao"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        
+
         <!-- Análise de Capacidade -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
                 <h5 class="mb-0">Análise de Capacidade e Potencial</h5>
-            </div>
-            <div class="card-body">
+                            </div>
+                            <div class="card-body">
                 <div id="capacityAnalysisAlimentacao"></div>
-            </div>
-        </div>
+                                </div>
+                                </div>
         
         <!-- Resumo e Recomendações -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
                 <h5 class="mb-0">Resumo e Próximos Passos</h5>
-            </div>
+                            </div>
             <div class="card-body">
                 <div id="summaryAnalysisAlimentacao"></div>
-            </div>
+                        </div>
         </div>
         
         <!-- Recomendações Específicas -->
@@ -257,9 +257,9 @@
             </div>
             <div class="card-body">
                 <div id="recommendationsAlimentacao"></div>
-            </div>
-        </div>
-        
+                    </div>
+                </div>
+
         <!-- Verificar se o usuário é de indústria -->
         {% elif user.activity_type in ['Indústria', 'Industria'] %}
         
@@ -267,13 +267,13 @@
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
                 <h5 class="mb-0">Resultado do Período</h5>
-            </div>
-            <div class="card-body">
+                            </div>
+                            <div class="card-body">
                 <div id="mainResultIndustria" class="mb-3"></div>
                 <div id="criticalStatusIndustria" class="mb-3"></div>
                 <div id="salesCapacityAnalysisIndustria" class="mb-3"></div>
-            </div>
-        </div>
+                                        </div>
+                                    </div>
         
         <!-- Análises Detalhadas -->
         <div class="row mb-4">
@@ -281,24 +281,24 @@
                 <div class="card h-100 shadow" style="background-color: #F0F0F0;">
                     <div class="card-header bg-secondary text-white">
                         <h5 class="mb-0">Ticket Médio e Margem de Contribuição</h5>
-                    </div>
+                                </div>
                     <div class="card-body">
                         <div id="ticketMarginAnalysisIndustria"></div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
             <div class="col-md-6">
                 <div class="card h-100 shadow" style="background-color: #F0F0F0;">
                     <div class="card-header bg-secondary text-white">
                         <h5 class="mb-0">Ponto de Equilíbrio</h5>
-                    </div>
+                </div>
                     <div class="card-body">
                         <div id="breakEvenAnalysisIndustria"></div>
-                    </div>
-                </div>
             </div>
         </div>
-        
+    </div>
+</div>
+
         <!-- Análise de Capacidade de Produção -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
@@ -306,19 +306,19 @@
             </div>
             <div class="card-body">
                 <div id="capacityAnalysisIndustria"></div>
+                </div>
             </div>
-        </div>
         
         <!-- Resumo e Recomendações -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
                 <h5 class="mb-0">Resumo e Próximos Passos</h5>
-            </div>
+        </div>
             <div class="card-body">
                 <div id="summaryAnalysisIndustria"></div>
-            </div>
-        </div>
-        
+    </div>
+</div>
+
         <!-- Recomendações Específicas -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
@@ -326,8 +326,8 @@
             </div>
             <div class="card-body">
                 <div id="recommendationsIndustria"></div>
+                </div>
             </div>
-        </div>
         
         <!-- Verificar se o usuário é prestador de serviços -->
         {% elif user.activity_type in ['Prestação de serviços', 'Prestador de serviços', 'Prestação de Serviços'] %}
@@ -336,26 +336,26 @@
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
                 <h5 class="mb-0">Resultado do Período</h5>
-            </div>
+        </div>
             <div class="card-body">
                 <div id="mainResultServicos" class="mb-3"></div>
                 <div id="criticalStatusServicos" class="mb-3"></div>
                 <div id="salesCapacityAnalysisServicos" class="mb-3"></div>
-            </div>
-        </div>
-        
+    </div>
+</div>
+
         <!-- Análises Detalhadas -->
         <div class="row mb-4">
             <div class="col-md-6">
                 <div class="card h-100 shadow" style="background-color: #F0F0F0;">
                     <div class="card-header bg-secondary text-white">
                         <h5 class="mb-0">Ticket Médio e Margem de Contribuição</h5>
-                    </div>
+            </div>
                     <div class="card-body">
                         <div id="ticketMarginAnalysisServicos"></div>
-                    </div>
                 </div>
             </div>
+        </div>
             <div class="col-md-6">
                 <div class="card h-100 shadow" style="background-color: #F0F0F0;">
                     <div class="card-header bg-secondary text-white">
@@ -365,9 +365,9 @@
                         <div id="breakEvenAnalysisServicos"></div>
                     </div>
                 </div>
-            </div>
-        </div>
-        
+    </div>
+</div>
+
         <!-- Análise de Capacidade de Atendimento -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
@@ -375,19 +375,19 @@
             </div>
             <div class="card-body">
                 <div id="capacityAnalysisServicos"></div>
+                </div>
             </div>
-        </div>
         
         <!-- Resumo e Recomendações -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
                 <h5 class="mb-0">Resumo e Próximos Passos</h5>
-            </div>
+        </div>
             <div class="card-body">
                 <div id="summaryAnalysisServicos"></div>
-            </div>
-        </div>
-        
+    </div>
+</div>
+
         <!-- Recomendações Específicas -->
         <div class="card shadow mb-4" style="background-color: #F0F0F0;">
             <div class="card-header bg-secondary text-white">
@@ -395,15 +395,15 @@
             </div>
             <div class="card-body">
                 <div id="recommendationsServicos"></div>
+                </div>
             </div>
-        </div>
         
         {% else %}
         <div class="alert alert-warning">
             <strong>Diagnóstico não disponível:</strong> Esta funcionalidade está disponível apenas para empresas de Comércio Varejista, Comércio Atacadista, Alimentação fora do lar, Indústria e Prestador de serviços.
         </div>
         {% endif %}
-      </div>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -1379,7 +1379,7 @@ function displayBreakEvenAnalysisIndustria(pontoEquilibrio, vendas, margemContri
         } else if (pontoEquilibrio > 0 && pontoEquilibrio < capacidadeProducao) {
             texto += "<p>Isso significa que se as vendas tivessem sido iguais à capacidade de produção, o lucro teria sido maior.</p>";
         }
-    } else {
+        } else {
         texto += "<p><strong>Ponto de equilíbrio:</strong> não alcançado</p>";
     }
     
@@ -1484,7 +1484,7 @@ function displayMainResultServicos(mesAno, faturamento, tipoResultado, margemPer
         texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou R$ ${valorResultado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} mais do que faturou!`;
     } else if (tipoResultado === "margem") {
         texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou tudo que faturou!`;
-    } else {
+     } else {
         texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou R$ ${valorResultado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} menos do que faturou!`;
     }
     
