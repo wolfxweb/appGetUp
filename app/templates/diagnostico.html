@@ -189,7 +189,6 @@
             </div>
         </div>
         
-        <!-- Verificar se o usuário é de alimentação fora do lar -->
         {% elif user.activity_type in ['Alimentação fora do Lar', 'Alimentação Fora do Lar', 'Alimentação fora do lar'] %}
         <div class="alert alert-info mb-4">
             <strong>Diagnóstico para Alimentação fora do lar:</strong> análise específica incluindo pró-labore e custo MOD.
@@ -261,9 +260,147 @@
             </div>
         </div>
         
+        <!-- Verificar se o usuário é de indústria -->
+        {% elif user.activity_type in ['Indústria', 'Industria'] %}
+        
+        <!-- Resultado Principal -->
+        <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Resultado do Período</h5>
+            </div>
+            <div class="card-body">
+                <div id="mainResultIndustria" class="mb-3"></div>
+                <div id="criticalStatusIndustria" class="mb-3"></div>
+                <div id="salesCapacityAnalysisIndustria" class="mb-3"></div>
+            </div>
+        </div>
+        
+        <!-- Análises Detalhadas -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow" style="background-color: #F0F0F0;">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Ticket Médio e Margem de Contribuição</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="ticketMarginAnalysisIndustria"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 shadow" style="background-color: #F0F0F0;">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Ponto de Equilíbrio</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="breakEvenAnalysisIndustria"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Análise de Capacidade de Produção -->
+        <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Análise de Capacidade de Produção e Potencial</h5>
+            </div>
+            <div class="card-body">
+                <div id="capacityAnalysisIndustria"></div>
+            </div>
+        </div>
+        
+        <!-- Resumo e Recomendações -->
+        <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Resumo e Próximos Passos</h5>
+            </div>
+            <div class="card-body">
+                <div id="summaryAnalysisIndustria"></div>
+            </div>
+        </div>
+        
+        <!-- Recomendações Específicas -->
+        <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Recomendações Específicas</h5>
+            </div>
+            <div class="card-body">
+                <div id="recommendationsIndustria"></div>
+            </div>
+        </div>
+        
+        <!-- Verificar se o usuário é prestador de serviços -->
+        {% elif user.activity_type in ['Prestação de serviços', 'Prestador de serviços', 'Prestação de Serviços'] %}
+        
+        <!-- Resultado Principal -->
+        <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Resultado do Período</h5>
+            </div>
+            <div class="card-body">
+                <div id="mainResultServicos" class="mb-3"></div>
+                <div id="criticalStatusServicos" class="mb-3"></div>
+                <div id="salesCapacityAnalysisServicos" class="mb-3"></div>
+            </div>
+        </div>
+        
+        <!-- Análises Detalhadas -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow" style="background-color: #F0F0F0;">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Ticket Médio e Margem de Contribuição</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="ticketMarginAnalysisServicos"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 shadow" style="background-color: #F0F0F0;">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Ponto de Equilíbrio</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="breakEvenAnalysisServicos"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Análise de Capacidade de Atendimento -->
+        <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Análise de Capacidade de Atendimento e Potencial</h5>
+            </div>
+            <div class="card-body">
+                <div id="capacityAnalysisServicos"></div>
+            </div>
+        </div>
+        
+        <!-- Resumo e Recomendações -->
+        <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Resumo e Próximos Passos</h5>
+            </div>
+            <div class="card-body">
+                <div id="summaryAnalysisServicos"></div>
+            </div>
+        </div>
+        
+        <!-- Recomendações Específicas -->
+        <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Recomendações Específicas</h5>
+            </div>
+            <div class="card-body">
+                <div id="recommendationsServicos"></div>
+            </div>
+        </div>
+        
         {% else %}
         <div class="alert alert-warning">
-            <strong>Diagnóstico não disponível:</strong> Esta funcionalidade está disponível apenas para empresas de Comércio Varejista, Comércio Atacadista e Alimentação fora do lar.
+            <strong>Diagnóstico não disponível:</strong> Esta funcionalidade está disponível apenas para empresas de Comércio Varejista, Comércio Atacadista, Alimentação fora do lar, Indústria e Prestador de serviços.
         </div>
         {% endif %}
       </div>
@@ -369,6 +506,10 @@ function calculateAndDisplayDiagnosis(data) {
     
     if (activityType === 'Alimentação fora do Lar' || activityType === 'Alimentação Fora do Lar' || activityType === 'Alimentação fora do lar') {
         calculateAndDisplayDiagnosisAlimentacao(data);
+    } else if (activityType === 'Indústria' || activityType === 'Industria') {
+        calculateAndDisplayDiagnosisIndustria(data);
+    } else if (activityType === 'Prestação de serviços' || activityType === 'Prestador de serviços' || activityType === 'Prestação de Serviços') {
+        calculateAndDisplayDiagnosisServicos(data);
     } else {
         // Cálculos para Comércio Varejista e Atacadista (código existente)
         calculateAndDisplayDiagnosisComercio(data);
@@ -554,6 +695,202 @@ function calculateAndDisplayDiagnosisAlimentacao(data) {
     displayRecommendationsAlimentacao(margemContribuicao, margemContribuicaoTotal, custosFixos, pontoEquilibrio, capacidadeAtendimento, vendas, margemPercentual, margemIdeal);
     
     console.log('=== FIM CÁLCULOS ALIMENTAÇÃO FORA DO LAR ===');
+}
+
+function calculateAndDisplayDiagnosisIndustria(data) {
+    console.log('=== INÍCIO CÁLCULOS INDÚSTRIA ===');
+    
+    // Pegar mês e ano do combo selecionado
+    const basicDataSelect = document.getElementById('basicDataSelect');
+    const selectedOption = basicDataSelect.options[basicDataSelect.selectedIndex];
+    const mesAno = selectedOption ? selectedOption.text : 'N/A';
+    
+    // Dados básicos
+    const faturamento = data.sales_revenue || 0; // (R$B)
+    const gastosVendas = data.sales_expenses || 0;
+    const gastosInsumos = data.input_product_expenses || 0;
+    const proLabore = data.pro_labore || 0;
+    const custoMOD = data.work_hours_per_week || 0; // Usando work_hours_per_week como custo MOD temporariamente
+    const demaisCustosFixos = data.other_fixed_costs || 0;
+    const vendas = data.clients_served || 0;
+    const capacidadeProducao = parseInt(data.service_capacity) || 0; // Capacidade de produção
+    const margemIdeal = (data.ideal_profit_margin || data.ideal_service_profit_margin || 0) / 100;
+    
+    // Fórmula (C): SE(P7<0;"prejuízo";SE(P7=0;"margem";SE(P7>0; "lucro")))
+    const totalGastos = gastosVendas + gastosInsumos + proLabore + custoMOD + demaisCustosFixos;
+    const margemValor = faturamento - totalGastos;
+    let tipoResultado;
+    if (margemValor < 0) {
+        tipoResultado = "prejuízo";
+    } else if (margemValor === 0) {
+        tipoResultado = "margem";
+    } else {
+        tipoResultado = "lucro";
+    }
+    
+    // Fórmula (D%): (Faturamento-(gastos com vendas + gastos com insumos e produtos + pró-labore +custo MOD + demais custos fixos)) / Faturamento
+    const margemPercentual = faturamento > 0 ? (margemValor / faturamento) * 100 : 0;
+    
+    // Fórmula (R$E): SE(Margem="";"";SE(Margem<0;(gastos com vendas + gastos com insumos e produtos + pró-labore + custo MOD + demais custos fixos)-Faturamento;SE(Margem >=0;Faturamento - (gastos com vendas + gastos com insumos e produtos + pró-labore + custo MOD + demais custos fixos))))
+    let valorResultado;
+    if (margemValor < 0) {
+        valorResultado = totalGastos - faturamento;
+    } else {
+        valorResultado = faturamento - totalGastos;
+    }
+    
+    // Fórmula (R$F): Faturamento/Vendas
+    const ticketMedio = vendas > 0 ? faturamento / vendas : 0;
+    
+    // Fórmula (R$G): (Faturamento-(gastos com vendas + gastos com insumos e produtos))/Vendas
+    const margemContribuicao = vendas > 0 ? (faturamento - (gastosVendas + gastosInsumos)) / vendas : 0;
+    
+    // Fórmula (R$H): Margem de contribuição*Vendas
+    const margemContribuicaoTotal = margemContribuicao * vendas;
+    
+    // Fórmula (i): SE(Margem de contribuição*Vendas>=(pró-labore +custo MOD + demais custos fixos);(pró-labore +custo MOD + demais custos fixos)/Margem de contribuição;"")
+    const custosFixos = proLabore + custoMOD + demaisCustosFixos;
+    const pontoEquilibrio = margemContribuicaoTotal >= custosFixos && margemContribuicao > 0 ? 
+        Math.ceil(custosFixos / margemContribuicao) : null;
+    
+    // Fórmula (J%): ((Capac. produção*Ticket médio)-((Capac. produção*Ticket médio*(%Gastos vendas+%gastos com insumos e produtos))+(pró-labore +custo MOD + demais custos fixos)))/(Capac. produção*Ticket médio)
+    const faturamentoPotencial = capacidadeProducao * ticketMedio;
+    const percentualGastosVendas = faturamento > 0 ? (gastosVendas / faturamento) * 100 : 0;
+    const percentualGastosInsumos = faturamento > 0 ? (gastosInsumos / faturamento) * 100 : 0;
+    const margemPotencial = faturamentoPotencial > 0 ? 
+        ((faturamentoPotencial - ((faturamentoPotencial * (percentualGastosVendas + percentualGastosInsumos) / 100) + custosFixos)) / faturamentoPotencial) * 100 : 0;
+    
+    // Fórmula (R$K): SE(Margem<0;Valor gasto a mais do que o faturamento+(Margem ideal*Faturamento);SE(mARGEM=0;Margem ideal*Faturamento;SE(E(Margem>0;(Margem ideal*Faturamento)<=Valor gasto a menos do que o faturamento);Valor gasto a menos do que o faturamento-(Margem ideal*Faturamento);SE(E(Margem>0;(Margem ideal*Faturamento)>Valor gasto a menos do que o faturamento);(Margem ideal*Faturamento)-Valor gasto a menos do que o faturamento))))
+    let distanciaObjetivo;
+    if (margemValor < 0) {
+        distanciaObjetivo = Math.abs(margemValor) + (margemIdeal * faturamento);
+    } else if (margemValor === 0) {
+        distanciaObjetivo = margemIdeal * faturamento;
+    } else {
+        const objetivoValor = margemIdeal * faturamento;
+        if (objetivoValor <= margemValor) {
+            distanciaObjetivo = margemValor - objetivoValor;
+        } else {
+            distanciaObjetivo = objetivoValor - margemValor;
+        }
+    }
+    
+    console.log('Cálculos realizados:', {
+        faturamento, gastosVendas, gastosInsumos, proLabore, custoMOD, demaisCustosFixos,
+        vendas, capacidadeProducao, margemIdeal, totalGastos, margemValor, tipoResultado,
+        margemPercentual, valorResultado, ticketMedio, margemContribuicao, margemContribuicaoTotal,
+        pontoEquilibrio, margemPotencial, distanciaObjetivo
+    });
+    
+    // Exibir resultados
+    displayMainResultIndustria(mesAno, faturamento, tipoResultado, margemPercentual, valorResultado);
+    displayCriticalStatusIndustria(margemValor, vendas, capacidadeProducao);
+    displaySalesCapacityAnalysisIndustria(margemValor, margemPercentual, margemIdeal, vendas, capacidadeProducao);
+    displayTicketMarginAnalysisIndustria(ticketMedio, margemContribuicao, margemContribuicaoTotal, custosFixos);
+    displayBreakEvenAnalysisIndustria(pontoEquilibrio, vendas, margemContribuicao, custosFixos, capacidadeProducao);
+    displayCapacityAnalysisIndustria(margemPotencial, margemPercentual, faturamentoPotencial, capacidadeProducao, vendas);
+    displaySummaryAnalysisIndustria(margemValor, margemPercentual, margemIdeal, distanciaObjetivo, margemPotencial);
+    displayRecommendationsIndustria(margemContribuicao, margemContribuicaoTotal, custosFixos, pontoEquilibrio, capacidadeProducao, vendas, margemPercentual, margemIdeal);
+    
+    console.log('=== FIM CÁLCULOS INDÚSTRIA ===');
+}
+
+function calculateAndDisplayDiagnosisServicos(data) {
+    console.log('=== INÍCIO CÁLCULOS PRESTADOR DE SERVIÇOS ===');
+    
+    // Pegar mês e ano do combo selecionado
+    const basicDataSelect = document.getElementById('basicDataSelect');
+    const selectedOption = basicDataSelect.options[basicDataSelect.selectedIndex];
+    const mesAno = selectedOption ? selectedOption.text : 'N/A';
+    
+    // Dados básicos
+    const faturamento = data.sales_revenue || 0; // (R$B)
+    const gastosVendas = data.sales_expenses || 0;
+    const gastosInsumos = data.input_product_expenses || 0;
+    const proLabore = data.pro_labore || 0;
+    const custoMOD = data.work_hours_per_week || 0; // Usando work_hours_per_week como custo MOD
+    const demaisCustosFixos = data.other_fixed_costs || 0;
+    const vendas = data.clients_served || 0;
+    const capacidadeAtendimento = parseInt(data.service_capacity) || 0;
+    const margemIdeal = (data.ideal_profit_margin || data.ideal_service_profit_margin || 0) / 100;
+    
+    // Fórmula (C): SE(P7<0;"prejuízo";SE(P7=0;"margem";SE(P7>0; "lucro")))
+    const totalGastos = gastosVendas + gastosInsumos + proLabore + custoMOD + demaisCustosFixos;
+    const margemValor = faturamento - totalGastos;
+    let tipoResultado;
+    if (margemValor < 0) {
+        tipoResultado = "prejuízo";
+    } else if (margemValor === 0) {
+        tipoResultado = "margem";
+    } else {
+        tipoResultado = "lucro";
+    }
+    
+    // Fórmula (D%): (Faturamento-(gastos com vendas + gastos com insumos e produtos + pró-labore +custo MOD + demais custos fixos)) / Faturamento
+    const margemPercentual = faturamento > 0 ? (margemValor / faturamento) * 100 : 0;
+    
+    // Fórmula (R$E): SE(Margem="";"";SE(Margem<0;(gastos com vendas + gastos com insumos e produtos + pró-labore + custo MOD + demais custos fixos)-Faturamento;SE(Margem >=0;Faturamento - (gastos com vendas + gastos com insumos e produtos + pró-labore + custo MOD + demais custos fixos))))
+    let valorResultado;
+    if (margemValor < 0) {
+        valorResultado = totalGastos - faturamento;
+    } else {
+        valorResultado = faturamento - totalGastos;
+    }
+    
+    // Fórmula (R$F): Faturamento/Vendas
+    const ticketMedio = vendas > 0 ? faturamento / vendas : 0;
+    
+    // Fórmula (R$G): (Faturamento-(gastos com vendas + gastos com insumos e produtos))/Vendas
+    const margemContribuicao = vendas > 0 ? (faturamento - (gastosVendas + gastosInsumos)) / vendas : 0;
+    
+    // Fórmula (R$H): Margem de contribuição*Vendas
+    const margemContribuicaoTotal = margemContribuicao * vendas;
+    
+    // Fórmula (i): SE(Margem de contribuição*Vendas>=(pró-labore +custo MOD + demais custos fixos);(pró-labore +custo MOD + demais custos fixos)/Margem de contribuição;"")
+    const custosFixos = proLabore + custoMOD + demaisCustosFixos;
+    const pontoEquilibrio = margemContribuicaoTotal >= custosFixos && margemContribuicao > 0 ? 
+        Math.ceil(custosFixos / margemContribuicao) : null;
+    
+    // Fórmula (J%): ((Capac. atendimento*Ticket médio)-((Capac. atendimento*Ticket médio*(%Gastos vendas+%gastos com insumos e produtos))+(pró-labore +custo MOD + demais custos fixos)))/(Capac. atendimento*Ticket médio)
+    const faturamentoPotencial = capacidadeAtendimento * ticketMedio;
+    const percentualGastosVendas = faturamento > 0 ? (gastosVendas / faturamento) * 100 : 0;
+    const percentualGastosInsumos = faturamento > 0 ? (gastosInsumos / faturamento) * 100 : 0;
+    const margemPotencial = faturamentoPotencial > 0 ? 
+        ((faturamentoPotencial - ((faturamentoPotencial * (percentualGastosVendas + percentualGastosInsumos) / 100) + custosFixos)) / faturamentoPotencial) * 100 : 0;
+    
+    // Fórmula (R$K): SE(Margem<0;Valor gasto a mais do que o faturamento+(Margem ideal*Faturamento);SE(mARGEM=0;Margem ideal*Faturamento;SE(E(Margem>0;(Margem ideal*Faturamento)<=Valor gasto a menos do que o faturamento);Valor gasto a menos do que o faturamento-(Margem ideal*Faturamento);SE(E(Margem>0;(Margem ideal*Faturamento)>Valor gasto a menos do que o faturamento);(Margem ideal*Faturamento)-Valor gasto a menos do que o faturamento))))
+    let distanciaObjetivo;
+    if (margemValor < 0) {
+        distanciaObjetivo = Math.abs(margemValor) + (margemIdeal * faturamento);
+    } else if (margemValor === 0) {
+        distanciaObjetivo = margemIdeal * faturamento;
+    } else {
+        const objetivoValor = margemIdeal * faturamento;
+        if (objetivoValor <= margemValor) {
+            distanciaObjetivo = margemValor - objetivoValor;
+        } else {
+            distanciaObjetivo = objetivoValor - margemValor;
+        }
+    }
+    
+    console.log('Cálculos realizados:', {
+        faturamento, gastosVendas, gastosInsumos, proLabore, custoMOD, demaisCustosFixos,
+        vendas, capacidadeAtendimento, margemIdeal, totalGastos, margemValor, tipoResultado,
+        margemPercentual, valorResultado, ticketMedio, margemContribuicao, margemContribuicaoTotal,
+        pontoEquilibrio, margemPotencial, distanciaObjetivo
+    });
+    
+    // Exibir resultados
+    displayMainResultServicos(mesAno, faturamento, tipoResultado, margemPercentual, valorResultado);
+    displayCriticalStatusServicos(margemValor, vendas, capacidadeAtendimento);
+    displaySalesCapacityAnalysisServicos(margemValor, margemPercentual, margemIdeal, vendas, capacidadeAtendimento);
+    displayTicketMarginAnalysisServicos(ticketMedio, margemContribuicao, margemContribuicaoTotal, custosFixos);
+    displayBreakEvenAnalysisServicos(pontoEquilibrio, vendas, margemContribuicao, custosFixos, capacidadeAtendimento);
+    displayCapacityAnalysisServicos(margemPotencial, margemPercentual, faturamentoPotencial, capacidadeAtendimento, vendas);
+    displaySummaryAnalysisServicos(margemValor, margemPercentual, margemIdeal, distanciaObjetivo, margemPotencial);
+    displayRecommendationsServicos(margemContribuicao, margemContribuicaoTotal, custosFixos, pontoEquilibrio, capacidadeAtendimento, vendas, margemPercentual, margemIdeal);
+    
+    console.log('=== FIM CÁLCULOS PRESTADOR DE SERVIÇOS ===');
 }
 
 function displayMainResult(data, faturamento, tipoResultado, margemPercentual, valorResultado) {
@@ -912,6 +1249,448 @@ function displayRecommendationsAlimentacao(margemContribuicao, margemContribuica
     texto += "<p><strong>Sendo assim, recomendamos que você acesse o Simulador</strong></p>";
     
     const element = document.getElementById('recommendationsAlimentacao');
+    if (element) {
+        element.innerHTML = texto;
+    }
+}
+
+function displayMainResultIndustria(mesAno, faturamento, tipoResultado, margemPercentual, valorResultado) {
+    console.log('displayMainResultIndustria executando...');
+    
+    let texto = "";
+    
+    if (tipoResultado === "prejuízo") {
+        texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou R$ ${valorResultado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} mais do que faturou!`;
+    } else if (tipoResultado === "margem") {
+        texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou tudo que faturou!`;
+    } else {
+        texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou R$ ${valorResultado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} menos do que faturou!`;
+    }
+    
+    const alertClass = tipoResultado === "prejuízo" ? "alert-danger" : 
+                     tipoResultado === "margem" ? "alert-warning" : "alert-success";
+    
+    const mainElement = document.getElementById('mainResultIndustria');
+    if (mainElement) {
+        mainElement.innerHTML = `<div class="alert ${alertClass}">${texto}</div>`;
+        console.log('HTML inserido no mainResultIndustria');
+    } else {
+        console.error('Elemento mainResultIndustria não encontrado!');
+    }
+}
+
+function displayCriticalStatusIndustria(margemValor, vendas, capacidadeProducao) {
+    let status = "";
+    let alertClass = "";
+    
+    if (margemValor < 0) {
+        status = "ESTA É UMA SITUAÇÃO CRÍTICA!";
+        alertClass = "alert-danger";
+    } else if (margemValor === 0) {
+        status = "ATENÇÃO!";
+        alertClass = "alert-warning";
+    } else if (vendas > capacidadeProducao * 1.05) {
+        status = "ATENÇÃO!";
+        alertClass = "alert-warning";
+    }
+    
+    if (status) {
+        const element = document.getElementById('criticalStatusIndustria');
+        if (element) {
+            element.innerHTML = `<div class="alert ${alertClass}"><strong>${status}</strong></div>`;
+        }
+    }
+}
+
+function displaySalesCapacityAnalysisIndustria(margemValor, margemPercentual, margemIdeal, vendas, capacidadeProducao) {
+    let texto = "";
+    
+    if (margemValor < 0) {
+        if (vendas > capacidadeProducao * 1.05) {
+            texto = "Este resultado negativo aconteceu mesmo com as vendas superando a capacidade de produção.";
+        } else if (vendas >= capacidadeProducao * 0.95 && vendas <= capacidadeProducao * 1.05) {
+            texto = "Este resultado negativo aconteceu mesmo com as vendas nos limites da capacidade de produção.";
+        } else {
+            texto = "Este resultado negativo aconteceu com as vendas abaixo da capacidade de produção.";
+        }
+    } else if (margemValor === 0) {
+        if (vendas > capacidadeProducao * 1.05) {
+            texto = "Mesmo com as vendas superando a capacidade de produção, o resultado do mês ficou em zero: nem lucro, nem prejuízo.";
+        } else if (vendas >= capacidadeProducao * 0.95 && vendas <= capacidadeProducao * 1.05) {
+            texto = "Mesmo vendendo nos limites da capacidade de produção, o resultado do mês ficou em zero: nem lucro, nem prejuízo.";
+        } else {
+            texto = "Com vendas abaixo da capacidade de produção, o resultado do mês ficou em zero: nem lucro, nem prejuízo.";
+        }
+    } else if (margemPercentual < margemIdeal * 95) {
+        if (vendas > capacidadeProducao * 1.05) {
+            texto = "O lucro foi menor do que você gostaria, mesmo com vendas maiores do que a capacidade de produção.";
+        } else if (vendas >= capacidadeProducao * 0.95 && vendas <= capacidadeProducao * 1.05) {
+            texto = "Mesmo vendendo nos limites da capacidade de produção, o lucro foi menor do que você gostaria.";
+        } else {
+            texto = "Este resultado não corresponde à sua expectativa de lucro, e as vendas foram menores do que a capacidade de produção.";
+        }
+    } else if (margemPercentual >= margemIdeal * 95) {
+        if (vendas > capacidadeProducao * 1.05) {
+            texto = "Este lucro corresponde às suas expectativas, mas foi alcançado com vendas maiores do que a capacidade de produção.";
+        } else if (vendas >= capacidadeProducao * 0.95 && vendas <= capacidadeProducao * 1.05) {
+            texto = "Este lucro corresponde à sua expectativa e foi alcançado com vendas que ficaram nos limites da capacidade de produção.";
+        } else {
+            texto = "Este lucro corresponde à sua expectativa, mesmo com vendas menores do que a capacidade de produção.";
+        }
+    }
+    
+    if (texto) {
+        const element = document.getElementById('salesCapacityAnalysisIndustria');
+        if (element) {
+            element.innerHTML = `<p>${texto}</p>`;
+        }
+    }
+}
+
+function displayTicketMarginAnalysisIndustria(ticketMedio, margemContribuicao, margemContribuicaoTotal, custosFixos) {
+    let texto = "";
+    
+    texto += `<p><strong>Ticket médio:</strong> R$ ${ticketMedio.toLocaleString('pt-BR', {minimumFractionDigits: 2})} - Faturamento médio por venda</p>`;
+    texto += `<p><strong>Margem de contribuição:</strong> R$ ${margemContribuicao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>`;
+    
+    if (margemContribuicao <= 0) {
+        texto += "<p><strong>Aqui temos uma explicação para o prejuízo!</strong></p>";
+        texto += "<p>Margem de contribuição menor ou igual a zero significa que quanto mais vende, mais perde.</p>";
+    } else if (margemContribuicaoTotal <= custosFixos) {
+        texto += "<p><strong>Aqui temos uma explicação para o prejuízo!</strong></p>";
+        texto += `<p>Se a margem de contribuição multiplicada pelas vendas (R$ ${margemContribuicaoTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}) não supera os custos fixos (R$ ${custosFixos.toLocaleString('pt-BR', {minimumFractionDigits: 2})}), o Negócio, na melhor das hipóteses, está numa situação frágil, sem folga para enfrentar imprevistos ou crescer.</p>`;
+    }
+    
+    const element = document.getElementById('ticketMarginAnalysisIndustria');
+    if (element) {
+        element.innerHTML = texto;
+    }
+}
+
+function displayBreakEvenAnalysisIndustria(pontoEquilibrio, vendas, margemContribuicao, custosFixos, capacidadeProducao) {
+    let texto = "";
+    
+    if (pontoEquilibrio) {
+        texto += `<p><strong>Ponto de equilíbrio:</strong> ${pontoEquilibrio} vendas</p>`;
+        
+        if (margemContribuicao * vendas > custosFixos && pontoEquilibrio >= capacidadeProducao) {
+            texto += "<p><strong>ALERTA MÁXIMO!</strong></p>";
+            texto += "<p>Para alcançar margem zero teria sido preciso vender mais (ou o equivalente) à capacidade de produção, ou seja: sua empresa está mal estruturada (custos elevados, preços mal calculados e/ou capacidade de produção insuficiente)!</p>";
+        } else if (pontoEquilibrio > 0 && pontoEquilibrio < capacidadeProducao) {
+            texto += "<p>Isso significa que se as vendas tivessem sido iguais à capacidade de produção, o lucro teria sido maior.</p>";
+        }
+    } else {
+        texto += "<p><strong>Ponto de equilíbrio:</strong> não alcançado</p>";
+    }
+    
+    const element = document.getElementById('breakEvenAnalysisIndustria');
+    if (element) {
+        element.innerHTML = texto;
+    }
+}
+
+function displayCapacityAnalysisIndustria(margemPotencial, margemPercentual, faturamentoPotencial, capacidadeProducao, vendas) {
+    let texto = "";
+    
+    if (margemPotencial > margemPercentual) {
+        texto += `<p>Isso significa que se as vendas tivessem sido iguais à capacidade de produção (${capacidadeProducao}), o lucro de ${margemPercentual.toFixed(2)}% teria sido de ${margemPotencial.toFixed(2)}%.</p>`;
+    }
+    
+    if (vendas < capacidadeProducao * 0.95) {
+        texto += "<p><strong>Por que não vendeu mais:</strong></p>";
+        texto += "<ul>";
+        texto += "<li>1) Mercado não comporta? Então aumente o valor do ticket médio e/ou reduza custos fixos;</li>";
+        texto += "<li>2) Concorrência? Crie diferenciais e corrija seus pontos fracos;</li>";
+        texto += "<li>3) Mês fraco? Crie incentivos.</li>";
+        texto += "</ul>";
+    } else if (vendas > capacidadeProducao * 1.05) {
+        texto += "<p>Vendas acima da capacidade de produção, se rotineiras, podem prejudicar a qualidade e/ou lucratividade dos produtos, gerar stress com os clientes, nos funcionários e em você, à menos que tenham sido viabilizadas por estoques de mês(es) anterior(es)!</p>";
+    }
+    
+    const element = document.getElementById('capacityAnalysisIndustria');
+    if (element) {
+        element.innerHTML = texto;
+    }
+}
+
+function displaySummaryAnalysisIndustria(margemValor, margemPercentual, margemIdeal, distanciaObjetivo, margemPotencial) {
+    let texto = "";
+    
+    if (margemValor <= 0) {
+        texto += `<p><strong>Você tem motivo para estar muito preocupado com este prejuízo de ${margemPercentual.toFixed(2)}%. É preciso agir rápido!</strong></p>`;
+    } else if (margemPercentual < margemIdeal * 50) {
+        texto += `<p><strong>Você deve estar bem chateado com este resultado ${margemPercentual.toFixed(2)}%, longe dos ${(margemIdeal * 100).toFixed(2)}% que considera ideal!</strong></p>`;
+    } else if (margemPercentual >= margemIdeal * 50 && margemPercentual < margemIdeal * 80) {
+        texto += `<p><strong>Você deve estar insatisfeito com este resultado ${margemPercentual.toFixed(2)}% e quer melhorá-lo, já que o ideal teria sido ${(margemIdeal * 100).toFixed(2)}%!</strong></p>`;
+    } else if (margemPercentual >= margemIdeal * 80 && margemPercentual < margemIdeal) {
+        texto += `<p><strong>Você deve estar satisfeito com este resultado ${margemPercentual.toFixed(2)}%, mas gostaria de ter alcançado ${(margemIdeal * 100).toFixed(2)}%!</strong></p>`;
+    } else if (margemPercentual >= margemIdeal) {
+        texto += `<p><strong>Você tem motivo para estar muito satisfeito com este lucro de ${margemPercentual.toFixed(2)}%!</strong></p>`;
+    }
+    
+    texto += `<p><strong>Distância do objetivo:</strong> R$ ${distanciaObjetivo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>`;
+    
+    if (margemPotencial > margemPercentual) {
+        texto += `<p><strong>Potencial de melhoria:</strong> margem pode chegar a ${margemPotencial.toFixed(2)}% operando na capacidade máxima</p>`;
+    }
+    
+    const element = document.getElementById('summaryAnalysisIndustria');
+    if (element) {
+        element.innerHTML = texto;
+    }
+}
+
+function displayRecommendationsIndustria(margemContribuicao, margemContribuicaoTotal, custosFixos, pontoEquilibrio, capacidadeProducao, vendas, margemPercentual, margemIdeal) {
+    let texto = "";
+    
+    // Adicionar nome do usuário
+    const userName = '{{ user.name }}' || 'Usuário';
+    
+    if (margemContribuicao <= 0) {
+        texto += "<p><strong>Principalmente, devido aos custos variáveis (gastos com vendas e compra de mercadorias).</strong></p>";
+    } else if (margemContribuicaoTotal <= custosFixos) {
+        texto += "<p><strong>Principalmente, devido aos custos variáveis (gastos com vendas e compra de mercadorias).</strong></p>";
+    } else if (pontoEquilibrio >= capacidadeProducao) {
+        texto += "<p><strong>Como vimos, sua empresa precisa ser reestruturada.</strong></p>";
+    } else {
+        texto += "<p><strong>Duas causas principais: os custos fixos e/ou os preços praticados.</strong></p>";
+    }
+    
+    if (margemContribuicaoTotal > custosFixos && pontoEquilibrio >= capacidadeProducao) {
+        texto += "<p><strong>Recomendamos que leia: NEM TUDO QUE RELUZ É OURO, no e-book!</strong></p>";
+    }
+    
+    texto += "<p><strong>Sugerimos ler, no e-book: BOAS PRÁTICAS e CAMINHOS PARA O SUCESSO.</strong></p>";
+    
+    if (margemPercentual < margemIdeal * 95) {
+        texto += `<p><strong>${userName},</strong> as análises acima são úteis para identificar o que pode ser melhorado para construir um futuro que corresponda às suas expectativas.</p>`;
+    }
+    
+    texto += "<p>Tendo em vista a dinâmica da economia, as características de cada mês, a atividade da concorrência, e os efeitos sobre o comportamento do seu público-alvo, é importante considerar (alterações e estimativas) mirando nos próximos meses.</p>";
+    texto += "<p><strong>Sendo assim, recomendamos que você acesse o Simulador</strong></p>";
+    
+    const element = document.getElementById('recommendationsIndustria');
+    if (element) {
+        element.innerHTML = texto;
+    }
+}
+
+function displayMainResultServicos(mesAno, faturamento, tipoResultado, margemPercentual, valorResultado) {
+    console.log('displayMainResultServicos executando...');
+    
+    let texto = "";
+    
+    if (tipoResultado === "prejuízo") {
+        texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou R$ ${valorResultado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} mais do que faturou!`;
+    } else if (tipoResultado === "margem") {
+        texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou tudo que faturou!`;
+    } else {
+        texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou R$ ${valorResultado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} menos do que faturou!`;
+    }
+    
+    const alertClass = tipoResultado === "prejuízo" ? "alert-danger" : 
+                     tipoResultado === "margem" ? "alert-warning" : "alert-success";
+    
+    const mainElement = document.getElementById('mainResultServicos');
+    if (mainElement) {
+        mainElement.innerHTML = `<div class="alert ${alertClass}">${texto}</div>`;
+        console.log('HTML inserido no mainResultServicos');
+    } else {
+        console.error('Elemento mainResultServicos não encontrado!');
+    }
+}
+
+function displayCriticalStatusServicos(margemValor, vendas, capacidadeAtendimento) {
+    let status = "";
+    let alertClass = "";
+    
+    if (margemValor < 0) {
+        status = "ESTA É UMA SITUAÇÃO CRÍTICA!";
+        alertClass = "alert-danger";
+    } else if (margemValor === 0) {
+        status = "ATENÇÃO!";
+        alertClass = "alert-warning";
+    } else if (vendas > capacidadeAtendimento * 1.05) {
+        status = "ATENÇÃO!";
+        alertClass = "alert-warning";
+    }
+    
+    if (status) {
+        const element = document.getElementById('criticalStatusServicos');
+        if (element) {
+            element.innerHTML = `<div class="alert ${alertClass}"><strong>${status}</strong></div>`;
+        }
+    }
+}
+
+function displaySalesCapacityAnalysisServicos(margemValor, margemPercentual, margemIdeal, vendas, capacidadeAtendimento) {
+    let texto = "";
+    
+    if (margemValor < 0) {
+        if (vendas > capacidadeAtendimento * 1.05) {
+            texto = "Este resultado negativo aconteceu mesmo com as vendas superando a capacidade de atendimento.";
+        } else if (vendas >= capacidadeAtendimento * 0.95 && vendas <= capacidadeAtendimento * 1.05) {
+            texto = "Este resultado negativo aconteceu mesmo com as vendas nos limites da capacidade de atendimento.";
+        } else {
+            texto = "Este resultado negativo aconteceu com as vendas abaixo da capacidade de atendimento.";
+        }
+    } else if (margemValor === 0) {
+        if (vendas > capacidadeAtendimento * 1.05) {
+            texto = "Mesmo com as vendas superando a capacidade de atendimento, o resultado do mês ficou em zero: nem lucro, nem prejuízo.";
+        } else if (vendas >= capacidadeAtendimento * 0.95 && vendas <= capacidadeAtendimento * 1.05) {
+            texto = "Mesmo vendendo nos limites da capacidade de atendimento, o resultado do mês ficou em zero: nem lucro, nem prejuízo.";
+        } else {
+            texto = "Com vendas abaixo da capacidade de atendimento, o resultado do mês ficou em zero: nem lucro, nem prejuízo.";
+        }
+    } else if (margemPercentual < margemIdeal * 95) {
+        if (vendas > capacidadeAtendimento * 1.05) {
+            texto = "O lucro foi menor do que você gostaria, mesmo com vendas maiores do que a capacidade de atendimento.";
+        } else if (vendas >= capacidadeAtendimento * 0.95 && vendas <= capacidadeAtendimento * 1.05) {
+            texto = "Mesmo vendendo nos limites da capacidade de atendimento, o lucro foi menor do que você gostaria.";
+        } else {
+            texto = "Este resultado não corresponde à sua expectativa de lucro, e as vendas foram menores do que a capacidade de atendimento.";
+        }
+    } else if (margemPercentual >= margemIdeal * 95) {
+        if (vendas > capacidadeAtendimento * 1.05) {
+            texto = "Este lucro corresponde às suas expectativas, mas foi alcançado com vendas maiores do que a capacidade de atendimento.";
+        } else if (vendas >= capacidadeAtendimento * 0.95 && vendas <= capacidadeAtendimento * 1.05) {
+            texto = "Este lucro corresponde à sua expectativa e foi alcançado com vendas que ficaram nos limites da capacidade de atendimento.";
+        } else {
+            texto = "Este lucro corresponde à sua expectativa, mesmo com vendas menores do que a capacidade de atendimento.";
+        }
+    }
+    
+    if (texto) {
+        const element = document.getElementById('salesCapacityAnalysisServicos');
+        if (element) {
+            element.innerHTML = `<p>${texto}</p>`;
+        }
+    }
+}
+
+function displayTicketMarginAnalysisServicos(ticketMedio, margemContribuicao, margemContribuicaoTotal, custosFixos) {
+    let texto = "";
+    
+    texto += `<p><strong>Ticket médio:</strong> R$ ${ticketMedio.toLocaleString('pt-BR', {minimumFractionDigits: 2})} - Faturamento médio por venda</p>`;
+    texto += `<p><strong>Margem de contribuição:</strong> R$ ${margemContribuicao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>`;
+    
+    if (margemContribuicao <= 0) {
+        texto += "<p><strong>Aqui temos uma explicação para o prejuízo!</strong></p>";
+        texto += "<p>Margem de contribuição menor ou igual a zero significa que quanto mais vende, mais perde.</p>";
+    } else if (margemContribuicaoTotal <= custosFixos) {
+        texto += "<p><strong>Aqui temos uma explicação para o prejuízo!</strong></p>";
+        texto += `<p>Se a margem de contribuição multiplicada pelas vendas (R$ ${margemContribuicaoTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}) não supera os custos fixos (R$ ${custosFixos.toLocaleString('pt-BR', {minimumFractionDigits: 2})}), o Negócio, na melhor das hipóteses, está numa situação frágil, sem folga para enfrentar imprevistos ou crescer.</p>`;
+    }
+    
+    const element = document.getElementById('ticketMarginAnalysisServicos');
+    if (element) {
+        element.innerHTML = texto;
+    }
+}
+
+function displayBreakEvenAnalysisServicos(pontoEquilibrio, vendas, margemContribuicao, custosFixos, capacidadeAtendimento) {
+    let texto = "";
+    
+    if (pontoEquilibrio) {
+        texto += `<p><strong>Ponto de equilíbrio:</strong> ${pontoEquilibrio} vendas</p>`;
+        
+        if (margemContribuicao * vendas > custosFixos && pontoEquilibrio >= capacidadeAtendimento) {
+            texto += "<p><strong>ALERTA MÁXIMO!</strong></p>";
+            texto += "<p>Para alcançar margem zero teria sido preciso vender mais (ou o equivalente) à capacidade de atendimento, ou seja: sua empresa está mal estruturada (custos elevados, preços mal calculados e/ou capacidade de atendimento insuficiente)!</p>";
+        } else if (pontoEquilibrio > 0 && pontoEquilibrio < capacidadeAtendimento) {
+            texto += "<p>Isso significa que se as vendas tivessem sido iguais à capacidade de atendimento, o lucro teria sido maior.</p>";
+        }
+    } else {
+        texto += "<p><strong>Ponto de equilíbrio:</strong> não alcançado</p>";
+    }
+    
+    const element = document.getElementById('breakEvenAnalysisServicos');
+    if (element) {
+        element.innerHTML = texto;
+    }
+}
+
+function displayCapacityAnalysisServicos(margemPotencial, margemPercentual, faturamentoPotencial, capacidadeAtendimento, vendas) {
+    let texto = "";
+    
+    if (margemPotencial > margemPercentual) {
+        texto += `<p>Isso significa que se as vendas tivessem sido iguais à capacidade de atendimento (${capacidadeAtendimento}), o lucro de ${margemPercentual.toFixed(2)}% teria sido de ${margemPotencial.toFixed(2)}%.</p>`;
+    }
+    
+    if (vendas < capacidadeAtendimento * 0.95) {
+        texto += "<p><strong>Por que não vendeu mais:</strong></p>";
+        texto += "<ul>";
+        texto += "<li>1) Mercado não comporta? Então aumente o valor do ticket médio e/ou reduza custos fixos;</li>";
+        texto += "<li>2) Concorrência? Crie diferenciais e corrija seus pontos fracos;</li>";
+        texto += "<li>3) Mês fraco? Crie incentivos.</li>";
+        texto += "</ul>";
+    } else if (vendas > capacidadeAtendimento * 1.05) {
+        texto += "<p>Vendas acima da capacidade de atendimento, se rotineiras, podem prejudicar a qualidade e/ou lucratividade dos produtos, gerar stress com os clientes, nos funcionários e em você, à menos que tenham sido viabilizadas por estoques de mês(es) anterior(es)!</p>";
+    }
+    
+    const element = document.getElementById('capacityAnalysisServicos');
+    if (element) {
+        element.innerHTML = texto;
+    }
+}
+
+function displaySummaryAnalysisServicos(margemValor, margemPercentual, margemIdeal, distanciaObjetivo, margemPotencial) {
+    let texto = "";
+    
+    if (margemValor <= 0) {
+        texto += `<p><strong>Você tem motivo para estar muito preocupado com este prejuízo de ${margemPercentual.toFixed(2)}%. É preciso agir rápido!</strong></p>`;
+    } else if (margemPercentual < margemIdeal * 50) {
+        texto += `<p><strong>Você deve estar bem chateado com este resultado ${margemPercentual.toFixed(2)}%, longe dos ${(margemIdeal * 100).toFixed(2)}% que considera ideal!</strong></p>`;
+    } else if (margemPercentual >= margemIdeal * 50 && margemPercentual < margemIdeal * 80) {
+        texto += `<p><strong>Você deve estar insatisfeito com este resultado ${margemPercentual.toFixed(2)}% e quer melhorá-lo, já que o ideal teria sido ${(margemIdeal * 100).toFixed(2)}%!</strong></p>`;
+    } else if (margemPercentual >= margemIdeal * 80 && margemPercentual < margemIdeal) {
+        texto += `<p><strong>Você deve estar satisfeito com este resultado ${margemPercentual.toFixed(2)}%, mas gostaria de ter alcançado ${(margemIdeal * 100).toFixed(2)}%!</strong></p>`;
+    } else if (margemPercentual >= margemIdeal) {
+        texto += `<p><strong>Você tem motivo para estar muito satisfeito com este lucro de ${margemPercentual.toFixed(2)}%!</strong></p>`;
+    }
+    
+    texto += `<p><strong>Distância do objetivo:</strong> R$ ${distanciaObjetivo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>`;
+    
+    if (margemPotencial > margemPercentual) {
+        texto += `<p><strong>Potencial de melhoria:</strong> margem pode chegar a ${margemPotencial.toFixed(2)}% operando na capacidade máxima</p>`;
+    }
+    
+    const element = document.getElementById('summaryAnalysisServicos');
+    if (element) {
+        element.innerHTML = texto;
+    }
+}
+
+function displayRecommendationsServicos(margemContribuicao, margemContribuicaoTotal, custosFixos, pontoEquilibrio, capacidadeAtendimento, vendas, margemPercentual, margemIdeal) {
+    let texto = "";
+    
+    // Adicionar nome do usuário
+    const userName = '{{ user.name }}' || 'Usuário';
+    
+    if (margemContribuicao <= 0) {
+        texto += "<p><strong>Principalmente, devido aos custos variáveis (gastos com vendas e compra de mercadorias).</strong></p>";
+    } else if (margemContribuicaoTotal <= custosFixos) {
+        texto += "<p><strong>Principalmente, devido aos custos variáveis (gastos com vendas e compra de mercadorias).</strong></p>";
+    } else if (pontoEquilibrio >= capacidadeAtendimento) {
+        texto += "<p><strong>Como vimos, sua empresa precisa ser reestruturada.</strong></p>";
+    } else {
+        texto += "<p><strong>Duas causas principais: os custos fixos e/ou os preços praticados.</strong></p>";
+    }
+    
+    if (margemContribuicaoTotal > custosFixos && pontoEquilibrio >= capacidadeAtendimento) {
+        texto += "<p><strong>Recomendamos que leia: NEM TUDO QUE RELUZ É OURO, no e-book!</strong></p>";
+    }
+    
+    texto += "<p><strong>Sugerimos ler, no e-book: BOAS PRÁTICAS e CAMINHOS PARA O SUCESSO.</strong></p>";
+    
+    if (margemPercentual < margemIdeal * 95) {
+        texto += `<p><strong>${userName},</strong> as análises acima referem-se a um período já encerrado. Elas são úteis para identificar o que pode ser melhorado para construir um futuro que corresponda às suas expectativas.</p>`;
+    }
+    
+    texto += "<p>Tendo em vista a dinâmica da economia, as características de cada mês, a atividade da concorrência, e os efeitos sobre o comportamento do seu público-alvo, é importante considerar (alterações e estimativas) nos próximos meses.</p>";
+    texto += "<p><strong>Sendo assim, recomendamos que você acesse o Simulador</strong></p>";
+    
+    const element = document.getElementById('recommendationsServicos');
     if (element) {
         element.innerHTML = texto;
     }
