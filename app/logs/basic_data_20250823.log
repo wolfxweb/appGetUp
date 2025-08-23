@@ -72,3 +72,15 @@
 2025-08-23 16:12:12,506 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=2800.0, other_fixed_costs=580.0
 2025-08-23 16:12:12,507 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1500.0, sales_expenses=350.0, input_product_expenses=100.0
 2025-08-23 16:12:12,507 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=280.0, other_fixed_costs=58.0
+2025-08-23 16:29:47,341 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-08-23 16:29:47,342 - app.routes.basic_data - INFO - Registro ID 21: month=7, year=2025, clients_served=150
+2025-08-23 16:29:47,343 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=15000.0, sales_expenses=3500.0, input_product_expenses=1000.0
+2025-08-23 16:29:47,343 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=2800.0, other_fixed_costs=580.0
+2025-08-23 16:29:47,343 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1500.0, sales_expenses=350.0, input_product_expenses=100.0
+2025-08-23 16:29:47,343 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=280.0, other_fixed_costs=58.0
+2025-08-23 16:29:54,903 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-08-23 16:29:54,903 - app.routes.basic_data - INFO - Registro ID 21: month=7, year=2025, clients_served=150
+2025-08-23 16:29:54,903 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=15000.0, sales_expenses=3500.0, input_product_expenses=1000.0
+2025-08-23 16:29:54,904 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=2800.0, other_fixed_costs=580.0
+2025-08-23 16:29:54,904 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1500.0, sales_expenses=350.0, input_product_expenses=100.0
+2025-08-23 16:29:54,904 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=280.0, other_fixed_costs=58.0
