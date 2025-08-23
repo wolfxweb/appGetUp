@@ -112,10 +112,7 @@ async def get_basic_data(
                 "sales_revenue": safe_float(basic_data.sales_revenue),
                 "sales_expenses": safe_float(basic_data.sales_expenses),
                 "fixed_costs": safe_float(basic_data.fixed_costs),
-                "operational_expenses": safe_float(
-                    basic_data.operational_expenses if hasattr(basic_data, 'operational_expenses') 
-                    else getattr(basic_data, 'input_product_expenses', None)
-                ),
+                "input_product_expenses": safe_float(basic_data.input_product_expenses),
                 "financial_expenses": safe_float(
                     getattr(basic_data, 'financial_expenses', None)
                 ),

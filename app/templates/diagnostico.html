@@ -30,6 +30,53 @@
     .form-control, .form-select {
         background-color: #F5F5F5 !important;
     }
+    .diagnostic-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        border: 1px solid #dee2e6;
+    }
+    .alert-critical {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        font-weight: bold;
+    }
+    .alert-attention {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        font-weight: bold;
+    }
+    .metrics-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin: 20px 0;
+    }
+    .metric-item {
+        background-color: #f8f9fa;
+        padding: 10px 15px;
+        border-radius: 5px;
+        border-left: 4px solid #6c757d;
+        flex: 1;
+        min-width: 200px;
+    }
+    .metric-label {
+        font-weight: bold;
+        color: #495057;
+    }
+    .metric-value {
+        font-size: 1.1em;
+        margin-top: 5px;
+    }
 </style>
 {% endblock %}
 
@@ -52,7 +99,6 @@
             Dados Básicos
           </a>
         </div>
-
         <div class="col-12 col-md-2 mb-2 mb-md-0">
           <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
             Simulador
@@ -64,1038 +110,407 @@
           </button>
         </div>
       </div>
-      <!-- Card principal Diagnóstico -->
+      
+      <!-- Card com seleção de período -->
       <div class="card shadow mb-4" style="background-color: #F0F0F0;">
-        <div class="card-header d-flex justify-content-between align-items-center bg-secondary text-white">
+        <div class="card-header bg-secondary text-white">
           <h4 class="card-title mb-0">Diagnóstico</h4>
         </div>
         <div class="card-body">
-          <!-- Descrição do diagnóstico -->
-          <div class="mb-4">
-            <p>Esta tela permite que o gestor ou empreendedor:</p>
-            <ul>
-              <li>Tenha uma visão holística da saúde financeira do negócio</li>
-              <li>Identifique rapidamente se está operando com lucro ou prejuízo</li>
-              <li>Entenda quais custos estão impactando mais o resultado</li>
-              <li>Monitore se está utilizando sua capacidade de forma eficiente</li>
-              <li>Tome decisões baseadas em métricas financeiras importantes</li>
-              <li>Compare desempenho entre diferentes períodos</li>
-            </ul>
-            <p>A organização em cards com informações relacionadas e a disponibilidade de modais explicativos (ícones de engrenagem) para cada métrica demonstra uma preocupação em tornar dados financeiros complexos mais acessíveis e compreensíveis para o usuário.</p>
-          </div>
-
-          <!-- Dados Básicos -->
-          <div class="card mb-4 shadow" style="background-color: #F0F0F0;">
-            <div class="card-header bg-secondary text-white">
-              <h5 class="card-title mb-0">Dados Básicos</h5>
-            </div>
-            <div class="card-body p-4">
-    <!-- Select Box -->
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="form-group">
-                                                        <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="basicDataSelect" class="form-label">Selecione o Período dos dados básicos que deseja visualizar</label>
                 <select class="form-select" id="basicDataSelect">
+                    <option value="">Selecione um período...</option>
                     {% for data in basic_data_list %}
                     <option value="{{ data.id }}" {% if data.is_current %}selected{% endif %}>
                         {{ data.month }}/{{ data.year }}
                     </option>
                     {% endfor %}
                 </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+            
+      <!-- Conteúdo do diagnóstico (inicialmente oculto) -->
+      <div id="diagnosticContent" style="display: none;">
+        <!-- Verificar se o usuário é de comércio varejista ou atacadista -->
+        {% if user.activity_type in ['Comércio varejista', 'Comércio atacadista', 'Comércio Varejista', 'Comércio Atacadista'] %}
+        <div class="alert alert-info mb-4">
+            <strong>Informações para os cálculos:</strong> todas as informações necessárias estão nos dados básicos.
+        </div>
+        
+        <!-- Resultado Principal -->
+        <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Resultado do Período</h5>
+            </div>
+            <div class="card-body">
+                <div id="mainResult" class="mb-3"></div>
+                <div id="criticalStatus" class="mb-3"></div>
+                <div id="salesCapacityAnalysis" class="mb-3"></div>
             </div>
         </div>
-    </div>
-
-                        <!-- Dados Básicos em formato de texto -->
-                        <div class="row">
-                            {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
-                                <div class="col-md-6 mb-3">
-                                    <p><strong>Quantidade de Clientes Atendidos:</strong> <span id="clientsServed">-</span></p>
-                                    <p><strong>Capacidade de Atendimento:</strong> <span id="capacidadeAtendimento">-</span></p>
-                                    <p><strong>Faturamento:</strong> <span id="salesRevenue">-</span></p>
-                                
-                                    <p><strong>Custos Fixos:</strong> <span id="fixedCosts">-</span></p>
-                            
-                </div>
-                                                <div class="col-md-6 mb-3">
-                                                    <p><strong>Despesas de Vendas:</strong> <span id="salesExpenses">-</span></p>
-                                                    <p><strong>Gastos com Insumos e Produtos:</strong> <span id="operationalExpenses">-</span></p>
-                                                    <p><strong>Margem de Lucro Ideal:</strong> <span id="margemIdeial">-</span></p>
-                                                
+        
+        <!-- Análises Detalhadas -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100 shadow" style="background-color: #F0F0F0;">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Margem de Contribuição</h5>
                     </div>
-                                            {% endif %}
-                            
-                            {% if user.activity_type == 'Prestação de serviços' %}
-                                <div class="col-md-6 mb-3">
-                                    <p><strong>Quantidade de Clientes Atendidos:</strong> <span id="clientsServed">-</span></p>
-                                    <p><strong>Faturamento:</strong> <span id="salesRevenue">-</span></p>
-                                    <p><strong>Gastos com Vendas:</strong> <span id="salesExpenses">-</span></p>
-                                    <p><strong>Gastos com Insumos e Produtos de Terceiros:</strong> <span id="operationalExpenses">-</span></p>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <p><strong>Pró-labore:</strong> <span id="proLabore">-</span></p>
-                                    <p><strong>Demais Custos Fixos:</strong> <span id="otherFixedCosts">-</span></p>
-                                    <p><strong>Margem que Considera Ideal:</strong> <span id="margemIdeial">-</span></p>
-                                    <p><strong>Horas de Trabalho em uma Semana:</strong> <span id="weeklyHours">-</span></p>
-                </div>
-                            {% endif %}
-            </div>
-        </div>
-    </div>
-
-    <!-- Gráficos e Métricas -->
-                <div class="row mb-4">
-                    <!-- Custos e Faturamento -->
-                    <div class="col-md-4">
-            <div class="card h-100 shadow" style="background-color: #F0F0F0;">
-                            <div class="card-header bg-secondary text-white">
-                    <h5 class="card-title mb-0">Custos e Faturamento</h5>
-                </div>
-                <div class="card-body">
-                                <div style="height: 400px;">
-                    <canvas id="costsChart"></canvas>
-                                </div>
+                    <div class="card-body">
+                        <div id="contributionMarginAnalysis"></div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-                    <!-- Métricas Financeiras -->
-                    <div class="col-md-4">
-            <div class="card h-100 shadow" style="background-color: #F0F0F0;">
-                            <div class="card-header bg-secondary text-white">
-                    <h5 class="card-title mb-0">Métricas Financeiras</h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label class="form-label">
-                                        Margem                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemModal" style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                                        <input type="text" class="form-control" id="lucro_reais" readonly>
-                                        <input type="text" class="form-control" id="lucro_percentual" readonly>
-                        </div>
+            <div class="col-md-6">
+                <div class="card h-100 shadow" style="background-color: #F0F0F0;">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Ponto de Equilíbrio</h5>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">
-                            Ticket Médio
-                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#ticketMedioModal" style="cursor: pointer;"></i>
-                        </label>
-                        <input type="text" class="form-control" id="ticketMedio" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">
-                            Margem de Contribuição
-                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#margemContribuicaoModal" style="cursor: pointer;"></i>
-                        </label>
-                        <input type="text" class="form-control" id="margemContribuicao" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">
-                            Produtividade
-                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#produtividadeModal" style="cursor: pointer;"></i>
-                        </label>
-                        <input type="text" class="form-control" id="produtividade" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">
-                            Ponto de Equilíbrio
-                            <i class="bi bi-gear-fill ms-2" data-bs-toggle="modal" data-bs-target="#pontoEquilibrioModal" style="cursor: pointer;"></i>
-                        </label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="pontoEquilibrio" readonly>
-                                        <input type="text" class="form-control" id="pontoEquilibrioPercentual" readonly>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Distribuição de Despesas -->
-                    <div class="col-md-4">
-                        <div class="card h-100 shadow" style="background-color: #F0F0F0;">
-                            <div class="card-header bg-secondary text-white">
-                                <h5 class="card-title mb-0">Distribuição de Despesas</h5>
-                            </div>
-                            <div class="card-body">
-                                {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
-                                <div style="height: 400px;">
-                                    <canvas id="expensesPieChart"></canvas>
-                                </div>
-                                {% endif %}
-                                {% if user.activity_type == 'Prestação de serviços' %}
-                                <div style="height: 400px;">
-                                    <canvas id="expensesPieChart"></canvas>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Análise do Cálculo -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card h-100 shadow" style="background-color: #F0F0F0;">
-                            <div class="card-header bg-secondary text-white">
-                                <h5 class="card-title mb-0">Análise do Cálculo</h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="mb-3">
-                                            <div id="analiseCalculo" class="p-3 bg-light rounded" style="white-space: pre-wrap;"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card-body">
+                        <div id="breakEvenAnalysis"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Modais de Ajuste -->
-<!-- Modal Margem -->
-<div class="modal fade" id="margemModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Ajuste de Margem</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        
+        <!-- Resumo e Recomendações -->
+        <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="mb-0">Resumo e Próximos Passos</h5>
             </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Fórmula</label>
-                    <input type="text" class="form-control" value="(Receita - Custos) / Receita" readonly>
-                </div>
+            <div class="card-body">
+                <div id="summaryAnalysis"></div>
             </div>
         </div>
-    </div>
-</div>
-
-<!-- Modal Ticket Médio -->
-<div class="modal fade" id="ticketMedioModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Ajuste de Ticket Médio</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Fórmula</label>
-                    <input type="text" class="form-control" value="Receita / Clientes Atendidos" readonly>
-                </div>
-            </div>
+        {% else %}
+        <div class="alert alert-warning">
+            <strong>Diagnóstico não disponível:</strong> Esta funcionalidade está disponível apenas para empresas de Comércio Varejista e Comércio Atacadista.
         </div>
-    </div>
-</div>
-
-<!-- Modal Margem de Contribuição -->
-<div class="modal fade" id="margemContribuicaoModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Ajuste de Margem de Contribuição</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Fórmula</label>
-                    <input type="text" class="form-control" value="(Receita - Custos Variáveis) / Receita" readonly>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Produtividade -->
-<div class="modal fade" id="produtividadeModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Ajuste de Produtividade</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Fórmula</label>
-                    <input type="text" class="form-control" value="Receita / Custos" readonly>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Ponto de Equilíbrio -->
-<div class="modal fade" id="pontoEquilibrioModal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Ajuste de Ponto de Equilíbrio</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label class="form-label">Fórmula</label>
-                    <input type="text" class="form-control" value="Custos Fixos / (1 - Custos Variáveis/Receita)" readonly>
-                </div>
-            </div>
-        </div>
-    </div>
+        {% endif %}
+      </div>
+  </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+console.log('=== SCRIPT CARREGADO ===');
+console.log('Teste básico de JavaScript funcionando!');
 
 document.addEventListener('DOMContentLoaded', function() {
- 
-    {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
-    typeActivity()
-    {% endif %} 
-    {% if user.activity_type == 'Prestação de serviços' %}
-    typeActivityService()
-    {% endif %}  
-});
-  // Função para formatar valores monetários (apenas para exibição)
-function formatMoney(value) {
-    return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-    }).format(value);
-}
-
-// Função para obter valor numérico (para cálculos)
-function getNumericValue(value) {
-    return parseFloat(value) || 0;
-}
-function typeActivityService() {
-    console.log("Iniciando typeActivityService");
+    console.log('=== INÍCIO DO SCRIPT DIAGNÓSTICO ===');
     
-    // Inicializar o gráfico de barras
-    const ctx = document.getElementById('costsChart').getContext('2d');
-    window.costsChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Custos', 'Faturamento'],
-            datasets: [{
-                data: [0, 0],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.5)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return 'R$ ' + context.raw.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return 'R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    // Inicializar o gráfico de pizza de despesas para serviços
-    console.log("Tentando inicializar o gráfico de pizza");
-    const pieCtx = document.getElementById('expensesPieChart');
-    if (!pieCtx) {
-        console.error("Elemento expensesPieChart não encontrado!");
-        return;
-    }
-    window.expensesPieChart = new Chart(pieCtx.getContext('2d'), {
-        type: 'pie',
-        data: {
-            labels: ['Despesas de Vendas', 'Pró-labore', 'Demais Custos Fixos'],
-            datasets: [{
-                data: [0, 0, 0],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.7)',
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(255, 206, 86, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.raw || 0;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-                            return `${label}: R$ ${value.toLocaleString('pt-BR', {minimumFractionDigits: 2})} (${percentage}%)`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    // Listener para o evento change
-    document.getElementById('basicDataSelect').addEventListener('change', function() {
-        const basicDataId = this.value;
-        console.log("ID selecionado:", basicDataId);
+    const basicDataSelect = document.getElementById('basicDataSelect');
+    const diagnosticContent = document.getElementById('diagnosticContent');
+    
+    console.log('Elementos encontrados:');
+    console.log('- basicDataSelect:', basicDataSelect);
+    console.log('- diagnosticContent:', diagnosticContent);
+    
+    if (basicDataSelect) {
+        console.log('Adicionando event listener ao basicDataSelect...');
         
-        fetch(`/diagnostico/api/basic-data/${basicDataId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Dados não encontrados');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Dados recebidos do servidor:", data);
-                console.log("Tipo de dados:", typeof data);
-                console.log("Estrutura dos dados:", Object.keys(data));
+        basicDataSelect.addEventListener('change', function() {
+            console.log('=== EVENTO CHANGE DISPARADO ===');
+            console.log('Valor selecionado:', this.value);
+            console.log('Opção selecionada:', this.options[this.selectedIndex].text);
+            
+            if (this.value) {
+                console.log('Valor válido selecionado, mostrando conteúdo...');
+                diagnosticContent.style.display = 'block';
+                console.log('diagnosticContent display:', diagnosticContent.style.display);
+                console.log('diagnosticContent offsetHeight:', diagnosticContent.offsetHeight);
+                console.log('diagnosticContent offsetWidth:', diagnosticContent.offsetWidth);
+                console.log('diagnosticContent getBoundingClientRect:', diagnosticContent.getBoundingClientRect());
                 
-                // Atualizar campos da coluna esquerda
-                document.getElementById('clientsServed').textContent = data.clients_served || '-';
-                document.getElementById('salesRevenue').textContent = formatMoney(data.sales_revenue);
-                document.getElementById('salesExpenses').textContent = formatMoney(data.sales_expenses);
-                document.getElementById('operationalExpenses').textContent = formatMoney(data.operational_expenses);
-
-                // Atualizar campos da coluna direita
-                document.getElementById('proLabore').textContent = formatMoney(data.pro_labore);
-                document.getElementById('otherFixedCosts').textContent = formatMoney(data.other_fixed_costs);
-                document.getElementById('weeklyHours').textContent = `${data.weekly_hours || '-'}h`;
-                
-                // Atualizar margem ideal
-                const idealMargin = data.ideal_service_profit_margin !== null && data.ideal_service_profit_margin !== undefined ? 
-                    data.ideal_service_profit_margin : 0;
-                document.getElementById('margemIdeial').textContent = `${idealMargin.toFixed(2)}%`;
-
-                // Armazenar dados brutos para cálculos
-                window.rawData = {
-                    salesRevenue: getNumericValue(data.sales_revenue),
-                    salesExpenses: getNumericValue(data.sales_expenses),
-                    operationalExpenses: getNumericValue(data.operational_expenses),
-                    proLabore: getNumericValue(data.pro_labore),
-                    weeklyHours: getNumericValue(data.weekly_hours),
-                    clientsServed: data.clients_served,
-                    otherFixedCosts: getNumericValue(data.other_fixed_costs),
-                    ideal_service_profit_margin: getNumericValue(data.ideal_service_profit_margin)
-                };
-                
-                // Atualizar o gráfico e os indicadores
-                updateChart();
-            })
-            .catch(error => {
-                console.error('Erro ao carregar dados:', error);
-                alert('Erro ao carregar os dados. Por favor, tente novamente.');
-            });
-    });
-
-    // Disparar o evento change automaticamente quando a página carregar
-    const selectElement = document.getElementById('basicDataSelect');
-    if (selectElement && selectElement.value) {
-        selectElement.dispatchEvent(new Event('change'));
+                loadDiagnosticData(this.value);
+            } else {
+                console.log('Nenhum valor selecionado, escondendo conteúdo...');
+                diagnosticContent.style.display = 'none';
+            }
+        });
+        
+        // Testar se o evento está funcionando
+        console.log('Testando se o select tem opções...');
+        console.log('Número de opções:', basicDataSelect.options.length);
+        for (let i = 0; i < basicDataSelect.options.length; i++) {
+            console.log(`Opção ${i}:`, basicDataSelect.options[i].value, basicDataSelect.options[i].text);
+        }
+        
+        // Carregar dados se já houver um período selecionado
+        if (basicDataSelect.value) {
+            console.log('Carregamento automático - valor:', basicDataSelect.value);
+            diagnosticContent.style.display = 'block';
+            loadDiagnosticData(basicDataSelect.value);
+        }
     } else {
-        console.warn('Select não encontrado ou sem valor para carregar dados iniciais');
+        console.error('ERRO: Elemento basicDataSelect não encontrado!');
     }
+    
+    console.log('=== FIM DO SCRIPT DIAGNÓSTICO ===');
+});
 
-    // Função para atualizar o gráfico de pizza de despesas
-    function updateExpensesPieChart(salesExpenses, proLabore, otherFixedCosts) {
-        // Atualizar dados do gráfico de pizza
-        window.expensesPieChart.data.datasets[0].data = [
-            salesExpenses,
-            proLabore,
-            otherFixedCosts
-        ];
-        window.expensesPieChart.update();
-    }
-
-    // Função para atualizar o gráfico com os valores da tabela
-    function updateChart() {
-        const {
-            salesRevenue,
-            salesExpenses,
-            operationalExpenses,
-            proLabore,
-            otherFixedCosts,
-            ideal_service_profit_margin
-        } = window.rawData;
-
-        // Calcular o total de custos (para serviços: despesas de vendas + outros custos fixos + gastos operacionais + pró-labore)
-        const totalCosts = salesExpenses + otherFixedCosts + operationalExpenses + proLabore;
-
-        // Atualizar o gráfico de barras
-        window.costsChart.data.datasets[0].data = [totalCosts, salesRevenue];
-        window.costsChart.update();
+async function loadDiagnosticData(basicDataId) {
+    console.log('=== INÍCIO loadDiagnosticData ===');
+    console.log('ID recebido:', basicDataId);
+    
+    try {
+        const url = `/diagnostico/api/basic-data/${basicDataId}`;
+        console.log('Fazendo requisição para:', url);
         
-        // Atualizar o gráfico de pizza
-        updateExpensesPieChart(salesExpenses, proLabore, otherFixedCosts);
+        const response = await fetch(url);
+        console.log('Response status:', response.status);
+        console.log('Response ok:', response.ok);
         
-        // Atualizar os indicadores
-        updateIndicators();
-    }
-
-    // Função para atualizar os indicadores para serviços
-    function updateIndicators() {
-        const {
-            salesRevenue,
-            salesExpenses,
-            operationalExpenses,
-            proLabore,
-            otherFixedCosts,
-            weeklyHours,
-            clientsServed,
-            ideal_service_profit_margin
-        } = window.rawData;
-
-        // Calcular Lucro em Reais (Receita - (Despesas de Vendas + Demais Custos Fixos + Gastos Operacionais + Pró-labore))
-        const lucroReais = salesRevenue - (salesExpenses + otherFixedCosts + operationalExpenses + proLabore);
-        
-        // Calcular Lucro Percentual
-        const lucroPercentual = salesRevenue > 0 ? (lucroReais / salesRevenue) * 100 : 0;
-        
-        // Calcular Ticket Médio (Receita / Clientes Atendidos)
-        const ticketMedio = clientsServed > 0 ? salesRevenue / clientsServed : 0;
-        
-        // Calcular Margem de Contribuição por cliente ((Receita - Despesas Variáveis) / Clientes)
-        const margemContribuicao = clientsServed > 0 ? 
-            (salesRevenue - salesExpenses) / clientsServed : 0;
-        
-        // Calcular Produtividade (Receita / (Pró-labore + Demais Custos Fixos))
-        const produtividade = (proLabore + otherFixedCosts) > 0 ? salesRevenue / (proLabore + otherFixedCosts) : 0;
-        
-        // Calcular Ponto de Equilíbrio
-        const pontoEquilibrio = margemContribuicao > 0 ? (otherFixedCosts + proLabore) / margemContribuicao : 0;
-        
-        // Calcular Ponto de Equilíbrio Percentual (quantidade de clientes necessários / quantidade atual de clientes)
-        const pontoEquilibrioPercentual = clientsServed > 0 ? (pontoEquilibrio / clientsServed) * 100 : 0;
-
-        const variavel = "Uma vez que estas considerações se referem a mês anterior, recomendamos que em \"Definição de Prioridades\" você estime as variações para o corrente mês, antecipando-se assim a eventuais providências relevantes. ";
-        
-        // Calcular análise de margem
-        let analiseMargem = '';
-        if (lucroPercentual === '') {
-            analiseMargem = '';
-        } else if (lucroPercentual < 0) {
-            analiseMargem = 'É preciso identificar as causas para corrigir: 1) Verifique os preços que está praticando; 2) Demanda fraca? Reduza custos fixos (inclusive Pró-labore); 3) Concorrência? Crie diferenciais que agradem a clientela; 4) Mês fraco? Crie incentivos e divulgue!';
-        } else if (lucroPercentual > 0 && lucroPercentual < ideal_service_profit_margin * 0.6) {
-            analiseMargem = 'Use a Calculadora de preços para analisar os valores que está cobrando por tipo de serviço!';
-        } else if (lucroPercentual >= ideal_service_profit_margin * 0.6 && lucroPercentual < ideal_service_profit_margin * 0.9) {
-            analiseMargem = 'Se os seus preços e ofertas de serviços são competitivos, considere a conveniencia de divulgá-los melhor!';
-        } else if (lucroPercentual >= ideal_service_profit_margin * 0.9 && lucroPercentual < ideal_service_profit_margin * 1.05) {
-            analiseMargem = 'Mas, pense que sempre é possível melhorar. Veja se dá para melhorar a produtividade!';
-        } else if (lucroPercentual >= ideal_service_profit_margin * 1.05) {
-            analiseMargem = 'Mas você sabe que não dá para baixar a guarda!';
-        } else if (lucroPercentual === 0) {
-            analiseMargem = 'É como se estivesse em uma bicicleta, sem pedalar nem apoiar os pés no chão!';
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
-
-        // Calcular análise de margem detalhada
-        let analiseMargemDetalhada = '';
         
-        // Verificar se MARGEM IDEAL está vazia
-        if (ideal_service_profit_margin === '') {
-            analiseMargemDetalhada = '';
-        } 
-        // Verificar se FATURAMENTO está vazio
-        else if (salesRevenue === '') {
-            analiseMargemDetalhada = '';
-        }
-        // Verificar se MARGEM >= 0 e MARGEM < MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO > 0 e MARG.CONTRIBUIÇÃO/TICKET MÉDIO < 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS > 50%
-        else if (lucroPercentual >= 0 && lucroPercentual < ideal_service_profit_margin * 0.9 && 
-                 margemContribuicao > 0 && (margemContribuicao / ticketMedio) < 0.2 && 
-                 (pontoEquilibrio / clientsServed) > 0.5) {
-            analiseMargemDetalhada = 'Diminua a participação dos seus gastos com vendas, e melhore a produtividade. Você está calculando corretamente os preços dos serviços?';
-        }
-        // Verificar se MARGEM >= 0 e MARGEM < MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO > 0 e MARG.CONTRIBUIÇÃO/TICKET MÉDIO < 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS < 50%
-        else if (lucroPercentual >= 0 && lucroPercentual < ideal_service_profit_margin * 0.9 && 
-                 margemContribuicao > 0 && (margemContribuicao / ticketMedio) < 0.2 && 
-                 (pontoEquilibrio / clientsServed) < 0.5) {
-            analiseMargemDetalhada = 'Diminua a participação dos seus gastos com vendas sobre o faturamento. Atenção com o tempo para realização dos serviços e com os prazos dos recebimentos e dos pagamentos!';
-        }
-        // Verificar se MARGEM >= 0 e MARGEM < MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO/TICKET MÉDIO >= 20% e PONTO EQUILÍBRIO/QUANT.VENDAS > 50%
-        else if (lucroPercentual >= 0 && lucroPercentual < ideal_service_profit_margin * 0.9 && 
-                 (margemContribuicao / ticketMedio) >= 0.2 && 
-                 (pontoEquilibrio / clientsServed) > 0.5) {
-            analiseMargemDetalhada = 'Verifique a possibilidade de aumentar a produtividade!';
-        }
-        // Verificar se MARGEM >= 0 e MARGEM < MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO/TICKET MÉDIO >= 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS < 50%
-        else if (lucroPercentual >= 0 && lucroPercentual < ideal_service_profit_margin * 0.9 && 
-                 (margemContribuicao / ticketMedio) >= 0.2 && 
-                 (pontoEquilibrio / clientsServed) < 0.5) {
-            analiseMargemDetalhada = 'Você está calculando corretamente os preços dos serviços que realiza?';
-        }
-        // Verificar se MARGEM >= MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO > 0 e MARG.CONTRIBUIÇÃO/TICKET MÉDIO < 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS > 50%
-        else if (lucroPercentual >= ideal_service_profit_margin * 0.9 && 
-                 margemContribuicao > 0 && (margemContribuicao / ticketMedio) < 0.2 && 
-                 (pontoEquilibrio / clientsServed) > 0.5) {
-            analiseMargemDetalhada = 'Diminua a participação dos seus gastos com vendas e custos fixos sobre o faturamento, e, o tempo de execução dos serviços!';
-        }
-        // Verificar se MARGEM >= MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO > 0 e MARG.CONTRIBUIÇÃO/TICKET MÉDIO < 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS < 50%
-        else if (lucroPercentual >= ideal_service_profit_margin * 0.9 && 
-                 margemContribuicao > 0 && (margemContribuicao / ticketMedio) < 0.2 && 
-                 (pontoEquilibrio / clientsServed) < 0.5) {
-            analiseMargemDetalhada = 'Diminua seus gastos com vendas e o tempo para execução dos serviços!';
-        }
-        // Verificar se MARGEM >= MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO/TICKET MÉDIO >= 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS > 50%
-        else if (lucroPercentual >= ideal_service_profit_margin * 0.9 && 
-                 (margemContribuicao / ticketMedio) >= 0.2 && 
-                 (pontoEquilibrio / clientsServed) > 0.5) {
-            analiseMargemDetalhada = 'Verifique a possibilidade de reduzir a participação dos custos fixos sobre o faturamento!';
-        }
-        // Verificar se MARGEM >= MARGEM IDEAL * 90% e MARG.CONTRIBUIÇÃO/TICKET MÉDIO >= 20% e QUANT.PONTO EQUILÍBRIO/QUANT.VENDAS < 50%
-        else if (lucroPercentual >= ideal_service_profit_margin * 0.9 && 
-                 (margemContribuicao / ticketMedio) >= 0.2 && 
-                 (pontoEquilibrio / clientsServed) < 0.5) {
-            analiseMargemDetalhada = 'A participação dos seus gastos e custos sobre o faturamento estão bem administrados!';
-        }
-        // Verificar se MARGEM < 0 e MARG.CONTRIBUIÇÃO < 0
-        else if (lucroPercentual < 0 && margemContribuicao < 0) {
-            analiseMargemDetalhada = 'Sua prioridade mais urgente é reduzir a participação dos gastos com vendas sobre o faturamento e o tempo para execução dos serviços!';
-        }
-        // Verificar se MARGEM < 0 e MARG.CONTRIBUIÇÃO > 0
-        else if (lucroPercentual < 0 && margemContribuicao > 0) {
-            analiseMargemDetalhada = 'Após analisar os preços, priorize reduzir os custos fixos! E reveja os gastos com vendas e o tempo para execução dos serviços.';
-        }
-        // Caso padrão
-        else {
-            analiseMargemDetalhada = '';
-        }
-
-        // Atualizar os elementos na interface
-        document.getElementById('lucro_reais').value = formatMoney(lucroReais);
-        document.getElementById('lucro_percentual').value = lucroPercentual.toFixed(2) + '%';
-        document.getElementById('ticketMedio').value = formatMoney(ticketMedio);
-        document.getElementById('margemContribuicao').value = formatMoney(margemContribuicao);
-        document.getElementById('produtividade').value = Math.round(produtividade);
-        document.getElementById('pontoEquilibrio').value = Math.round(pontoEquilibrio);
-        document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
-        document.getElementById('analiseCalculo').textContent = variavel + '\n' + analiseMargem + '\n' + analiseMargemDetalhada;
-    }
-}
-
-function typeActivity() {
-
-    // Inicializar o gráfico de barras
-    const ctx = document.getElementById('costsChart').getContext('2d');
-    window.costsChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Custos', 'Faturamento'],
-            datasets: [{
-                data: [0, 0],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.5)',
-                    'rgba(54, 162, 235, 0.5)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            return 'R$ ' + context.raw.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        callback: function(value) {
-                            return 'R$ ' + value.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                        }
-                    }
-                }
-            }
-        }
-    });
-
-    {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
-    // Inicializar o gráfico de pizza de despesas
-    const pieCtx = document.getElementById('expensesPieChart').getContext('2d');
-    window.expensesPieChart = new Chart(pieCtx, {
-        type: 'pie',
-        data: {
-            labels: ['Despesas de Vendas', 'Custos Fixos', 'Gastos com Insumos e Produtos'],
-            datasets: [{
-                data: [0, 0, 0],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.7)',
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(255, 206, 86, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.raw || 0;
-                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                            const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
-                            return `${label}: R$ ${value.toLocaleString('pt-BR', {minimumFractionDigits: 2})} (${percentage}%)`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-    {% endif %}
-
-    // Função para atualizar os indicadores
-    function updateIndicators() {
-        const {
-            salesRevenue,
-            salesExpenses,
-            fixedCosts,
-            operationalExpenses,
-            clientsServed
-        } = window.rawData;
+        const data = await response.json();
+        console.log('Dados recebidos:', data);
         
-        {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
-        // Calcular Lucro em Reais (F11-(F12+F13+F14))
-        const lucroReais = salesRevenue - (salesExpenses + operationalExpenses + fixedCosts);
+        calculateAndDisplayDiagnosis(data);
         
-        // Calcular Lucro Percentual (L13/F11)
-        const lucroPercentual = salesRevenue > 0 ? (lucroReais / salesRevenue) * 100 : 0;
-        
-        // Calcular Ticket Médio (F11/F10)
-        const ticketMedio = clientsServed > 0 ? salesRevenue / clientsServed : 0;
-        
-        // Calcular Margem de Contribuição ((F11-(F12+F13))/F10)
-        const margemContribuicao = clientsServed > 0 ? 
-            (salesRevenue - (salesExpenses + operationalExpenses)) / clientsServed : 0;
-        
-        // Calcular Produtividade (F11/F14)
-        const produtividade = fixedCosts > 0 ? salesRevenue / fixedCosts : 0;
-        
-        // Calcular L24 (custos fixos / (ticket médio - custos variáveis por cliente))
-        const custosVariaveisPorCliente = clientsServed > 0 ? 
-            (salesExpenses + operationalExpenses) / clientsServed : 0;
-        const L24 = ticketMedio > 0 ? 
-            fixedCosts / (ticketMedio - custosVariaveisPorCliente) : 0;
-        
-        // Calcular Ponto de Equilíbrio
-        const pontoEquilibrio = L24 * ticketMedio;
-        
-        // Calcular Ponto de Equilíbrio Percentual ((L24*(F11/F10))/(F11/F10))
-        const pontoEquilibrioPercentual = ticketMedio > 0 ? pontoEquilibrio / ticketMedio : 0;
-
-        const variavel = "Uma vez que estas considerações se referem a mês anterior, recomendamos que em \"Definição de Prioridades\" você estime as variações para o corrente mês, antecipando-se assim a eventuais providências relevantes. ";
-        
-        // Definir textos das variáveis
-        const variavel1 = `Você tem motivo para estar bem preocupado!
-É preciso agir rápido! Seja racional, objetivo e frio! Faça o que for preciso! Agora!
-Com está margem de contribuição, vender mais não irá tirar o Negócio do prejuízo!
-Faça simulações na "Gestão de Prioridades", tratando de reduzir prioritariamente os gastos com vendas (consulte seu Contador para verificar seu enquadramento fiscal).
-Também será preciso reduzir, os custos dos insumos e/ou mercadorias de terceiros: 
-    a) comprando bem (preços, prazos e quantidades); 
-    b) eliminando desperdícios, retrabalhos, perdas e desvios.
-Utilize a "Calculadora de preços" para analisar:
-    1) a margem de cada item;
-    2) a comparação com os preços dos concorrentes.
-Assim você saberá: 
-    a) o que deve deixar de produzir/vender; 
-    b) em quais ainda existe espaço para aumentar preços; 
-    c) o que terá que associar com os mais lucrativos (combos); 
-    d) em quais concentrar suas vendas.
-Se o Negócio ainda continuar no prejuízo, veja o que consegue reduzir nos custos fixos (aumento da produtividade).
-O negócio é viável? Então assuma a responsabilidade e aprenda com os erros. 
-Levante a cabeça. Não demonstre que está com problemas. 
-Não comente. Priorize o pagamento de dívidas pequenas.
-Proponha acordos para as maiores, considerando que será vital cumpri-los fielmente!`;
-
-        const variavel2 = `Você tem motivo para estar bem preocupado!
-É preciso agir rápido! Seja racional, objetivo e frio! Faça o que for preciso. Agora!
-Comece utilizando a "Calculadora de preços" para verificar: 
-    1) a margem de cada item; 
-    2) seus preços em relação aos dos concorrentes.
-Assim você saberá: 
-    a) o que deve deixar de produzir/vender; 
-    b) em quais ainda existe espaço para aumentar preços;
-    c) quais terá que associar com os mais lucrativos (combos); 
-    d) em quais concentrar suas vendas.
-Melhore sua produtividade! Analise seus custos fixos e veja o que pode fazer para reduzi-los.
-É possível vender mais? (Existe demanda? Preparado para competir? Capital de giro suficiente? Fornecedores?).
-Utilize a ferramenta "Gestão de Prioridades" para simular o resultado de suas análises. 
-O negócio é viável? Então assuma a responsabilidade e aprenda com os erros.
-Levante a cabeça. Não demonstre que está com problemas. 
-Não comente. Priorize o pagamento de dívidas pequenas. 
-Proponha acordos para as maiores, considerando que será vital cumpri-los fielmente!`;
-
-        const variavel3 = `O lucro alcançado não é aquele que você gostaria!
-Na ferramenta "Gestão de Prioridades" aumente a quantidade de clientes atendidos (desde que exista demanda, esteja preparado para competir, disponha de capital de giro suficiente e haja disponibilidades nos fornecedores). Verifique a margem resultante.
-Se não for possível vender mais, ou se não for suficiente, você ainda pode tentar estimular aumento do valor do ticket médio e verificar a possibilidade de reduzir despesas e custos.
-Utilize a "Calculadora de preços" para analisar: 
-    1) a margem de cada item; 
-    2) a comparação com os preços dos concorrentes.
-Assim você saberá:
-    a) se deve deixar de produzir/vender algum item;
-    b) em quais ainda existe espaço para aumentar preços; 
-    c) o que terá que associar com os mais lucrativos (combos); 
-    d) em quais concentrar suas vendas.
-Se a margem continuar menor do que o ideal, considere a hipótese de que o negócio não permite a lucratividade que você considera ideal!`;
-
-        const variavel4 = `O lucro alcançado não é aquele que você gostaria!
-Comece utilizando a "Calculadora de preços" para verificar: 
-    1) a margem de cada item; 
-    2) seus preços em relação aos dos concorrentes.
-Assim você saberá: 
-    a) o que deve deixar de produzir/vender; 
-    b) em quais ainda existe espaço para aumentar preços; 
-    c) quais terá que associar com os mais lucrativos (combos); 
-    d) em quais concentrar suas vendas.
-Ainda assim a lucratividade não é a desejada?
-Na ferramenta "Gestão de Prioridades" simule uma possível redução dos custos fixos e veja o que acontece com a margem. Se isso ainda não for suficiente, verifique a possibilidade de reduzir os demais custos!
-Se a margem continuar menor do que o ideal, considere a hipótese de que o negócio não permite a lucratividade que você considera ideal!`;
-
-        const variavel5 = `O lucro alcançado não é aquele que você gostaria!
-Utilize a "Calculadora de Preços" para verificar: 
-    1) a margem de cada item; 
-    2) seus preços em relação aos dos concorrentes.
-Assim você saberá: 
-    a) o que deve deixar de produzir/vender; 
-    b) em quais ainda existe espaço para aumentar preços; 
-    c) quais terá que associar com os mais lucrativos (combos); 
-    d) em quais concentrar suas vendas.
-Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos. 
-Depois, para melhorar a produtividade, reduza os custos fixos. Ainda não está bom? Veja o que dá para reduzir nos demais custos.
-Se a margem continuar menor do que o ideal, considere a hipótese de que o negócio não permite a lucratividade que você considera ideal! 
-E, avalie a conveniência de investir para ampliar sua capacidade de atendimento!`;
-
-        const variavel6 = `Você deve estar satisfeito com o lucro alcançado!
-É preciso reduzir a capacidade ociosa (custos e recursos subutilizados).
-Por que não vendeu mais:
-    1) Mercado não comporta? Então aumente o valor do ticket médio e/ou reduza custos fixos (utilize a ferramenta "Gestão de Prioridades" para fazer simulações);
-    2) Concorrência? a) crie diferenciais e corrija seus pontos fracos; b) utilize a "Calculadora de Preços" para comparar seus preços com os dos concorrentes. Faça simulações em "Definição de Prioridades".`;
-
-        const variavel7 = `Você deve estar satisfeito com o lucro alcançado!
-Estude o potencial do mercado em que atua! 
-Observe os indícios de alterações: aumento ou redução da demanda; mudanças tecnológicas e/ou nas preferências dos clientes; situação dos fornecedores; comportamento dos preços;ações importantes na concorrência e o impacto em sua competitividade; situações sócio econômicas, mudanças na legislação, obras públicas, etc.
-Traduza suas conclusões em percentuais de aumento ou redução (em relação aos dados atuais), na ferramenta "Definição de Prioridades" e veja como afeta sua lucratividade. Se acredita em variações nos preços dos insumos e/ou mercadorias de terceiros; ou nos preços dos concorrentes, recorra à "Calculadora de Preços"!`;
-
-        const variavel8 = `Você deve estar satisfeito com o lucro alcançado!
-Considere a viabilidade de ampliar sua capacidade de atendimento! Fora de cogitação?
-Então, na ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos.
-Verifique o impacto na margem! Para retomar o lucro anterior, verifique o resultado de um aumento no valor do ticket médio; também, reduza os custos fixos, (aumento da produtividade). 
-Ainda não está bom? Então utilize a "Calculadora de Preços" para comparar seus preços com os da concorrência: existe espaço para aumentos? é possível estimular a venda dos itens mais lucrativos?`;
-
-        const variavel9 = `Você deve estar muito satisfeito com o lucro alcançado!
-É preciso reduzir a capacidade ociosa (custos e recursos subutilizados).
-Por que não vendeu mais:
-1) Mercado não comporta? Então aumente o valor do ticket médio e/ou reduza custos fixos (utilize a ferramenta "Gestão de Prioridades" para fazer simulações);
-2) Concorrência? a) crie diferenciais e corrija seus pontos fracos; b) utilize a "Calculadora de Preços" para comparar seus preços com os dos concorrentes. Faça simulações em "Definição de Prioridades".`;
-
-        const variavel10 = `Você deve estar muito satisfeito com o lucro alcançado!
-Estude o potencial do mercado em que atua! Observe os indícios de alterações: aumento ou redução da demanda; mudanças tecnológicas e/ou nas preferências dos clientes; situação dos fornecedores; comportamento dos preços; ações importantes na concorrência e o impacto em sua competitividade; situações sócio econômicas, mudanças na legislação, obras públicas, etc.
-Traduza suas conclusões em percentuais de aumento ou redução (em relação aos dados atuais), na ferramenta "Definição de Prioridades" e veja como afeta sua lucratividade. Se acredita em variações nos preços dos insumos e/ou mercadorias de terceiros; ou nos preços dos concorrentes, recorra à "Calculadora de Preços"!`;
-
-        const variavel11 = `Você deve estar muito satisfeito com o lucro alcançado!
-Considere a viabilidade de ampliar sua capacidade de atendimento! Fora de cogitação?
-Com a ferramenta "Gestão de Prioridades" simule reduzir a quantidade de clientes atendidos. Isso reduzirá a margem. Então, tente melhorar a produtividade, reduzindo os custos fixos. Ainda não está bom? Veja o que dá para reduzir nos demais custos. Ainda assim a margem continua menor? O que acontece se conseguir aumentar o ticket médio? Com a ajuda da "Calculadora de Preços" identifique os produtos mais lucrativos e considere a possibilidade de aumentar o volume de vendas deles. Nas comparações com os concorrentes, veja se há espaço para aumento de preços.`;
-
-        // Calcular Análise
-        let analiseResult = '';
-        if (pontoEquilibrio > salesRevenue) {
-            analiseResult = variavel1;
-        } else if (margemContribuicao < 0) {
-            analiseResult = variavel2;
-        } else if (margemContribuicao < 0.3) {
-            analiseResult = variavel3;
-        } else if (margemContribuicao < 0.4) {
-            analiseResult = variavel4;
-        } else if (margemContribuicao < 0.5) {
-            analiseResult = variavel5;
-        } else if (margemContribuicao < 0.6) {
-            analiseResult = variavel6;
-        } else if (margemContribuicao < 0.7) {
-            analiseResult = variavel7;
-        } else if (margemContribuicao < 0.8) {
-            analiseResult = variavel8;
-        } else if (margemContribuicao < 0.9) {
-            analiseResult = variavel9;
-        } else if (margemContribuicao < 1) {
-            analiseResult = variavel10;
+    } catch (error) {
+        console.error('Erro em loadDiagnosticData:', error);
+        const mainResult = document.getElementById('mainResult');
+        if (mainResult) {
+            mainResult.innerHTML = `<div class="alert alert-danger">Erro ao carregar os dados do diagnóstico: ${error.message}</div>`;
         } else {
-            analiseResult = variavel11;
+            console.error('Elemento mainResult não encontrado para exibir erro!');
         }
-
-        analiseResult = variavel + analiseResult;
-
-        // Atualizar os elementos na interface
-        document.getElementById('lucro_reais').value = formatMoney(lucroReais);
-        document.getElementById('lucro_percentual').value = lucroPercentual.toFixed(2) + '%';
-        document.getElementById('ticketMedio').value = formatMoney(ticketMedio);
-        document.getElementById('margemContribuicao').value = formatMoney(margemContribuicao);
-        document.getElementById('produtividade').value = Math.round(produtividade);
-        document.getElementById('pontoEquilibrio').value = Math.round(pontoEquilibrio);
-        document.getElementById('pontoEquilibrioPercentual').value = pontoEquilibrioPercentual.toFixed(0);
-        document.getElementById('analiseCalculo').textContent = analiseResult;
-        
-        // Atualizar o gráfico de pizza de despesas
-        updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses);
-        {% endif %}
     }
-
-    // Função para atualizar o gráfico de pizza
-    function updateExpensesPieChart(salesExpenses, fixedCosts, operationalExpenses) {
-        // Atualizar dados do gráfico de pizza
-        window.expensesPieChart.data.datasets[0].data = [
-            salesExpenses,
-            fixedCosts,
-            operationalExpenses
-        ];
-        window.expensesPieChart.update();
-    }
-
-    // Função para atualizar o gráfico com os valores da tabela
-    function updateChart() {
-        // Usar os valores numéricos originais para cálculos
-        const {
-            salesRevenue,
-            salesExpenses,
-            fixedCosts,
-            operationalExpenses,
-            financialExpenses,
-            clientsServed
-        } = window.rawData;
-
-        // Calcular o total de custos
-        const totalCosts = salesExpenses + fixedCosts + operationalExpenses + financialExpenses;
-
-        // Atualizar o gráfico de barras
-        window.costsChart.data.datasets[0].data = [totalCosts, salesRevenue];
-        window.costsChart.update();
-        
-        // Atualizar os indicadores
-        updateIndicators();
-    }
-
-    // Listener para o evento change
-    document.getElementById('basicDataSelect').addEventListener('change', function() {
-        const basicDataId = this.value;
-        console.log("ID selecionado:", basicDataId);
-        
-        fetch(`/diagnostico/api/basic-data/${basicDataId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Dados não encontrados');
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log("Dados recebidos do servidor:", data);
-                console.log("Tipo de dados:", typeof data);
-                console.log("Estrutura dos dados:", Object.keys(data));
-                
-                // Atualizar a tabela com os dados (formatação para exibição)
-                document.getElementById('clientsServed').textContent = data.clients_served;
-                const capacidade = data.service_capacity || 'Não definido';
-                document.getElementById('capacidadeAtendimento').textContent = `${capacidade} clientes`;
-                document.getElementById('salesRevenue').textContent = formatMoney(data.sales_revenue);
-                document.getElementById('salesExpenses').textContent = formatMoney(data.sales_expenses);
-                {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
-                document.getElementById('fixedCosts').textContent = formatMoney(data.fixed_costs);
-                {% endif %}
-                document.getElementById('operationalExpenses').textContent = formatMoney(data.operational_expenses);
-                {% if user.activity_type == 'Prestação de serviços' %}
-                document.getElementById('proLabore').textContent = formatMoney(data.pro_labore);
-                document.getElementById('weeklyHours').textContent = `${data.weekly_hours}h`;
-                {% endif %}
-                
-                // Atualizar a margem de lucro ideal
-                const idealMargin = data.ideal_service_profit_margin !== null && data.ideal_service_profit_margin !== undefined ? data.ideal_service_profit_margin : 0;
-                console.log("Valor final da margem ideal:", idealMargin);
-                document.getElementById('margemIdeial').textContent = `${idealMargin.toFixed(2)}%`;
-                
-                // Guardar os valores numéricos originais para cálculos
-                window.rawData = {
-                    salesRevenue: getNumericValue(data.sales_revenue),
-                    salesExpenses: getNumericValue(data.sales_expenses),
-                    fixedCosts: getNumericValue(data.fixed_costs),
-                    operationalExpenses: getNumericValue(data.operational_expenses),
-                    financialExpenses: getNumericValue(data.financial_expenses),
-                    proLabore: getNumericValue(data.pro_labore),
-                    clientsServed: data.clients_served,
-                    otherFixedCosts: getNumericValue(data.other_fixed_costs || 0)
-                };
-                
-                // Atualizar o gráfico e os indicadores usando os valores numéricos
-                updateChart();
-            })
-            .catch(error => {
-                console.error('Erro ao carregar dados:', error);
-                alert('Erro ao carregar os dados. Por favor, tente novamente.');
-            });
-    });
-     // Disparar o evento change automaticamente quando a página carregar
-     const selectElement = document.getElementById('basicDataSelect');
-     if (selectElement && selectElement.value) {
-         selectElement.dispatchEvent(new Event('change'));
-     } else {
-         console.warn('Select não encontrado ou sem valor para carregar dados iniciais');
-     }
+    
+    console.log('=== FIM loadDiagnosticData ===');
 }
 
+function calculateAndDisplayDiagnosis(data) {
+    // Cálculos básicos
+    const faturamento = data.sales_revenue || 0;
+    const gastosVendas = data.sales_expenses || 0;
+    const gastosCompras = data.input_product_expenses || 0;
+    const custosFixos = data.fixed_costs || data.other_fixed_costs || 0;
+    const vendas = data.clients_served || 0;
+    const capacidadeAtendimento = parseInt(data.service_capacity) || 0;
+    const margemIdeal = (data.ideal_profit_margin || data.ideal_service_profit_margin || 0) / 100;
+    
+    // Cálculo da margem
+    const totalGastos = gastosVendas + gastosCompras + custosFixos;
+    const margemValor = faturamento - totalGastos;
+    const margemPercentual = faturamento > 0 ? (margemValor / faturamento) * 100 : 0;
+    
+    // Determinar tipo de resultado
+    let tipoResultado, valorResultado;
+    if (margemValor < 0) {
+        tipoResultado = "prejuízo";
+        valorResultado = Math.abs(margemValor);
+    } else if (margemValor === 0) {
+        tipoResultado = "margem";
+        valorResultado = 0;
+    } else {
+        tipoResultado = "lucro";
+        valorResultado = margemValor;
+    }
+    
+    // Ticket médio
+    const ticketMedio = vendas > 0 ? faturamento / vendas : 0;
+    
+    // Margem de contribuição unitária
+    const margemContribuicao = vendas > 0 ? (faturamento - (gastosVendas + gastosCompras)) / vendas : 0;
+    
+    // Ponto de equilíbrio
+    const pontoEquilibrio = margemContribuicao > 0 && margemContribuicao * vendas >= custosFixos ? 
+        Math.ceil(custosFixos / margemContribuicao) : null;
+    
+    // Margem potencial (capacidade máxima)
+    const faturamentoPotencial = capacidadeAtendimento * ticketMedio;
+         const margemPotencial = faturamentoPotencial > 0 && faturamento > 0 ? 
+         ((faturamentoPotencial - ((faturamentoPotencial * (gastosVendas + gastosCompras) / faturamento) + custosFixos)) / faturamentoPotencial) * 100 : 0;
+    
+    // Distância do objetivo
+    let distanciaObjetivo = 0;
+    if (margemValor < 0) {
+        distanciaObjetivo = Math.abs(margemValor) + (margemIdeal * faturamento);
+    } else if (margemValor === 0) {
+        distanciaObjetivo = margemIdeal * faturamento;
+    } else {
+        const objetivoValor = margemIdeal * faturamento;
+        if (objetivoValor <= margemValor) {
+            distanciaObjetivo = margemValor - objetivoValor;
+        } else {
+            distanciaObjetivo = objetivoValor - margemValor;
+        }
+    }
+    
+    // Exibir resultado principal
+    console.log('Chamando displayMainResult...');
+    displayMainResult(data, faturamento, tipoResultado, margemPercentual, valorResultado);
+    
+    // Exibir status crítico
+    console.log('Chamando displayCriticalStatus...');
+    displayCriticalStatus(margemValor, vendas, capacidadeAtendimento);
+    
+    // Análise vendas vs capacidade
+    console.log('Chamando displaySalesCapacityAnalysis...');
+    displaySalesCapacityAnalysis(margemValor, vendas, capacidadeAtendimento);
+    
+    // Análise da margem de contribuição
+    console.log('Chamando displayContributionMarginAnalysis...');
+    displayContributionMarginAnalysis(margemContribuicao, vendas, custosFixos);
+    
+    // Análise do ponto de equilíbrio
+    console.log('Chamando displayBreakEvenAnalysis...');
+    displayBreakEvenAnalysis(pontoEquilibrio, vendas, margemContribuicao);
+    
+    // Resumo e próximos passos
+    console.log('Chamando displaySummaryAnalysis...');
+    displaySummaryAnalysis(margemValor, margemPercentual, margemIdeal, distanciaObjetivo, margemPotencial);
+}
+
+function displayMainResult(data, faturamento, tipoResultado, margemPercentual, valorResultado) {
+    console.log('displayMainResult executando...');
+    
+    // Pegar mês e ano do combo selecionado
+    const basicDataSelect = document.getElementById('basicDataSelect');
+    const selectedOption = basicDataSelect.options[basicDataSelect.selectedIndex];
+    const mesAno = selectedOption ? selectedOption.text : 'N/A';
+    
+    console.log('Mês/Ano do combo:', mesAno);
+    
+    let texto = "";
+    
+    if (tipoResultado === "prejuízo") {
+        texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou R$ ${valorResultado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} mais do que faturou!`;
+    } else if (tipoResultado === "margem") {
+        texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou tudo que faturou!`;
+    } else {
+        texto = `Em ${mesAno} seu Negócio alcançou um faturamento bruto de R$ ${faturamento.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, com ${tipoResultado} de ${margemPercentual.toFixed(2)}%, o que significa que gastou R$ ${valorResultado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} menos do que faturou!`;
+    }
+    
+    const alertClass = tipoResultado === "prejuízo" ? "alert-danger" : 
+                     tipoResultado === "margem" ? "alert-warning" : "alert-success";
+    
+    const mainElement = document.getElementById('mainResult');
+    console.log('mainResult element:', mainElement);
+    console.log('texto gerado:', texto);
+    
+    if (mainElement) {
+        mainElement.innerHTML = `<div class="alert ${alertClass}">${texto}</div>`;
+        console.log('HTML inserido no mainResult');
+    } else {
+        console.error('Elemento mainResult não encontrado!');
+    }
+}
+
+function displayCriticalStatus(margemValor, vendas, capacidadeAtendimento) {
+    let status = "";
+    let alertClass = "";
+    
+    if (margemValor < 0) {
+        status = "ESTA É UMA SITUAÇÃO CRÍTICA!";
+        alertClass = "alert-danger";
+    } else if (margemValor === 0) {
+        status = "ATENÇÃO!";
+        alertClass = "alert-warning";
+    } else if (vendas > capacidadeAtendimento * 1.05) {
+        status = "ATENÇÃO!";
+        alertClass = "alert-warning";
+    }
+    
+    if (status) {
+        document.getElementById('criticalStatus').innerHTML = `<div class="alert ${alertClass}"><strong>${status}</strong></div>`;
+    }
+}
+
+function displaySalesCapacityAnalysis(margemValor, vendas, capacidadeAtendimento) {
+    let texto = "";
+    
+    if (margemValor < 0) {
+        if (vendas > capacidadeAtendimento * 1.05) {
+            texto = `Este resultado negativo aconteceu mesmo com as vendas (${vendas}) superando a capacidade de atendimento (${capacidadeAtendimento}).`;
+        } else if (vendas >= capacidadeAtendimento * 0.95 && vendas <= capacidadeAtendimento * 1.05) {
+            texto = `Este resultado negativo aconteceu mesmo com as vendas nos limites da capacidade de atendimento (${capacidadeAtendimento}).`;
+        } else {
+            texto = `Este resultado negativo aconteceu com as vendas (${vendas}) abaixo da capacidade de atendimento (${capacidadeAtendimento}).`;
+        }
+    }
+    
+    if (texto) {
+        document.getElementById('salesCapacityAnalysis').innerHTML = `<p>${texto}</p>`;
+    }
+}
+
+function displayContributionMarginAnalysis(margemContribuicao, vendas, custosFixos) {
+    let texto = "";
+    
+    if (margemContribuicao <= 0) {
+        texto = "A margem de contribuição unitária é negativa ou zero, o que significa que cada venda não cobre nem os custos variáveis.";
+    } else {
+        const totalContribuicao = margemContribuicao * vendas;
+        if (totalContribuicao >= custosFixos) {
+            texto = `A margem de contribuição unitária é de R$ ${margemContribuicao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}. Com ${vendas} vendas, você gera R$ ${totalContribuicao.toLocaleString('pt-BR', {minimumFractionDigits: 2})} para cobrir os custos fixos de R$ ${custosFixos.toLocaleString('pt-BR', {minimumFractionDigits: 2})}.`;
+        } else {
+            texto = `A margem de contribuição unitária é de R$ ${margemContribuicao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}. Com ${vendas} vendas, você gera apenas R$ ${totalContribuicao.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, insuficiente para cobrir os custos fixos de R$ ${custosFixos.toLocaleString('pt-BR', {minimumFractionDigits: 2})}.`;
+        }
+    }
+    
+    document.getElementById('contributionMarginAnalysis').innerHTML = `<p>${texto}</p>`;
+}
+
+function displayBreakEvenAnalysis(pontoEquilibrio, vendas, margemContribuicao) {
+    let texto = "";
+    
+    if (pontoEquilibrio) {
+        if (vendas >= pontoEquilibrio) {
+            texto = `Seu ponto de equilíbrio é de ${pontoEquilibrio} vendas. Com ${vendas} vendas realizadas, você superou o ponto de equilíbrio.`;
+        } else {
+            const faltam = pontoEquilibrio - vendas;
+            texto = `Seu ponto de equilíbrio é de ${pontoEquilibrio} vendas. Você precisa de mais ${faltam} vendas para atingir o equilíbrio.`;
+        }
+    } else {
+        texto = "Não foi possível calcular o ponto de equilíbrio com os dados atuais.";
+    }
+    
+    document.getElementById('breakEvenAnalysis').innerHTML = `<p>${texto}</p>`;
+}
+
+function displaySummaryAnalysis(margemValor, margemPercentual, margemIdeal, distanciaObjetivo, margemPotencial) {
+    let recomendacoes = [];
+    
+    if (margemValor < 0) {
+        recomendacoes.push("• Revisar imediatamente todos os custos e despesas");
+        recomendacoes.push("• Analisar a possibilidade de aumento de preços");
+        recomendacoes.push("• Buscar fornecedores com melhores condições");
+        recomendacoes.push("• Reduzir custos fixos onde possível");
+    } else if (margemPercentual < margemIdeal * 100) {
+        recomendacoes.push("• Trabalhar para atingir a margem ideal");
+        recomendacoes.push("• Otimizar processos para reduzir custos");
+        recomendacoes.push("• Avaliar estratégias de precificação");
+    } else {
+        recomendacoes.push("• Manter os bons resultados");
+        recomendacoes.push("• Buscar oportunidades de crescimento");
+        recomendacoes.push("• Reinvestir os lucros no negócio");
+    }
+    
+    if (margemPotencial > margemPercentual) {
+        recomendacoes.push(`• Potencial de melhoria: margem pode chegar a ${margemPotencial.toFixed(2)}% operando na capacidade máxima`);
+    }
+    
+    const texto = `
+        <p><strong>Distância do objetivo:</strong> R$ ${distanciaObjetivo.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+        <p><strong>Próximos passos recomendados:</strong></p>
+        <ul class="mb-0">
+            ${recomendacoes.map(rec => `<li>${rec}</li>`).join('')}
+        </ul>
+    `;
+    
+    document.getElementById('summaryAnalysis').innerHTML = texto;
+}
 </script>
 {% endblock %} 
