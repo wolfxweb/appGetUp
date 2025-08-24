@@ -32,8 +32,8 @@ COPY . .
 # Set permissions for the entire app directory
 RUN chmod -R 777 /app
 
-# Expose port
-EXPOSE 9090
+# Expose port (mudar para 8080 para corresponder ao Easy Panel)
+EXPOSE 8080
 
-# Command to run the application
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9090", "--reload"]
+# Command to run the application (sem reload para produção)
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
