@@ -1,0 +1,6 @@
+2025-10-15 17:00:26,684 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-10-15 17:00:26,684 - app.routes.basic_data - INFO - Registro ID 22: month=9, year=2025, clients_served=65
+2025-10-15 17:00:26,684 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=12000.0, sales_expenses=2800.0, input_product_expenses=5800.0
+2025-10-15 17:00:26,685 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=5000.0
+2025-10-15 17:00:26,685 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=1200.0, sales_expenses=280.0, input_product_expenses=580.0
+2025-10-15 17:00:26,685 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=500.0
