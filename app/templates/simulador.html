@@ -135,7 +135,6 @@
           
           <!-- Seleção de Mês/Ano -->
           <div class="field-section">
-            <div class="section-title" id="selectMonthTitle">Para iniciar selecione o mês</div>
             <label for="basicDataSelect" class="form-label">Selecione o mês/ano</label>
             <select class="form-control" id="basicDataSelect">
               <option value="">Selecione um período base...</option>
@@ -291,7 +290,6 @@ document.addEventListener('DOMContentLoaded', function() {
             loadBaseData(this.value);
         } else {
             document.getElementById('simulationForm').style.display = 'none';
-            document.getElementById('selectMonthTitle').textContent = 'Para iniciar selecione o mês';
         }
     });
     
@@ -355,7 +353,6 @@ async function loadBaseData(basicDataId) {
 }
 
 function initializeSimulation() {
-    document.getElementById('selectMonthTitle').textContent = 'CAPACIDADE DE ATENDIMENTO';
     document.getElementById('simulationForm').style.display = 'block';
     
     // Atualizar textos com mês A e B
@@ -367,9 +364,9 @@ function initializeSimulation() {
     document.getElementById('capacidadeInfo').textContent = 
         `Em ${mesA} você informou que seu negócio estava estruturado para ${capacidadeA} atendimentos. Confirme ou altere esta capacidade para o mês ${mesB}:`;
     
-    // Preencher com valor inicial
-    document.getElementById('capacidadeB').value = capacidadeA;
-    onCapacidadeChange();
+    // NÃO preencher - deixar vazio para o usuário digitar
+    document.getElementById('capacidadeB').value = '';
+    document.getElementById('capacidadeB').focus(); // Focar no campo
 }
 
 // Fórmula (3): Capacidade
@@ -400,10 +397,9 @@ function onCapacidadeChange() {
         document.getElementById('clientesInfo').textContent = 
             `Em ${mesA} foram atendidos ${clientesA} clientes. Anote sua estimativa para o mês ${mesB}:`;
         
-        // Preencher com valor inicial
+        // NÃO preencher - deixar vazio para o usuário digitar
         if (!document.getElementById('clientesB').value) {
-            document.getElementById('clientesB').value = clientesA;
-            onClientesChange();
+            document.getElementById('clientesB').value = '';
         }
     } else {
         alertDiv.style.display = 'none';
@@ -435,10 +431,10 @@ function onClientesChange() {
         // Mostrar próxima seção
         document.getElementById('section-precos').style.display = 'block';
         
+        // NÃO preencher - deixar vazio para o usuário digitar
         if (!document.getElementById('variacaoPrecos').value) {
-            document.getElementById('variacaoPrecos').value = 100;
+            document.getElementById('variacaoPrecos').value = '';
         }
-        onPrecosChange(); // Recalcular sempre
     }
 }
 
@@ -495,15 +491,13 @@ function calculateTicketMedio() {
     
     document.getElementById('ticketInfo').textContent = infoText;
     
-    // Atualizar o valor calculado sempre que recalcular
-    const currentValue = parseFloat(document.getElementById('ticketMedioB').value) || 0;
-    if (currentValue === 0 || !document.getElementById('ticketMedioB').dataset.userEdited) {
-        document.getElementById('ticketMedioB').value = ticketMedioCalculado.toFixed(2);
-    }
-    
-    // Armazenar para comparação
+    // Armazenar valor calculado para comparação
     document.getElementById('ticketMedioB').dataset.calculado = ticketMedioCalculado;
-    onTicketChange();
+    
+    // NÃO preencher automaticamente - deixar vazio para o usuário decidir
+    if (!document.getElementById('ticketMedioB').value) {
+        document.getElementById('ticketMedioB').value = '';
+    }
 }
 
 // Fórmula (12): Alerta Ticket Médio
@@ -542,14 +536,13 @@ function calculateFaturamento() {
     document.getElementById('faturamentoInfo').textContent = 
         `Com base em suas estimativas, até aqui, o Faturamento que em ${mesA} foi de R$ ${faturamentoA.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, será de R$ ${faturamentoCalculado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} em ${mesB}. Porém, descontos promocionais que você poderá adotar alterariam este valor. Anote sua previsão de faturamento:`;
     
-    // Atualizar o valor se não foi editado pelo usuário
-    const currentValue = parseFloat(document.getElementById('faturamentoB').value) || 0;
-    if (currentValue === 0 || !document.getElementById('faturamentoB').dataset.userEdited) {
-        document.getElementById('faturamentoB').value = faturamentoCalculado.toFixed(2);
-    }
-    
+    // Armazenar valor calculado para comparação
     document.getElementById('faturamentoB').dataset.calculado = faturamentoCalculado;
-    onFaturamentoChange();
+    
+    // NÃO preencher automaticamente
+    if (!document.getElementById('faturamentoB').value) {
+        document.getElementById('faturamentoB').value = '';
+    }
 }
 
 // Fórmula (15) e (16): Alerta Faturamento
@@ -606,13 +599,10 @@ function calculateGastosVendas() {
     document.getElementById('gastosVendasInfo').textContent = 
         `Em ${mesA} estes gastos representaram ${percGastosVendasA.toFixed(2)}% do faturamento. Em ${mesB} aquele índice, aplicado ao faturamento previsto, resultaria em R$ ${gastosVendasCalculado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}. Alteração nas alíquotas, nas taxas e juros bancários, comissões, etc., podem alterar aquele valor. Digite sua previsão:`;
     
-    // Recalcular sempre que o faturamento mudar
-    const currentValue = parseFloat(document.getElementById('gastosVendasB').value) || 0;
-    if (currentValue === 0 || !document.getElementById('gastosVendasB').dataset.userEdited) {
-        document.getElementById('gastosVendasB').value = gastosVendasCalculado.toFixed(2);
+    // NÃO preencher automaticamente
+    if (!document.getElementById('gastosVendasB').value) {
+        document.getElementById('gastosVendasB').value = '';
     }
-    
-    onGastosVendasChange();
 }
 
 // Fórmula (20) e (21): Gastos com Compras  
@@ -634,14 +624,13 @@ function calculateGastosCompras() {
     document.getElementById('gastosComprasInfo').textContent = 
         `Em ${mesA}, representaram ${percGastosComprasA.toFixed(2)}% do faturamento. Sua repetição em ${mesB}, resultaria em R$ ${gastosComprasCalculado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}. Outros fornecedores e preços e mudanças na sua oferta, influenciam esses gastos. Anote sua previsão: (se for vender só o que já está no estoque, digite 0 (zero).`;
     
-    // Recalcular sempre que o faturamento mudar
-    const currentValue = parseFloat(document.getElementById('gastosComprasB').value);
-    if (isNaN(currentValue) || currentValue === 0 || !document.getElementById('gastosComprasB').dataset.userEdited) {
-        document.getElementById('gastosComprasB').value = gastosComprasCalculado.toFixed(2);
-    }
-    
+    // Armazenar valor calculado
     document.getElementById('gastosComprasB').dataset.calculado = gastosComprasCalculado;
-    onGastosComprasChange();
+    
+    // NÃO preencher automaticamente
+    if (!document.getElementById('gastosComprasB').value) {
+        document.getElementById('gastosComprasB').value = '';
+    }
 }
 
 // Fórmula (22) até (28): Gastos Compras e Custo Variável
@@ -702,13 +691,10 @@ function calculateCustosFixos() {
     document.getElementById('custosFixosInfo').textContent = 
         `Em ${mesA} seus custos fixos somavam R$ ${custosFixosA.toLocaleString('pt-BR', {minimumFractionDigits: 2})}. Porém, alterações nos recursos e valores contratados influenciam. Informe sua previsão para ${mesB}:`;
     
-    // Recalcular sempre
-    const currentValue = parseFloat(document.getElementById('custosFixosB').value);
-    if (isNaN(currentValue) || currentValue === 0 || !document.getElementById('custosFixosB').dataset.userEdited) {
-        document.getElementById('custosFixosB').value = custosFixosA.toFixed(2);
+    // NÃO preencher automaticamente
+    if (!document.getElementById('custosFixosB').value) {
+        document.getElementById('custosFixosB').value = '';
     }
-    
-    onCustosFixosChange();
 }
 
 function onCustosFixosChange() {
