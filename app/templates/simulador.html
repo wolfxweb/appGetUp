@@ -1,0 +1,822 @@
+{% extends "base.html" %}
+
+{% block title %}Simulador - GetUp Gestão{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #F5F5F5 !important;
+    }
+    .container-fluid, .container {
+        background-color: #F5F5F5 !important;
+    }
+    .card, .card-body {
+        background-color: #F0F0F0 !important;
+    }
+    .card-header.bg-secondary {
+        background-color: #6c757d !important;
+        color: white !important;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: white;
+    }
+    .form-control, .form-select {
+        background-color: #FFFFFF !important;
+        border: 1px solid #ced4da;
+    }
+    .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 0.5rem;
+    }
+    .field-section {
+        background-color: #FFFFFF;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #dee2e6;
+    }
+    .info-text {
+        color: #6c757d;
+        font-size: 0.9rem;
+        margin-top: 5px;
+        line-height: 1.4;
+    }
+    .alert-info-custom {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-size: 0.9rem;
+        border: 1px solid #bee5eb;
+    }
+    .alert-warning-custom {
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-weight: 600;
+        border: 1px solid #ffeaa7;
+    }
+    .alert-danger-custom {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-weight: 600;
+        border: 1px solid #f5c6cb;
+    }
+    .section-title {
+        color: #495057;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+    }
+    .calculated-value {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        font-weight: 600;
+        border-left: 4px solid #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="background-color: #F5F5F5; min-height: 100vh;">
+  <div class="row">
+    <div class="col-md-12 mt-5">
+        <div class="col-md-12 mb-4">
+            <img src="/static/images/Logo.png" alt="Logo" height="40">
+        </div>
+      
+      <!-- Botões de navegação -->
+      <div class="row mb-4 justify-content-center">
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/dashboard" class="btn btn-secondary w-100">
+            Índice
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/basic-data/new" class="btn btn-secondary w-100">
+            Dados Básicos
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/simulador" class="btn btn-secondary w-100" style="background-color: #01392c; border-color: #01392c;">
+            Simulador
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/calculator" class="btn btn-secondary w-100">
+            Calculadora de preços
+          </a>
+        </div>
+      </div>
+
+      <!-- Card principal do Simulador -->
+      <div class="card shadow mb-4">
+        <div class="card-header bg-secondary text-white">
+          <h4 class="card-title mb-0">Simulador de Cenários</h4>
+        </div>
+        <div class="card-body">
+          
+          <!-- Seleção de Mês/Ano -->
+          <div class="field-section">
+            <div class="section-title" id="selectMonthTitle">Para iniciar selecione o mês</div>
+            <label for="basicDataSelect" class="form-label">Selecione o mês/ano</label>
+            <select class="form-control" id="basicDataSelect">
+              <option value="">Selecione um período base...</option>
+              {% for data in basic_data_list %}
+              <option value="{{ data.id }}" 
+                      data-month="{{ data.month }}" 
+                      data-year="{{ data.year }}"
+                      {% if data.is_current %}selected{% endif %}>
+                {{ data.month }}/{{ data.year }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Formulário de Simulação -->
+          <div id="simulationForm" style="display: none;">
+            
+            <!-- 1. CAPACIDADE DE ATENDIMENTO -->
+            <div class="field-section">
+              <div class="section-title">CAPACIDADE DE ATENDIMENTO</div>
+              <div class="info-text" id="capacidadeInfo"></div>
+              <label for="capacidadeB" class="form-label mt-3">Capacidade para o mês simulado:</label>
+              <input type="number" class="form-control" id="capacidadeB" placeholder="Digite a capacidade">
+              <div id="capacidadeAlert" class="alert-info-custom" style="display: none;"></div>
+            </div>
+
+            <!-- 2. QUANTIDADE DE CLIENTES ATENDIDOS -->
+            <div class="field-section" id="section-clientes" style="display: none;">
+              <div class="section-title">QUANTIDADE DE CLIENTES ATENDIDOS</div>
+              <div class="info-text" id="clientesInfo"></div>
+              <label for="clientesB" class="form-label mt-3">Sua estimativa de clientes atendidos:</label>
+              <input type="number" class="form-control" id="clientesB" placeholder="Digite a quantidade estimada">
+              <div id="clientesAlert" class="alert-warning-custom" style="display: none;"></div>
+            </div>
+
+            <!-- 3. VARIAÇÃO NOS PREÇOS -->
+            <div class="field-section" id="section-precos" style="display: none;">
+              <div class="section-title">VARIAÇÃO NOS SEUS PREÇOS DE VENDAS</div>
+              <div class="info-text">
+                Considere os preços praticados em <span id="mesA1"></span> como 100%. Se você não prevê alteração para <span id="mesB1"></span>, digite 100%. 
+                Se, por exemplo, um aumento de 5%, digite 105%. Redução de 10%? Digite 90%.
+              </div>
+              <label for="variacaoPrecos" class="form-label mt-3">Variação nos preços (%):</label>
+              <input type="number" class="form-control" id="variacaoPrecos" placeholder="Digite a variação (ex: 100, 105, 90)" step="0.1">
+              <div id="precosAlert" class="alert-info-custom" style="display: none;"></div>
+            </div>
+
+            <!-- 4. TICKET MÉDIO -->
+            <div class="field-section" id="section-ticket" style="display: none;">
+              <div class="section-title">TICKET MÉDIO</div>
+              <div class="info-text" id="ticketInfo"></div>
+              <label for="ticketMedioB" class="form-label mt-3">Ticket médio estimado (R$):</label>
+              <input type="number" class="form-control" id="ticketMedioB" placeholder="Digite o ticket médio" step="0.01">
+              <div id="ticketAlert" class="alert-info-custom" style="display: none;"></div>
+            </div>
+
+            <!-- 5. FATURAMENTO BRUTO -->
+            <div class="field-section" id="section-faturamento" style="display: none;">
+              <div class="section-title">FATURAMENTO BRUTO</div>
+              <div class="info-text" id="faturamentoInfo"></div>
+              <label for="faturamentoB" class="form-label mt-3">Previsão de faturamento (R$):</label>
+              <input type="number" class="form-control" id="faturamentoB" placeholder="Digite o faturamento previsto" step="0.01">
+              <div id="faturamentoAlert" class="alert-info-custom" style="display: none;"></div>
+              <div id="margemAposFaturamento" class="calculated-value" style="display: none;"></div>
+            </div>
+
+            <!-- 6. GASTOS COM VENDAS -->
+            <div class="field-section" id="section-gastos-vendas" style="display: none;">
+              <div class="section-title">GASTOS COM VENDAS</div>
+              <div class="info-text" id="gastosVendasInfo"></div>
+              <label for="gastosVendasB" class="form-label mt-3">Previsão gastos com vendas (R$):</label>
+              <input type="number" class="form-control" id="gastosVendasB" placeholder="Digite os gastos com vendas" step="0.01">
+            </div>
+
+            <!-- 7. GASTOS COM COMPRAS -->
+            <div class="field-section" id="section-gastos-compras" style="display: none;">
+              <div class="section-title">GASTOS COM COMPRAS DE MERCADORIAS</div>
+              <div class="info-text" id="gastosComprasInfo"></div>
+              <label for="gastosComprasB" class="form-label mt-3">Previsão gastos com compras (R$):</label>
+              <input type="number" class="form-control" id="gastosComprasB" placeholder="Digite os gastos com compras (0 se vender só estoque)" step="0.01">
+              <div id="comprasAlert" class="alert-info-custom" style="display: none;"></div>
+              
+              <!-- Custo Variável -->
+              <div id="custoVariavelSection" style="display: none;">
+                <div class="info-text mt-3">Gastos com vendas + compras de mercadorias =</div>
+                <div class="section-title mt-2">CUSTO VARIÁVEL</div>
+                <div class="calculated-value" id="custoVariavel">R$ 0,00</div>
+                <div id="custoVariavelAlert" class="alert-danger-custom" style="display: none;"></div>
+              </div>
+            </div>
+
+            <!-- 8. MARGEM DE CONTRIBUIÇÃO -->
+            <div class="field-section" id="section-margem-contrib" style="display: none;">
+              <div class="section-title">MARGEM DE CONTRIBUIÇÃO</div>
+              <div class="info-text">Por atendimento</div>
+              <div class="calculated-value" id="margemContribuicao">R$ 0,00</div>
+            </div>
+
+            <!-- 9. CUSTOS FIXOS -->
+            <div class="field-section" id="section-custos-fixos" style="display: none;">
+              <div class="section-title">CUSTOS FIXOS</div>
+              <div class="info-text" id="custosFixosInfo"></div>
+              <label for="custosFixosB" class="form-label mt-3">Previsão custos fixos (R$):</label>
+              <input type="number" class="form-control" id="custosFixosB" placeholder="Digite os custos fixos" step="0.01">
+              <div id="custosFixosAlert" class="alert-info-custom" style="display: none;"></div>
+              
+              <!-- Custo Total -->
+              <div id="custoTotalSection" style="display: none;">
+                <div class="info-text mt-3">Custo variável + Custos fixos =</div>
+                <div class="section-title mt-2">CUSTO TOTAL</div>
+                <div class="calculated-value" id="custoTotal">R$ 0,00</div>
+                <div id="custoTotalInfo" class="info-text"></div>
+              </div>
+            </div>
+
+            <!-- 10. RESULTADO FINAL -->
+            <div class="field-section" id="section-resultado" style="display: none;">
+              <div class="info-text">Faturamento bruto - Custo total =</div>
+              <div class="calculated-value mt-2" id="resultadoValor">R$ 0,00</div>
+              <div class="info-text mt-2" id="resultadoOuSeja" style="display: none;">Ou seja, <span id="resultadoTipo"></span></div>
+              <div class="calculated-value mt-2" id="resultadoPercentual" style="display: none;">0%</div>
+              <div class="info-text mt-3" id="resultadoMesA"></div>
+              <div id="resultadoFinal" class="alert-info-custom mt-2" style="display: none;"></div>
+              <div id="proximoPasso" class="alert-warning-custom mt-2" style="display: none;"></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden data from server -->
+<input type="hidden" id="baseDataId" value="">
+{% endblock %}
+
+{% block scripts %}
+<script>
+console.log('=== SIMULADOR CARREGADO ===');
+
+let baseData = null;
+let mesA = '';
+let mesB = '';
+
+document.addEventListener('DOMContentLoaded', function() {
+    const basicDataSelect = document.getElementById('basicDataSelect');
+    
+    // Event listeners para cada campo
+    basicDataSelect.addEventListener('change', function() {
+        if (this.value) {
+            const selectedOption = this.options[this.selectedIndex];
+            mesA = selectedOption.text;
+            loadBaseData(this.value);
+        } else {
+            document.getElementById('simulationForm').style.display = 'none';
+            document.getElementById('selectMonthTitle').textContent = 'Para iniciar selecione o mês';
+        }
+    });
+    
+    // Listeners para os campos - usando 'change' e 'input' para recalcular em tempo real
+    // Marcar como editado pelo usuário quando houver input manual
+    const markAsEdited = (fieldId) => {
+        return function() {
+            document.getElementById(fieldId).dataset.userEdited = 'true';
+        };
+    };
+    
+    document.getElementById('capacidadeB').addEventListener('input', onCapacidadeChange);
+    document.getElementById('capacidadeB').addEventListener('focus', markAsEdited('capacidadeB'));
+    
+    document.getElementById('clientesB').addEventListener('input', onClientesChange);
+    document.getElementById('clientesB').addEventListener('focus', markAsEdited('clientesB'));
+    
+    document.getElementById('variacaoPrecos').addEventListener('input', onPrecosChange);
+    document.getElementById('variacaoPrecos').addEventListener('focus', markAsEdited('variacaoPrecos'));
+    
+    document.getElementById('ticketMedioB').addEventListener('input', function() {
+        this.dataset.userEdited = 'true';
+        onTicketChange();
+    });
+    
+    document.getElementById('faturamentoB').addEventListener('input', function() {
+        this.dataset.userEdited = 'true';
+        onFaturamentoChange();
+    });
+    
+    document.getElementById('gastosVendasB').addEventListener('input', function() {
+        this.dataset.userEdited = 'true';
+        onGastosVendasChange();
+    });
+    
+    document.getElementById('gastosComprasB').addEventListener('input', function() {
+        this.dataset.userEdited = 'true';
+        onGastosComprasChange();
+    });
+    
+    document.getElementById('custosFixosB').addEventListener('input', function() {
+        this.dataset.userEdited = 'true';
+        onCustosFixosChange();
+    });
+    
+    // Carregar dados se já houver período selecionado
+    if (basicDataSelect.value) {
+        const selectedOption = basicDataSelect.options[basicDataSelect.selectedIndex];
+        mesA = selectedOption.text;
+        loadBaseData(basicDataSelect.value);
+    }
+});
+
+async function loadBaseData(basicDataId) {
+    try {
+        const response = await fetch(`/diagnostico/api/basic-data/${basicDataId}`);
+        if (!response.ok) throw new Error('Erro ao carregar dados');
+        
+        baseData = await response.json();
+        const selectedOption = document.getElementById('basicDataSelect').options[document.getElementById('basicDataSelect').selectedIndex];
+        mesB = selectedOption.text; // Usar o mesmo mês selecionado
+        
+        initializeSimulation();
+    } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao carregar dados básicos');
+    }
+}
+
+function initializeSimulation() {
+    document.getElementById('selectMonthTitle').textContent = 'CAPACIDADE DE ATENDIMENTO';
+    document.getElementById('simulationForm').style.display = 'block';
+    
+    // Atualizar textos com mês A e B
+    document.querySelectorAll('#mesA1').forEach(el => el.textContent = mesA);
+    document.querySelectorAll('#mesB1').forEach(el => el.textContent = mesB);
+    
+    // Fórmula (2): Texto da capacidade
+    const capacidadeA = baseData.service_capacity || 0;
+    document.getElementById('capacidadeInfo').textContent = 
+        `Em ${mesA} você informou que seu negócio estava estruturado para ${capacidadeA} atendimentos. Confirme ou altere esta capacidade para o mês ${mesB}:`;
+    
+    // Preencher com valor inicial
+    document.getElementById('capacidadeB').value = capacidadeA;
+    onCapacidadeChange();
+}
+
+// Fórmula (3): Capacidade
+function onCapacidadeChange() {
+    const capacidadeB = parseFloat(document.getElementById('capacidadeB').value) || 0;
+    const capacidadeA = baseData.service_capacity || 0;
+    const alertDiv = document.getElementById('capacidadeAlert');
+    
+    if (capacidadeB > 0) {
+        const variacao = ((capacidadeB - capacidadeA) / capacidadeA * 100).toFixed(2);
+        
+        if (capacidadeB > capacidadeA) {
+            alertDiv.textContent = `Aumento de ${Math.abs(variacao)}% em relação a ${mesA}.`;
+            alertDiv.style.display = 'block';
+        } else if (capacidadeB === capacidadeA) {
+            alertDiv.textContent = 'A capacidade permanecerá inalterada.';
+            alertDiv.style.display = 'block';
+        } else {
+            alertDiv.textContent = `Redução de ${Math.abs(variacao)}% em relação a ${mesA}.`;
+            alertDiv.style.display = 'block';
+        }
+        
+        // Mostrar próxima seção
+        document.getElementById('section-clientes').style.display = 'block';
+        
+        // Fórmula (5): Texto clientes
+        const clientesA = baseData.clients_served || 0;
+        document.getElementById('clientesInfo').textContent = 
+            `Em ${mesA} foram atendidos ${clientesA} clientes. Anote sua estimativa para o mês ${mesB}:`;
+        
+        // Preencher com valor inicial
+        if (!document.getElementById('clientesB').value) {
+            document.getElementById('clientesB').value = clientesA;
+            onClientesChange();
+        }
+    } else {
+        alertDiv.style.display = 'none';
+        document.getElementById('section-clientes').style.display = 'none';
+    }
+}
+
+// Fórmula (6): Clientes atendidos
+function onClientesChange() {
+    const clientesB = parseFloat(document.getElementById('clientesB').value) || 0;
+    const capacidadeB = parseFloat(document.getElementById('capacidadeB').value) || 0;
+    const alertDiv = document.getElementById('clientesAlert');
+    
+    if (clientesB > 0) {
+        const percentual = ((clientesB / capacidadeB - 1) * 100).toFixed(2);
+        
+        if (clientesB > capacidadeB * 1.05) {
+            alertDiv.className = 'alert-danger-custom';
+            alertDiv.textContent = `Atenção! Você está prevendo atender ${percentual}% acima da capacidade prevista para ${mesB}. Isso tende a gerar aumento de custos, perda de qualidade, estresse e perda de clientes!`;
+            alertDiv.style.display = 'block';
+        } else if (clientesB < capacidadeB * 0.95) {
+            alertDiv.className = 'alert-warning-custom';
+            alertDiv.textContent = `Atenção! Você está prevendo atender ${Math.abs(percentual)}% menos do que a capacidade informada para ${mesB}. Isso prejudica a rentabilidade do negócio!`;
+            alertDiv.style.display = 'block';
+        } else {
+            alertDiv.style.display = 'none';
+        }
+        
+        // Mostrar próxima seção
+        document.getElementById('section-precos').style.display = 'block';
+        
+        if (!document.getElementById('variacaoPrecos').value) {
+            document.getElementById('variacaoPrecos').value = 100;
+        }
+        onPrecosChange(); // Recalcular sempre
+    }
+}
+
+// Fórmula (9): Variação de preços
+function onPrecosChange() {
+    const variacaoPrecos = parseFloat(document.getElementById('variacaoPrecos').value) || 0;
+    const clientesB = parseFloat(document.getElementById('clientesB').value) || 0;
+    const clientesA = baseData.clients_served || 0;
+    const alertDiv = document.getElementById('precosAlert');
+    
+    if (variacaoPrecos > 0) {
+        let mensagem = '';
+        
+        if (clientesB > clientesA * 1.05 && variacaoPrecos > 100) {
+            mensagem = `Em ${mesB} você está prevendo vender mais do que em ${mesA}, mesmo com aumento nos preços! Certeza?`;
+        } else if (clientesB >= clientesA * 0.95 && clientesB <= clientesA * 1.05 && variacaoPrecos > 100) {
+            mensagem = `Você está prevendo manter as vendas de ${mesA} mesmo com aumento nos preços! Certeza?`;
+        } else if (clientesB < clientesA * 0.95 && variacaoPrecos < 100) {
+            mensagem = `Você está prevendo vender menos do que em ${mesA}, mesmo com redução nos preços! Certeza?`;
+        } else if (clientesB >= clientesA * 0.95 && clientesB <= clientesA * 1.05 && variacaoPrecos < 100) {
+            mensagem = `Você está prevendo manter as vendas de ${mesA} mesmo com redução nos preços! Certeza?`;
+        } else if (clientesB < clientesA * 0.95 && variacaoPrecos === 100) {
+            mensagem = `Você está prevendo vender menos do que em ${mesA} mesmo mantendo os preços! Certeza?`;
+        }
+        
+        if (mensagem) {
+            alertDiv.textContent = mensagem;
+            alertDiv.style.display = 'block';
+        } else {
+            alertDiv.style.display = 'none';
+        }
+        
+        // Mostrar próxima seção e recalcular ticket (que recalculará tudo depois)
+        document.getElementById('section-ticket').style.display = 'block';
+        calculateTicketMedio(); // Recalcula ticket e cascateia para faturamento, gastos, etc
+    }
+}
+
+// Fórmula (11): Ticket Médio
+function calculateTicketMedio() {
+    const ticketMedioA = baseData.sales_revenue && baseData.clients_served ? 
+        baseData.sales_revenue / baseData.clients_served : 0;
+    const variacaoPrecos = parseFloat(document.getElementById('variacaoPrecos').value) || 100;
+    const ticketMedioCalculado = ticketMedioA * (variacaoPrecos / 100);
+    
+    let infoText = '';
+    if (variacaoPrecos > 100) {
+        infoText = `Em ${mesA} o Ticket médio foi de R$ ${ticketMedioA.toFixed(2)}. Com o aumento nos preços, em ${mesB} chegará a R$ ${ticketMedioCalculado.toFixed(2)}. Alterações no poder de compra do seu público-alvo e/ou campanhas promocionais, podem influenciar este valor. Indique o ticket médio que considera possível:`;
+    } else if (variacaoPrecos === 100) {
+        infoText = `Como não houve variação nos preços, o Ticket médio deverá ficar no mesmo valor de ${mesA}: R$ ${ticketMedioA.toFixed(2)}. Alterações no poder de compra do seu público-alvo e/ou campanhas promocionais, podem influenciar este valor. Indique o ticket médio que considera possível:`;
+    } else {
+        infoText = `Em ${mesA} o Ticket médio foi de R$ ${ticketMedioA.toFixed(2)}. Com a redução dos preços, em ${mesB} ficará em R$ ${ticketMedioCalculado.toFixed(2)}. Alterações no poder de compra do seu público-alvo e/ou campanhas promocionais, podem influenciar este valor. Indique o ticket médio que considera possível:`;
+    }
+    
+    document.getElementById('ticketInfo').textContent = infoText;
+    
+    // Atualizar o valor calculado sempre que recalcular
+    const currentValue = parseFloat(document.getElementById('ticketMedioB').value) || 0;
+    if (currentValue === 0 || !document.getElementById('ticketMedioB').dataset.userEdited) {
+        document.getElementById('ticketMedioB').value = ticketMedioCalculado.toFixed(2);
+    }
+    
+    // Armazenar para comparação
+    document.getElementById('ticketMedioB').dataset.calculado = ticketMedioCalculado;
+    onTicketChange();
+}
+
+// Fórmula (12): Alerta Ticket Médio
+function onTicketChange() {
+    const ticketMedioB = parseFloat(document.getElementById('ticketMedioB').value) || 0;
+    const ticketCalculado = parseFloat(document.getElementById('ticketMedioB').dataset.calculado) || 0;
+    const alertDiv = document.getElementById('ticketAlert');
+    
+    if (ticketMedioB > 0) {
+        const variacaoReal = ((ticketMedioB / ticketCalculado - 1) * 100).toFixed(2);
+        
+        if (ticketMedioB < ticketCalculado * 0.99) {
+            alertDiv.textContent = `Em termos reais, você está estimando que os clientes vão comprar ${Math.abs(variacaoReal)}% menos em cada transação.`;
+            alertDiv.style.display = 'block';
+        } else if (ticketMedioB >= ticketCalculado * 0.99 && ticketMedioB <= ticketCalculado * 1.01) {
+            alertDiv.textContent = 'OK. Você não está prevendo mudança real no valor médio das compras por cliente.';
+            alertDiv.style.display = 'block';
+        } else if (ticketMedioB > ticketCalculado * 1.01) {
+            alertDiv.textContent = `Você está prevendo que os clientes comprarão ${variacaoReal}% mais em cada transação.`;
+            alertDiv.style.display = 'block';
+        }
+        
+        // Mostrar próxima seção e recalcular tudo abaixo
+        document.getElementById('section-faturamento').style.display = 'block';
+        calculateFaturamento(); // Isso irá recalcular automaticamente tudo que vem depois
+    }
+}
+
+// Fórmula (14): Faturamento
+function calculateFaturamento() {
+    const clientesB = parseFloat(document.getElementById('clientesB').value) || 0;
+    const ticketMedioB = parseFloat(document.getElementById('ticketMedioB').value) || 0;
+    const faturamentoCalculado = clientesB * ticketMedioB;
+    const faturamentoA = baseData.sales_revenue || 0;
+    
+    document.getElementById('faturamentoInfo').textContent = 
+        `Com base em suas estimativas, até aqui, o Faturamento que em ${mesA} foi de R$ ${faturamentoA.toLocaleString('pt-BR', {minimumFractionDigits: 2})}, será de R$ ${faturamentoCalculado.toLocaleString('pt-BR', {minimumFractionDigits: 2})} em ${mesB}. Porém, descontos promocionais que você poderá adotar alterariam este valor. Anote sua previsão de faturamento:`;
+    
+    // Atualizar o valor se não foi editado pelo usuário
+    const currentValue = parseFloat(document.getElementById('faturamentoB').value) || 0;
+    if (currentValue === 0 || !document.getElementById('faturamentoB').dataset.userEdited) {
+        document.getElementById('faturamentoB').value = faturamentoCalculado.toFixed(2);
+    }
+    
+    document.getElementById('faturamentoB').dataset.calculado = faturamentoCalculado;
+    onFaturamentoChange();
+}
+
+// Fórmula (15) e (16): Alerta Faturamento
+function onFaturamentoChange() {
+    const faturamentoB = parseFloat(document.getElementById('faturamentoB').value) || 0;
+    const faturamentoCalculado = parseFloat(document.getElementById('faturamentoB').dataset.calculado) || 0;
+    const alertDiv = document.getElementById('faturamentoAlert');
+    const margemDiv = document.getElementById('margemAposFaturamento');
+    
+    if (faturamentoB > 0) {
+        if (faturamentoB < faturamentoCalculado * 0.99) {
+            const desconto = ((1 - faturamentoB / faturamentoCalculado) * 100).toFixed(2);
+            alertDiv.textContent = `Esta previsão de faturamento indica que você praticará um desconto médio de ${desconto}% no valor de suas vendas.`;
+            alertDiv.style.display = 'block';
+        } else if (faturamentoB >= faturamentoCalculado * 0.99 && faturamentoB <= faturamentoCalculado * 1.01) {
+            alertDiv.textContent = `Ou seja: você não está prevendo descontos promocionais em ${mesB}.`;
+            alertDiv.style.display = 'block';
+        } else {
+            alertDiv.textContent = 'Sua previsão de faturamento é inviável com as premissas informadas até aqui. Por favor reveja suas estimativas!';
+            alertDiv.className = 'alert-danger-custom';
+            alertDiv.style.display = 'block';
+            margemDiv.style.display = 'none';
+            return;
+        }
+        
+        // Fórmula (16) e (17): Margem após faturamento
+        const percGastosVendasA = baseData.sales_expenses && baseData.sales_revenue ? 
+            (baseData.sales_expenses / baseData.sales_revenue) : 0;
+        const percGastosComprasA = baseData.input_product_expenses && baseData.sales_revenue ? 
+            (baseData.input_product_expenses / baseData.sales_revenue) : 0;
+        const custosFixosA = baseData.fixed_costs || baseData.other_fixed_costs || 0;
+        const ticketMedioA = baseData.sales_revenue && baseData.clients_served ? 
+            baseData.sales_revenue / baseData.clients_served : 0;
+        const clientesB = parseFloat(document.getElementById('clientesB').value) || 0;
+        
+        const margemE2 = (faturamentoB - ((faturamentoB * percGastosVendasA) + (ticketMedioA * clientesB * percGastosComprasA) + custosFixosA)) / faturamentoB * 100;
+        
+        margemDiv.textContent = `Até aqui, as simulações referiram-se aos fatores que influenciam na formação do faturamento bruto. Mantendo-se as incidências dos custos observadas em ${mesA} o mês de ${mesB} se encerrará com ${margemE2.toFixed(2)}%`;
+        margemDiv.style.display = 'block';
+        
+        // Mostrar próxima seção
+        document.getElementById('section-gastos-vendas').style.display = 'block';
+        calculateGastosVendas();
+    }
+}
+
+// Fórmula (19): Gastos com Vendas
+function calculateGastosVendas() {
+    const percGastosVendasA = baseData.sales_expenses && baseData.sales_revenue ? 
+        (baseData.sales_expenses / baseData.sales_revenue * 100) : 0;
+    const faturamentoB = parseFloat(document.getElementById('faturamentoB').value) || 0;
+    const gastosVendasCalculado = faturamentoB * (percGastosVendasA / 100);
+    
+    document.getElementById('gastosVendasInfo').textContent = 
+        `Em ${mesA} estes gastos representaram ${percGastosVendasA.toFixed(2)}% do faturamento. Em ${mesB} aquele índice, aplicado ao faturamento previsto, resultaria em R$ ${gastosVendasCalculado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}. Alteração nas alíquotas, nas taxas e juros bancários, comissões, etc., podem alterar aquele valor. Digite sua previsão:`;
+    
+    // Recalcular sempre que o faturamento mudar
+    const currentValue = parseFloat(document.getElementById('gastosVendasB').value) || 0;
+    if (currentValue === 0 || !document.getElementById('gastosVendasB').dataset.userEdited) {
+        document.getElementById('gastosVendasB').value = gastosVendasCalculado.toFixed(2);
+    }
+    
+    onGastosVendasChange();
+}
+
+// Fórmula (20) e (21): Gastos com Compras  
+function onGastosVendasChange() {
+    const gastosVendasB = parseFloat(document.getElementById('gastosVendasB').value);
+    
+    if (!isNaN(gastosVendasB) && gastosVendasB >= 0) {
+        document.getElementById('section-gastos-compras').style.display = 'block';
+        calculateGastosCompras(); // Recalcula gastos compras e tudo depois
+    }
+}
+
+function calculateGastosCompras() {
+    const percGastosComprasA = baseData.input_product_expenses && baseData.sales_revenue ? 
+        (baseData.input_product_expenses / baseData.sales_revenue * 100) : 0;
+    const faturamentoB = parseFloat(document.getElementById('faturamentoB').value) || 0;
+    const gastosComprasCalculado = faturamentoB * (percGastosComprasA / 100);
+    
+    document.getElementById('gastosComprasInfo').textContent = 
+        `Em ${mesA}, representaram ${percGastosComprasA.toFixed(2)}% do faturamento. Sua repetição em ${mesB}, resultaria em R$ ${gastosComprasCalculado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}. Outros fornecedores e preços e mudanças na sua oferta, influenciam esses gastos. Anote sua previsão: (se for vender só o que já está no estoque, digite 0 (zero).`;
+    
+    // Recalcular sempre que o faturamento mudar
+    const currentValue = parseFloat(document.getElementById('gastosComprasB').value);
+    if (isNaN(currentValue) || currentValue === 0 || !document.getElementById('gastosComprasB').dataset.userEdited) {
+        document.getElementById('gastosComprasB').value = gastosComprasCalculado.toFixed(2);
+    }
+    
+    document.getElementById('gastosComprasB').dataset.calculado = gastosComprasCalculado;
+    onGastosComprasChange();
+}
+
+// Fórmula (22) até (28): Gastos Compras e Custo Variável
+function onGastosComprasChange() {
+    const gastosComprasB = parseFloat(document.getElementById('gastosComprasB').value);
+    if (isNaN(gastosComprasB) || gastosComprasB < 0) return;
+    
+    const gastosComprasCalculado = parseFloat(document.getElementById('gastosComprasB').dataset.calculado) || 0;
+    const alertDiv = document.getElementById('comprasAlert');
+    
+    // Fórmula (22)
+    if (gastosComprasB !== gastosComprasCalculado) {
+        const variacao = ((gastosComprasB / gastosComprasCalculado - 1) * 100).toFixed(2);
+        if (gastosComprasB > gastosComprasCalculado) {
+            alertDiv.textContent = `Você está prevendo um aumento médio de ${variacao}% no preço das mercadorias. OK?`;
+            alertDiv.style.display = 'block';
+        } else {
+            alertDiv.textContent = `Você está prevendo uma redução de ${Math.abs(variacao)}% nos gastos com a compra de mercadorias. OK?`;
+            alertDiv.style.display = 'block';
+        }
+    } else {
+        alertDiv.style.display = 'none';
+    }
+    
+    // Fórmula (23) e (24): Custo Variável
+    const gastosVendasB = parseFloat(document.getElementById('gastosVendasB').value) || 0;
+    const custoVariavel = gastosVendasB + gastosComprasB;
+    const faturamentoB = parseFloat(document.getElementById('faturamentoB').value) || 0;
+    
+    document.getElementById('custoVariavelSection').style.display = 'block';
+    document.getElementById('custoVariavel').textContent = `R$ ${custoVariavel.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    
+    // Fórmula (25): Alerta crítico
+    const custoVariavelAlertDiv = document.getElementById('custoVariavelAlert');
+    if (custoVariavel >= faturamentoB) {
+        custoVariavelAlertDiv.textContent = 'ESTA É UMA SITUAÇÃO CRÍTICA! Com este custo variável, seu negócio é inviável!';
+        custoVariavelAlertDiv.style.display = 'block';
+        return;
+    } else {
+        custoVariavelAlertDiv.style.display = 'none';
+    }
+    
+    // Fórmula (26), (27) e (28): Margem de Contribuição
+    document.getElementById('section-margem-contrib').style.display = 'block';
+    const clientesB = parseFloat(document.getElementById('clientesB').value) || 0;
+    const margemContrib = clientesB > 0 ? (faturamentoB - custoVariavel) / clientesB : 0;
+    document.getElementById('margemContribuicao').textContent = `R$ ${margemContrib.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    
+    // Mostrar próxima seção
+    document.getElementById('section-custos-fixos').style.display = 'block';
+    calculateCustosFixos();
+}
+
+// Fórmula (30) e (31): Custos Fixos
+function calculateCustosFixos() {
+    const custosFixosA = baseData.fixed_costs || baseData.other_fixed_costs || 0;
+    
+    document.getElementById('custosFixosInfo').textContent = 
+        `Em ${mesA} seus custos fixos somavam R$ ${custosFixosA.toLocaleString('pt-BR', {minimumFractionDigits: 2})}. Porém, alterações nos recursos e valores contratados influenciam. Informe sua previsão para ${mesB}:`;
+    
+    // Recalcular sempre
+    const currentValue = parseFloat(document.getElementById('custosFixosB').value);
+    if (isNaN(currentValue) || currentValue === 0 || !document.getElementById('custosFixosB').dataset.userEdited) {
+        document.getElementById('custosFixosB').value = custosFixosA.toFixed(2);
+    }
+    
+    onCustosFixosChange();
+}
+
+function onCustosFixosChange() {
+    const custosFixosB = parseFloat(document.getElementById('custosFixosB').value);
+    if (isNaN(custosFixosB) || custosFixosB < 0) return;
+    
+    const custosFixosA = baseData.fixed_costs || baseData.other_fixed_costs || 0;
+    const alertDiv = document.getElementById('custosFixosAlert');
+    
+    // Fórmula (31)
+    const variacao = ((custosFixosB / custosFixosA - 1) * 100).toFixed(2);
+    if (Math.abs(custosFixosB - custosFixosA) < 0.01) {
+        alertDiv.textContent = 'Você não está prevendo nenhuma alteração nos custos fixos.';
+        alertDiv.style.display = 'block';
+    } else if (custosFixosB < custosFixosA) {
+        alertDiv.textContent = `Você está considerando uma diminuição de ${Math.abs(variacao)}% nos custos fixos. OK?`;
+        alertDiv.style.display = 'block';
+    } else {
+        alertDiv.textContent = `Você está prevendo um aumento médio de ${variacao}% nos custos fixos. OK?`;
+        alertDiv.style.display = 'block';
+    }
+    
+    // Fórmulas (32) até (42): Custo Total e Resultado Final
+    calculateResultadoFinal();
+}
+
+function calculateResultadoFinal() {
+    const gastosVendasB = parseFloat(document.getElementById('gastosVendasB').value) || 0;
+    const gastosComprasB = parseFloat(document.getElementById('gastosComprasB').value) || 0;
+    const custosFixosB = parseFloat(document.getElementById('custosFixosB').value) || 0;
+    const faturamentoB = parseFloat(document.getElementById('faturamentoB').value) || 0;
+    
+    const custoVariavel = gastosVendasB + gastosComprasB;
+    const custoTotal = custoVariavel + custosFixosB;
+    
+    // Fórmula (33) e (34)
+    document.getElementById('custoTotalSection').style.display = 'block';
+    document.getElementById('custoTotal').textContent = `R$ ${custoTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    
+    // Fórmula (35)
+    const percCustoTotalA = baseData.sales_revenue ? 
+        ((baseData.sales_expenses + baseData.input_product_expenses + (baseData.fixed_costs || baseData.other_fixed_costs || 0)) / baseData.sales_revenue * 100) : 0;
+    const percCustoTotalB = faturamentoB > 0 ? (custoTotal / faturamentoB * 100) : 0;
+    
+    if (Math.abs(percCustoTotalA - percCustoTotalB) < 0.01) {
+        document.getElementById('custoTotalInfo').textContent = `Em ${mesB} o custo total simulado será igual ao de ${mesA}`;
+    } else {
+        document.getElementById('custoTotalInfo').textContent = 
+            `Em ${mesA} o custo total correspondeu a ${percCustoTotalA.toFixed(2)}% do faturamento. Nesta sua previsão para ${mesB}, corresponde a ${percCustoTotalB.toFixed(2)}%.`;
+    }
+    
+    // Fórmulas (37) até (42): Resultado Final
+    document.getElementById('section-resultado').style.display = 'block';
+    const resultadoValor = faturamentoB - custoTotal;
+    const resultadoPerc = faturamentoB > 0 ? (resultadoValor / faturamentoB * 100) : 0;
+    
+    document.getElementById('resultadoValor').textContent = `R$ ${resultadoValor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    
+    // Determinar tipo de resultado
+    let tipoResultado = '';
+    if (resultadoValor === 0) {
+        tipoResultado = 'Margem zero!';
+    } else if (custoVariavel >= faturamentoB) {
+        tipoResultado = 'Prejuízo = hemorragia financeira!';
+        document.getElementById('resultadoPercentual').style.display = 'none';
+        document.getElementById('resultadoOuSeja').style.display = 'none';
+    } else {
+        document.getElementById('resultadoOuSeja').style.display = 'block';
+        document.getElementById('resultadoTipo').textContent = resultadoValor < 0 ? 'prejuízo' : 'lucro';
+        document.getElementById('resultadoPercentual').textContent = `${Math.abs(resultadoPerc).toFixed(2)}%`;
+        document.getElementById('resultadoPercentual').style.display = 'block';
+    }
+    
+    // Fórmula (40): Resultado em A
+    const margemA = baseData.sales_revenue ? 
+        ((baseData.sales_revenue - (baseData.sales_expenses + baseData.input_product_expenses + (baseData.fixed_costs || baseData.other_fixed_costs || 0))) / baseData.sales_revenue * 100) : 0;
+    document.getElementById('resultadoMesA').textContent = 
+        `Em ${mesA} o mês fechou com ${margemA >= 0 ? 'lucro' : 'prejuízo'} de ${Math.abs(margemA).toFixed(2)}%`;
+    
+    // Fórmula (42): Próximo passo
+    const margemIdealA = (baseData.ideal_profit_margin || baseData.ideal_service_profit_margin || 0);
+    const proximoPassoDiv = document.getElementById('proximoPasso');
+    let mensagemProximoPasso = '';
+    
+    if (custoVariavel >= faturamentoB) {
+        mensagemProximoPasso = 'Vamos definir prioridades para solucionar este grave problema!';
+    } else if (resultadoValor <= 0) {
+        mensagemProximoPasso = 'Vamos definir prioridades para solucionar este problema!';
+    } else if (resultadoValor > 0 && resultadoPerc <= margemIdealA * 0.70) {
+        mensagemProximoPasso = 'Este resultado está longe do lucro que você considera ideal. Vamos definir prioridades para chegar lá!';
+    } else if (resultadoPerc > margemIdealA * 0.70 && resultadoPerc < margemIdealA) {
+        mensagemProximoPasso = 'Ainda será preciso definir algumas prioridades para atingir o lucro que você considera ideal!';
+    } else if (resultadoPerc === margemIdealA) {
+        mensagemProximoPasso = 'Vamos ver se é possível adotar algumas prioridades para que sua loja alcance um resultado ainda melhor!';
+    } else if (resultadoPerc > margemIdealA) {
+        mensagemProximoPasso = 'Será que dá para melhorar este ótimo resultado?';
+    }
+    
+    proximoPassoDiv.textContent = mensagemProximoPasso;
+    proximoPassoDiv.style.display = 'block';
+}
+</script>
+{% endblock %}
