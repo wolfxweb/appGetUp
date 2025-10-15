@@ -142,8 +142,7 @@
               {% for data in basic_data_list %}
               <option value="{{ data.id }}" 
                       data-month="{{ data.month }}" 
-                      data-year="{{ data.year }}"
-                      {% if data.is_current %}selected{% endif %}>
+                      data-year="{{ data.year }}">
                 {{ data.month }}/{{ data.year }}
               </option>
               {% endfor %}
@@ -337,13 +336,6 @@ document.addEventListener('DOMContentLoaded', function() {
         this.dataset.userEdited = 'true';
         onCustosFixosChange();
     });
-    
-    // Carregar dados se já houver período selecionado
-    if (basicDataSelect.value) {
-        const selectedOption = basicDataSelect.options[basicDataSelect.selectedIndex];
-        mesA = selectedOption.text;
-        loadBaseData(basicDataSelect.value);
-    }
 });
 
 async function loadBaseData(basicDataId) {
