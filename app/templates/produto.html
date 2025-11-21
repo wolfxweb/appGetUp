@@ -68,6 +68,13 @@
         line-height: 1.5;
         border-radius: 0.2rem;
     }
+    .btn-action i {
+        color: white !important;
+    }
+    .btn-secondary i,
+    .btn-danger i {
+        color: white !important;
+    }
     .table-responsive {
         margin-bottom: 1rem;
         border-radius: 0.25rem;
@@ -300,65 +307,93 @@ document.getElementById('categoriaForm').addEventListener('submit', async functi
     const data = await response.json();
     
     if (response.ok) {
-      const modal = bootstrap.Modal.getInstance(document.getElementById('categoriaModal'));
-      if (modal) {
-        modal.hide();
-      }
+      const modalElement = document.getElementById('categoriaModal');
+      const modal = bootstrap.Modal.getInstance(modalElement);
       
+      // Resetar formulário antes de fechar
       document.getElementById('categoriaForm').reset();
       document.getElementById('categoriaCodigoOriginal').value = '';
       
-      // Garantir que estamos na tab de categoria e que ela esteja ativa
-      setTimeout(() => {
-        const categoriaTab = document.getElementById('categoria-tab');
-        const categoriaPane = document.getElementById('categoria');
+      // Fechar modal e remover backdrop corretamente
+      if (modal) {
+        // Aguardar o evento de fechamento da modal para fazer cleanup
+        modalElement.addEventListener('hidden.bs.modal', function cleanup() {
+          // Remover backdrop se ainda existir (pode haver múltiplos)
+          const backdrops = document.querySelectorAll('.modal-backdrop');
+          backdrops.forEach(backdrop => backdrop.remove());
+          
+          // Restaurar scroll do body
+          document.body.classList.remove('modal-open');
+          document.body.style.overflow = '';
+          document.body.style.paddingRight = '';
+          
+          // Garantir que estamos na tab de categoria e que ela esteja ativa
+          const categoriaTab = document.getElementById('categoria-tab');
+          const categoriaPane = document.getElementById('categoria');
+          
+          if (categoriaTab && categoriaPane) {
+            // Remover active de todas as tabs
+            document.querySelectorAll('#produtoTabs .nav-link').forEach(tabLink => {
+              tabLink.classList.remove('active');
+              tabLink.setAttribute('aria-selected', 'false');
+            });
+            
+            // Remover active de todos os panes
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+              pane.classList.remove('show', 'active');
+            });
+            
+            // Ativar a tab de categoria
+            categoriaTab.classList.add('active');
+            categoriaTab.setAttribute('aria-selected', 'true');
+            categoriaPane.classList.add('show', 'active');
+            
+            // Usar Bootstrap Tab API para garantir que funcione corretamente
+            const tab = bootstrap.Tab.getOrCreateInstance(categoriaTab);
+            tab.show();
+          }
+          
+          // Recarregar categorias após um pequeno delay
+          setTimeout(() => {
+            if (typeof window.carregarCategorias === 'function') {
+              window.carregarCategorias();
+            }
+          }, 200);
+          
+          // Mostrar mensagem de sucesso
+          const mensagem = categoriaCodigoOriginal ? 'Categoria atualizada com sucesso!' : 'Categoria adicionada com sucesso!';
+          const alertDiv = document.createElement('div');
+          alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
+          alertDiv.style.zIndex = '9999';
+          alertDiv.innerHTML = `
+            ${mensagem}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          `;
+          document.body.appendChild(alertDiv);
+          setTimeout(() => {
+            if (alertDiv.parentNode) {
+              alertDiv.remove();
+            }
+          }, 3000);
+        }, { once: true });
         
-        if (categoriaTab && categoriaPane) {
-          // Remover active de todas as tabs
-          document.querySelectorAll('#produtoTabs .nav-link').forEach(tabLink => {
-            tabLink.classList.remove('active');
-            tabLink.setAttribute('aria-selected', 'false');
-          });
-          
-          // Remover active de todos os panes
-          document.querySelectorAll('.tab-pane').forEach(pane => {
-            pane.classList.remove('show', 'active');
-          });
-          
-          // Ativar a tab de categoria
-          categoriaTab.classList.add('active');
-          categoriaTab.setAttribute('aria-selected', 'true');
-          categoriaPane.classList.add('show', 'active');
-          
-          // Usar Bootstrap Tab API para garantir que funcione corretamente
-          const tab = bootstrap.Tab.getOrCreateInstance(categoriaTab);
-          tab.show();
-        }
-      }, 100);
-      
-      // Recarregar categorias após um pequeno delay para garantir que o backend processou
-      setTimeout(() => {
-        if (typeof window.carregarCategorias === 'function') {
-          window.carregarCategorias();
-        }
-      }, 500);
-      
-      // Mostrar mensagem de sucesso
-      const mensagem = categoriaCodigoOriginal ? 'Categoria atualizada com sucesso!' : 'Categoria adicionada com sucesso!';
-      // Criar um alert temporário
-      const alertDiv = document.createElement('div');
-      alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
-      alertDiv.style.zIndex = '9999';
-      alertDiv.innerHTML = `
-        ${mensagem}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      `;
-      document.body.appendChild(alertDiv);
-      setTimeout(() => {
-        if (alertDiv.parentNode) {
-          alertDiv.remove();
-        }
-      }, 3000);
+        // Fechar a modal
+        modal.hide();
+      } else {
+        // Se não há instância da modal, fazer cleanup manual
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => backdrop.remove());
+        document.body.classList.remove('modal-open');
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+        
+        // Recarregar categorias
+        setTimeout(() => {
+          if (typeof window.carregarCategorias === 'function') {
+            window.carregarCategorias();
+          }
+        }, 200);
+      }
     } else {
       alert(data.error || 'Erro ao salvar categoria');
     }
