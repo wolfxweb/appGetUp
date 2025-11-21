@@ -4,6 +4,7 @@ from app.models.user import User
 from app.models.basic_data import BasicData
 from app.models.license import License
 from app.models.categoria import Categoria
+from app.models.produto import Produto
 
 # Export all models
-__all__ = ['User', 'BasicData', 'License', 'Categoria'] 
+__all__ = ['User', 'BasicData', 'License', 'Categoria', 'Produto'] 

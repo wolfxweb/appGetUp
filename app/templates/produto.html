@@ -154,8 +154,42 @@
             
             <!-- Produto Tab -->
             <div class="tab-pane fade" id="produto" role="tabpanel" aria-labelledby="produto-tab">
-              <!-- Conteúdo do Produto -->
-              <p>Conteúdo do Produto será adicionado aqui.</p>
+              <!-- Botão para adicionar produto -->
+              <div class="mb-3">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#produtoModal" id="btnAdicionarProduto">
+                  <i class="bi bi-plus-circle"></i> Adicionar Produto
+                </button>
+              </div>
+              
+              <!-- Tabela de produtos -->
+              <div class="table-responsive">
+                <table class="table table-hover" id="produtosTable">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome do Produto</th>
+                      <th>Categoria</th>
+                      <th>Dados Básicos</th>
+                      <th>Faturamento por Mercadoria</th>
+                      <th>Preço de Venda</th>
+                      <th>Custo de Aquisição</th>
+                      <th>Quantidade de Vendas</th>
+                      <th>Gastos com Vendas</th>
+                      <th>Gastos com Compras</th>
+                      <th>Margem Contrib. Informada (%)</th>
+                      <th>Margem Contrib. Corrigida (%)</th>
+                      <th>Margem Contrib. (R$)</th>
+                      <th>Custos Fixos</th>
+                      <th>Ponto de Equilíbrio</th>
+                      <th>Margem Operacional</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="produtosTableBody">
+                    <!-- Produtos serão carregados aqui via JavaScript -->
+                  </tbody>
+                </table>
+              </div>
             </div>
             
             <!-- Categoria Tab -->
@@ -220,6 +254,122 @@
     </div>
   </div>
 </div>
+
+<!-- Modal para Produto -->
+<div class="modal fade" id="produtoModal" tabindex="-1" aria-labelledby="produtoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header bg-secondary text-white">
+        <h5 class="modal-title" id="produtoModalLabel">Adicionar Produto</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="produtoForm">
+        <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+          <input type="hidden" id="produtoCodigoOriginal" name="produtoCodigoOriginal">
+          
+          <h6 class="mb-3 text-secondary">Informações Básicas</h6>
+          
+          <div class="mb-3">
+            <label for="produtoNome" class="form-label">Nome do Produto <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="produtoNome" name="nome" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoCategoriaCodigo" class="form-label">Categoria</label>
+            <select class="form-select" id="produtoCategoriaCodigo" name="categoria_codigo">
+              <option value="">Selecione uma categoria</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoBasicDataId" class="form-label">Dados Básicos</label>
+            <select class="form-select" id="produtoBasicDataId" name="basic_data_id">
+              <option value="">Selecione um período</option>
+            </select>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoPrecoVenda" class="form-label">Preço de Venda (R$) <span class="text-danger">*</span></label>
+            <input type="number" step="0.01" class="form-control" id="produtoPrecoVenda" name="preco_venda" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoCustoAquisicao" class="form-label">Custo de Aquisição (R$) <span class="text-danger">*</span></label>
+            <input type="number" step="0.01" class="form-control" id="produtoCustoAquisicao" name="custo_aquisicao" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoPercentualFaturamento" class="form-label">Percentual que o produto representa no faturamento (%)</label>
+            <input type="number" step="0.01" class="form-control" id="produtoPercentualFaturamento" name="percentual_faturamento">
+          </div>
+          
+          <div class="mb-3">
+            <div class="alert alert-info mb-0" id="calculoQuantidadeVendas" style="display: none;">
+              <small>Com base nesta participação, as vendas teriam sido de <strong><span id="quantidadeVendasCalculada">0</span></strong> unidades. Caso não concorde, reveja o % informado.</small>
+            </div>
+          </div>
+          
+          <hr class="my-4">
+          <h6 class="mb-3 text-secondary">Campos Calculados</h6>
+          
+          <div class="mb-3">
+            <label for="produtoFaturamentoPorMercadoria" class="form-label">Faturamento por Mercadoria (R$)</label>
+            <input type="number" step="0.01" class="form-control" id="produtoFaturamentoPorMercadoria" name="faturamento_por_mercadoria" readonly>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoQuantidadeVendas" class="form-label">Quantidade de Vendas</label>
+            <input type="number" step="0.01" class="form-control" id="produtoQuantidadeVendas" name="quantidade_vendas" readonly>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoGastosComVendas" class="form-label">Gastos com Vendas (R$)</label>
+            <input type="number" step="0.01" class="form-control" id="produtoGastosComVendas" name="gastos_com_vendas" readonly>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoGastosComCompras" class="form-label">Gastos com Compras (R$)</label>
+            <input type="number" step="0.01" class="form-control" id="produtoGastosComCompras" name="gastos_com_compras" readonly>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoMargemContribuicaoValor" class="form-label">Margem de Contribuição (R$)</label>
+            <input type="number" step="0.01" class="form-control" id="produtoMargemContribuicaoValor" name="margem_contribuicao_valor" readonly>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoMargemContribuicaoInformada" class="form-label">Margem de Contribuição (%) Informada</label>
+            <input type="number" step="0.01" class="form-control" id="produtoMargemContribuicaoInformada" name="margem_contribuicao_informada" readonly>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoMargemContribuicaoCorrigida" class="form-label">Margem de Contribuição (%) Corrigida</label>
+            <input type="number" step="0.01" class="form-control" id="produtoMargemContribuicaoCorrigida" name="margem_contribuicao_corrigida" readonly>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoCustosFixos" class="form-label">Custos Fixos (R$)</label>
+            <input type="number" step="0.01" class="form-control" id="produtoCustosFixos" name="custos_fixos" readonly>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoPontoEquilibrio" class="form-label">Ponto de Equilíbrio</label>
+            <input type="number" step="0.01" class="form-control" id="produtoPontoEquilibrio" name="ponto_equilibrio" readonly>
+          </div>
+          
+          <div class="mb-3">
+            <label for="produtoMargemOperacional" class="form-label">Margem Operacional</label>
+            <input type="number" step="0.01" class="form-control" id="produtoMargemOperacional" name="margem_operacional" readonly>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
@@ -247,6 +397,58 @@ document.addEventListener('DOMContentLoaded', function() {
   if (btnAdicionarCategoria) {
     btnAdicionarCategoria.addEventListener('click', function() {
       openCategoriaModal();
+    });
+  }
+  
+  // Carregar produtos quando a tab de produto for clicada
+  const produtoTab = document.getElementById('produto-tab');
+  if (produtoTab) {
+    produtoTab.addEventListener('shown.bs.tab', function() {
+      carregarProdutos();
+      carregarCategoriasParaSelect();
+      carregarBasicDataParaSelect();
+    });
+  }
+  
+  // Adicionar event listener ao botão de adicionar produto
+  const btnAdicionarProduto = document.getElementById('btnAdicionarProduto');
+  if (btnAdicionarProduto) {
+    btnAdicionarProduto.addEventListener('click', function() {
+      openProdutoModal();
+    });
+  }
+  
+  // Adicionar event listeners para cálculo automático de margens
+  const precoVendaInput = document.getElementById('produtoPrecoVenda');
+  const custoAquisicaoInput = document.getElementById('produtoCustoAquisicao');
+  const percentualFaturamentoInput = document.getElementById('produtoPercentualFaturamento');
+  const basicDataIdInput = document.getElementById('produtoBasicDataId');
+  
+  if (precoVendaInput) {
+    precoVendaInput.addEventListener('input', calcularCamposProduto);
+    precoVendaInput.addEventListener('blur', calcularCamposProduto);
+  }
+  
+  if (custoAquisicaoInput) {
+    custoAquisicaoInput.addEventListener('input', calcularCamposProduto);
+    custoAquisicaoInput.addEventListener('blur', calcularCamposProduto);
+  }
+  
+  if (percentualFaturamentoInput) {
+    percentualFaturamentoInput.addEventListener('input', () => {
+      console.log('Event: percentualFaturamento input');
+      calcularCamposProduto();
+    });
+    percentualFaturamentoInput.addEventListener('blur', () => {
+      console.log('Event: percentualFaturamento blur');
+      calcularCamposProduto();
+    });
+  }
+  
+  if (basicDataIdInput) {
+    basicDataIdInput.addEventListener('change', () => {
+      console.log('Event: basicDataId change', basicDataIdInput.value);
+      calcularCamposProduto();
     });
   }
 });
@@ -494,6 +696,597 @@ window.removerCategoria = async function(categoriaCodigo) {
   } catch (error) {
     console.error('Erro:', error);
     alert('Erro ao remover categoria. Por favor, tente novamente.');
+  }
+}
+
+// ============ FUNÇÕES PARA PRODUTOS ============
+
+// Variável global para armazenar dados básicos
+let basicDataCache = null;
+
+// Função para carregar dados básicos
+async function carregarBasicData(basicDataId) {
+  if (!basicDataId) {
+    console.log('carregarBasicData: basicDataId vazio');
+    basicDataCache = null;
+    return null;
+  }
+  
+  console.log('carregarBasicData: Carregando dados para ID:', basicDataId);
+  
+  try {
+    const url = `/produto/api/basic-data/${basicDataId}`;
+    console.log('carregarBasicData: Fazendo requisição para:', url);
+    const response = await fetch(url);
+    console.log('carregarBasicData: Response status:', response.status);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('carregarBasicData: Erro na resposta:', response.status, response.statusText, errorText);
+      basicDataCache = null;
+      return null;
+    }
+    
+    const data = await response.json();
+    console.log('carregarBasicData: Dados recebidos:', data);
+    basicDataCache = data;
+    return data;
+  } catch (error) {
+    console.error('carregarBasicData: Erro ao carregar dados básicos:', error);
+    basicDataCache = null;
+    return null;
+  }
+}
+
+// Função para calcular os campos do produto
+window.calcularCamposProduto = async function() {
+  console.log('=== INÍCIO CÁLCULO CAMPOS PRODUTO ===');
+  
+  const precoVenda = parseFloat(document.getElementById('produtoPrecoVenda').value) || 0;
+  const custoAquisicao = parseFloat(document.getElementById('produtoCustoAquisicao').value) || 0;
+  const percentualFaturamento = parseFloat(document.getElementById('produtoPercentualFaturamento').value) || 0;
+  const basicDataId = document.getElementById('produtoBasicDataId').value;
+  
+  console.log('Valores:', { precoVenda, custoAquisicao, percentualFaturamento, basicDataId });
+  
+  // Carregar dados básicos se houver basic_data_id selecionado
+  let basicData = null;
+  if (basicDataId) {
+    console.log('Carregando dados básicos para ID:', basicDataId);
+    basicData = await carregarBasicData(basicDataId);
+    console.log('Dados básicos carregados:', basicData);
+  } else {
+    console.log('Nenhum basic_data_id selecionado');
+  }
+  
+  // Calcular Margem de Contribuição (R$)
+  const margemContribuicaoValor = precoVenda - custoAquisicao;
+  document.getElementById('produtoMargemContribuicaoValor').value = margemContribuicaoValor.toFixed(2);
+  
+  // Calcular Margem de Contribuição (%) Informada
+  let margemContribuicaoPercentual = 0;
+  if (precoVenda > 0) {
+    margemContribuicaoPercentual = (margemContribuicaoValor / precoVenda) * 100;
+  }
+  document.getElementById('produtoMargemContribuicaoInformada').value = margemContribuicaoPercentual.toFixed(2);
+  
+  // Margem de Contribuição (%) Corrigida inicialmente é igual à informada
+  document.getElementById('produtoMargemContribuicaoCorrigida').value = margemContribuicaoPercentual.toFixed(2);
+  
+  // Calcular campos usando dados básicos com percentual
+  console.log('Verificando condições para cálculos:', { basicData: !!basicData, percentualFaturamento });
+  
+  const calculoQuantidadeVendasDiv = document.getElementById('calculoQuantidadeVendas');
+  let faturamentoPorMercadoria = 0;
+  let quantidadeVendas = 0;
+  
+  if (basicData && percentualFaturamento > 0) {
+    console.log('Calculando campos com dados básicos e percentual');
+    const percentualDecimal = percentualFaturamento / 100;
+    const fatLoja = basicData.sales_revenue || 0;
+    
+    // 1. Faturamento por Mercadoria = %Faturamento * Fat.Loja
+    // Exemplo: se faturamento loja = 100 e percentual = 30%, então faturamento por mercadoria = 30
+    faturamentoPorMercadoria = percentualDecimal * fatLoja;
+    console.log('Faturamento por Mercadoria calculado:', faturamentoPorMercadoria, '(Loja:', fatLoja, 'Percentual:', percentualFaturamento + '%)');
+    document.getElementById('produtoFaturamentoPorMercadoria').value = faturamentoPorMercadoria.toFixed(2);
+    
+    // 2. Gastos com Vendas = %Faturamento * Gastos com Vendas (Loja)
+    const gastosComVendas = percentualDecimal * (basicData.sales_expenses || 0);
+    console.log('Gastos com Vendas:', gastosComVendas);
+    document.getElementById('produtoGastosComVendas').value = gastosComVendas.toFixed(2);
+    
+    // 3. Gastos com Compras = %Faturamento * Gastos com Compras (Loja)
+    const gastosComCompras = percentualDecimal * (basicData.input_product_expenses || 0);
+    console.log('Gastos com Compras:', gastosComCompras);
+    document.getElementById('produtoGastosComCompras').value = gastosComCompras.toFixed(2);
+    
+    // 4. Custos Fixos = %Faturamento * Custos Fixos (Loja)
+    const custosFixos = percentualDecimal * ((basicData.fixed_costs || 0) + (basicData.other_fixed_costs || 0));
+    console.log('Custos Fixos:', custosFixos);
+    document.getElementById('produtoCustosFixos').value = custosFixos.toFixed(2);
+    
+    // 5. Quantidade de Vendas = %Faturamento * Quantidade de Clientes Atendidos (clients_served dos dados básicos)
+    // Usa o clients_served dos dados básicos aplicado ao percentual
+    const quantidadeClientesLoja = basicData.clients_served || 0;
+    console.log('Quantidade de Clientes Atendidos da Loja (clients_served):', quantidadeClientesLoja, 'do basicData:', basicData.clients_served);
+    
+    if (quantidadeClientesLoja > 0) {
+      quantidadeVendas = percentualDecimal * quantidadeClientesLoja;
+      console.log('Quantidade de Vendas após aplicar percentual:', quantidadeVendas, '(Loja:', quantidadeClientesLoja, 'Percentual:', percentualFaturamento + '%)');
+      
+      // Sempre exibir o valor calculado no campo
+      try {
+        const quantidadeVendasCalculadaEl = document.getElementById('quantidadeVendasCalculada');
+        if (quantidadeVendasCalculadaEl) {
+          quantidadeVendasCalculadaEl.textContent = quantidadeVendas.toFixed(2);
+        }
+      } catch (e) {
+        console.error('Erro ao definir quantidadeVendasCalculada:', e);
+      }
+      
+      try {
+        const produtoQuantidadeVendasEl = document.getElementById('produtoQuantidadeVendas');
+        if (produtoQuantidadeVendasEl) {
+          produtoQuantidadeVendasEl.value = quantidadeVendas.toFixed(2);
+        }
+      } catch (e) {
+        console.error('Erro ao definir produtoQuantidadeVendas:', e);
+      }
+      
+      // Exibir mensagem informativa
+      if (calculoQuantidadeVendasDiv) {
+        calculoQuantidadeVendasDiv.style.display = 'block';
+        console.log('Mensagem de cálculo exibida');
+      }
+    } else {
+      console.log('Quantidade de Clientes Atendidos da Loja é zero ou não informado');
+      try {
+        const quantidadeVendasCalculadaEl = document.getElementById('quantidadeVendasCalculada');
+        if (quantidadeVendasCalculadaEl) {
+          quantidadeVendasCalculadaEl.textContent = '0';
+        }
+      } catch (e) {
+        console.error('Erro ao definir quantidadeVendasCalculada (else):', e);
+      }
+      
+      try {
+        const produtoQuantidadeVendasEl = document.getElementById('produtoQuantidadeVendas');
+        if (produtoQuantidadeVendasEl) {
+          produtoQuantidadeVendasEl.value = '0';
+        }
+      } catch (e) {
+        console.error('Erro ao definir produtoQuantidadeVendas (else):', e);
+      }
+      
+      if (calculoQuantidadeVendasDiv) {
+        calculoQuantidadeVendasDiv.style.display = 'none';
+      }
+    }
+    
+    // 6. Ponto de Equilíbrio = Custos Fixos / Margem de Contribuição (R$)
+    // Ponto de Equilíbrio = Custos Fixos / (Preço Venda - Custo Aquisição)
+    if (margemContribuicaoValor > 0 && custosFixos > 0) {
+      const pontoEquilibrio = custosFixos / margemContribuicaoValor;
+      console.log('Ponto de Equilíbrio:', pontoEquilibrio, '(Custos Fixos:', custosFixos, 'Margem Contrib:', margemContribuicaoValor + ')');
+      document.getElementById('produtoPontoEquilibrio').value = pontoEquilibrio.toFixed(2);
+    } else {
+      document.getElementById('produtoPontoEquilibrio').value = '';
+    }
+    
+    // 7. Margem Operacional = (Faturamento por Mercadoria - Total Gastos) / Faturamento por Mercadoria * 100
+    if (faturamentoPorMercadoria > 0) {
+      const totalGastos = gastosComVendas + gastosComCompras + custosFixos;
+      const margemOperacional = ((faturamentoPorMercadoria - totalGastos) / faturamentoPorMercadoria) * 100;
+      console.log('Margem Operacional:', margemOperacional, '(Faturamento:', faturamentoPorMercadoria, 'Total Gastos:', totalGastos + ')');
+      document.getElementById('produtoMargemOperacional').value = margemOperacional.toFixed(2);
+    } else {
+      document.getElementById('produtoMargemOperacional').value = '';
+    }
+    
+    console.log('Cálculos concluídos com sucesso');
+  } else {
+    console.log('Não há dados básicos ou percentual - limpando campos');
+    // Limpar campos calculados se não houver dados básicos ou percentual
+    document.getElementById('produtoFaturamentoPorMercadoria').value = '';
+    document.getElementById('produtoQuantidadeVendas').value = '';
+    document.getElementById('produtoGastosComVendas').value = '';
+    document.getElementById('produtoGastosComCompras').value = '';
+    document.getElementById('produtoCustosFixos').value = '';
+    document.getElementById('produtoPontoEquilibrio').value = '';
+    document.getElementById('produtoMargemOperacional').value = '';
+    if (calculoQuantidadeVendasDiv) {
+      calculoQuantidadeVendasDiv.style.display = 'none';
+    }
+  }
+  
+  console.log('=== FIM CÁLCULO CAMPOS PRODUTO ===');
+};
+
+// Carregar categorias para o select do produto
+async function carregarCategoriasParaSelect() {
+  try {
+    const response = await fetch('/categoria/api/list');
+    const categorias = await response.json();
+    const select = document.getElementById('produtoCategoriaCodigo');
+    
+    if (select) {
+      // Limpar opções existentes exceto a primeira
+      while (select.options.length > 1) {
+        select.remove(1);
+      }
+      
+      categorias.forEach(categoria => {
+        const option = document.createElement('option');
+        option.value = categoria.codigo;
+        option.textContent = categoria.nome;
+        select.appendChild(option);
+      });
+    }
+  } catch (error) {
+    console.error('Erro ao carregar categorias para select:', error);
+  }
+}
+
+// Carregar dados básicos para o select do produto
+async function carregarBasicDataParaSelect() {
+  try {
+    const response = await fetch('/produto/api/basic-data');
+    const basicDataList = await response.json();
+    const select = document.getElementById('produtoBasicDataId');
+    
+    if (select) {
+      // Limpar opções existentes exceto a primeira
+      while (select.options.length > 1) {
+        select.remove(1);
+      }
+      
+      basicDataList.forEach(bd => {
+        const option = document.createElement('option');
+        option.value = bd.id;
+        option.textContent = bd.display;
+        select.appendChild(option);
+      });
+    }
+  } catch (error) {
+    console.error('Erro ao carregar dados básicos para select:', error);
+  }
+}
+
+// Abrir modal para adicionar ou editar produto
+window.openProdutoModal = function(produtoCodigo = null) {
+  const modal = new bootstrap.Modal(document.getElementById('produtoModal'));
+  const form = document.getElementById('produtoForm');
+  const modalTitle = document.getElementById('produtoModalLabel');
+  
+  // Carregar categorias e dados básicos nos selects
+  carregarCategoriasParaSelect();
+  carregarBasicDataParaSelect();
+  
+  if (produtoCodigo) {
+    modalTitle.textContent = 'Editar Produto';
+    // Carregar dados do produto
+    fetch(`/produto/api/get/${produtoCodigo}`)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('produtoCodigoOriginal').value = data.codigo;
+        document.getElementById('produtoNome').value = data.nome || '';
+        document.getElementById('produtoCategoriaCodigo').value = data.categoria_codigo || '';
+        document.getElementById('produtoBasicDataId').value = data.basic_data_id || '';
+        document.getElementById('produtoFaturamentoPorMercadoria').value = data.faturamento_por_mercadoria || '';
+        document.getElementById('produtoPrecoVenda').value = data.preco_venda || '';
+        document.getElementById('produtoCustoAquisicao').value = data.custo_aquisicao || '';
+        document.getElementById('produtoPercentualFaturamento').value = data.percentual_faturamento || '';
+        document.getElementById('produtoQuantidadeVendas').value = data.quantidade_vendas || '';
+        document.getElementById('produtoGastosComVendas').value = data.gastos_com_vendas || '';
+        document.getElementById('produtoGastosComCompras').value = data.gastos_com_compras || '';
+        document.getElementById('produtoCustosFixos').value = data.custos_fixos || '';
+        document.getElementById('produtoPontoEquilibrio').value = data.ponto_equilibrio || '';
+        document.getElementById('produtoMargemOperacional').value = data.margem_operacional || '';
+        
+        // Recalcular campos de margem baseado no preço de venda e custo de aquisição
+        setTimeout(() => {
+          calcularCamposProduto();
+        }, 100);
+      })
+      .catch(error => {
+        console.error('Erro ao carregar produto:', error);
+        alert('Erro ao carregar produto');
+      });
+  } else {
+    modalTitle.textContent = 'Adicionar Produto';
+    form.reset();
+    document.getElementById('produtoCodigoOriginal').value = '';
+    
+    // Limpar campos calculados
+    document.getElementById('produtoMargemContribuicaoValor').value = '';
+    document.getElementById('produtoMargemContribuicaoInformada').value = '';
+    document.getElementById('produtoMargemContribuicaoCorrigida').value = '';
+  }
+  
+  // Adicionar event listeners após o modal ser mostrado
+  setTimeout(() => {
+    const precoVendaInput = document.getElementById('produtoPrecoVenda');
+    const custoAquisicaoInput = document.getElementById('produtoCustoAquisicao');
+    const percentualFaturamentoInput = document.getElementById('produtoPercentualFaturamento');
+    const basicDataIdInput = document.getElementById('produtoBasicDataId');
+    
+    if (precoVendaInput) {
+      precoVendaInput.removeEventListener('input', calcularCamposProduto);
+      precoVendaInput.removeEventListener('blur', calcularCamposProduto);
+      precoVendaInput.addEventListener('input', calcularCamposProduto);
+      precoVendaInput.addEventListener('blur', calcularCamposProduto);
+    }
+    
+    if (custoAquisicaoInput) {
+      custoAquisicaoInput.removeEventListener('input', calcularCamposProduto);
+      custoAquisicaoInput.removeEventListener('blur', calcularCamposProduto);
+      custoAquisicaoInput.addEventListener('input', calcularCamposProduto);
+      custoAquisicaoInput.addEventListener('blur', calcularCamposProduto);
+    }
+    
+    if (percentualFaturamentoInput) {
+      percentualFaturamentoInput.removeEventListener('input', calcularCamposProduto);
+      percentualFaturamentoInput.removeEventListener('blur', calcularCamposProduto);
+      percentualFaturamentoInput.addEventListener('input', () => {
+        console.log('Event: percentualFaturamento input');
+        calcularCamposProduto();
+      });
+      percentualFaturamentoInput.addEventListener('blur', () => {
+        console.log('Event: percentualFaturamento blur');
+        calcularCamposProduto();
+      });
+    }
+    
+    if (basicDataIdInput) {
+      basicDataIdInput.removeEventListener('change', calcularCamposProduto);
+      basicDataIdInput.addEventListener('change', () => {
+        console.log('Event: basicDataId change', basicDataIdInput.value);
+        calcularCamposProduto();
+      });
+    }
+    
+    // Se estiver editando, calcular campos
+    if (produtoCodigo) {
+      setTimeout(() => {
+        calcularCamposProduto();
+      }, 300);
+    }
+  }, 100);
+  
+  modal.show();
+}
+
+// Submeter formulário de produto
+document.getElementById('produtoForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const produtoCodigoOriginal = document.getElementById('produtoCodigoOriginal').value;
+  const nome = document.getElementById('produtoNome').value.trim();
+  
+  if (!nome) {
+    alert('Por favor, informe o nome do produto');
+    return;
+  }
+  
+  const formData = new FormData();
+  formData.append('nome', nome);
+  
+  // Mapeamento de campos
+  const camposMap = {
+    'categoria_codigo': 'produtoCategoriaCodigo',
+    'basic_data_id': 'produtoBasicDataId',
+    'faturamento_por_mercadoria': 'produtoFaturamentoPorMercadoria',
+    'preco_venda': 'produtoPrecoVenda',
+    'custo_aquisicao': 'produtoCustoAquisicao',
+    'percentual_faturamento': 'produtoPercentualFaturamento',
+    'quantidade_vendas': 'produtoQuantidadeVendas',
+    'gastos_com_vendas': 'produtoGastosComVendas',
+    'gastos_com_compras': 'produtoGastosComCompras',
+    'margem_contribuicao_informada': 'produtoMargemContribuicaoInformada',
+    'margem_contribuicao_corrigida': 'produtoMargemContribuicaoCorrigida',
+    'margem_contribuicao_valor': 'produtoMargemContribuicaoValor',
+    'custos_fixos': 'produtoCustosFixos',
+    'ponto_equilibrio': 'produtoPontoEquilibrio',
+    'margem_operacional': 'produtoMargemOperacional'
+  };
+  
+  Object.keys(camposMap).forEach(campo => {
+    const elemento = document.getElementById(camposMap[campo]);
+    if (elemento && elemento.value) {
+      formData.append(campo, elemento.value);
+    }
+  });
+  
+  const url = produtoCodigoOriginal ? `/produto/api/update/${produtoCodigoOriginal}` : '/produto/api/create';
+  const method = produtoCodigoOriginal ? 'PUT' : 'POST';
+  
+  try {
+    const response = await fetch(url, {
+      method: method,
+      body: formData
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      const modalElement = document.getElementById('produtoModal');
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      
+      document.getElementById('produtoForm').reset();
+      document.getElementById('produtoCodigoOriginal').value = '';
+      
+      if (modal) {
+        modalElement.addEventListener('hidden.bs.modal', function cleanup() {
+          const backdrops = document.querySelectorAll('.modal-backdrop');
+          backdrops.forEach(backdrop => backdrop.remove());
+          document.body.classList.remove('modal-open');
+          document.body.style.overflow = '';
+          document.body.style.paddingRight = '';
+          
+          const produtoTab = document.getElementById('produto-tab');
+          const produtoPane = document.getElementById('produto');
+          
+          if (produtoTab && produtoPane) {
+            document.querySelectorAll('#produtoTabs .nav-link').forEach(tabLink => {
+              tabLink.classList.remove('active');
+              tabLink.setAttribute('aria-selected', 'false');
+            });
+            
+            document.querySelectorAll('.tab-pane').forEach(pane => {
+              pane.classList.remove('show', 'active');
+            });
+            
+            produtoTab.classList.add('active');
+            produtoTab.setAttribute('aria-selected', 'true');
+            produtoPane.classList.add('show', 'active');
+            
+            const tab = bootstrap.Tab.getOrCreateInstance(produtoTab);
+            tab.show();
+          }
+          
+          setTimeout(() => {
+            if (typeof window.carregarProdutos === 'function') {
+              window.carregarProdutos();
+            }
+          }, 200);
+          
+          const mensagem = produtoCodigoOriginal ? 'Produto atualizado com sucesso!' : 'Produto adicionado com sucesso!';
+          const alertDiv = document.createElement('div');
+          alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
+          alertDiv.style.zIndex = '9999';
+          alertDiv.innerHTML = `
+            ${mensagem}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          `;
+          document.body.appendChild(alertDiv);
+          setTimeout(() => {
+            if (alertDiv.parentNode) {
+              alertDiv.remove();
+            }
+          }, 3000);
+        }, { once: true });
+        
+        modal.hide();
+      }
+    } else {
+      alert(data.error || 'Erro ao salvar produto');
+    }
+  } catch (error) {
+    console.error('Erro:', error);
+    alert('Erro ao salvar produto. Por favor, tente novamente.');
+  }
+});
+
+// Carregar produtos (já filtrados pelo usuário logado no backend)
+window.carregarProdutos = async function() {
+  try {
+    const tbody = document.getElementById('produtosTableBody');
+    if (!tbody) {
+      console.error('Tabela de produtos não encontrada');
+      return;
+    }
+    
+    tbody.innerHTML = '<tr><td colspan="17" class="text-center"><i class="spinner-border spinner-border-sm me-2"></i>Carregando produtos...</td></tr>';
+    
+    const response = await fetch('/produto/api/list');
+    
+    if (!response.ok) {
+      throw new Error(`Erro ${response.status}: ${response.statusText}`);
+    }
+    
+    const produtos = await response.json();
+    
+    tbody.innerHTML = '';
+    
+    if (!produtos || produtos.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="17" class="text-center text-muted py-4">Nenhum produto cadastrado. Clique em "Adicionar Produto" para criar um novo.</td></tr>';
+      return;
+    }
+    
+    produtos.sort((a, b) => a.nome.localeCompare(b.nome));
+    
+    // Função auxiliar para formatar valores monetários
+    const formatMoney = (valor) => valor ? 'R$ ' + parseFloat(valor).toFixed(2).replace('.', ',') : '-';
+    
+    // Função auxiliar para formatar percentuais
+    const formatPercent = (valor) => valor ? parseFloat(valor).toFixed(2).replace('.', ',') + '%' : '-';
+    
+    // Função auxiliar para formatar números
+    const formatNumber = (valor) => valor ? parseFloat(valor).toFixed(2).replace('.', ',') : '-';
+    
+    produtos.forEach(produto => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${produto.codigo}</strong></td>
+        <td>${produto.nome}</td>
+        <td>${produto.categoria_codigo || '-'}</td>
+        <td>${produto.basic_data_id || '-'}</td>
+        <td>${formatMoney(produto.faturamento_por_mercadoria)}</td>
+        <td>${formatMoney(produto.preco_venda)}</td>
+        <td>${formatMoney(produto.custo_aquisicao)}</td>
+        <td>${formatNumber(produto.quantidade_vendas)}</td>
+        <td>${formatMoney(produto.gastos_com_vendas)}</td>
+        <td>${formatMoney(produto.gastos_com_compras)}</td>
+        <td>${formatPercent(produto.margem_contribuicao_informada)}</td>
+        <td>${formatPercent(produto.margem_contribuicao_corrigida)}</td>
+        <td>${formatMoney(produto.margem_contribuicao_valor)}</td>
+        <td>${formatMoney(produto.custos_fixos)}</td>
+        <td>${formatNumber(produto.ponto_equilibrio)}</td>
+        <td>${formatPercent(produto.margem_operacional)}</td>
+        <td>
+          <button class="btn btn-sm btn-secondary btn-action me-2" onclick="openProdutoModal(${produto.codigo})" title="Editar produto">
+            <i class="bi bi-pencil"></i> Editar
+          </button>
+          <button class="btn btn-sm btn-danger btn-action" onclick="removerProduto(${produto.codigo})" title="Remover produto">
+            <i class="bi bi-trash"></i> Remover
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (error) {
+    console.error('Erro ao carregar produtos:', error);
+    const tbody = document.getElementById('produtosTableBody');
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="17" class="text-center text-danger py-4">Erro ao carregar produtos. Por favor, recarregue a página.</td></tr>';
+    }
+  }
+}
+
+// Remover produto
+window.removerProduto = async function(produtoCodigo) {
+  if (!confirm('Tem certeza que deseja remover este produto?')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/produto/api/delete/${produtoCodigo}`, {
+      method: 'DELETE'
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      carregarProdutos();
+      
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
+      alertDiv.style.zIndex = '9999';
+      alertDiv.innerHTML = `
+        Produto removido com sucesso!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      document.body.appendChild(alertDiv);
+      setTimeout(() => {
+        alertDiv.remove();
+      }, 3000);
+    } else {
+      alert(data.error || 'Erro ao remover produto');
+    }
+  } catch (error) {
+    console.error('Erro:', error);
+    alert('Erro ao remover produto. Por favor, tente novamente.');
   }
 }
 </script>

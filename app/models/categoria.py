@@ -16,6 +16,7 @@ class Categoria(Base):
     
     # Relacionamento
     user = relationship("User", back_populates="categorias")
+    produtos = relationship("Produto", back_populates="categoria", cascade="all, delete-orphan")
     
     def __repr__(self):
         return f"<Categoria(codigo={self.codigo}, nome={self.nome}, user_id={self.user_id})>"
