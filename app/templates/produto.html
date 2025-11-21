@@ -309,57 +309,60 @@
             </div>
           </div>
           
-          <hr class="my-4">
-          <h6 class="mb-3 text-secondary">Campos Calculados</h6>
-          
-          <div class="mb-3">
-            <label for="produtoFaturamentoPorMercadoria" class="form-label">Faturamento por Mercadoria (R$)</label>
-            <input type="number" step="0.01" class="form-control" id="produtoFaturamentoPorMercadoria" name="faturamento_por_mercadoria" readonly>
-          </div>
-          
-          <div class="mb-3">
-            <label for="produtoQuantidadeVendas" class="form-label">Quantidade de Vendas</label>
-            <input type="number" step="0.01" class="form-control" id="produtoQuantidadeVendas" name="quantidade_vendas" readonly>
-          </div>
-          
-          <div class="mb-3">
-            <label for="produtoGastosComVendas" class="form-label">Gastos com Vendas (R$)</label>
-            <input type="number" step="0.01" class="form-control" id="produtoGastosComVendas" name="gastos_com_vendas" readonly>
-          </div>
-          
-          <div class="mb-3">
-            <label for="produtoGastosComCompras" class="form-label">Gastos com Compras (R$)</label>
-            <input type="number" step="0.01" class="form-control" id="produtoGastosComCompras" name="gastos_com_compras" readonly>
-          </div>
-          
-          <div class="mb-3">
-            <label for="produtoMargemContribuicaoValor" class="form-label">Margem de Contribuição (R$)</label>
-            <input type="number" step="0.01" class="form-control" id="produtoMargemContribuicaoValor" name="margem_contribuicao_valor" readonly>
-          </div>
-          
-          <div class="mb-3">
-            <label for="produtoMargemContribuicaoInformada" class="form-label">Margem de Contribuição (%) Informada</label>
-            <input type="number" step="0.01" class="form-control" id="produtoMargemContribuicaoInformada" name="margem_contribuicao_informada" readonly>
-          </div>
-          
-          <div class="mb-3">
-            <label for="produtoMargemContribuicaoCorrigida" class="form-label">Margem de Contribuição (%) Corrigida</label>
-            <input type="number" step="0.01" class="form-control" id="produtoMargemContribuicaoCorrigida" name="margem_contribuicao_corrigida" readonly>
-          </div>
-          
-          <div class="mb-3">
-            <label for="produtoCustosFixos" class="form-label">Custos Fixos (R$)</label>
-            <input type="number" step="0.01" class="form-control" id="produtoCustosFixos" name="custos_fixos" readonly>
-          </div>
-          
-          <div class="mb-3">
-            <label for="produtoPontoEquilibrio" class="form-label">Ponto de Equilíbrio</label>
-            <input type="number" step="0.01" class="form-control" id="produtoPontoEquilibrio" name="ponto_equilibrio" readonly>
-          </div>
-          
-          <div class="mb-3">
-            <label for="produtoMargemOperacional" class="form-label">Margem Operacional</label>
-            <input type="number" step="0.01" class="form-control" id="produtoMargemOperacional" name="margem_operacional" readonly>
+          <!-- Campos Calculados - Ocultos na modal mas salvos no banco de dados -->
+          <div style="display: none;">
+            <hr class="my-4">
+            <h6 class="mb-3 text-secondary">Campos Calculados</h6>
+            
+            <div class="mb-3">
+              <label for="produtoFaturamentoPorMercadoria" class="form-label">Faturamento por Mercadoria (R$)</label>
+              <input type="number" step="0.01" class="form-control" id="produtoFaturamentoPorMercadoria" name="faturamento_por_mercadoria" readonly>
+            </div>
+            
+            <div class="mb-3">
+              <label for="produtoQuantidadeVendas" class="form-label">Quantidade de Vendas</label>
+              <input type="number" step="0.01" class="form-control" id="produtoQuantidadeVendas" name="quantidade_vendas" readonly>
+            </div>
+            
+            <div class="mb-3">
+              <label for="produtoGastosComVendas" class="form-label">Gastos com Vendas (R$)</label>
+              <input type="number" step="0.01" class="form-control" id="produtoGastosComVendas" name="gastos_com_vendas" readonly>
+            </div>
+            
+            <div class="mb-3">
+              <label for="produtoGastosComCompras" class="form-label">Gastos com Compras (R$)</label>
+              <input type="number" step="0.01" class="form-control" id="produtoGastosComCompras" name="gastos_com_compras" readonly>
+            </div>
+            
+            <div class="mb-3">
+              <label for="produtoMargemContribuicaoValor" class="form-label">Margem de Contribuição (R$)</label>
+              <input type="number" step="0.01" class="form-control" id="produtoMargemContribuicaoValor" name="margem_contribuicao_valor" readonly>
+            </div>
+            
+            <div class="mb-3">
+              <label for="produtoMargemContribuicaoInformada" class="form-label">Margem de Contribuição (%) Informada</label>
+              <input type="number" step="0.01" class="form-control" id="produtoMargemContribuicaoInformada" name="margem_contribuicao_informada" readonly>
+            </div>
+            
+            <div class="mb-3">
+              <label for="produtoMargemContribuicaoCorrigida" class="form-label">Margem de Contribuição (%) Corrigida</label>
+              <input type="number" step="0.01" class="form-control" id="produtoMargemContribuicaoCorrigida" name="margem_contribuicao_corrigida" readonly>
+            </div>
+            
+            <div class="mb-3">
+              <label for="produtoCustosFixos" class="form-label">Custos Fixos (R$)</label>
+              <input type="number" step="0.01" class="form-control" id="produtoCustosFixos" name="custos_fixos" readonly>
+            </div>
+            
+            <div class="mb-3">
+              <label for="produtoPontoEquilibrio" class="form-label">Ponto de Equilíbrio</label>
+              <input type="number" step="0.01" class="form-control" id="produtoPontoEquilibrio" name="ponto_equilibrio" readonly>
+            </div>
+            
+            <div class="mb-3">
+              <label for="produtoMargemOperacional" class="form-label">Margem Operacional</label>
+              <input type="number" step="0.01" class="form-control" id="produtoMargemOperacional" name="margem_operacional" readonly>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
