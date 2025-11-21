@@ -776,7 +776,11 @@ window.calcularCamposProduto = async function() {
   // Calcular campos usando dados básicos com percentual
   console.log('Verificando condições para cálculos:', { basicData: !!basicData, percentualFaturamento });
   
+  // Buscar elementos do DOM - podem não existir se o modal não estiver aberto
   const calculoQuantidadeVendasDiv = document.getElementById('calculoQuantidadeVendas');
+  const quantidadeVendasCalculadaEl = document.getElementById('quantidadeVendasCalculada');
+  const produtoQuantidadeVendasEl = document.getElementById('produtoQuantidadeVendas');
+  
   let faturamentoPorMercadoria = 0;
   let quantidadeVendas = 0;
   
@@ -811,57 +815,42 @@ window.calcularCamposProduto = async function() {
     const quantidadeClientesLoja = basicData.clients_served || 0;
     console.log('Quantidade de Clientes Atendidos da Loja (clients_served):', quantidadeClientesLoja, 'do basicData:', basicData.clients_served);
     
-    if (quantidadeClientesLoja > 0) {
-      quantidadeVendas = percentualDecimal * quantidadeClientesLoja;
-      console.log('Quantidade de Vendas após aplicar percentual:', quantidadeVendas, '(Loja:', quantidadeClientesLoja, 'Percentual:', percentualFaturamento + '%)');
+    // Calcular quantidade de vendas sempre que houver dados básicos e percentual
+    quantidadeVendas = percentualDecimal * quantidadeClientesLoja;
+    console.log('Quantidade de Vendas após aplicar percentual:', quantidadeVendas, '(Loja:', quantidadeClientesLoja, 'Percentual:', percentualFaturamento + '%)');
+    
+    // Função para atualizar os elementos (será chamada imediatamente e com retry se necessário)
+    const atualizarElementosQuantidadeVendas = () => {
+      const quantidadeVendasCalculadaEl = document.getElementById('quantidadeVendasCalculada');
+      const produtoQuantidadeVendasEl = document.getElementById('produtoQuantidadeVendas');
+      const calculoQuantidadeVendasDiv = document.getElementById('calculoQuantidadeVendas');
       
-      // Sempre exibir o valor calculado no campo
-      try {
-        const quantidadeVendasCalculadaEl = document.getElementById('quantidadeVendasCalculada');
-        if (quantidadeVendasCalculadaEl) {
-          quantidadeVendasCalculadaEl.textContent = quantidadeVendas.toFixed(2);
-        }
-      } catch (e) {
-        console.error('Erro ao definir quantidadeVendasCalculada:', e);
+      // Atualizar valor no span dentro da mensagem
+      if (quantidadeVendasCalculadaEl) {
+        quantidadeVendasCalculadaEl.textContent = quantidadeVendas.toFixed(2);
       }
       
-      try {
-        const produtoQuantidadeVendasEl = document.getElementById('produtoQuantidadeVendas');
-        if (produtoQuantidadeVendasEl) {
-          produtoQuantidadeVendasEl.value = quantidadeVendas.toFixed(2);
-        }
-      } catch (e) {
-        console.error('Erro ao definir produtoQuantidadeVendas:', e);
+      // Atualizar valor no campo de input
+      if (produtoQuantidadeVendasEl) {
+        produtoQuantidadeVendasEl.value = quantidadeVendas.toFixed(2);
       }
       
-      // Exibir mensagem informativa
+      // Exibir mensagem informativa - sempre que houver dados básicos e percentual
       if (calculoQuantidadeVendasDiv) {
         calculoQuantidadeVendasDiv.style.display = 'block';
-        console.log('Mensagem de cálculo exibida');
+        return true; // Indica que todos os elementos foram encontrados
       }
-    } else {
-      console.log('Quantidade de Clientes Atendidos da Loja é zero ou não informado');
-      try {
-        const quantidadeVendasCalculadaEl = document.getElementById('quantidadeVendasCalculada');
-        if (quantidadeVendasCalculadaEl) {
-          quantidadeVendasCalculadaEl.textContent = '0';
-        }
-      } catch (e) {
-        console.error('Erro ao definir quantidadeVendasCalculada (else):', e);
-      }
-      
-      try {
-        const produtoQuantidadeVendasEl = document.getElementById('produtoQuantidadeVendas');
-        if (produtoQuantidadeVendasEl) {
-          produtoQuantidadeVendasEl.value = '0';
-        }
-      } catch (e) {
-        console.error('Erro ao definir produtoQuantidadeVendas (else):', e);
-      }
-      
-      if (calculoQuantidadeVendasDiv) {
-        calculoQuantidadeVendasDiv.style.display = 'none';
-      }
+      return false; // Indica que precisa tentar novamente
+    };
+    
+    // Tentar atualizar imediatamente
+    const elementosEncontrados = atualizarElementosQuantidadeVendas();
+    
+    // Se não encontrou todos os elementos, tentar novamente com retries
+    if (!elementosEncontrados) {
+      setTimeout(() => atualizarElementosQuantidadeVendas(), 50);
+      setTimeout(() => atualizarElementosQuantidadeVendas(), 150);
+      setTimeout(() => atualizarElementosQuantidadeVendas(), 300);
     }
     
     // 6. Ponto de Equilíbrio = Custos Fixos / Margem de Contribuição (R$)
@@ -1011,39 +1000,53 @@ window.openProdutoModal = function(produtoCodigo = null) {
     const percentualFaturamentoInput = document.getElementById('produtoPercentualFaturamento');
     const basicDataIdInput = document.getElementById('produtoBasicDataId');
     
+    // Função wrapper para garantir que o cálculo seja chamado sempre que qualquer campo dependente mudar
+    const recalcular = () => {
+      console.log('Recalculando campos do produto (triggered by field change)...');
+      // Garantir que o cálculo seja feito, mesmo se o DOM ainda não estiver pronto
+      setTimeout(() => {
+        calcularCamposProduto();
+      }, 10);
+    };
+    
+    // Remover todos os listeners anteriores e adicionar novos para garantir que o cálculo seja refeito
     if (precoVendaInput) {
-      precoVendaInput.removeEventListener('input', calcularCamposProduto);
-      precoVendaInput.removeEventListener('blur', calcularCamposProduto);
-      precoVendaInput.addEventListener('input', calcularCamposProduto);
-      precoVendaInput.addEventListener('blur', calcularCamposProduto);
+      precoVendaInput.oninput = null;
+      precoVendaInput.onblur = null;
+      precoVendaInput.onchange = null;
+      precoVendaInput.addEventListener('input', recalcular);
+      precoVendaInput.addEventListener('blur', recalcular);
+      precoVendaInput.addEventListener('change', recalcular);
+      console.log('Event listeners adicionados ao campo Preço de Venda');
     }
     
     if (custoAquisicaoInput) {
-      custoAquisicaoInput.removeEventListener('input', calcularCamposProduto);
-      custoAquisicaoInput.removeEventListener('blur', calcularCamposProduto);
-      custoAquisicaoInput.addEventListener('input', calcularCamposProduto);
-      custoAquisicaoInput.addEventListener('blur', calcularCamposProduto);
+      custoAquisicaoInput.oninput = null;
+      custoAquisicaoInput.onblur = null;
+      custoAquisicaoInput.onchange = null;
+      custoAquisicaoInput.addEventListener('input', recalcular);
+      custoAquisicaoInput.addEventListener('blur', recalcular);
+      custoAquisicaoInput.addEventListener('change', recalcular);
+      console.log('Event listeners adicionados ao campo Custo de Aquisição');
     }
     
     if (percentualFaturamentoInput) {
-      percentualFaturamentoInput.removeEventListener('input', calcularCamposProduto);
-      percentualFaturamentoInput.removeEventListener('blur', calcularCamposProduto);
-      percentualFaturamentoInput.addEventListener('input', () => {
-        console.log('Event: percentualFaturamento input');
-        calcularCamposProduto();
-      });
-      percentualFaturamentoInput.addEventListener('blur', () => {
-        console.log('Event: percentualFaturamento blur');
-        calcularCamposProduto();
-      });
+      percentualFaturamentoInput.oninput = null;
+      percentualFaturamentoInput.onblur = null;
+      percentualFaturamentoInput.onchange = null;
+      percentualFaturamentoInput.addEventListener('input', recalcular);
+      percentualFaturamentoInput.addEventListener('blur', recalcular);
+      percentualFaturamentoInput.addEventListener('change', recalcular);
+      console.log('Event listeners adicionados ao campo Percentual de Faturamento');
     }
     
     if (basicDataIdInput) {
-      basicDataIdInput.removeEventListener('change', calcularCamposProduto);
+      basicDataIdInput.onchange = null;
       basicDataIdInput.addEventListener('change', () => {
         console.log('Event: basicDataId change', basicDataIdInput.value);
-        calcularCamposProduto();
+        recalcular();
       });
+      console.log('Event listener adicionado ao campo Dados Básicos');
     }
     
     // Se estiver editando, calcular campos
@@ -1053,6 +1056,20 @@ window.openProdutoModal = function(produtoCodigo = null) {
       }, 300);
     }
   }, 100);
+  
+  // Adicionar listener para quando o modal estiver completamente aberto
+  const produtoModalElement = document.getElementById('produtoModal');
+  if (produtoModalElement) {
+    // Função para executar quando o modal estiver completamente aberto
+    const onModalShown = () => {
+      console.log('Modal completamente aberto - garantindo que elementos estejam disponíveis...');
+      setTimeout(() => {
+        calcularCamposProduto();
+      }, 50);
+    };
+    
+    produtoModalElement.addEventListener('shown.bs.modal', onModalShown, { once: true });
+  }
   
   modal.show();
 }
