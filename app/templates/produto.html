@@ -1,0 +1,465 @@
+{% extends "base.html" %}
+
+{% block title %}Produto - GetUp Gestão{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #F5F5F5 !important;
+    }
+    .container-fluid, .container {
+        background-color: #F5F5F5 !important;
+    }
+    .card, .card-body {
+        background-color: #F0F0F0 !important;
+    }
+    .card-header.bg-secondary {
+        background-color: #6c757d !important;
+        color: white !important;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: white;
+    }
+    .form-control, .form-select {
+        background-color: #F5F5F5 !important;
+    }
+    .nav-tabs {
+        border-bottom: 2px solid #6c757d;
+    }
+    .nav-tabs .nav-link {
+        color: #6c757d;
+        border: 1px solid transparent;
+        border-top-left-radius: 0.375rem;
+        border-top-right-radius: 0.375rem;
+    }
+    .nav-tabs .nav-link:hover {
+        border-color: #e9ecef #e9ecef #6c757d;
+        color: #495057;
+    }
+    .nav-tabs .nav-link.active {
+        color: #495057;
+        background-color: #F0F0F0;
+        border-color: #6c757d #6c757d #F0F0F0;
+        font-weight: bold;
+    }
+    .tab-content {
+        padding-top: 20px;
+    }
+    .tab-pane {
+        min-height: 200px;
+    }
+    .table th {
+        white-space: nowrap;
+        background-color: #f8f9fa;
+    }
+    .table td {
+        vertical-align: middle;
+    }
+    .btn-action {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 0.2rem;
+    }
+    .table-responsive {
+        margin-bottom: 1rem;
+        border-radius: 0.25rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="background-color: #F5F5F5; min-height: 100vh;">
+  <div class="row">
+    <div class="col-md-12 mt-5">
+        <div class="col-md-12 mb-4">
+            <img src="/static/images/Logo.png" alt="Logo" height="40">
+        </div>
+      <!-- Botões de navegação -->
+      <div class="row mb-4 justify-content-center">
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/dashboard" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Índice
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/basic-data/new" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Dados Básicos
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/simulador" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Simulador
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Calculadora de preços
+          </button>
+        </div>
+      </div>
+
+      <!-- Card com conteúdo e tabs -->
+      <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+        <div class="card-header bg-secondary text-white">
+          <h4 class="card-title mb-0">Produto</h4>
+        </div>
+        <div class="card-body">
+          <!-- Tabs -->
+          <ul class="nav nav-tabs mb-3" id="produtoTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="true">
+                Dashboard
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="produto-tab" data-bs-toggle="tab" data-bs-target="#produto" type="button" role="tab" aria-controls="produto" aria-selected="false">
+                Produto
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="categoria-tab" data-bs-toggle="tab" data-bs-target="#categoria" type="button" role="tab" aria-controls="categoria" aria-selected="false">
+                Categoria
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link" id="importancia-meses-tab" data-bs-toggle="tab" data-bs-target="#importancia-meses" type="button" role="tab" aria-controls="importancia-meses" aria-selected="false">
+                Importância dos Meses
+              </button>
+            </li>
+          </ul>
+          
+          <!-- Tab content -->
+          <div class="tab-content" id="produtoTabsContent">
+            <!-- Dashboard Tab -->
+            <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+              <!-- Conteúdo do Dashboard -->
+              <p>Conteúdo do Dashboard será adicionado aqui.</p>
+            </div>
+            
+            <!-- Produto Tab -->
+            <div class="tab-pane fade" id="produto" role="tabpanel" aria-labelledby="produto-tab">
+              <!-- Conteúdo do Produto -->
+              <p>Conteúdo do Produto será adicionado aqui.</p>
+            </div>
+            
+            <!-- Categoria Tab -->
+            <div class="tab-pane fade" id="categoria" role="tabpanel" aria-labelledby="categoria-tab">
+              <!-- Botão para adicionar categoria -->
+              <div class="mb-3">
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#categoriaModal" id="btnAdicionarCategoria">
+                  <i class="bi bi-plus-circle"></i> Adicionar Categoria
+                </button>
+              </div>
+              
+              <!-- Tabela de categorias -->
+              <div class="table-responsive">
+                <table class="table table-hover" id="categoriasTable">
+                  <thead>
+                    <tr>
+                      <th>Código</th>
+                      <th>Nome</th>
+                      <th>Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody id="categoriasTableBody">
+                    <!-- Categorias serão carregadas aqui via JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Importância dos Meses Tab -->
+            <div class="tab-pane fade" id="importancia-meses" role="tabpanel" aria-labelledby="importancia-meses-tab">
+              <!-- Conteúdo da Importância dos Meses -->
+              <p>Conteúdo da Importância dos Meses será adicionado aqui.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal para Categoria -->
+<div class="modal fade" id="categoriaModal" tabindex="-1" aria-labelledby="categoriaModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-secondary text-white">
+        <h5 class="modal-title" id="categoriaModalLabel">Adicionar Categoria</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="categoriaForm">
+        <div class="modal-body">
+          <input type="hidden" id="categoriaCodigoOriginal" name="categoriaCodigoOriginal">
+          <div class="mb-3">
+            <label for="categoriaNome" class="form-label">Nome da Categoria</label>
+            <input type="text" class="form-control" id="categoriaNome" name="nome" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Tornar funções globalmente acessíveis
+window.categoriasEditando = null;
+
+// Carregar categorias ao carregar a página e ao mostrar a tab
+document.addEventListener('DOMContentLoaded', function() {
+  // Carregar categorias quando a tab de categoria for clicada
+  const categoriaTab = document.getElementById('categoria-tab');
+  if (categoriaTab) {
+    categoriaTab.addEventListener('shown.bs.tab', function() {
+      carregarCategorias();
+    });
+  }
+  
+  // Também carregar se a tab já estiver ativa
+  if (categoriaTab && categoriaTab.classList.contains('active')) {
+    carregarCategorias();
+  }
+  
+  // Adicionar event listener ao botão de adicionar categoria
+  const btnAdicionarCategoria = document.querySelector('[data-bs-target="#categoriaModal"]');
+  if (btnAdicionarCategoria) {
+    btnAdicionarCategoria.addEventListener('click', function() {
+      openCategoriaModal();
+    });
+  }
+});
+
+// Abrir modal para adicionar ou editar categoria
+window.openCategoriaModal = function(categoriaCodigo = null) {
+  window.categoriasEditando = categoriaCodigo;
+  const modal = new bootstrap.Modal(document.getElementById('categoriaModal'));
+  const form = document.getElementById('categoriaForm');
+  const modalTitle = document.getElementById('categoriaModalLabel');
+  
+  if (categoriaCodigo) {
+    modalTitle.textContent = 'Editar Categoria';
+    // Carregar dados da categoria (código agora é Integer)
+    fetch(`/categoria/api/get/${categoriaCodigo}`)
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('categoriaCodigoOriginal').value = data.codigo;
+        document.getElementById('categoriaNome').value = data.nome;
+      })
+      .catch(error => {
+        console.error('Erro ao carregar categoria:', error);
+        alert('Erro ao carregar categoria');
+      });
+  } else {
+    modalTitle.textContent = 'Adicionar Categoria';
+    form.reset();
+    document.getElementById('categoriaCodigoOriginal').value = '';
+  }
+  
+  modal.show();
+}
+
+// Submeter formulário de categoria
+document.getElementById('categoriaForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  const categoriaCodigoOriginal = document.getElementById('categoriaCodigoOriginal').value;
+  const nome = document.getElementById('categoriaNome').value.trim();
+  
+  if (!nome) {
+    alert('Por favor, informe o nome da categoria');
+    return;
+  }
+  
+  const formData = new FormData();
+  formData.append('nome', nome);
+  
+  const url = categoriaCodigoOriginal ? `/categoria/api/update/${categoriaCodigoOriginal}` : '/categoria/api/create';
+  const method = categoriaCodigoOriginal ? 'PUT' : 'POST';
+  
+  try {
+    const response = await fetch(url, {
+      method: method,
+      body: formData
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      const modal = bootstrap.Modal.getInstance(document.getElementById('categoriaModal'));
+      if (modal) {
+        modal.hide();
+      }
+      
+      document.getElementById('categoriaForm').reset();
+      document.getElementById('categoriaCodigoOriginal').value = '';
+      
+      // Garantir que estamos na tab de categoria e que ela esteja ativa
+      setTimeout(() => {
+        const categoriaTab = document.getElementById('categoria-tab');
+        const categoriaPane = document.getElementById('categoria');
+        
+        if (categoriaTab && categoriaPane) {
+          // Remover active de todas as tabs
+          document.querySelectorAll('#produtoTabs .nav-link').forEach(tabLink => {
+            tabLink.classList.remove('active');
+            tabLink.setAttribute('aria-selected', 'false');
+          });
+          
+          // Remover active de todos os panes
+          document.querySelectorAll('.tab-pane').forEach(pane => {
+            pane.classList.remove('show', 'active');
+          });
+          
+          // Ativar a tab de categoria
+          categoriaTab.classList.add('active');
+          categoriaTab.setAttribute('aria-selected', 'true');
+          categoriaPane.classList.add('show', 'active');
+          
+          // Usar Bootstrap Tab API para garantir que funcione corretamente
+          const tab = bootstrap.Tab.getOrCreateInstance(categoriaTab);
+          tab.show();
+        }
+      }, 100);
+      
+      // Recarregar categorias após um pequeno delay para garantir que o backend processou
+      setTimeout(() => {
+        if (typeof window.carregarCategorias === 'function') {
+          window.carregarCategorias();
+        }
+      }, 500);
+      
+      // Mostrar mensagem de sucesso
+      const mensagem = categoriaCodigoOriginal ? 'Categoria atualizada com sucesso!' : 'Categoria adicionada com sucesso!';
+      // Criar um alert temporário
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
+      alertDiv.style.zIndex = '9999';
+      alertDiv.innerHTML = `
+        ${mensagem}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      document.body.appendChild(alertDiv);
+      setTimeout(() => {
+        if (alertDiv.parentNode) {
+          alertDiv.remove();
+        }
+      }, 3000);
+    } else {
+      alert(data.error || 'Erro ao salvar categoria');
+    }
+  } catch (error) {
+    console.error('Erro:', error);
+    alert('Erro ao salvar categoria. Por favor, tente novamente.');
+  }
+});
+
+// Carregar categorias (já filtradas pelo usuário logado no backend)
+window.carregarCategorias = async function() {
+  try {
+    const tbody = document.getElementById('categoriasTableBody');
+    if (!tbody) {
+      console.error('Tabela de categorias não encontrada');
+      return;
+    }
+    
+    // Mostrar loading
+    tbody.innerHTML = '<tr><td colspan="3" class="text-center"><i class="spinner-border spinner-border-sm me-2"></i>Carregando categorias...</td></tr>';
+    
+    const response = await fetch('/categoria/api/list');
+    
+    if (!response.ok) {
+      throw new Error(`Erro ${response.status}: ${response.statusText}`);
+    }
+    
+    const categorias = await response.json();
+    
+    tbody.innerHTML = '';
+    
+    if (!categorias || categorias.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-4">Nenhuma categoria cadastrada. Clique em "Adicionar Categoria" para criar uma nova.</td></tr>';
+      return;
+    }
+    
+    // Ordenar categorias por nome
+    categorias.sort((a, b) => a.nome.localeCompare(b.nome));
+    
+    categorias.forEach(categoria => {
+      const tr = document.createElement('tr');
+      // Código agora é Integer, não precisa escapar
+      tr.innerHTML = `
+        <td><strong>${categoria.codigo}</strong></td>
+        <td>${categoria.nome}</td>
+        <td>
+          <button class="btn btn-sm btn-secondary btn-action me-2" onclick="openCategoriaModal(${categoria.codigo})" title="Editar categoria">
+            <i class="bi bi-pencil"></i> Editar
+          </button>
+          <button class="btn btn-sm btn-danger btn-action" onclick="removerCategoria(${categoria.codigo})" title="Remover categoria">
+            <i class="bi bi-trash"></i> Remover
+          </button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (error) {
+    console.error('Erro ao carregar categorias:', error);
+    const tbody = document.getElementById('categoriasTableBody');
+    if (tbody) {
+      tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Erro ao carregar categorias. Por favor, recarregue a página.</td></tr>';
+    }
+  }
+}
+
+// Remover categoria
+window.removerCategoria = async function(categoriaCodigo) {
+  if (!confirm('Tem certeza que deseja remover esta categoria?')) {
+    return;
+  }
+  
+  try {
+    const response = await fetch(`/categoria/api/delete/${categoriaCodigo}`, {
+      method: 'DELETE'
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      // Recarregar categorias
+      carregarCategorias();
+      
+      // Mostrar mensagem de sucesso
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3';
+      alertDiv.style.zIndex = '9999';
+      alertDiv.innerHTML = `
+        Categoria removida com sucesso!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      document.body.appendChild(alertDiv);
+      setTimeout(() => {
+        alertDiv.remove();
+      }, 3000);
+    } else {
+      alert(data.error || 'Erro ao remover categoria');
+    }
+  } catch (error) {
+    console.error('Erro:', error);
+    alert('Erro ao remover categoria. Por favor, tente novamente.');
+  }
+}
+</script>
+{% endblock %}

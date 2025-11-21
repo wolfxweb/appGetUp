@@ -41,7 +41,10 @@ class User(Base):
     # basic_data_logs = relationship("BasicDataLog", back_populates="user", cascade="all, delete-orphan")
     
     # Relacionamento com registros da Calculadora
-    calculator_records = relationship("Calculator", back_populates="user", cascade="all, delete-orphan") 
+    calculator_records = relationship("Calculator", back_populates="user", cascade="all, delete-orphan")
+    
+    # Relacionamento com Categorias
+    categorias = relationship("Categoria", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email})>" 

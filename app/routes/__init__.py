@@ -14,6 +14,8 @@ from app.routes.diagnostico import router as diagnostico_router
 from app.routes.simulador import router as simulador_router
 from app.routes.profile import router as profile_router
 from app.routes.admin import router as admin_router
+from app.routes.produto import router as produto_router
+from app.routes.categoria import router as categoria_router
 
 router = APIRouter()
 
@@ -25,4 +27,6 @@ router.include_router(calculator_router)
 router.include_router(diagnostico_router)
 router.include_router(simulador_router)
 router.include_router(profile_router)
-router.include_router(admin_router) 
+router.include_router(admin_router)
+router.include_router(produto_router)
+router.include_router(categoria_router) 

@@ -14,6 +14,9 @@ from app.database.db import engine, Base
 from app.routes import router as main_router
 from app.routes.auth import get_current_user
 
+# Importar modelos para garantir que as tabelas sejam criadas
+from app.models import User, BasicData, License, Categoria
+
 # Adicionar o Mangum como adaptador para a Vercel
 from mangum import Mangum
 

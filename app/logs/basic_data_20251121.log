@@ -1,0 +1,18 @@
+2025-11-21 21:46:18,163 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-11-21 21:46:18,163 - app.routes.basic_data - INFO - Registro ID 1: month=10, year=2025, clients_served=33
+2025-11-21 21:46:18,164 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=1500.0, sales_expenses=32.0, input_product_expenses=32.0
+2025-11-21 21:46:18,164 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=32.0
+2025-11-21 21:46:18,164 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=150.0, sales_expenses=3.2, input_product_expenses=3.2
+2025-11-21 21:46:18,164 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=3.2
+2025-11-21 21:46:36,299 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-11-21 21:46:36,303 - app.routes.basic_data - INFO - Registro ID 1: month=10, year=2025, clients_served=33
+2025-11-21 21:46:36,303 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=1500.0, sales_expenses=32.0, input_product_expenses=32.0
+2025-11-21 21:46:36,303 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=32.0
+2025-11-21 21:46:36,303 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=150.0, sales_expenses=3.2, input_product_expenses=3.2
+2025-11-21 21:46:36,304 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=3.2
+2025-11-21 22:04:03,208 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-11-21 22:04:03,208 - app.routes.basic_data - INFO - Registro ID 1: month=10, year=2025, clients_served=33
+2025-11-21 22:04:03,208 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=1500.0, sales_expenses=32.0, input_product_expenses=32.0
+2025-11-21 22:04:03,209 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=32.0
+2025-11-21 22:04:03,209 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=150.0, sales_expenses=3.2, input_product_expenses=3.2
+2025-11-21 22:04:03,209 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=3.2
