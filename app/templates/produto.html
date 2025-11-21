@@ -166,22 +166,19 @@
                 <table class="table table-hover" id="produtosTable">
                   <thead>
                     <tr>
-                      <th>Código</th>
                       <th>Nome do Produto</th>
-                      <th>Categoria</th>
-                      <th>Dados Básicos</th>
-                      <th>Faturamento por Mercadoria</th>
-                      <th>Preço de Venda</th>
-                      <th>Custo de Aquisição</th>
-                      <th>Quantidade de Vendas</th>
-                      <th>Gastos com Vendas</th>
-                      <th>Gastos com Compras</th>
-                      <th>Margem Contrib. Informada (%)</th>
-                      <th>Margem Contrib. Corrigida (%)</th>
-                      <th>Margem Contrib. (R$)</th>
-                      <th>Custos Fixos</th>
-                      <th>Ponto de Equilíbrio</th>
-                      <th>Margem Operacional</th>
+                      <th>Faturamento por<br>Mercadoria</th>
+                      <th>Preço de<br>Venda</th>
+                      <th>Custo de<br>Aquisição</th>
+                      <th>Quantidade de<br>Vendas</th>
+                      <th>Gastos com<br>Vendas</th>
+                      <th>Gastos com<br>Compras</th>
+                      <th>Margem Contrib.<br>Informada (%)</th>
+                      <th>Margem Contrib.<br>Corrigida (%)</th>
+                      <th>Margem Contrib.<br>(R$)</th>
+                      <th>Custos<br>Fixos</th>
+                      <th>Ponto de<br>Equilíbrio</th>
+                      <th>Margem<br>Operacional</th>
                       <th>Ações</th>
                     </tr>
                   </thead>
@@ -321,7 +318,7 @@
             
             <div class="mb-3">
               <label for="produtoQuantidadeVendas" class="form-label">Quantidade de Vendas</label>
-              <input type="number" step="0.01" class="form-control" id="produtoQuantidadeVendas" name="quantidade_vendas" readonly>
+              <input type="number" step="1" class="form-control" id="produtoQuantidadeVendas" name="quantidade_vendas" readonly>
             </div>
             
             <div class="mb-3">
@@ -830,12 +827,12 @@ window.calcularCamposProduto = async function() {
       
       // Atualizar valor no span dentro da mensagem
       if (quantidadeVendasCalculadaEl) {
-        quantidadeVendasCalculadaEl.textContent = quantidadeVendas.toFixed(2);
+        quantidadeVendasCalculadaEl.textContent = Math.round(quantidadeVendas);
       }
       
       // Atualizar valor no campo de input
       if (produtoQuantidadeVendasEl) {
-        produtoQuantidadeVendasEl.value = quantidadeVendas.toFixed(2);
+        produtoQuantidadeVendasEl.value = Math.round(quantidadeVendas);
       }
       
       // Exibir mensagem informativa - sempre que houver dados básicos e percentual
@@ -1198,7 +1195,7 @@ document.getElementById('produtoForm').addEventListener('submit', async function
   }
 });
 
-// Carregar produtos (já filtrados pelo usuário logado no backend)
+// Carregar produtos (já filtrados pelo usuário logado no backend) agrupados por categoria
 window.carregarProdutos = async function() {
   try {
     const tbody = document.getElementById('produtosTableBody');
@@ -1207,24 +1204,33 @@ window.carregarProdutos = async function() {
       return;
     }
     
-    tbody.innerHTML = '<tr><td colspan="17" class="text-center"><i class="spinner-border spinner-border-sm me-2"></i>Carregando produtos...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="14" class="text-center"><i class="spinner-border spinner-border-sm me-2"></i>Carregando produtos...</td></tr>';
     
-    const response = await fetch('/produto/api/list');
+    // Carregar produtos e categorias em paralelo
+    const [produtosResponse, categoriasResponse] = await Promise.all([
+      fetch('/produto/api/list'),
+      fetch('/produto/api/categorias')
+    ]);
     
-    if (!response.ok) {
-      throw new Error(`Erro ${response.status}: ${response.statusText}`);
+    if (!produtosResponse.ok) {
+      throw new Error(`Erro ${produtosResponse.status}: ${produtosResponse.statusText}`);
     }
     
-    const produtos = await response.json();
+    const produtos = await produtosResponse.json();
+    const categorias = await categoriasResponse.json();
     
     tbody.innerHTML = '';
     
     if (!produtos || produtos.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="17" class="text-center text-muted py-4">Nenhum produto cadastrado. Clique em "Adicionar Produto" para criar um novo.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="14" class="text-center text-muted py-4">Nenhum produto cadastrado. Clique em "Adicionar Produto" para criar um novo.</td></tr>';
       return;
     }
     
-    produtos.sort((a, b) => a.nome.localeCompare(b.nome));
+    // Criar mapa de categorias (codigo -> nome)
+    const categoriasMap = {};
+    categorias.forEach(cat => {
+      categoriasMap[cat.codigo] = cat.nome;
+    });
     
     // Função auxiliar para formatar valores monetários
     const formatMoney = (valor) => valor ? 'R$ ' + parseFloat(valor).toFixed(2).replace('.', ',') : '-';
@@ -1235,41 +1241,177 @@ window.carregarProdutos = async function() {
     // Função auxiliar para formatar números
     const formatNumber = (valor) => valor ? parseFloat(valor).toFixed(2).replace('.', ',') : '-';
     
+    // Função auxiliar para formatar números inteiros (sem casas decimais)
+    const formatInteger = (valor) => valor ? Math.round(parseFloat(valor)).toString() : '-';
+    
+    // Agrupar produtos por categoria
+    const produtosPorCategoria = {};
+    const produtosSemCategoria = [];
+    
     produtos.forEach(produto => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td><strong>${produto.codigo}</strong></td>
-        <td>${produto.nome}</td>
-        <td>${produto.categoria_codigo || '-'}</td>
-        <td>${produto.basic_data_id || '-'}</td>
-        <td>${formatMoney(produto.faturamento_por_mercadoria)}</td>
-        <td>${formatMoney(produto.preco_venda)}</td>
-        <td>${formatMoney(produto.custo_aquisicao)}</td>
-        <td>${formatNumber(produto.quantidade_vendas)}</td>
-        <td>${formatMoney(produto.gastos_com_vendas)}</td>
-        <td>${formatMoney(produto.gastos_com_compras)}</td>
-        <td>${formatPercent(produto.margem_contribuicao_informada)}</td>
-        <td>${formatPercent(produto.margem_contribuicao_corrigida)}</td>
-        <td>${formatMoney(produto.margem_contribuicao_valor)}</td>
-        <td>${formatMoney(produto.custos_fixos)}</td>
-        <td>${formatNumber(produto.ponto_equilibrio)}</td>
-        <td>${formatPercent(produto.margem_operacional)}</td>
-        <td>
-          <button class="btn btn-sm btn-secondary btn-action me-2" onclick="openProdutoModal(${produto.codigo})" title="Editar produto">
-            <i class="bi bi-pencil"></i> Editar
-          </button>
-          <button class="btn btn-sm btn-danger btn-action" onclick="removerProduto(${produto.codigo})" title="Remover produto">
-            <i class="bi bi-trash"></i> Remover
-          </button>
-        </td>
-      `;
-      tbody.appendChild(tr);
+      const categoriaCodigo = produto.categoria_codigo;
+      if (categoriaCodigo) {
+        if (!produtosPorCategoria[categoriaCodigo]) {
+          produtosPorCategoria[categoriaCodigo] = [];
+        }
+        produtosPorCategoria[categoriaCodigo].push(produto);
+      } else {
+        produtosSemCategoria.push(produto);
+      }
     });
+    
+    // Função para calcular totais de uma categoria
+    const calcularTotaisCategoria = (prods) => {
+      const faturamento = prods.reduce((sum, p) => sum + (parseFloat(p.faturamento_por_mercadoria) || 0), 0);
+      const gastosVendas = prods.reduce((sum, p) => sum + (parseFloat(p.gastos_com_vendas) || 0), 0);
+      const gastosCompras = prods.reduce((sum, p) => sum + (parseFloat(p.gastos_com_compras) || 0), 0);
+      const custosFixos = prods.reduce((sum, p) => sum + (parseFloat(p.custos_fixos) || 0), 0);
+      const totalGastos = gastosVendas + gastosCompras + custosFixos;
+      
+      // Calcular margem operacional como: (Faturamento - Total Gastos) / Faturamento * 100
+      const margemOperacional = faturamento > 0 ? ((faturamento - totalGastos) / faturamento) * 100 : 0;
+      
+      return {
+        faturamento: faturamento,
+        quantidadeVendas: prods.reduce((sum, p) => sum + (parseFloat(p.quantidade_vendas) || 0), 0),
+        gastosVendas: gastosVendas,
+        gastosCompras: gastosCompras,
+        margemContribValor: prods.reduce((sum, p) => sum + (parseFloat(p.margem_contribuicao_valor) || 0), 0),
+        custosFixos: custosFixos,
+        pontoEquilibrio: prods.reduce((sum, p) => sum + (parseFloat(p.ponto_equilibrio) || 0), 0),
+        margemOperacional: margemOperacional
+      };
+    };
+    
+    // Ordenar categorias por nome
+    const categoriasOrdenadas = Object.keys(produtosPorCategoria).sort((a, b) => {
+      const nomeA = categoriasMap[a] || '';
+      const nomeB = categoriasMap[b] || '';
+      return nomeA.localeCompare(nomeB);
+    });
+    
+    // Adicionar produtos agrupados por categoria
+    categoriasOrdenadas.forEach(categoriaCodigo => {
+      const produtosCategoria = produtosPorCategoria[categoriaCodigo];
+      const categoriaNome = categoriasMap[categoriaCodigo] || `Categoria ${categoriaCodigo}`;
+      
+      // Ordenar produtos da categoria por nome
+      produtosCategoria.sort((a, b) => a.nome.localeCompare(b.nome));
+      
+      // Calcular totais da categoria
+      const totais = calcularTotaisCategoria(produtosCategoria);
+      
+      // Linha de cabeçalho da categoria com totais
+      const trCategoria = document.createElement('tr');
+      trCategoria.className = 'table-light fw-bold';
+      trCategoria.innerHTML = `
+        <td><strong>${categoriaNome}</strong> <small>(Total)</small></td>
+        <td><strong>${formatMoney(totais.faturamento)}</strong></td>
+        <td>-</td>
+        <td>-</td>
+        <td><strong>${formatInteger(totais.quantidadeVendas)}</strong></td>
+        <td><strong>${formatMoney(totais.gastosVendas)}</strong></td>
+        <td><strong>${formatMoney(totais.gastosCompras)}</strong></td>
+        <td>-</td>
+        <td>-</td>
+        <td><strong>${formatMoney(totais.margemContribValor)}</strong></td>
+        <td><strong>${formatMoney(totais.custosFixos)}</strong></td>
+        <td><strong>${formatNumber(totais.pontoEquilibrio)}</strong></td>
+        <td><strong>${formatPercent(totais.margemOperacional)}</strong></td>
+        <td>-</td>
+      `;
+      tbody.appendChild(trCategoria);
+      
+      // Adicionar produtos da categoria
+      produtosCategoria.forEach(produto => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>&nbsp;&nbsp;&nbsp;&nbsp;${produto.nome}</td>
+          <td>${formatMoney(produto.faturamento_por_mercadoria)}</td>
+          <td>${formatMoney(produto.preco_venda)}</td>
+          <td>${formatMoney(produto.custo_aquisicao)}</td>
+          <td>${formatInteger(produto.quantidade_vendas)}</td>
+          <td>${formatMoney(produto.gastos_com_vendas)}</td>
+          <td>${formatMoney(produto.gastos_com_compras)}</td>
+          <td>${formatPercent(produto.margem_contribuicao_informada)}</td>
+          <td>${formatPercent(produto.margem_contribuicao_corrigida)}</td>
+          <td>${formatMoney(produto.margem_contribuicao_valor)}</td>
+          <td>${formatMoney(produto.custos_fixos)}</td>
+          <td>${formatNumber(produto.ponto_equilibrio)}</td>
+          <td>${formatPercent(produto.margem_operacional)}</td>
+          <td>
+            <button class="btn btn-sm btn-secondary btn-action me-2" onclick="openProdutoModal(${produto.codigo})" title="Editar produto">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-danger btn-action" onclick="removerProduto(${produto.codigo})" title="Remover produto">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    });
+    
+    // Adicionar produtos sem categoria no final
+    if (produtosSemCategoria.length > 0) {
+      produtosSemCategoria.sort((a, b) => a.nome.localeCompare(b.nome));
+      
+      const totaisSemCategoria = calcularTotaisCategoria(produtosSemCategoria);
+      
+      // Linha de cabeçalho para produtos sem categoria
+      const trSemCategoria = document.createElement('tr');
+      trSemCategoria.className = 'table-light fw-bold';
+      trSemCategoria.innerHTML = `
+        <td><strong>Sem Categoria</strong> <small>(Total)</small></td>
+        <td><strong>${formatMoney(totaisSemCategoria.faturamento)}</strong></td>
+        <td>-</td>
+        <td>-</td>
+        <td><strong>${formatInteger(totaisSemCategoria.quantidadeVendas)}</strong></td>
+        <td><strong>${formatMoney(totaisSemCategoria.gastosVendas)}</strong></td>
+        <td><strong>${formatMoney(totaisSemCategoria.gastosCompras)}</strong></td>
+        <td>-</td>
+        <td>-</td>
+        <td><strong>${formatMoney(totaisSemCategoria.margemContribValor)}</strong></td>
+        <td><strong>${formatMoney(totaisSemCategoria.custosFixos)}</strong></td>
+        <td><strong>${formatNumber(totaisSemCategoria.pontoEquilibrio)}</strong></td>
+        <td><strong>${formatPercent(totaisSemCategoria.margemOperacional)}</strong></td>
+        <td>-</td>
+      `;
+      tbody.appendChild(trSemCategoria);
+      
+      produtosSemCategoria.forEach(produto => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>&nbsp;&nbsp;&nbsp;&nbsp;${produto.nome}</td>
+          <td>${formatMoney(produto.faturamento_por_mercadoria)}</td>
+          <td>${formatMoney(produto.preco_venda)}</td>
+          <td>${formatMoney(produto.custo_aquisicao)}</td>
+          <td>${formatInteger(produto.quantidade_vendas)}</td>
+          <td>${formatMoney(produto.gastos_com_vendas)}</td>
+          <td>${formatMoney(produto.gastos_com_compras)}</td>
+          <td>${formatPercent(produto.margem_contribuicao_informada)}</td>
+          <td>${formatPercent(produto.margem_contribuicao_corrigida)}</td>
+          <td>${formatMoney(produto.margem_contribuicao_valor)}</td>
+          <td>${formatMoney(produto.custos_fixos)}</td>
+          <td>${formatNumber(produto.ponto_equilibrio)}</td>
+          <td>${formatPercent(produto.margem_operacional)}</td>
+          <td>
+            <button class="btn btn-sm btn-secondary btn-action me-2" onclick="openProdutoModal(${produto.codigo})" title="Editar produto">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-danger btn-action" onclick="removerProduto(${produto.codigo})" title="Remover produto">
+              <i class="bi bi-trash"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
   } catch (error) {
     console.error('Erro ao carregar produtos:', error);
     const tbody = document.getElementById('produtosTableBody');
     if (tbody) {
-      tbody.innerHTML = '<tr><td colspan="17" class="text-center text-danger py-4">Erro ao carregar produtos. Por favor, recarregue a página.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="14" class="text-center text-danger py-4">Erro ao carregar produtos. Por favor, recarregue a página.</td></tr>';
     }
   }
 }
