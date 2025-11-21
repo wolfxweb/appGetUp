@@ -385,16 +385,40 @@ async def get_curva_abc(
     faturamento_acumulado = 0
     quantidade_total = len(produtos_com_faturamento)
     
+    # Limites da curva ABC (ajustáveis)
+    limite_a = 80.0  # Até 80% do faturamento = Classe A
+    limite_b = 95.0  # De 80% a 95% = Classe B, acima de 95% = Classe C
+    
     for i, produto in enumerate(produtos_com_faturamento):
-        faturamento_acumulado += produto["faturamento"]
-        percentual_acumulado = (faturamento_acumulado / faturamento_total * 100) if faturamento_total > 0 else 0
         percentual_produto = (produto["faturamento"] / faturamento_total * 100) if faturamento_total > 0 else 0
         
-        # Classificar em A, B ou C
-        if percentual_acumulado <= 80:
+        # Calcular percentual acumulado ANTES de adicionar este produto
+        percentual_acumulado_antes = (faturamento_acumulado / faturamento_total * 100) if faturamento_total > 0 else 0
+        
+        # Adicionar o faturamento deste produto ao acumulado
+        faturamento_acumulado += produto["faturamento"]
+        percentual_acumulado = (faturamento_acumulado / faturamento_total * 100) if faturamento_total > 0 else 0
+        
+        # Classificar em A, B ou C baseado no percentual acumulado após incluir este produto
+        # A classificação é baseada em onde o acumulado está após incluir este produto
+        # Classe A: produtos que juntos somam até 80% do faturamento
+        if percentual_acumulado <= limite_a:
             classe = "A"
-        elif percentual_acumulado <= 95:
-            classe = "B"
+        # Classe B: produtos que somam de 80% a 95% do faturamento
+        elif percentual_acumulado <= limite_b:
+            # Se o acumulado anterior estava abaixo de 80%, o primeiro produto que ultrapassa
+            # deve ser incluído em A se o percentual acumulado não ultrapassar muito 80%
+            # Permite margem de até 10% (até 90%) para garantir que produtos importantes sejam A
+            if percentual_acumulado_antes < limite_a:
+                # Primeiro produto que ultrapassa 80% - se não ultrapassa muito, mantém como A
+                if percentual_acumulado <= 90.0:
+                    classe = "A"
+                else:
+                    classe = "B"
+            else:
+                # Já estávamos acima de 80%, então é B
+                classe = "B"
+        # Classe C: produtos que somam acima de 95% do faturamento
         else:
             classe = "C"
         
