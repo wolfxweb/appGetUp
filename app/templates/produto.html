@@ -67,6 +67,59 @@
     .table td {
         vertical-align: middle;
     }
+    /* Ajustar largura das colunas monetárias - garantir que não quebrem linha */
+    #produtosTable th:nth-child(2),
+    #produtosTable td:nth-child(2),
+    #produtosTable th:nth-child(3),
+    #produtosTable td:nth-child(3),
+    #produtosTable th:nth-child(4),
+    #produtosTable td:nth-child(4),
+    #produtosTable th:nth-child(7),
+    #produtosTable td:nth-child(7),
+    #produtosTable th:nth-child(8),
+    #produtosTable td:nth-child(8),
+    #produtosTable th:nth-child(11),
+    #produtosTable td:nth-child(11),
+    #produtosTable th:nth-child(12),
+    #produtosTable td:nth-child(12) {
+        white-space: nowrap !important;
+    }
+    /* Larguras específicas para colunas monetárias */
+    #produtosTable th:nth-child(2),
+    #produtosTable td:nth-child(2) { /* Faturamento por Mercadoria */
+        min-width: 170px;
+        text-align: right;
+    }
+    #produtosTable th:nth-child(3),
+    #produtosTable td:nth-child(3) { /* Preço de Venda */
+        min-width: 130px;
+        text-align: right;
+    }
+    #produtosTable th:nth-child(4),
+    #produtosTable td:nth-child(4) { /* Custo de Aquisição */
+        min-width: 150px;
+        text-align: right;
+    }
+    #produtosTable th:nth-child(7),
+    #produtosTable td:nth-child(7) { /* Gastos com Vendas */
+        min-width: 140px;
+        text-align: right;
+    }
+    #produtosTable th:nth-child(8),
+    #produtosTable td:nth-child(8) { /* Gastos com Compras */
+        min-width: 140px;
+        text-align: right;
+    }
+    #produtosTable th:nth-child(11),
+    #produtosTable td:nth-child(11) { /* Margem Contrib. (R$) */
+        min-width: 140px;
+        text-align: right;
+    }
+    #produtosTable th:nth-child(12),
+    #produtosTable td:nth-child(12) { /* Custos Fixos */
+        min-width: 120px;
+        text-align: right;
+    }
     .btn-action {
         padding: 0.25rem 0.5rem;
         font-size: 0.875rem;
@@ -210,11 +263,11 @@
                   <thead>
                     <tr>
                       <th>Nome do Produto</th>
-                      <th>Faturamento por<br>Mercadoria</th>
-                      <th>Preço de<br>Venda</th>
-                      <th>Custo de<br>Aquisição</th>
-                      <th>Quantidade de<br>Vendas</th>
-                      <th>Gastos com<br>Vendas</th>
+                      <th>Faturamento por Mercadoria</th>
+                      <th>Preço de Venda</th>
+                      <th>Custo de Aquisição</th>
+                      <th>Quantidade de Vendas</th>
+                      <th>Gastos com Vendas</th>
                       <th>Gastos com<br>Compras</th>
                       <th>Margem Contrib.<br>Informada (%)</th>
                       <th>Margem Contrib.<br>Corrigida (%)</th>
@@ -686,10 +739,10 @@ window.carregarCategorias = async function() {
         <td>${categoria.nome}</td>
         <td>
           <button class="btn btn-sm btn-secondary btn-action me-2" onclick="openCategoriaModal(${categoria.codigo})" title="Editar categoria">
-            <i class="bi bi-pencil"></i> Editar
+            <i class="bi bi-pencil"></i>
           </button>
           <button class="btn btn-sm btn-danger btn-action" onclick="removerCategoria(${categoria.codigo})" title="Remover categoria">
-            <i class="bi bi-trash"></i> Remover
+            <i class="bi bi-trash"></i>
           </button>
         </td>
       `;
@@ -1515,13 +1568,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const iconTd = classeRow?.querySelector('.icon-toggle');
     
     if (detalhesRow) {
-      // Se já existe, remover ou mostrar
-      if (detalhesRow.style.display === 'none' || !detalhesRow.style.display) {
-        detalhesRow.style.display = '';
-        if (iconTd) iconTd.innerHTML = '<i class="bi bi-chevron-down"></i>';
-      } else {
+      // Se já existe, verificar se está visível ou oculto
+      const isVisible = detalhesRow.style.display !== 'none' && 
+                        (detalhesRow.style.display === '' || 
+                         window.getComputedStyle(detalhesRow).display !== 'none');
+      
+      if (isVisible) {
+        // Se está visível, ocultar
         detalhesRow.style.display = 'none';
         if (iconTd) iconTd.innerHTML = '<i class="bi bi-chevron-right"></i>';
+      } else {
+        // Se está oculto, mostrar
+        detalhesRow.style.display = '';
+        if (iconTd) iconTd.innerHTML = '<i class="bi bi-chevron-down"></i>';
       }
     } else {
       // Criar linha de detalhes
@@ -1615,7 +1674,7 @@ document.addEventListener('DOMContentLoaded', function() {
               <td>R$ ${data.resumo.classe_c.faturamento.toFixed(2).replace('.', ',')}</td>
               <td>${data.resumo.classe_c.percentual.toFixed(2)}%</td>
             </tr>
-            <tr class="table-info fw-bold">
+            <tr class="fw-bold" style="background-color: #6c757d; color: white;">
               <td></td>
               <td><strong>Total</strong></td>
               <td>${data.quantidade_total}</td>
