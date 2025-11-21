@@ -335,3 +335,100 @@ async def get_basic_data_for_produto(
     
     return JSONResponse(data)
 
+@router.get("/api/curva-abc")
+async def get_curva_abc(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Calcula a curva ABC dos produtos baseada no faturamento"""
+    if not current_user:
+        return JSONResponse({"error": "Unauthorized"}, status_code=401)
+    
+    result = await db.execute(
+        select(Produto).filter(Produto.user_id == current_user.id)
+    )
+    produtos = result.scalars().all()
+    
+    if not produtos:
+        return JSONResponse({
+            "curva_abc": [],
+            "resumo": {
+                "classe_a": {"quantidade": 0, "faturamento": 0, "percentual": 0},
+                "classe_b": {"quantidade": 0, "faturamento": 0, "percentual": 0},
+                "classe_c": {"quantidade": 0, "faturamento": 0, "percentual": 0}
+            }
+        })
+    
+    # Calcular faturamento total e preparar dados
+    produtos_com_faturamento = []
+    faturamento_total = 0
+    
+    for produto in produtos:
+        faturamento = float(produto.faturamento_por_mercadoria or 0)
+        if faturamento > 0:
+            produtos_com_faturamento.append({
+                "codigo": produto.codigo,
+                "nome": produto.nome,
+                "faturamento": faturamento,
+                "percentual_faturamento": produto.percentual_faturamento or 0,
+                "margem_contribuicao_valor": float(produto.margem_contribuicao_valor or 0),
+                "quantidade_vendas": int(produto.quantidade_vendas or 0)
+            })
+            faturamento_total += faturamento
+    
+    # Ordenar por faturamento decrescente
+    produtos_com_faturamento.sort(key=lambda x: x["faturamento"], reverse=True)
+    
+    # Calcular curva ABC
+    curva_abc = []
+    faturamento_acumulado = 0
+    quantidade_total = len(produtos_com_faturamento)
+    
+    for i, produto in enumerate(produtos_com_faturamento):
+        faturamento_acumulado += produto["faturamento"]
+        percentual_acumulado = (faturamento_acumulado / faturamento_total * 100) if faturamento_total > 0 else 0
+        percentual_produto = (produto["faturamento"] / faturamento_total * 100) if faturamento_total > 0 else 0
+        
+        # Classificar em A, B ou C
+        if percentual_acumulado <= 80:
+            classe = "A"
+        elif percentual_acumulado <= 95:
+            classe = "B"
+        else:
+            classe = "C"
+        
+        curva_abc.append({
+            **produto,
+            "percentual_acumulado": round(percentual_acumulado, 2),
+            "percentual_produto": round(percentual_produto, 2),
+            "classe": classe,
+            "posicao": i + 1
+        })
+    
+    # Calcular resumo por classe
+    resumo = {
+        "classe_a": {"quantidade": 0, "faturamento": 0, "percentual": 0},
+        "classe_b": {"quantidade": 0, "faturamento": 0, "percentual": 0},
+        "classe_c": {"quantidade": 0, "faturamento": 0, "percentual": 0}
+    }
+    
+    for item in curva_abc:
+        classe_key = f"classe_{item['classe'].lower()}"
+        resumo[classe_key]["quantidade"] += 1
+        resumo[classe_key]["faturamento"] += item["faturamento"]
+    
+    for classe_key in resumo:
+        resumo[classe_key]["percentual"] = round(
+            (resumo[classe_key]["faturamento"] / faturamento_total * 100) if faturamento_total > 0 else 0,
+            2
+        )
+        resumo[classe_key]["faturamento"] = round(resumo[classe_key]["faturamento"], 2)
+    
+    return JSONResponse({
+        "curva_abc": curva_abc,
+        "resumo": resumo,
+        "faturamento_total": round(faturamento_total, 2),
+        "quantidade_total": quantidade_total
+    })
+

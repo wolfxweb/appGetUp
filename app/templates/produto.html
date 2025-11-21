@@ -2,6 +2,11 @@
 
 {% block title %}Produto - GetUp Gestão{% endblock %}
 
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{{ super() }}
+{% endblock %}
+
 {% block extra_css %}
 <style>
     body {
@@ -148,8 +153,46 @@
           <div class="tab-content" id="produtoTabsContent">
             <!-- Dashboard Tab -->
             <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-              <!-- Conteúdo do Dashboard -->
-              <p>Conteúdo do Dashboard será adicionado aqui.</p>
+              <!-- Análise Curva ABC -->
+              <div class="card shadow-sm mb-4" style="background-color: #F0F0F0;">
+                <div class="card-header bg-secondary text-white">
+                  <h5 class="mb-0"><i class="bi bi-graph-up"></i> Análise Curva ABC</h5>
+                </div>
+                <div class="card-body p-3">
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <canvas id="curvaAbcChart"></canvas>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <canvas id="distribuicaoClasseChart"></canvas>
+                    </div>
+                  </div>
+                  <div class="row mt-3">
+                    <div class="col-md-12">
+                      <div class="table-responsive">
+                        <table class="table table-sm table-hover" id="tabelaResumoCurvaAbc">
+                          <thead>
+                            <tr>
+                              <th style="width: 30px;"></th>
+                              <th>Classe</th>
+                              <th>Quantidade</th>
+                              <th>Faturamento (R$)</th>
+                              <th>% do Total</th>
+                            </tr>
+                          </thead>
+                          <tbody id="resumoCurvaAbc">
+                            <tr>
+                              <td colspan="5" class="text-center">
+                                <i class="spinner-border spinner-border-sm me-2"></i>Carregando dados...
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             
             <!-- Produto Tab -->
@@ -1451,5 +1494,308 @@ window.removerProduto = async function(produtoCodigo) {
     alert('Erro ao remover produto. Por favor, tente novamente.');
   }
 }
+
+// Carregar Curva ABC
+document.addEventListener('DOMContentLoaded', function() {
+  let curvaAbcChart = null;
+  let distribuicaoClasseChart = null;
+  
+  // Armazenar dados da curva ABC globalmente
+  let dadosCurvaAbc = null;
+  
+  // Função para formatar valores
+  const formatMoney = (valor) => valor ? 'R$ ' + parseFloat(valor).toFixed(2).replace('.', ',') : '-';
+  const formatPercent = (valor) => valor ? parseFloat(valor).toFixed(2).replace('.', ',') + '%' : '-';
+  
+  // Função para exibir/ocultar produtos de uma classe
+  function toggleProdutosClasse(classe) {
+    const detalhesRowId = `detalhes-${classe}`;
+    const detalhesRow = document.getElementById(detalhesRowId);
+    const classeRow = document.querySelector(`[data-classe="${classe}"]`);
+    const iconTd = classeRow?.querySelector('.icon-toggle');
+    
+    if (detalhesRow) {
+      // Se já existe, remover ou mostrar
+      if (detalhesRow.style.display === 'none' || !detalhesRow.style.display) {
+        detalhesRow.style.display = '';
+        if (iconTd) iconTd.innerHTML = '<i class="bi bi-chevron-down"></i>';
+      } else {
+        detalhesRow.style.display = 'none';
+        if (iconTd) iconTd.innerHTML = '<i class="bi bi-chevron-right"></i>';
+      }
+    } else {
+      // Criar linha de detalhes
+      if (!dadosCurvaAbc) return;
+      
+      const produtosClasse = dadosCurvaAbc.curva_abc.filter(p => p.classe === classe);
+      if (produtosClasse.length === 0) return;
+      
+      // Criar linha de detalhes
+      const detalhesTr = document.createElement('tr');
+      detalhesTr.id = detalhesRowId;
+      detalhesTr.className = 'table-secondary';
+      detalhesTr.style.backgroundColor = '#f8f9fa';
+      
+      let produtosHtml = produtosClasse.map(produto => `
+        <tr style="background-color: #ffffff;">
+          <td></td>
+          <td style="padding-left: 30px;"><small>${produto.nome}</small></td>
+          <td><small>${produto.quantidade_vendas || '-'}</small></td>
+          <td><small>${formatMoney(produto.faturamento)}</small></td>
+          <td><small>${formatPercent(produto.percentual_produto)}</small></td>
+        </tr>
+      `).join('');
+      
+      detalhesTr.innerHTML = `
+        <td colspan="5" style="padding: 0;">
+          <table class="table table-sm mb-0" style="margin-bottom: 0;">
+            <thead>
+              <tr>
+                <th style="width: 30px;"></th>
+                <th>Nome do Produto</th>
+                <th>Qtd. Vendas</th>
+                <th>Faturamento (R$)</th>
+                <th>% do Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${produtosHtml}
+            </tbody>
+          </table>
+        </td>
+      `;
+      
+      // Inserir após a linha da classe
+      if (classeRow && classeRow.nextSibling) {
+        classeRow.parentNode.insertBefore(detalhesTr, classeRow.nextSibling);
+      } else if (classeRow) {
+        classeRow.parentNode.appendChild(detalhesTr);
+      }
+      
+      if (iconTd) iconTd.innerHTML = '<i class="bi bi-chevron-down"></i>';
+    }
+  }
+  
+  // Carregar dados da curva ABC
+  async function carregarCurvaABC() {
+    try {
+      const response = await fetch('/produto/api/curva-abc');
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao carregar dados');
+      }
+      
+      // Armazenar dados globalmente
+      dadosCurvaAbc = data;
+      
+      // Atualizar resumo
+      const resumoTbody = document.getElementById('resumoCurvaAbc');
+      if (resumoTbody) {
+        if (data.resumo && data.curva_abc && data.curva_abc.length > 0) {
+          resumoTbody.innerHTML = `
+            <tr class="table-light classe-row" data-classe="A" style="cursor: pointer;" onclick="window.toggleProdutosClasse('A')">
+              <td class="icon-toggle"><i class="bi bi-chevron-right"></i></td>
+              <td><strong>Classe A</strong></td>
+              <td>${data.resumo.classe_a.quantidade}</td>
+              <td>R$ ${data.resumo.classe_a.faturamento.toFixed(2).replace('.', ',')}</td>
+              <td>${data.resumo.classe_a.percentual.toFixed(2)}%</td>
+            </tr>
+            <tr class="table-light classe-row" data-classe="B" style="cursor: pointer;" onclick="window.toggleProdutosClasse('B')">
+              <td class="icon-toggle"><i class="bi bi-chevron-right"></i></td>
+              <td><strong>Classe B</strong></td>
+              <td>${data.resumo.classe_b.quantidade}</td>
+              <td>R$ ${data.resumo.classe_b.faturamento.toFixed(2).replace('.', ',')}</td>
+              <td>${data.resumo.classe_b.percentual.toFixed(2)}%</td>
+            </tr>
+            <tr class="table-light classe-row" data-classe="C" style="cursor: pointer;" onclick="window.toggleProdutosClasse('C')">
+              <td class="icon-toggle"><i class="bi bi-chevron-right"></i></td>
+              <td><strong>Classe C</strong></td>
+              <td>${data.resumo.classe_c.quantidade}</td>
+              <td>R$ ${data.resumo.classe_c.faturamento.toFixed(2).replace('.', ',')}</td>
+              <td>${data.resumo.classe_c.percentual.toFixed(2)}%</td>
+            </tr>
+            <tr class="table-info fw-bold">
+              <td></td>
+              <td><strong>Total</strong></td>
+              <td>${data.quantidade_total}</td>
+              <td><strong>R$ ${data.faturamento_total.toFixed(2).replace('.', ',')}</strong></td>
+              <td><strong>100%</strong></td>
+            </tr>
+          `;
+        } else {
+          resumoTbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Nenhum produto com faturamento cadastrado.</td></tr>';
+        }
+      }
+      
+      // Preparar dados para gráficos
+      if (data.curva_abc && data.curva_abc.length > 0) {
+        // Gráfico de Curva ABC (Pareto)
+        const labels = data.curva_abc.map(p => p.nome.length > 20 ? p.nome.substring(0, 20) + '...' : p.nome);
+        const faturamentos = data.curva_abc.map(p => p.faturamento);
+        const percentuaisAcumulados = data.curva_abc.map(p => p.percentual_acumulado);
+        
+        const ctx1 = document.getElementById('curvaAbcChart');
+        if (ctx1) {
+          if (curvaAbcChart) {
+            curvaAbcChart.destroy();
+          }
+          curvaAbcChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Faturamento (R$)',
+                data: faturamentos,
+                backgroundColor: data.curva_abc.map(p => {
+                  if (p.classe === 'A') return 'rgba(40, 167, 69, 0.7)';
+                  if (p.classe === 'B') return 'rgba(255, 193, 7, 0.7)';
+                  return 'rgba(220, 53, 69, 0.7)';
+                }),
+                borderColor: data.curva_abc.map(p => {
+                  if (p.classe === 'A') return 'rgba(40, 167, 69, 1)';
+                  if (p.classe === 'B') return 'rgba(255, 193, 7, 1)';
+                  return 'rgba(220, 53, 69, 1)';
+                }),
+                borderWidth: 1
+              }, {
+                label: '% Acumulado',
+                data: percentuaisAcumulados,
+                type: 'line',
+                borderColor: 'rgba(0, 123, 255, 1)',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                yAxisID: 'y1',
+                tension: 0.4
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Curva ABC - Faturamento por Produto'
+                },
+                legend: {
+                  display: true
+                }
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: 'Faturamento (R$)'
+                  }
+                },
+                y1: {
+                  type: 'linear',
+                  display: true,
+                  position: 'right',
+                  max: 100,
+                  title: {
+                    display: true,
+                    text: '% Acumulado'
+                  },
+                  grid: {
+                    drawOnChartArea: false
+                  }
+                }
+              }
+            }
+          });
+        }
+        
+        // Gráfico de Distribuição por Classe
+        const ctx2 = document.getElementById('distribuicaoClasseChart');
+        if (ctx2) {
+          if (distribuicaoClasseChart) {
+            distribuicaoClasseChart.destroy();
+          }
+          distribuicaoClasseChart = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+              labels: ['Classe A', 'Classe B', 'Classe C'],
+              datasets: [{
+                data: [
+                  data.resumo.classe_a.faturamento,
+                  data.resumo.classe_b.faturamento,
+                  data.resumo.classe_c.faturamento
+                ],
+                backgroundColor: [
+                  'rgba(40, 167, 69, 0.7)',
+                  'rgba(255, 193, 7, 0.7)',
+                  'rgba(220, 53, 69, 0.7)'
+                ],
+                borderColor: [
+                  'rgba(40, 167, 69, 1)',
+                  'rgba(255, 193, 7, 1)',
+                  'rgba(220, 53, 69, 1)'
+                ],
+                borderWidth: 2
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: true,
+              plugins: {
+                title: {
+                  display: true,
+                  text: 'Distribuição de Faturamento por Classe'
+                },
+                legend: {
+                  position: 'bottom'
+                },
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const label = context.label || '';
+                      const value = context.parsed || 0;
+                      const percentual = data.resumo[label.toLowerCase().replace('classe ', 'classe_')].percentual;
+                      return `${label}: R$ ${value.toFixed(2).replace('.', ',')} (${percentual.toFixed(2)}%)`;
+                    }
+                  }
+                }
+              }
+            }
+          });
+        }
+      } else {
+        // Se não houver dados, mostrar mensagem
+        const ctx1 = document.getElementById('curvaAbcChart');
+        const ctx2 = document.getElementById('distribuicaoClasseChart');
+        if (ctx1 && ctx1.parentElement) ctx1.parentElement.innerHTML = '<p class="text-center text-muted">Nenhum produto com faturamento cadastrado.</p>';
+        if (ctx2 && ctx2.parentElement) ctx2.parentElement.innerHTML = '<p class="text-center text-muted">Nenhum produto com faturamento cadastrado.</p>';
+      }
+    } catch (error) {
+      console.error('Erro ao carregar curva ABC:', error);
+      const resumoTbody = document.getElementById('resumoCurvaAbc');
+      if (resumoTbody) {
+        resumoTbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">Erro ao carregar dados. Por favor, recarregue a página.</td></tr>';
+      }
+    }
+  }
+  
+  // Tornar função global para acesso via onclick
+  window.toggleProdutosClasse = toggleProdutosClasse;
+  
+  // Carregar dados quando a aba Dashboard for ativada
+  const dashboardTab = document.getElementById('dashboard-tab');
+  if (dashboardTab) {
+    dashboardTab.addEventListener('shown.bs.tab', function() {
+      // Aguardar um pouco para garantir que o DOM está pronto
+      setTimeout(() => {
+        carregarCurvaABC();
+      }, 100);
+    });
+    
+    // Se a aba Dashboard já estiver ativa, carregar imediatamente
+    if (dashboardTab.classList.contains('active')) {
+      setTimeout(() => {
+        carregarCurvaABC();
+      }, 500);
+    }
+  }
+});
 </script>
 {% endblock %}
