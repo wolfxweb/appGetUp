@@ -280,6 +280,23 @@ async function carregarImportanciaMeses() {
         
         const meses = await response.json();
         console.log('Meses recebidos:', meses);
+        // Log detalhado dos primeiros meses para debug
+        if (meses.length > 0) {
+            console.log('Primeiros 3 meses detalhados:', meses.slice(0, 3).map(m => ({
+                month: m.month,
+                nota: m.nota_atribuida,
+                ritmo: m.ritmo_negocio_percentual,
+                qtd_real: m.quantidade_vendas_real,
+                qtd_est: m.quantidade_vendas_estimada
+            })));
+            console.log('Últimos 3 meses detalhados:', meses.slice(9, 12).map(m => ({
+                month: m.month,
+                nota: m.nota_atribuida,
+                ritmo: m.ritmo_negocio_percentual,
+                qtd_real: m.quantidade_vendas_real,
+                qtd_est: m.quantidade_vendas_estimada
+            })));
+        }
         
         if (meses.length === 0) {
             console.log('Nenhum mês encontrado para o ano:', ano);

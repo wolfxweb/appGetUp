@@ -226,6 +226,8 @@ let basicDataMap = {}; // {year-month: clients_served}
 let eventosList = []; // Lista de eventos (padrão + customizados do usuário)
 let notasMeses = {}; // {month: nota}
 
+// Função removida - notas atribuídas agora são calculadas automaticamente dos eventos
+
 // IMPORTANTE: Definir funções globais PRIMEIRO, antes de qualquer uso
 window.salvarEvento = async function() {
     console.log('=== salvarEvento chamada ===');
@@ -436,23 +438,8 @@ async function carregarDadosBasicos() {
 }
 
 async function carregarImportanciaMesesPorBasicData() {
-    if (!basicDataIdSelecionado) return;
-    
-    try {
-        const response = await fetch(`/importancia-meses/api/basic-data/${basicDataIdSelecionado}/month-importance`, {
-            credentials: 'include'
-        });
-        if (response.ok) {
-            const meses = await response.json();
-            notasMeses = {};
-            meses.forEach(mes => {
-                notasMeses[mes.month] = mes.nota_atribuida;
-            });
-        }
-    } catch (error) {
-        console.error('Erro ao carregar importância dos meses:', error);
-        notasMeses = {};
-    }
+    // Função removida - não precisa mais carregar notas, serão calculadas dos eventos
+    // Mantida vazia para não quebrar código existente
 }
 
 async function carregarEventos() {
@@ -639,11 +626,31 @@ async function salvarImportanciaMeses() {
         return;
     }
     
-    // Coletar dados dos meses (usando dados já carregados, pois a tabela foi movida para tela principal)
+    // Calcular notas atribuídas para cada mês = soma das notas dos eventos que afetam aquele mês
     const meses = [];
     for (let month = 1; month <= 12; month++) {
-        const nota = notasMeses[month] !== undefined ? notasMeses[month] : null;
-        meses.push({ month: month, nota_atribuida: nota });
+        let somaNotas = 0;
+        
+        // Percorrer todos os eventos e somar notas dos que afetam este mês
+        eventosList.forEach(evento => {
+            const mesesAfetados = [];
+            for (let i = 1; i <= 12; i++) {
+                const checkbox = document.querySelector(`.evento-mes-checkbox[data-event-id="${evento.id}"][data-month="${i}"]`);
+                if (checkbox && checkbox.checked) {
+                    mesesAfetados.push(i);
+                }
+            }
+            
+            // Se este mês está nos meses afetados, somar a nota do evento
+            if (mesesAfetados.includes(month)) {
+                const notaInput = document.querySelector(`.evento-nota-input[data-event-id="${evento.id}"]`);
+                const nota = notaInput ? (parseFloat(notaInput.value) || 0) : 0;
+                somaNotas += nota;
+            }
+        });
+        
+        // Se a soma for 0, enviar null (não salvar)
+        meses.push({ month: month, nota_atribuida: somaNotas > 0 ? somaNotas : null });
     }
     
     // Coletar dados dos eventos
