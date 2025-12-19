@@ -68,7 +68,7 @@
         </div>
         <div class="card-body">
           <!-- Seção: Seleção de Dado Básico -->
-          <div class="row mb-4">
+          <div class="row mb-4 align-items-end">
             <div class="col-md-6">
               <label for="basicDataSelect" class="form-label">Selecione o Dado Básico:</label>
               <select class="form-select" id="basicDataSelect">
@@ -80,16 +80,15 @@
                 {% endfor %}
               </select>
             </div>
+            <div class="col-md-6 text-end">
+              <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEvento">
+                Adicionar novo evento
+              </button>
+            </div>
           </div>
 
           <!-- Seção: Eventos que Influenciam as Vendas (EDITÁVEL) -->
           <div id="tabelaEventosContainer" class="mt-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h5 class="mb-0">Eventos que Influenciam as Vendas da Loja</h5>
-              <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEvento">
-                <i class="bi bi-plus-circle"></i> Adicionar novo evento
-              </button>
-            </div>
             <div class="table-responsive">
               <table class="table table-bordered table-sm">
                 <thead class="table-light">
