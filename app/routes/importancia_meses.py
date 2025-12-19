@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Depends, HTTPException, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, or_
+from sqlalchemy import select, and_, or_, func
 from app.database import async_session
 from app.routes.auth import get_current_user
 from app.database.db import get_db
@@ -217,6 +217,29 @@ async def get_basic_data_for_importancia(
             return JSONResponse(content=data)
     except Exception as e:
         logger.error(f"Erro ao listar dados básicos: {str(e)}")
+        return JSONResponse({"error": str(e)}, status_code=500)
+
+@router.get("/api/available-years")
+async def get_available_years(
+    request: Request,
+    current_user = Depends(get_current_user)
+):
+    """Retorna lista de anos disponíveis que têm dados de importância dos meses salvos"""
+    if not current_user:
+        return JSONResponse({"error": "Unauthorized"}, status_code=401)
+    
+    try:
+        async with async_session() as session:
+            # Buscar anos únicos da tabela mes_importancia
+            query = select(MesImportancia.year).where(
+                MesImportancia.user_id == current_user.id
+            ).distinct()
+            result = await session.execute(query)
+            anos = [row[0] for row in result.all() if row[0] is not None]
+            
+            return JSONResponse(content=sorted(anos, reverse=True))
+    except Exception as e:
+        logger.error(f"Erro ao buscar anos disponíveis: {str(e)}")
         return JSONResponse({"error": str(e)}, status_code=500)
 
 @router.get("/api/month-importance/{year}")

@@ -108,7 +108,7 @@
 
           <!-- Mensagem quando não há dados -->
           <div id="mensagemSemDados" class="alert alert-info" style="display: none;">
-            Nenhum dado cadastrado. Clique em 'Cadastrar Importâncias dos Meses' para começar.
+            Nenhuma importância de mês cadastrada. Clique em 'Cadastrar Importâncias dos Meses' para começar.
           </div>
 
           <!-- Tabela: Importância dos Meses -->
@@ -120,10 +120,9 @@
                   <tr>
                     <th>Ano</th>
                     <th>Mês</th>
-                    <th>Nota Atribuída</th>
+                    <th>Notas Atribuídas</th>
                     <th>Ritmo do Negócio (%)</th>
                     <th>Quantidade de Vendas</th>
-                    <th>Peso do Mês (%)</th>
                   </tr>
                 </thead>
                 <tbody id="tabelaMeses">
@@ -176,44 +175,121 @@ const mesesNomes = ['', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 
 
 let anoAtual = new Date().getFullYear();
 
-// Popular dropdown de anos
-function popularAnos() {
+// Popular dropdown de anos com anos disponíveis no banco
+async function popularAnos() {
+    console.log('[popularAnos] Iniciando...');
     const select = document.getElementById('anoSelect');
-    const anoAtual = new Date().getFullYear();
+    const mensagemSemDados = document.getElementById('mensagemSemDados');
     
-    for (let ano = anoAtual; ano >= anoAtual - 5; ano--) {
-        const option = document.createElement('option');
-        option.value = ano;
-        option.textContent = ano;
-        select.appendChild(option);
+    if (!select) {
+        console.error('[popularAnos] Elemento anoSelect não encontrado!');
+        return;
     }
     
-    select.value = anoAtual;
-    select.addEventListener('change', function() {
-        anoAtual = parseInt(this.value);
-        if (anoAtual) {
-            carregarImportanciaMeses();
+    if (!mensagemSemDados) {
+        console.error('[popularAnos] Elemento mensagemSemDados não encontrado!');
+        return;
+    }
+    
+    try {
+        console.log('[popularAnos] Fazendo requisição para /importancia-meses/api/available-years...');
+        const response = await fetch('/importancia-meses/api/available-years', {
+            credentials: 'include'
+        });
+        console.log('[popularAnos] Response status:', response.status, response.statusText);
+        
+        if (response.ok) {
+            const anos = await response.json();
+            console.log('[popularAnos] Anos recebidos:', anos);
+            
+            if (!Array.isArray(anos) || anos.length === 0) {
+                // Não há anos cadastrados - mostrar mensagem e ocultar dropdown
+                console.log('[popularAnos] Nenhum ano encontrado');
+                select.style.display = 'none';
+                mensagemSemDados.style.display = 'block';
+                mensagemSemDados.textContent = 'Nenhuma importância de mês cadastrada. Clique em "Cadastrar Importâncias dos Meses" para começar.';
+                document.getElementById('tabelaMesesContainer').style.display = 'none';
+                document.getElementById('tabelaEventosContainer').style.display = 'none';
+                return;
+            }
+            
+            // Há anos cadastrados - mostrar dropdown e popular
+            console.log('[popularAnos] Populando dropdown com', anos.length, 'anos');
+            select.style.display = 'block';
+            mensagemSemDados.style.display = 'none';
+            select.innerHTML = '<option value="">Selecione um ano...</option>';
+            
+            anos.sort((a, b) => b - a); // Ordenar do mais recente para o mais antigo
+            anos.forEach(ano => {
+                const option = document.createElement('option');
+                option.value = ano;
+                option.textContent = ano;
+                select.appendChild(option);
+            });
+            
+            // Selecionar o primeiro ano (mais recente) automaticamente
+            if (anos.length > 0) {
+                select.value = anos[0];
+                console.log('[popularAnos] Selecionando ano:', anos[0]);
+                await carregarImportanciaMeses();
+            }
+        } else {
+            // Erro na API - mostrar mensagem
+            console.error('[popularAnos] Erro na resposta:', response.status);
+            const errorText = await response.text();
+            console.error('[popularAnos] Erro detalhado:', errorText);
+            select.style.display = 'none';
+            mensagemSemDados.style.display = 'block';
+            mensagemSemDados.textContent = 'Erro ao carregar dados. Tente novamente.';
         }
-    });
+    } catch (error) {
+        console.error('[popularAnos] Erro ao carregar anos:', error);
+        select.style.display = 'none';
+        mensagemSemDados.style.display = 'block';
+        mensagemSemDados.textContent = 'Erro ao carregar dados. Tente novamente.';
+    }
+    
+    // Adicionar listener apenas uma vez
+    if (!select.hasAttribute('data-listener-added')) {
+        select.setAttribute('data-listener-added', 'true');
+        select.addEventListener('change', function() {
+            if (this.value) {
+                console.log('[popularAnos] Ano alterado para:', this.value);
+                carregarImportanciaMeses();
+            }
+        });
+    }
 }
 
 async function carregarImportanciaMeses() {
     const ano = document.getElementById('anoSelect').value;
-    if (!ano) return;
+    if (!ano) {
+        console.log('Nenhum ano selecionado');
+        return;
+    }
+    
+    console.log('Carregando dados para o ano:', ano);
     
     try {
-        const response = await fetch(`/importancia-meses/api/month-importance/${ano}`);
+        const response = await fetch(`/importancia-meses/api/month-importance/${ano}`, {
+            credentials: 'include'
+        });
+        console.log('Response status:', response.status);
+        
         if (!response.ok) throw new Error('Erro ao carregar dados');
         
         const meses = await response.json();
+        console.log('Meses recebidos:', meses);
         
         if (meses.length === 0) {
+            console.log('Nenhum mês encontrado para o ano:', ano);
             document.getElementById('mensagemSemDados').style.display = 'block';
             document.getElementById('tabelaMesesContainer').style.display = 'none';
             document.getElementById('tabelaEventosContainer').style.display = 'none';
             return;
         }
         
+        console.log('Exibindo tabela com', meses.length, 'meses');
         document.getElementById('mensagemSemDados').style.display = 'none';
         document.getElementById('tabelaMesesContainer').style.display = 'block';
         
@@ -222,7 +298,7 @@ async function carregarImportanciaMeses() {
         // Carregar eventos
         await carregarEventos();
     } catch (error) {
-        console.error('Erro:', error);
+        console.error('Erro ao carregar dados:', error);
         document.getElementById('mensagemSemDados').style.display = 'block';
         document.getElementById('mensagemSemDados').textContent = 'Erro ao carregar dados. Tente novamente.';
     }
@@ -263,9 +339,8 @@ function preencherTabelaMeses(meses) {
             <td>${mes.year}</td>
             <td class="mes-nome">${mesesNomes[mes.month]}</td>
             <td>${mes.nota_atribuida !== null && mes.nota_atribuida !== undefined ? mes.nota_atribuida.toFixed(2) : '-'}</td>
-            <td>${mes.ritmo_negocio_percentual !== null && mes.ritmo_negocio_percentual !== undefined ? mes.ritmo_negocio_percentual.toFixed(2) + '%' : '-'}</td>
+            <td>${mes.ritmo_negocio_percentual !== null && mes.ritmo_negocio_percentual !== undefined ? mes.ritmo_negocio_percentual.toFixed(1) + '%' : '-'}</td>
             <td>${quantidadeVendas !== null && quantidadeVendas !== undefined ? Math.round(quantidadeVendas) : '-'}</td>
-            <td>${mes.peso_mes !== null && mes.peso_mes !== undefined ? mes.peso_mes.toFixed(2) + '%' : '-'}</td>
         `;
         tbody.appendChild(tr);
     }
