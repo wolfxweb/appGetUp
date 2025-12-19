@@ -86,15 +86,6 @@
         </div>
       </div>
 
-      <!-- Botão Cadastrar -->
-      <div class="row mb-4">
-        <div class="col-12">
-          <a href="/importancia-meses/cadastrar" class="btn btn-secondary btn-lg">
-            <i class="bi bi-plus-circle"></i> Cadastrar Importâncias dos Meses
-          </a>
-        </div>
-      </div>
-
       <!-- Card principal -->
       <div class="card shadow mb-4" style="background-color: #F0F0F0;">
         <div class="card-header bg-secondary text-white">
@@ -102,12 +93,17 @@
         </div>
         <div class="card-body">
           <!-- Seção: Seleção de Ano -->
-          <div class="row mb-4">
+          <div class="row mb-4 align-items-end">
             <div class="col-md-6">
               <label for="anoSelect" class="form-label">Selecione o Ano:</label>
               <select class="form-select" id="anoSelect">
                 <option value="">Selecione um ano...</option>
               </select>
+            </div>
+            <div class="col-md-6 text-end">
+              <a href="/importancia-meses/cadastrar" class="btn btn-secondary">
+                Cadastrar Importâncias dos Meses
+              </a>
             </div>
           </div>
 
