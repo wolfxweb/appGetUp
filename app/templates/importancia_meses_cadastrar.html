@@ -95,6 +95,7 @@
                 <thead class="table-light">
                   <tr>
                     <th>Nome do Evento</th>
+                    <th>Nota</th>
                     <th>AUMENTAM</th>
                     <th>DIMINUEM</th>
                     <th>JAN</th>
@@ -116,6 +117,10 @@
                     {% for evento in eventos_padrao %}
                     <tr>
                       <td>{{ evento.nome_evento }}</td>
+                      <td class="text-center">
+                        <input type="number" step="0.01" class="form-control form-control-sm evento-nota-input" 
+                               data-event-id="{{ evento.id }}" value="{{ evento.nota or 0 }}" style="width: 80px;">
+                      </td>
                       <td class="text-center">
                         <input type="checkbox" class="form-check-input evento-aumenta-checkbox" 
                                data-event-id="{{ evento.id }}" {% if evento.aumenta_vendas %}checked{% endif %}>
@@ -166,6 +171,11 @@
           <div class="mb-3">
             <label for="eventoNome" class="form-label">Nome do Evento:</label>
             <input type="text" class="form-control" id="eventoNome" required>
+          </div>
+          <div class="mb-3">
+            <label for="eventoNota" class="form-label">Nota:</label>
+            <input type="number" step="0.01" class="form-control" id="eventoNota" value="0" required>
+            <small class="form-text text-muted">Valor numérico usado no cálculo do peso do mês</small>
           </div>
           <div class="mb-3">
             <label class="form-label">Tipo de Impacto:</label>
@@ -221,6 +231,7 @@ window.salvarEvento = async function() {
     console.log('=== salvarEvento chamada ===');
     
     const nomeInput = document.getElementById('eventoNome');
+    const notaInput = document.getElementById('eventoNota');
     const aumentaInput = document.getElementById('eventoAumenta');
     const diminuiInput = document.getElementById('eventoDiminui');
     
@@ -231,10 +242,11 @@ window.salvarEvento = async function() {
     }
     
     const nome = nomeInput.value.trim();
+    const nota = notaInput ? (parseFloat(notaInput.value) || 0.0) : 0.0;
     const aumenta = aumentaInput ? aumentaInput.checked : false;
     const diminui = diminuiInput ? diminuiInput.checked : false;
     
-    console.log('Valores capturados:', { nome, aumenta, diminui });
+    console.log('Valores capturados:', { nome, nota, aumenta, diminui });
     
     if (!nome) {
         alert('Por favor, informe o nome do evento.');
@@ -259,6 +271,7 @@ window.salvarEvento = async function() {
     try {
         const formData = new FormData();
         formData.append('nome_evento', nome);
+        formData.append('nota', nota);
         formData.append('aumenta_vendas', aumenta);
         formData.append('diminui_vendas', diminui);
         formData.append('meses_afetados', JSON.stringify(mesesAfetados));
@@ -266,7 +279,8 @@ window.salvarEvento = async function() {
         console.log('Enviando requisição para /importancia-meses/api/sales-event...');
         const response = await fetch('/importancia-meses/api/sales-event', {
             method: 'POST',
-            body: formData
+            body: formData,
+            credentials: 'include'
         });
         
         console.log('Resposta recebida:', response.status, response.statusText);
@@ -330,7 +344,8 @@ window.deletarEvento = async function(eventId) {
     
     try {
         const response = await fetch(`/importancia-meses/api/sales-event/${eventId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            credentials: 'include'
         });
         
         if (!response.ok) throw new Error('Erro ao excluir evento');
@@ -400,7 +415,9 @@ function configurarSelectDadoBasico() {
 
 async function carregarDadosBasicos() {
     try {
-        const response = await fetch('/importancia-meses/api/basic-data');
+        const response = await fetch('/importancia-meses/api/basic-data', {
+            credentials: 'include'
+        });
         if (!response.ok) throw new Error('Erro ao carregar dados básicos');
         
         const dados = await response.json();
@@ -422,7 +439,9 @@ async function carregarImportanciaMesesPorBasicData() {
     if (!basicDataIdSelecionado) return;
     
     try {
-        const response = await fetch(`/importancia-meses/api/basic-data/${basicDataIdSelecionado}/month-importance`);
+        const response = await fetch(`/importancia-meses/api/basic-data/${basicDataIdSelecionado}/month-importance`, {
+            credentials: 'include'
+        });
         if (response.ok) {
             const meses = await response.json();
             notasMeses = {};
@@ -447,7 +466,9 @@ async function carregarEventos() {
         
         // Carregar eventos do servidor
         try {
-            const response = await fetch('/importancia-meses/api/sales-events');
+            const response = await fetch('/importancia-meses/api/sales-events', {
+                credentials: 'include'
+            });
             if (response.ok) {
                 const eventosServidor = await response.json();
                 console.log(`[carregarEventos] Recebidos ${eventosServidor ? eventosServidor.length : 0} eventos do servidor`);
@@ -475,6 +496,9 @@ async function carregarEventos() {
                     });
                     
                     console.log(`[carregarEventos] Eventos mesclados: ${eventosList.length} total (${EVENTOS_PADRAO_HARDCODE.length} padrão + ${eventosCustomizadosServidor.length} customizados)`);
+                    
+                    // Renderizar novamente após carregar do servidor
+                    renderizarTabelaEventos();
                 } else {
                     // Nenhum evento no servidor, usar apenas hardcode
                     eventosList = [...EVENTOS_PADRAO_HARDCODE];
@@ -583,6 +607,10 @@ function renderizarTabelaEventos() {
         tr.innerHTML = `
             <td>${evento.nome_evento}</td>
             <td class="text-center">
+                <input type="number" step="0.01" class="form-control form-control-sm evento-nota-input" 
+                       data-event-id="${evento.id}" value="${evento.nota || 0}" style="width: 80px;">
+            </td>
+            <td class="text-center">
                 <input type="checkbox" class="form-check-input evento-aumenta-checkbox" 
                        data-event-id="${evento.id}" ${evento.aumenta_vendas ? 'checked' : ''}>
             </td>
@@ -621,6 +649,7 @@ async function salvarImportanciaMeses() {
     // Coletar dados dos eventos
     const eventos = [];
     eventosList.forEach(evento => {
+        const notaInput = document.querySelector(`.evento-nota-input[data-event-id="${evento.id}"]`);
         const aumentaCheckbox = document.querySelector(`.evento-aumenta-checkbox[data-event-id="${evento.id}"]`);
         const diminuiCheckbox = document.querySelector(`.evento-diminui-checkbox[data-event-id="${evento.id}"]`);
         const mesesAfetados = [];
@@ -632,8 +661,13 @@ async function salvarImportanciaMeses() {
             }
         }
         
+        const nota = notaInput ? (parseFloat(notaInput.value) || 0.0) : (evento.nota || 0.0);
+        
+        console.log(`Evento ${evento.nome_evento}: nota coletada = ${nota} (do input: ${notaInput ? notaInput.value : 'não encontrado'}, do objeto: ${evento.nota || 'não definido'})`);
+        
         eventos.push({
             id: evento.id,
+            nota: nota,
             aumenta_vendas: aumentaCheckbox ? aumentaCheckbox.checked : false,
             diminui_vendas: diminuiCheckbox ? diminuiCheckbox.checked : false,
             meses_afetados: mesesAfetados
@@ -788,6 +822,7 @@ function renderizarEventosAgora() {
         
         tr.innerHTML = `
             <td>${evento.nome_evento}</td>
+            <td class="text-center"><input type="number" step="0.01" class="form-control form-control-sm evento-nota-input" data-event-id="${evento.id}" value="${evento.nota || 0}" style="width: 80px;"></td>
             <td class="text-center"><input type="checkbox" class="form-check-input evento-aumenta-checkbox" data-event-id="${evento.id}" ${evento.aumenta_vendas ? 'checked' : ''}></td>
             <td class="text-center"><input type="checkbox" class="form-check-input evento-diminui-checkbox" data-event-id="${evento.id}" ${evento.diminui_vendas ? 'checked' : ''}></td>
             ${mesesCells}

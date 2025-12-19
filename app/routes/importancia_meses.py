@@ -103,6 +103,7 @@ async def criar_eventos_padrao(user_id: int, session: AsyncSession):
             novo_evento = EventoVenda(
                 user_id=user_id,
                 nome_evento=evento_nome,
+                nota=0.0,
                 aumenta_vendas=False,
                 diminui_vendas=False,
                 meses_afetados=None,
@@ -140,23 +141,40 @@ async def importancia_meses_cadastrar_page(
     if not current_user:
         return RedirectResponse(url="/login", status_code=302)
     
-    # Buscar dados básicos do usuário
+    # Buscar dados básicos do usuário e eventos padrão
     async with async_session() as session:
         await criar_eventos_padrao(current_user.id, session)
         
         query = select(BasicData).where(BasicData.user_id == current_user.id).order_by(BasicData.year.desc(), BasicData.month.desc())
         result = await session.execute(query)
         basic_data_list = result.scalars().all()
+        
+        # Buscar eventos padrão reais do banco para passar ao template
+        query_eventos = select(EventoVenda).where(
+            and_(
+                EventoVenda.user_id == current_user.id,
+                EventoVenda.is_padrao == True
+            )
+        ).order_by(EventoVenda.nome_evento.asc())
+        result_eventos = await session.execute(query_eventos)
+        eventos_padrao_banco = result_eventos.scalars().all()
     
     # Preparar lista de eventos padrão para o template
     eventos_padrao_template = []
-    for i, nome in enumerate(EVENTOS_PADRAO, start=1):
+    for evento in eventos_padrao_banco:
+        meses_afetados = evento.meses_afetados
+        if isinstance(meses_afetados, str):
+            try:
+                meses_afetados = json.loads(meses_afetados)
+            except:
+                meses_afetados = []
         eventos_padrao_template.append({
-            "id": i,
-            "nome_evento": nome,
-            "aumenta_vendas": False,
-            "diminui_vendas": False,
-            "meses_afetados": [],
+            "id": evento.id,
+            "nome_evento": evento.nome_evento,
+            "nota": evento.nota if evento.nota is not None else 0.0,
+            "aumenta_vendas": evento.aumenta_vendas,
+            "diminui_vendas": evento.diminui_vendas,
+            "meses_afetados": meses_afetados if meses_afetados else [],
             "is_padrao": True
         })
     
@@ -240,6 +258,61 @@ async def get_month_importance(
         logger.error(f"Erro ao buscar importância dos meses: {str(e)}")
         return JSONResponse({"error": str(e)}, status_code=500)
 
+@router.get("/api/basic-data/{basic_data_id}/month-importance")
+async def get_month_importance_by_basic_data(
+    basic_data_id: int,
+    request: Request,
+    current_user = Depends(get_current_user)
+):
+    """Retorna importância dos meses SALVOS para um dado básico específico"""
+    if not current_user:
+        return JSONResponse({"error": "Unauthorized"}, status_code=401)
+    
+    try:
+        async with async_session() as session:
+            # Buscar o dado básico para obter o ano
+            query = select(BasicData).where(
+                and_(
+                    BasicData.id == basic_data_id,
+                    BasicData.user_id == current_user.id
+                )
+            )
+            result = await session.execute(query)
+            basic_data = result.scalar_one_or_none()
+            
+            if not basic_data:
+                return JSONResponse({"error": "Dado básico não encontrado"}, status_code=404)
+            
+            year = basic_data.year
+            
+            # Buscar meses de importância para o ano
+            query = select(MesImportancia).where(
+                and_(
+                    MesImportancia.user_id == current_user.id,
+                    MesImportancia.year == year
+                )
+            )
+            result = await session.execute(query)
+            meses = result.scalars().all()
+            
+            data = []
+            for mes in meses:
+                data.append({
+                    "id": mes.id,
+                    "year": mes.year,
+                    "month": mes.month,
+                    "nota_atribuida": mes.nota_atribuida,
+                    "ritmo_negocio_percentual": mes.ritmo_negocio_percentual,
+                    "quantidade_vendas_real": mes.quantidade_vendas_real,
+                    "quantidade_vendas_estimada": mes.quantidade_vendas_estimada,
+                    "peso_mes": mes.peso_mes
+                })
+            
+            return JSONResponse(content=data)
+    except Exception as e:
+        logger.error(f"Erro ao buscar importância dos meses: {str(e)}")
+        return JSONResponse({"error": str(e)}, status_code=500)
+
 @router.get("/api/sales-events")
 async def get_sales_events(
     request: Request,
@@ -270,6 +343,7 @@ async def get_sales_events(
                 data.append({
                     "id": evento.id,
                     "nome_evento": evento.nome_evento,
+                    "nota": evento.nota if evento.nota is not None else 0.0,
                     "aumenta_vendas": evento.aumenta_vendas,
                     "diminui_vendas": evento.diminui_vendas,
                     "meses_afetados": meses_afetados if meses_afetados else [],
@@ -313,13 +387,13 @@ def calcular_quantidade_vendas(
 
 def calcular_peso_mes(
     nota_atribuida: Optional[float],
-    eventos_aumentam: int,
-    eventos_diminuem: int,
+    soma_notas_aumentam: float,
+    soma_notas_diminuem: float,
     ritmo_negocio: Optional[float]
 ) -> Optional[float]:
-    """Calcula peso do mês"""
+    """Calcula peso do mês usando soma das notas dos eventos"""
     peso_base = nota_atribuida if nota_atribuida is not None else 0
-    ajuste_eventos = eventos_aumentam - eventos_diminuem
+    ajuste_eventos = soma_notas_aumentam - soma_notas_diminuem
     peso_bruto = peso_base + ajuste_eventos
     
     if ritmo_negocio is not None:
@@ -438,21 +512,22 @@ async def save_importancia_meses(
                 quantidades_real[month] = quant_real
                 quantidades_estimada[month] = quant_est
             
-            # Calcular ajuste de eventos por mês
-            ajustes_eventos = {}  # {month: (aumenta, diminui)}
+            # Calcular ajuste de eventos por mês (soma das notas ao invés de contagem)
+            ajustes_eventos = {}  # {month: (soma_notas_aumenta, soma_notas_diminui)}
             for month in range(1, 13):
-                aumenta = 0
-                diminui = 0
+                soma_notas_aumenta = 0.0
+                soma_notas_diminui = 0.0
                 
                 for evento in eventos:
                     meses_afetados = evento.get('meses_afetados', [])
                     if month in meses_afetados:
+                        nota = float(evento.get('nota', 0) or 0)
                         if evento.get('aumenta_vendas'):
-                            aumenta += 1
+                            soma_notas_aumenta += nota
                         if evento.get('diminui_vendas'):
-                            diminui += 1
+                            soma_notas_diminui += nota
                 
-                ajustes_eventos[month] = (aumenta, diminui)
+                ajustes_eventos[month] = (soma_notas_aumenta, soma_notas_diminui)
             
             # Calcular peso de cada mês
             pesos = {}
@@ -501,13 +576,13 @@ async def save_importancia_meses(
                     )
                     session.add(mes_importancia)
             
-            # Salvar/atualizar eventos
+            # Salvar/atualizar eventos (sempre atualiza eventos existentes, nunca cria novos)
             for evento_data in eventos:
                 evento_id = evento_data.get('id')
                 meses_afetados = evento_data.get('meses_afetados', [])
                 
                 if evento_id:
-                    # Atualizar evento existente
+                    # Buscar e atualizar evento existente
                     query = select(EventoVenda).where(
                         and_(
                             EventoVenda.id == evento_id,
@@ -518,10 +593,17 @@ async def save_importancia_meses(
                     evento = result.scalar_one_or_none()
                     
                     if evento:
+                        # Atualizar evento existente (não criar novo)
+                        evento.nota = float(evento_data.get('nota', 0) or 0)
                         evento.aumenta_vendas = evento_data.get('aumenta_vendas', False)
                         evento.diminui_vendas = evento_data.get('diminui_vendas', False)
                         evento.meses_afetados = json.dumps(meses_afetados) if meses_afetados else None
                         evento.updated_at = datetime.now()
+                        logger.info(f"Evento atualizado: id={evento_id}, nome={evento.nome_evento}, nota={evento.nota}")
+                    else:
+                        logger.warning(f"Evento não encontrado para atualização: id={evento_id}, user_id={current_user.id}")
+                else:
+                    logger.warning(f"Evento sem ID recebido no salvamento: {evento_data.get('nome_evento', 'sem nome')}")
             
             await session.commit()
             
@@ -535,6 +617,7 @@ async def save_importancia_meses(
 async def create_sales_event(
     request: Request,
     nome_evento: str = Form(...),
+    nota: float = Form(0.0),
     aumenta_vendas: bool = Form(False),
     diminui_vendas: bool = Form(False),
     meses_afetados: str = Form(...),  # JSON string com array de meses
@@ -551,6 +634,7 @@ async def create_sales_event(
             novo_evento = EventoVenda(
                 user_id=current_user.id,
                 nome_evento=nome_evento,
+                nota=float(nota) if nota else 0.0,
                 aumenta_vendas=aumenta_vendas,
                 diminui_vendas=diminui_vendas,
                 meses_afetados=json.dumps(meses) if meses else None,

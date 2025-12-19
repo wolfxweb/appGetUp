@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database.db import Base
@@ -9,6 +9,9 @@ class EventoVenda(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
     nome_evento = Column(String, nullable=False)
+    
+    # Nota do evento (usada no cálculo do peso do mês)
+    nota = Column(Float, nullable=True, default=0.0)  # Campo numérico para nota do evento
     
     # Campos booleanos para tipo de impacto
     aumenta_vendas = Column(Boolean, default=False)  # Checkbox AUMENTAM

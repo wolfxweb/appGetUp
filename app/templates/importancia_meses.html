@@ -303,6 +303,7 @@ function renderizarTabelaEventos(eventos) {
         
         tr.innerHTML = `
             <td>${evento.nome_evento}</td>
+            <td class="text-center">${evento.nota !== null && evento.nota !== undefined ? evento.nota.toFixed(2) : '0.00'}</td>
             <td class="text-center">${evento.aumenta_vendas ? 'X' : ''}</td>
             <td class="text-center">${evento.diminui_vendas ? 'X' : ''}</td>
             ${mesesCells}
