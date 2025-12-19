@@ -310,9 +310,6 @@ window.salvarEvento = async function() {
         // Recarregar eventos do servidor para atualizar a lista
         console.log('Recarregando eventos após salvar...');
         await carregarEventos();
-        
-        // Mostrar mensagem de sucesso
-        alert('Evento salvo com sucesso!');
     } catch (error) {
         console.error('Erro ao salvar evento:', error);
         alert('Erro ao salvar evento: ' + error.message);
