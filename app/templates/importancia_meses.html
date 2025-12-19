@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block title %}Importância dos Meses - GetUp Gestão{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #F5F5F5 !important;
+    }
+    .container-fluid, .container {
+        background-color: #F5F5F5 !important;
+    }
+    .card, .card-body {
+        background-color: #F0F0F0 !important;
+    }
+    .card-header.bg-secondary {
+        background-color: #6c757d !important;
+        color: white !important;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: white;
+    }
+    .form-control, .form-select {
+        background-color: #F5F5F5 !important;
+    }
+    .table-responsive {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+    .mes-nome {
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="background-color: #F5F5F5; min-height: 100vh;">
+  <div class="row">
+    <div class="col-md-12 mt-5">
+        <div class="col-md-12 mb-4">
+            <img src="/static/images/Logo.png" alt="Logo" height="40">
+        </div>
+      <!-- Botões de navegação -->
+      <div class="row mb-4 justify-content-center">
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/dashboard" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Índice
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/basic-data/new" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Dados Básicos
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/diagnostico" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Diagnóstico
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/simulador" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Simulador
+          </a>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Calculadora de preços
+          </button>
+        </div>
+        <div class="col-12 col-md-2 mb-2 mb-md-0">
+          <a href="/produto" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
+            Produto
+          </a>
+        </div>
+      </div>
+
+      <!-- Botão Cadastrar -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <a href="/importancia-meses/cadastrar" class="btn btn-secondary btn-lg">
+            <i class="bi bi-plus-circle"></i> Cadastrar Importâncias dos Meses
+          </a>
+        </div>
+      </div>
+
+      <!-- Card principal -->
+      <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+        <div class="card-header bg-secondary text-white">
+          <h4 class="card-title mb-0">Importância dos Meses</h4>
+        </div>
+        <div class="card-body">
+          <!-- Seção: Seleção de Ano -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label for="anoSelect" class="form-label">Selecione o Ano:</label>
+              <select class="form-select" id="anoSelect">
+                <option value="">Selecione um ano...</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Mensagem quando não há dados -->
+          <div id="mensagemSemDados" class="alert alert-info" style="display: none;">
+            Nenhum dado cadastrado. Clique em 'Cadastrar Importâncias dos Meses' para começar.
+          </div>
+
+          <!-- Tabela: Importância dos Meses -->
+          <div id="tabelaMesesContainer" style="display: none;">
+            <h5 class="mb-3">Importância dos Meses</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                  <tr>
+                    <th>Ano</th>
+                    <th>Mês</th>
+                    <th>Nota Atribuída</th>
+                    <th>Ritmo do Negócio (%)</th>
+                    <th>Quantidade de Vendas</th>
+                    <th>Peso do Mês (%)</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaMeses">
+                  <!-- Será preenchido via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Seção: Eventos que Influenciam as Vendas -->
+          <div id="tabelaEventosContainer" style="display: none;" class="mt-5">
+            <h5 class="mb-3">Eventos que Influenciam as Vendas da Loja</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                  <tr>
+                    <th>Nome do Evento</th>
+                    <th>AUMENTAM</th>
+                    <th>DIMINUEM</th>
+                    <th>JAN</th>
+                    <th>FEV</th>
+                    <th>MAR</th>
+                    <th>ABR</th>
+                    <th>MAI</th>
+                    <th>JUN</th>
+                    <th>JUL</th>
+                    <th>AGO</th>
+                    <th>SET</th>
+                    <th>OUT</th>
+                    <th>NOV</th>
+                    <th>DEZ</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaEventos">
+                  <!-- Será preenchido via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const mesesNomes = ['', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+
+let anoAtual = new Date().getFullYear();
+
+// Popular dropdown de anos
+function popularAnos() {
+    const select = document.getElementById('anoSelect');
+    const anoAtual = new Date().getFullYear();
+    
+    for (let ano = anoAtual; ano >= anoAtual - 5; ano--) {
+        const option = document.createElement('option');
+        option.value = ano;
+        option.textContent = ano;
+        select.appendChild(option);
+    }
+    
+    select.value = anoAtual;
+    select.addEventListener('change', function() {
+        anoAtual = parseInt(this.value);
+        if (anoAtual) {
+            carregarImportanciaMeses();
+        }
+    });
+}
+
+async function carregarImportanciaMeses() {
+    const ano = document.getElementById('anoSelect').value;
+    if (!ano) return;
+    
+    try {
+        const response = await fetch(`/importancia-meses/api/month-importance/${ano}`);
+        if (!response.ok) throw new Error('Erro ao carregar dados');
+        
+        const meses = await response.json();
+        
+        if (meses.length === 0) {
+            document.getElementById('mensagemSemDados').style.display = 'block';
+            document.getElementById('tabelaMesesContainer').style.display = 'none';
+            document.getElementById('tabelaEventosContainer').style.display = 'none';
+            return;
+        }
+        
+        document.getElementById('mensagemSemDados').style.display = 'none';
+        document.getElementById('tabelaMesesContainer').style.display = 'block';
+        
+        preencherTabelaMeses(meses);
+        
+        // Carregar eventos
+        await carregarEventos();
+    } catch (error) {
+        console.error('Erro:', error);
+        document.getElementById('mensagemSemDados').style.display = 'block';
+        document.getElementById('mensagemSemDados').textContent = 'Erro ao carregar dados. Tente novamente.';
+    }
+}
+
+function preencherTabelaMeses(meses) {
+    const tbody = document.getElementById('tabelaMeses');
+    tbody.innerHTML = '';
+    
+    // Ordenar meses de 1 a 12
+    meses.sort((a, b) => a.month - b.month);
+    
+    meses.forEach(mes => {
+        const tr = document.createElement('tr');
+        const quantidadeVendas = mes.quantidade_vendas_real !== null && mes.quantidade_vendas_real !== undefined 
+            ? mes.quantidade_vendas_real 
+            : mes.quantidade_vendas_estimada;
+        
+        tr.innerHTML = `
+            <td>${mes.year}</td>
+            <td class="mes-nome">${mesesNomes[mes.month]}</td>
+            <td>${mes.nota_atribuida !== null ? mes.nota_atribuida.toFixed(2) : '-'}</td>
+            <td>${mes.ritmo_negocio_percentual !== null ? mes.ritmo_negocio_percentual.toFixed(2) + '%' : '-'}</td>
+            <td>${quantidadeVendas !== null && quantidadeVendas !== undefined ? Math.round(quantidadeVendas) : '-'}</td>
+            <td>${mes.peso_mes !== null ? mes.peso_mes.toFixed(2) + '%' : '-'}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+async function carregarEventos() {
+    try {
+        const response = await fetch('/importancia-meses/api/sales-events');
+        if (!response.ok) throw new Error('Erro ao carregar eventos');
+        
+        const eventos = await response.json();
+        
+        if (eventos.length > 0) {
+            document.getElementById('tabelaEventosContainer').style.display = 'block';
+            renderizarTabelaEventos(eventos);
+        }
+    } catch (error) {
+        console.error('Erro ao carregar eventos:', error);
+    }
+}
+
+function renderizarTabelaEventos(eventos) {
+    const tbody = document.getElementById('tabelaEventos');
+    tbody.innerHTML = '';
+    
+    eventos.forEach(evento => {
+        const tr = document.createElement('tr');
+        const mesesAfetados = evento.meses_afetados || [];
+        
+        let mesesCells = '';
+        for (let i = 1; i <= 12; i++) {
+            const marcado = mesesAfetados.includes(i) ? 'X' : '';
+            mesesCells += `<td class="text-center">${marcado}</td>`;
+        }
+        
+        tr.innerHTML = `
+            <td>${evento.nome_evento}</td>
+            <td class="text-center">${evento.aumenta_vendas ? 'X' : ''}</td>
+            <td class="text-center">${evento.diminui_vendas ? 'X' : ''}</td>
+            ${mesesCells}
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', function() {
+    popularAnos();
+    const ano = document.getElementById('anoSelect').value;
+    if (ano) {
+        carregarImportanciaMeses();
+    }
+});
+</script>
+{% endblock %}

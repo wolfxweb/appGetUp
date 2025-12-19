@@ -1,0 +1,544 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastrar Importâncias dos Meses - GetUp Gestão{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #F5F5F5 !important;
+    }
+    .container-fluid, .container {
+        background-color: #F5F5F5 !important;
+    }
+    .card, .card-body {
+        background-color: #F0F0F0 !important;
+    }
+    .card-header.bg-secondary {
+        background-color: #6c757d !important;
+        color: white !important;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: white;
+    }
+    .form-control, .form-select {
+        background-color: #F5F5F5 !important;
+    }
+    .table-responsive {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+    .mes-nome {
+        font-weight: bold;
+    }
+    .campo-calculado {
+        background-color: #e9ecef !important;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="background-color: #F5F5F5; min-height: 100vh;">
+  <div class="row">
+    <div class="col-md-12 mt-5">
+        <div class="col-md-12 mb-4">
+            <img src="/static/images/Logo.png" alt="Logo" height="40">
+        </div>
+      
+      <!-- Botão Voltar -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <a href="/importancia-meses" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Voltar
+          </a>
+        </div>
+      </div>
+
+      <!-- Card principal -->
+      <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+        <div class="card-header bg-secondary text-white">
+          <h4 class="card-title mb-0">Cadastrar Importâncias dos Meses</h4>
+        </div>
+        <div class="card-body">
+          <!-- Seção: Seleção de Dado Básico -->
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <label for="basicDataSelect" class="form-label">Selecione o Dado Básico:</label>
+              <select class="form-select" id="basicDataSelect">
+                <option value="">Selecione um dado básico...</option>
+                {% for data in basic_data_list %}
+                <option value="{{ data.id }}" data-year="{{ data.year }}" data-month="{{ data.month }}">
+                  {{ data.month }}/{{ data.year }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <!-- Seção: Eventos que Influenciam as Vendas (EDITÁVEL) -->
+          <div id="tabelaEventosContainer" class="mt-5">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h5 class="mb-0">Eventos que Influenciam as Vendas da Loja</h5>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="abrirModalEvento()">
+                <i class="bi bi-plus-circle"></i> Adicionar novo evento
+              </button>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm">
+                <thead class="table-light">
+                  <tr>
+                    <th>Nome do Evento</th>
+                    <th>AUMENTAM</th>
+                    <th>DIMINUEM</th>
+                    <th>JAN</th>
+                    <th>FEV</th>
+                    <th>MAR</th>
+                    <th>ABR</th>
+                    <th>MAI</th>
+                    <th>JUN</th>
+                    <th>JUL</th>
+                    <th>AGO</th>
+                    <th>SET</th>
+                    <th>OUT</th>
+                    <th>NOV</th>
+                    <th>DEZ</th>
+                  </tr>
+                </thead>
+                <tbody id="tabelaEventos">
+                  <!-- Será preenchido via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Botão Salvar -->
+          <div class="row mt-4">
+            <div class="col-12 text-end">
+              <button type="button" class="btn btn-secondary btn-lg" onclick="salvarImportanciaMeses()">
+                <i class="bi bi-save"></i> Salvar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Adicionar Evento -->
+<div class="modal fade" id="modalEvento" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-secondary text-white">
+        <h5 class="modal-title">Adicionar Novo Evento</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formEvento">
+          <div class="mb-3">
+            <label for="eventoNome" class="form-label">Nome do Evento:</label>
+            <input type="text" class="form-control" id="eventoNome" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tipo de Impacto:</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="eventoAumenta">
+              <label class="form-check-label" for="eventoAumenta">Aumentam vendas</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="eventoDiminui">
+              <label class="form-check-label" for="eventoDiminui">Diminuem vendas</label>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Meses Afetados:</label>
+            <div class="row">
+              {% for mes_num, mes_nome in [
+                (1, 'JAN'), (2, 'FEV'), (3, 'MAR'), (4, 'ABR'),
+                (5, 'MAI'), (6, 'JUN'), (7, 'JUL'), (8, 'AGO'),
+                (9, 'SET'), (10, 'OUT'), (11, 'NOV'), (12, 'DEZ')
+              ] %}
+              <div class="col-3 mb-2">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="mes{{ mes_num }}" value="{{ mes_num }}">
+                  <label class="form-check-label" for="mes{{ mes_num }}">{{ mes_nome }}</label>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" onclick="salvarEvento()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const mesesNomes = ['', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+let anoAtual = null;
+let basicDataIdSelecionado = null;
+let basicDataMap = {}; // {year-month: clients_served}
+let eventosList = [];
+let notasMeses = {}; // {month: nota}
+
+// Eventos padrão em hardcode
+const EVENTOS_PADRAO_HARDCODE = [
+    { id: 1, nome_evento: "Atividades agrícolas", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 2, nome_evento: "Carnaval", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 3, nome_evento: "Comemorações de fim-de-ano", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 4, nome_evento: "Comemorações e eventos religiosos", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 5, nome_evento: "Dia da Mulher", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 6, nome_evento: "Dia da Secretária", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 7, nome_evento: "Dia das Crianças", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 8, nome_evento: "Dia das Mães", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 9, nome_evento: "Dia dos Avós", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 10, nome_evento: "Dia dos Namorados", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 11, nome_evento: "Dia dos Pais", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 12, nome_evento: "Eventos esportivos", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 13, nome_evento: "Eventos folclóricos", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 14, nome_evento: "Festas Juninas", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 15, nome_evento: "Festas de peão (rodeios)", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 16, nome_evento: "Festivais, feiras e exposições", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 17, nome_evento: "Férias escolares/recessos", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 18, nome_evento: "Obras e empreendimentos particulares", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 19, nome_evento: "Obras públicas", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 20, nome_evento: "Períodos de muita chuva", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 21, nome_evento: "Períodos de muito calor", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true },
+    { id: 22, nome_evento: "Volta às aulas", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true }
+];
+
+// Configurar seleção de dado básico
+function configurarSelectDadoBasico() {
+    const select = document.getElementById('basicDataSelect');
+    
+    select.addEventListener('change', async function() {
+        const selectedOption = this.options[this.selectedIndex];
+        if (selectedOption.value) {
+            basicDataIdSelecionado = parseInt(selectedOption.value);
+            anoAtual = parseInt(selectedOption.dataset.year);
+            
+            await carregarDadosBasicos();
+            await carregarImportanciaMesesPorBasicData();
+            await carregarEventos();
+        } else {
+            basicDataIdSelecionado = null;
+            anoAtual = null;
+            notasMeses = {};
+        }
+    });
+}
+
+async function carregarDadosBasicos() {
+    try {
+        const response = await fetch('/importancia-meses/api/basic-data');
+        if (!response.ok) throw new Error('Erro ao carregar dados básicos');
+        
+        const dados = await response.json();
+        basicDataMap = {};
+        
+        // Carregar todos os dados básicos do ano selecionado
+        dados.forEach(item => {
+            if (item.year === anoAtual) {
+                const key = `${item.year}-${String(item.month).padStart(2, '0')}`;
+                basicDataMap[key] = item.clients_served;
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao carregar dados básicos:', error);
+    }
+}
+
+async function carregarImportanciaMesesPorBasicData() {
+    if (!basicDataIdSelecionado) return;
+    
+    try {
+        const response = await fetch(`/importancia-meses/api/basic-data/${basicDataIdSelecionado}/month-importance`);
+        if (response.ok) {
+            const meses = await response.json();
+            notasMeses = {};
+            meses.forEach(mes => {
+                notasMeses[mes.month] = mes.nota_atribuida;
+            });
+        }
+    } catch (error) {
+        console.error('Erro ao carregar importância dos meses:', error);
+        notasMeses = {};
+    }
+}
+
+async function carregarEventos() {
+    // Sempre usar eventos padrão em hardcode primeiro
+    eventosList = [...EVENTOS_PADRAO_HARDCODE];
+    console.log(`Carregando ${eventosList.length} eventos padrão em hardcode`);
+    
+    // Tentar carregar eventos do servidor para mesclar com os hardcode
+    try {
+        const response = await fetch('/importancia-meses/api/sales-events');
+        if (response.ok) {
+            const eventosServidor = await response.json();
+            if (Array.isArray(eventosServidor) && eventosServidor.length > 0) {
+                // Mesclar eventos do servidor com hardcode (servidor tem prioridade)
+                const eventosServidorMap = new Map();
+                eventosServidor.forEach(e => eventosServidorMap.set(e.nome_evento.toLowerCase(), e));
+                
+                // Atualizar eventos hardcode com dados do servidor se existirem
+                eventosList = eventosList.map(evento => {
+                    const servidor = eventosServidorMap.get(evento.nome_evento.toLowerCase());
+                    return servidor || evento;
+                });
+                
+                // Adicionar eventos do servidor que não estão no hardcode
+                eventosServidor.forEach(evento => {
+                    if (!eventosList.find(e => e.nome_evento.toLowerCase() === evento.nome_evento.toLowerCase())) {
+                        eventosList.push(evento);
+                    }
+                });
+                
+                console.log(`Eventos mesclados: ${eventosList.length} (${eventosServidor.length} do servidor)`);
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao carregar eventos do servidor:', error);
+        // Continuar com eventos hardcode
+    }
+    
+    renderizarTabelaEventos();
+}
+
+// Funções removidas - tabela movida para tela principal
+
+function calcularRitmoNegocio(notaAtual, notaAnterior) {
+    if (notaAtual === null || notaAtual === undefined || notaAnterior === null || notaAnterior === undefined || notaAnterior === 0) {
+        return null;
+    }
+    return (notaAtual / notaAnterior) * 100;
+}
+
+function calcularQuantidadeVendas(month, year, ritmo, quantidadeAnterior) {
+    const key = `${year}-${String(month).padStart(2, '0')}`;
+    
+    // Se houver dados básicos, usar valor real
+    if (basicDataMap[key] !== undefined) {
+        return { real: basicDataMap[key], estimada: null };
+    }
+    
+    // Se não houver, calcular estimativa
+    if (ritmo !== null && quantidadeAnterior !== null) {
+        const estimada = (ritmo / 100) * quantidadeAnterior;
+        return { real: null, estimada: estimada };
+    }
+    
+    return { real: null, estimada: null };
+}
+
+// Função removida - cálculos em tempo real não são mais necessários na tela de cadastro
+
+function renderizarTabelaEventos() {
+    const tbody = document.getElementById('tabelaEventos');
+    if (!tbody) {
+        console.error('Elemento tabelaEventos não encontrado!');
+        return;
+    }
+    
+    tbody.innerHTML = '';
+    
+    if (!eventosList || eventosList.length === 0) {
+        console.warn('Nenhum evento encontrado para renderizar. Lista:', eventosList);
+        // Se não houver eventos, usar hardcode
+        eventosList = [...EVENTOS_PADRAO_HARDCODE];
+        console.log('Usando eventos padrão em hardcode');
+    }
+    
+    console.log(`Renderizando ${eventosList.length} eventos`);
+    eventosList.forEach(evento => {
+        const tr = document.createElement('tr');
+        const mesesAfetados = evento.meses_afetados || [];
+        
+        let mesesCells = '';
+        for (let i = 1; i <= 12; i++) {
+            const checked = mesesAfetados.includes(i) ? 'checked' : '';
+            mesesCells += `
+                <td class="text-center">
+                    <input type="checkbox" class="form-check-input evento-mes-checkbox" 
+                           data-event-id="${evento.id}" data-month="${i}" ${checked}>
+                </td>
+            `;
+        }
+        
+        tr.innerHTML = `
+            <td>${evento.nome_evento}</td>
+            <td class="text-center">
+                <input type="checkbox" class="form-check-input evento-aumenta-checkbox" 
+                       data-event-id="${evento.id}" ${evento.aumenta_vendas ? 'checked' : ''}>
+            </td>
+            <td class="text-center">
+                <input type="checkbox" class="form-check-input evento-diminui-checkbox" 
+                       data-event-id="${evento.id}" ${evento.diminui_vendas ? 'checked' : ''}>
+            </td>
+            ${mesesCells}
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+window.abrirModalEvento = function() {
+    document.getElementById('formEvento').reset();
+    const modal = new bootstrap.Modal(document.getElementById('modalEvento'));
+    modal.show();
+};
+
+window.salvarEvento = async function() {
+    const nome = document.getElementById('eventoNome').value;
+    const aumenta = document.getElementById('eventoAumenta').checked;
+    const diminui = document.getElementById('eventoDiminui').checked;
+    
+    if (!nome) {
+        alert('Por favor, informe o nome do evento.');
+        return;
+    }
+    
+    if (!aumenta && !diminui) {
+        alert('Por favor, marque pelo menos um tipo de impacto (Aumentam ou Diminuem vendas).');
+        return;
+    }
+    
+    const mesesAfetados = [];
+    for (let i = 1; i <= 12; i++) {
+        if (document.getElementById(`mes${i}`).checked) {
+            mesesAfetados.push(i);
+        }
+    }
+    
+    if (mesesAfetados.length === 0) {
+        alert('Por favor, marque pelo menos um mês afetado.');
+        return;
+    }
+    
+    try {
+        const formData = new FormData();
+        formData.append('nome_evento', nome);
+        formData.append('aumenta_vendas', aumenta);
+        formData.append('diminui_vendas', diminui);
+        formData.append('meses_afetados', JSON.stringify(mesesAfetados));
+        
+        const response = await fetch('/importancia-meses/api/sales-event', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!response.ok) throw new Error('Erro ao salvar evento');
+        
+        const result = await response.json();
+        if (result.success) {
+            const modal = bootstrap.Modal.getInstance(document.getElementById('modalEvento'));
+            modal.hide();
+            await carregarEventos();
+        }
+    } catch (error) {
+        console.error('Erro ao salvar evento:', error);
+        alert('Erro ao salvar evento. Tente novamente.');
+    }
+};
+
+window.deletarEvento = async function(eventId) {
+    if (!confirm('Tem certeza que deseja deletar este evento?')) return;
+    
+    try {
+        const response = await fetch(`/importancia-meses/api/sales-event/${eventId}`, {
+            method: 'DELETE'
+        });
+        
+        if (!response.ok) throw new Error('Erro ao deletar evento');
+        
+        await carregarEventos();
+    } catch (error) {
+        console.error('Erro ao deletar evento:', error);
+        alert('Erro ao deletar evento. Tente novamente.');
+    }
+};
+
+async function salvarImportanciaMeses() {
+    if (!basicDataIdSelecionado) {
+        alert('Por favor, selecione um dado básico.');
+        return;
+    }
+    
+    if (!anoAtual) {
+        alert('Erro: Ano não identificado.');
+        return;
+    }
+    
+    // Coletar dados dos meses (usando dados já carregados, pois a tabela foi movida para tela principal)
+    const meses = [];
+    for (let month = 1; month <= 12; month++) {
+        const nota = notasMeses[month] !== undefined ? notasMeses[month] : null;
+        meses.push({ month: month, nota_atribuida: nota });
+    }
+    
+    // Coletar dados dos eventos
+    const eventos = [];
+    eventosList.forEach(evento => {
+        const aumentaCheckbox = document.querySelector(`.evento-aumenta-checkbox[data-event-id="${evento.id}"]`);
+        const diminuiCheckbox = document.querySelector(`.evento-diminui-checkbox[data-event-id="${evento.id}"]`);
+        const mesesAfetados = [];
+        
+        for (let i = 1; i <= 12; i++) {
+            const checkbox = document.querySelector(`.evento-mes-checkbox[data-event-id="${evento.id}"][data-month="${i}"]`);
+            if (checkbox && checkbox.checked) {
+                mesesAfetados.push(i);
+            }
+        }
+        
+        eventos.push({
+            id: evento.id,
+            aumenta_vendas: aumentaCheckbox ? aumentaCheckbox.checked : false,
+            diminui_vendas: diminuiCheckbox ? diminuiCheckbox.checked : false,
+            meses_afetados: mesesAfetados
+        });
+    });
+    
+    try {
+        const formData = new FormData();
+        formData.append('basic_data_id', basicDataIdSelecionado);
+        formData.append('meses_data', JSON.stringify(meses));
+        formData.append('eventos_data', JSON.stringify(eventos));
+        
+        const response = await fetch('/importancia-meses/api/save', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!response.ok) throw new Error('Erro ao salvar dados');
+        
+        const result = await response.json();
+        if (result.success) {
+            alert('Dados salvos com sucesso!');
+            window.location.href = '/importancia-meses';
+        }
+    } catch (error) {
+        console.error('Erro ao salvar:', error);
+        alert('Erro ao salvar dados. Tente novamente.');
+    }
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', function() {
+    configurarSelectDadoBasico();
+    carregarEventos();
+});
+</script>
+{% endblock %}
+
