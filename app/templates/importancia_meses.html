@@ -2,6 +2,11 @@
 
 {% block title %}Importância dos Meses - GetUp Gestão{% endblock %}
 
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{{ super() }}
+{% endblock %}
+
 {% block extra_css %}
 <style>
     body {
@@ -108,7 +113,7 @@
 
           <!-- Mensagem quando não há dados -->
           <div id="mensagemSemDados" class="alert alert-info" style="display: none;">
-            Nenhum dado cadastrado. Clique em 'Cadastrar Importâncias dos Meses' para começar.
+            Nenhuma importância de mês cadastrada. Clique em 'Cadastrar Importâncias dos Meses' para começar.
           </div>
 
           <!-- Tabela: Importância dos Meses -->
@@ -120,10 +125,9 @@
                   <tr>
                     <th>Ano</th>
                     <th>Mês</th>
-                    <th>Nota Atribuída</th>
+                    <th>Notas Atribuídas</th>
                     <th>Ritmo do Negócio (%)</th>
                     <th>Quantidade de Vendas</th>
-                    <th>Peso do Mês (%)</th>
                   </tr>
                 </thead>
                 <tbody id="tabelaMeses">
@@ -133,36 +137,16 @@
             </div>
           </div>
 
-          <!-- Seção: Eventos que Influenciam as Vendas -->
-          <div id="tabelaEventosContainer" style="display: none;" class="mt-5">
-            <h5 class="mb-3">Eventos que Influenciam as Vendas da Loja</h5>
-            <div class="table-responsive">
-              <table class="table table-bordered table-sm">
-                <thead class="table-light">
-                  <tr>
-                    <th>Nome do Evento</th>
-                    <th>AUMENTAM</th>
-                    <th>DIMINUEM</th>
-                    <th>JAN</th>
-                    <th>FEV</th>
-                    <th>MAR</th>
-                    <th>ABR</th>
-                    <th>MAI</th>
-                    <th>JUN</th>
-                    <th>JUL</th>
-                    <th>AGO</th>
-                    <th>SET</th>
-                    <th>OUT</th>
-                    <th>NOV</th>
-                    <th>DEZ</th>
-                  </tr>
-                </thead>
-                <tbody id="tabelaEventos">
-                  <!-- Será preenchido via JavaScript -->
-                </tbody>
-              </table>
+          <!-- Gráfico de Barras: Quantidade de Vendas por Mês -->
+          <div id="graficoContainer" style="display: none;" class="mt-5">
+            <h5 class="mb-3">Quantidade de Vendas por Mês</h5>
+            <div class="card">
+              <div class="card-body">
+                <canvas id="graficoVendas"></canvas>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -170,59 +154,152 @@
 </div>
 {% endblock %}
 
-{% block extra_js %}
+{% block scripts %}
 <script>
 const mesesNomes = ['', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
 
 let anoAtual = new Date().getFullYear();
 
-// Popular dropdown de anos
-function popularAnos() {
+// Popular dropdown de anos com anos disponíveis no banco
+async function popularAnos() {
+    console.log('[popularAnos] Iniciando...');
     const select = document.getElementById('anoSelect');
-    const anoAtual = new Date().getFullYear();
+    const mensagemSemDados = document.getElementById('mensagemSemDados');
     
-    for (let ano = anoAtual; ano >= anoAtual - 5; ano--) {
-        const option = document.createElement('option');
-        option.value = ano;
-        option.textContent = ano;
-        select.appendChild(option);
+    if (!select) {
+        console.error('[popularAnos] Elemento anoSelect não encontrado!');
+        return;
     }
     
-    select.value = anoAtual;
-    select.addEventListener('change', function() {
-        anoAtual = parseInt(this.value);
-        if (anoAtual) {
-            carregarImportanciaMeses();
+    if (!mensagemSemDados) {
+        console.error('[popularAnos] Elemento mensagemSemDados não encontrado!');
+        return;
+    }
+    
+    try {
+        console.log('[popularAnos] Fazendo requisição para /importancia-meses/api/available-years...');
+        const response = await fetch('/importancia-meses/api/available-years', {
+            credentials: 'include'
+        });
+        console.log('[popularAnos] Response status:', response.status, response.statusText);
+        
+        if (response.ok) {
+            const anos = await response.json();
+            console.log('[popularAnos] Anos recebidos:', anos);
+            
+            if (!Array.isArray(anos) || anos.length === 0) {
+                // Não há anos cadastrados - mostrar mensagem e ocultar dropdown
+                console.log('[popularAnos] Nenhum ano encontrado');
+                select.style.display = 'none';
+                mensagemSemDados.style.display = 'block';
+                mensagemSemDados.textContent = 'Nenhuma importância de mês cadastrada. Clique em "Cadastrar Importâncias dos Meses" para começar.';
+                document.getElementById('tabelaMesesContainer').style.display = 'none';
+                return;
+            }
+            
+            // Há anos cadastrados - mostrar dropdown e popular
+            console.log('[popularAnos] Populando dropdown com', anos.length, 'anos');
+            select.style.display = 'block';
+            mensagemSemDados.style.display = 'none';
+            select.innerHTML = '<option value="">Selecione um ano...</option>';
+            
+            anos.sort((a, b) => b - a); // Ordenar do mais recente para o mais antigo
+            anos.forEach(ano => {
+                const option = document.createElement('option');
+                option.value = ano;
+                option.textContent = ano;
+                select.appendChild(option);
+            });
+            
+            // Selecionar o primeiro ano (mais recente) automaticamente
+            if (anos.length > 0) {
+                select.value = anos[0];
+                console.log('[popularAnos] Selecionando ano:', anos[0]);
+                await carregarImportanciaMeses();
+            }
+        } else {
+            // Erro na API - mostrar mensagem
+            console.error('[popularAnos] Erro na resposta:', response.status);
+            const errorText = await response.text();
+            console.error('[popularAnos] Erro detalhado:', errorText);
+            select.style.display = 'none';
+            mensagemSemDados.style.display = 'block';
+            mensagemSemDados.textContent = 'Erro ao carregar dados. Tente novamente.';
         }
-    });
+    } catch (error) {
+        console.error('[popularAnos] Erro ao carregar anos:', error);
+        select.style.display = 'none';
+        mensagemSemDados.style.display = 'block';
+        mensagemSemDados.textContent = 'Erro ao carregar dados. Tente novamente.';
+    }
+    
+    // Adicionar listener apenas uma vez
+    if (!select.hasAttribute('data-listener-added')) {
+        select.setAttribute('data-listener-added', 'true');
+        select.addEventListener('change', function() {
+            if (this.value) {
+                console.log('[popularAnos] Ano alterado para:', this.value);
+                carregarImportanciaMeses();
+            }
+        });
+    }
 }
 
 async function carregarImportanciaMeses() {
     const ano = document.getElementById('anoSelect').value;
-    if (!ano) return;
+    if (!ano) {
+        console.log('Nenhum ano selecionado');
+        return;
+    }
+    
+    console.log('Carregando dados para o ano:', ano);
     
     try {
-        const response = await fetch(`/importancia-meses/api/month-importance/${ano}`);
+        const response = await fetch(`/importancia-meses/api/month-importance/${ano}`, {
+            credentials: 'include'
+        });
+        console.log('Response status:', response.status);
+        
         if (!response.ok) throw new Error('Erro ao carregar dados');
         
         const meses = await response.json();
+        console.log('Meses recebidos:', meses);
+        // Log detalhado dos primeiros meses para debug
+        if (meses.length > 0) {
+            console.log('Primeiros 3 meses detalhados:', meses.slice(0, 3).map(m => ({
+                month: m.month,
+                nota: m.nota_atribuida,
+                ritmo: m.ritmo_negocio_percentual,
+                qtd_real: m.quantidade_vendas_real,
+                qtd_est: m.quantidade_vendas_estimada
+            })));
+            console.log('Últimos 3 meses detalhados:', meses.slice(9, 12).map(m => ({
+                month: m.month,
+                nota: m.nota_atribuida,
+                ritmo: m.ritmo_negocio_percentual,
+                qtd_real: m.quantidade_vendas_real,
+                qtd_est: m.quantidade_vendas_estimada
+            })));
+        }
         
         if (meses.length === 0) {
+            console.log('Nenhum mês encontrado para o ano:', ano);
             document.getElementById('mensagemSemDados').style.display = 'block';
             document.getElementById('tabelaMesesContainer').style.display = 'none';
-            document.getElementById('tabelaEventosContainer').style.display = 'none';
+            document.getElementById('graficoContainer').style.display = 'none';
             return;
         }
         
+        console.log('Exibindo tabela com', meses.length, 'meses');
         document.getElementById('mensagemSemDados').style.display = 'none';
         document.getElementById('tabelaMesesContainer').style.display = 'block';
         
         preencherTabelaMeses(meses);
         
-        // Carregar eventos
-        await carregarEventos();
+        // Criar gráfico de barras
+        criarGraficoVendas(meses);
     } catch (error) {
-        console.error('Erro:', error);
+        console.error('Erro ao carregar dados:', error);
         document.getElementById('mensagemSemDados').style.display = 'block';
         document.getElementById('mensagemSemDados').textContent = 'Erro ao carregar dados. Tente novamente.';
     }
@@ -263,52 +340,113 @@ function preencherTabelaMeses(meses) {
             <td>${mes.year}</td>
             <td class="mes-nome">${mesesNomes[mes.month]}</td>
             <td>${mes.nota_atribuida !== null && mes.nota_atribuida !== undefined ? mes.nota_atribuida.toFixed(2) : '-'}</td>
-            <td>${mes.ritmo_negocio_percentual !== null && mes.ritmo_negocio_percentual !== undefined ? mes.ritmo_negocio_percentual.toFixed(2) + '%' : '-'}</td>
+            <td>${mes.ritmo_negocio_percentual !== null && mes.ritmo_negocio_percentual !== undefined ? mes.ritmo_negocio_percentual.toFixed(1) + '%' : '-'}</td>
             <td>${quantidadeVendas !== null && quantidadeVendas !== undefined ? Math.round(quantidadeVendas) : '-'}</td>
-            <td>${mes.peso_mes !== null && mes.peso_mes !== undefined ? mes.peso_mes.toFixed(2) + '%' : '-'}</td>
         `;
         tbody.appendChild(tr);
     }
 }
 
-async function carregarEventos() {
-    try {
-        const response = await fetch('/importancia-meses/api/sales-events');
-        if (!response.ok) throw new Error('Erro ao carregar eventos');
-        
-        const eventos = await response.json();
-        
-        if (eventos.length > 0) {
-            document.getElementById('tabelaEventosContainer').style.display = 'block';
-            renderizarTabelaEventos(eventos);
-        }
-    } catch (error) {
-        console.error('Erro ao carregar eventos:', error);
-    }
-}
+// Funções removidas - tabela de eventos não é mais exibida na tela principal
 
-function renderizarTabelaEventos(eventos) {
-    const tbody = document.getElementById('tabelaEventos');
-    tbody.innerHTML = '';
+let graficoVendas = null;
+
+function criarGraficoVendas(meses) {
+    const canvas = document.getElementById('graficoVendas');
+    if (!canvas) {
+        console.warn('[criarGraficoVendas] Canvas não encontrado');
+        return;
+    }
     
-    eventos.forEach(evento => {
-        const tr = document.createElement('tr');
-        const mesesAfetados = evento.meses_afetados || [];
+    // Destruir gráfico anterior se existir
+    if (graficoVendas) {
+        graficoVendas.destroy();
+        graficoVendas = null;
+    }
+    
+    // Preparar dados
+    const labels = [];
+    const dados = [];
+    
+    // Ordenar meses por número do mês (1-12)
+    const mesesOrdenados = [...meses].sort((a, b) => a.month - b.month);
+    
+    mesesOrdenados.forEach(mes => {
+        const quantidadeVendas = mes.quantidade_vendas_real !== null && mes.quantidade_vendas_real !== undefined 
+            ? mes.quantidade_vendas_real 
+            : mes.quantidade_vendas_estimada;
         
-        let mesesCells = '';
-        for (let i = 1; i <= 12; i++) {
-            const marcado = mesesAfetados.includes(i) ? 'X' : '';
-            mesesCells += `<td class="text-center">${marcado}</td>`;
+        if (quantidadeVendas !== null && quantidadeVendas !== undefined) {
+            labels.push(mesesNomes[mes.month]);
+            dados.push(Math.round(quantidadeVendas));
         }
-        
-        tr.innerHTML = `
-            <td>${evento.nome_evento}</td>
-            <td class="text-center">${evento.nota !== null && evento.nota !== undefined ? evento.nota.toFixed(2) : '0.00'}</td>
-            <td class="text-center">${evento.aumenta_vendas ? 'X' : ''}</td>
-            <td class="text-center">${evento.diminui_vendas ? 'X' : ''}</td>
-            ${mesesCells}
-        `;
-        tbody.appendChild(tr);
+    });
+    
+    // Se não houver dados, ocultar o gráfico
+    if (dados.length === 0) {
+        document.getElementById('graficoContainer').style.display = 'none';
+        return;
+    }
+    
+    // Exibir o gráfico
+    document.getElementById('graficoContainer').style.display = 'block';
+    
+    // Verificar se Chart está disponível
+    if (typeof Chart === 'undefined') {
+        console.error('[criarGraficoVendas] Chart.js não está disponível');
+        return;
+    }
+    
+    // Criar gráfico de barras verticais
+    const ctx = canvas.getContext('2d');
+    graficoVendas = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Quantidade de Vendas',
+                data: dados,
+                backgroundColor: 'rgba(108, 117, 125, 0.6)',
+                borderColor: 'rgba(108, 117, 125, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0
+                    },
+                    title: {
+                        display: true,
+                        text: 'Quantidade de Vendas'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mês'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'Vendas: ' + Math.round(context.parsed.y);
+                        }
+                    }
+                }
+            }
+        }
     });
 }
 

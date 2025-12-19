@@ -2,7 +2,7 @@ from fastapi import APIRouter, Request, Depends, HTTPException, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, and_, or_
+from sqlalchemy import select, and_, or_, func
 from app.database import async_session
 from app.routes.auth import get_current_user
 from app.database.db import get_db
@@ -219,39 +219,169 @@ async def get_basic_data_for_importancia(
         logger.error(f"Erro ao listar dados básicos: {str(e)}")
         return JSONResponse({"error": str(e)}, status_code=500)
 
+@router.get("/api/available-years")
+async def get_available_years(
+    request: Request,
+    current_user = Depends(get_current_user)
+):
+    """Retorna lista de anos disponíveis que têm dados de importância dos meses salvos"""
+    if not current_user:
+        return JSONResponse({"error": "Unauthorized"}, status_code=401)
+    
+    try:
+        async with async_session() as session:
+            # Buscar anos únicos da tabela mes_importancia
+            query = select(MesImportancia.year).where(
+                MesImportancia.user_id == current_user.id
+            ).distinct()
+            result = await session.execute(query)
+            anos = [row[0] for row in result.all() if row[0] is not None]
+            
+            return JSONResponse(content=sorted(anos, reverse=True))
+    except Exception as e:
+        logger.error(f"Erro ao buscar anos disponíveis: {str(e)}")
+        return JSONResponse({"error": str(e)}, status_code=500)
+
+async def recalcular_importancia_meses(session: AsyncSession, year: int, user_id: int) -> List[dict]:
+    """
+    Recalcula importância dos meses baseado em notas atribuídas salvas e dados básicos.
+    Retorna lista com dados calculados para todos os 12 meses.
+    """
+    # Buscar todas as notas atribuídas salvas para o ano
+    query = select(MesImportancia).where(
+        and_(
+            MesImportancia.user_id == user_id,
+            MesImportancia.year == year
+        )
+    )
+    result = await session.execute(query)
+    meses_salvos = result.scalars().all()
+    
+    # Criar dicionário de notas atribuídas: {month: nota}
+    notas_meses = {}
+    meses_map = {}  # {month: MesImportancia}
+    for mes in meses_salvos:
+        if mes.nota_atribuida is not None:
+            notas_meses[mes.month] = float(mes.nota_atribuida)
+        meses_map[mes.month] = mes
+    
+    # Calcular total das notas dos 12 meses (para validação)
+    total_notas = sum(notas_meses.values()) if notas_meses else 0
+    logger.info(f"[recalcular_importancia_meses] Ano {year}, User {user_id}: {len(meses_salvos)} meses salvos, {len(notas_meses)} com notas, Total notas: {total_notas}")
+    logger.info(f"[recalcular_importancia_meses] Notas por mês: {notas_meses}")
+    
+    # Buscar dados básicos do ano e ano anterior (para janeiro)
+    year_anterior = year - 1
+    query = select(BasicData).where(
+        and_(
+            BasicData.user_id == user_id,
+            or_(BasicData.year == year, BasicData.year == year_anterior)
+        )
+    )
+    result = await session.execute(query)
+    basic_data_list = result.scalars().all()
+    
+    # Criar dicionário de dados básicos: {"2025-11": clients_served, ...}
+    basic_data_dict = {}
+    for bd in basic_data_list:
+        key = f"{bd.year}-{bd.month:02d}"
+        basic_data_dict[key] = float(bd.clients_served) if bd.clients_served else 0
+    
+    # Buscar dezembro do ano anterior para cálculo de janeiro
+    mes_importancia_ano_anterior = {}
+    query_dez_ano_anterior = select(MesImportancia).where(
+        and_(
+            MesImportancia.user_id == user_id,
+            MesImportancia.year == year_anterior,
+            MesImportancia.month == 12
+        )
+    )
+    result_dez = await session.execute(query_dez_ano_anterior)
+    dez_ano_anterior = result_dez.scalar_one_or_none()
+    if dez_ano_anterior:
+        mes_importancia_ano_anterior[12] = {
+            'nota': dez_ano_anterior.nota_atribuida,
+            'quantidade_real': dez_ano_anterior.quantidade_vendas_real,
+            'quantidade_estimada': dez_ano_anterior.quantidade_vendas_estimada
+        }
+    
+    # Calcular ritmo do negócio e quantidade de vendas para cada mês
+    # ESTRATÉGIA: Fazer duas passadas completas para garantir que janeiro (que depende de dezembro) seja calculado corretamente
+    ritmos = {}  # {month: ritmo}
+    quantidades_real = {}  # {month: quantidade_real}
+    quantidades_estimada = {}  # {month: quantidade_estimada}
+    
+    # Fazer duas passadas completas para garantir convergência
+    for passada in range(2):
+        for month in range(1, 13):
+            nota_atual = notas_meses.get(month)
+            
+            # Calcular ritmo do negócio
+            if month == 1:
+                # Janeiro: comparar com dezembro (do mesmo ano primeiro, depois ano anterior)
+                nota_anterior = notas_meses.get(12)
+                if nota_anterior is None and mes_importancia_ano_anterior.get(12):
+                    nota_anterior = mes_importancia_ano_anterior[12].get('nota')
+            else:
+                nota_anterior = notas_meses.get(month - 1)
+            
+            ritmo = calcular_ritmo_negocio(nota_atual, nota_anterior)
+            ritmos[month] = ritmo
+            
+            # Calcular quantidade de vendas
+            quantidade_anterior = None
+            if month == 1:
+                # Janeiro: tentar usar dezembro do mesmo ano (na segunda passada já estará calculado)
+                quantidade_anterior = quantidades_real.get(12) or quantidades_estimada.get(12)
+                if quantidade_anterior is None and mes_importancia_ano_anterior.get(12):
+                    quantidade_anterior = (mes_importancia_ano_anterior[12].get('quantidade_real') or 
+                                         mes_importancia_ano_anterior[12].get('quantidade_estimada'))
+            else:
+                # Demais meses: usar mês anterior (já calculado)
+                quantidade_anterior = quantidades_real.get(month - 1) or quantidades_estimada.get(month - 1)
+            
+            # Calcular quantidade de vendas (a função garante que meses com dados básicos usam valor real)
+            quant_real, quant_est = calcular_quantidade_vendas(
+                month, year, basic_data_dict, ritmo, quantidade_anterior
+            )
+            quantidades_real[month] = quant_real
+            quantidades_estimada[month] = quant_est
+    
+    # Construir lista de resultados para todos os 12 meses
+    data = []
+    for month in range(1, 13):
+        mes_salvo = meses_map.get(month)
+        resultado = {
+            "id": mes_salvo.id if mes_salvo else None,
+            "year": year,
+            "month": month,
+            "nota_atribuida": notas_meses.get(month),
+            "ritmo_negocio_percentual": ritmos.get(month),
+            "quantidade_vendas_real": quantidades_real.get(month),
+            "quantidade_vendas_estimada": quantidades_estimada.get(month),
+            "peso_mes": mes_salvo.peso_mes if mes_salvo else None
+        }
+        data.append(resultado)
+        if month <= 3 or month >= 11:  # Log apenas primeiros e últimos meses para não poluir
+            logger.info(f"[recalcular] Mês {month}: nota={resultado['nota_atribuida']}, ritmo={resultado['ritmo_negocio_percentual']}, qtd_real={resultado['quantidade_vendas_real']}, qtd_est={resultado['quantidade_vendas_estimada']}")
+    
+    logger.info(f"[recalcular_importancia_meses] Retornando {len(data)} meses calculados")
+    return data
+
 @router.get("/api/month-importance/{year}")
 async def get_month_importance(
     year: int,
     request: Request,
     current_user = Depends(get_current_user)
 ):
-    """Retorna importância dos meses SALVOS para um ano específico"""
+    """Retorna importância dos meses RECALCULADOS para um ano específico"""
     if not current_user:
         return JSONResponse({"error": "Unauthorized"}, status_code=401)
     
     try:
         async with async_session() as session:
-            query = select(MesImportancia).where(
-                and_(
-                    MesImportancia.user_id == current_user.id,
-                    MesImportancia.year == year
-                )
-            )
-            result = await session.execute(query)
-            meses = result.scalars().all()
-            
-            data = []
-            for mes in meses:
-                data.append({
-                    "id": mes.id,
-                    "year": mes.year,
-                    "month": mes.month,
-                    "nota_atribuida": mes.nota_atribuida,
-                    "ritmo_negocio_percentual": mes.ritmo_negocio_percentual,
-                    "quantidade_vendas_real": mes.quantidade_vendas_real,
-                    "quantidade_vendas_estimada": mes.quantidade_vendas_estimada,
-                    "peso_mes": mes.peso_mes
-                })
+            # Recalcular todos os valores baseado nas notas atribuídas salvas
+            data = await recalcular_importancia_meses(session, year, current_user.id)
             
             return JSONResponse(content=data)
     except Exception as e:
@@ -356,10 +486,14 @@ async def get_sales_events(
         return JSONResponse({"error": str(e)}, status_code=500)
 
 def calcular_ritmo_negocio(nota_atual: Optional[float], nota_anterior: Optional[float]) -> Optional[float]:
-    """Calcula ritmo do negócio como razão entre notas"""
+    """
+    Calcula ritmo do negócio como razão entre notas.
+    Fórmula: (Nota atribuída mês atual / Nota atribuída mês anterior) * 100
+    """
     if nota_atual is None or nota_anterior is None or nota_anterior == 0:
         return None
-    return (nota_atual / nota_anterior) * 100
+    ritmo = (nota_atual / nota_anterior) * 100
+    return ritmo
 
 def calcular_quantidade_vendas(
     month: int,
@@ -469,13 +603,32 @@ async def save_importancia_meses(
                     'quantidade_estimada': dez_ano_anterior.quantidade_vendas_estimada
                 }
             
-            # Processar cada mês
+            # Calcular notas atribuídas para cada mês = soma das notas dos eventos que afetam aquele mês
             notas_meses = {}  # {month: nota}
-            for mes_data in meses:
-                month = int(mes_data.get('month'))
-                nota = mes_data.get('nota_atribuida')
-                if nota is not None:
-                    notas_meses[month] = float(nota)
+            logger.info(f"[save_importancia_meses] Recebidos {len(eventos)} eventos no request")
+            
+            # Inicializar notas de todos os meses como 0
+            for month in range(1, 13):
+                notas_meses[month] = 0.0
+            
+            # Para cada evento, somar sua nota aos meses que ele afeta
+            for evento in eventos:
+                meses_afetados = evento.get('meses_afetados', [])
+                nota_evento = float(evento.get('nota', 0) or 0)
+                
+                logger.info(f"[save_importancia_meses] Evento: {evento.get('nome_evento', 'sem nome')}, nota={nota_evento}, meses_afetados={meses_afetados}")
+                
+                # Somar a nota do evento aos meses afetados
+                for month in meses_afetados:
+                    if month >= 1 and month <= 12:
+                        notas_meses[month] += nota_evento
+            
+            # Converter notas 0 para None (não salvar se não houver eventos)
+            for month in range(1, 13):
+                if notas_meses[month] == 0:
+                    notas_meses[month] = None
+            
+            logger.info(f"[save_importancia_meses] Notas calculadas (soma dos eventos): {notas_meses}")
             
             # Calcular ritmo do negócio para cada mês
             ritmos = {}  # {month: ritmo}
@@ -554,9 +707,19 @@ async def save_importancia_meses(
                 result = await session.execute(query)
                 mes_importancia = result.scalar_one_or_none()
                 
+                # Converter nota para float ou None
+                nota_float = None
+                if nota is not None and nota != '' and nota != 'null':
+                    try:
+                        nota_float = float(nota)
+                        logger.info(f"[save_importancia_meses] Salvando mês {month}: nota={nota_float}")
+                    except (ValueError, TypeError):
+                        logger.warning(f"[save_importancia_meses] Erro ao converter nota do mês {month}: {nota}")
+                        nota_float = None
+                
                 if mes_importancia:
                     # Atualizar
-                    mes_importancia.nota_atribuida = float(nota) if nota else None
+                    mes_importancia.nota_atribuida = nota_float
                     mes_importancia.ritmo_negocio_percentual = ritmos.get(month)
                     mes_importancia.quantidade_vendas_real = quantidades_real.get(month)
                     mes_importancia.quantidade_vendas_estimada = quantidades_estimada.get(month)
@@ -568,7 +731,7 @@ async def save_importancia_meses(
                         user_id=current_user.id,
                         year=year,
                         month=month,
-                        nota_atribuida=float(nota) if nota else None,
+                        nota_atribuida=nota_float,
                         ritmo_negocio_percentual=ritmos.get(month),
                         quantidade_vendas_real=quantidades_real.get(month),
                         quantidade_vendas_estimada=quantidades_estimada.get(month),

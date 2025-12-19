@@ -4,3 +4,35 @@
 2025-12-19 14:10:31,801 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=500.0
 2025-12-19 14:10:31,801 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=10000.0, sales_expenses=2500.0, input_product_expenses=2500.0
 2025-12-19 14:10:31,801 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=50.0
+2025-12-19 19:58:35,623 - app.routes.basic_data_operations - INFO - Alteração detectada: É o Atual de Sim para Não
+2025-12-19 19:58:35,671 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-12-19 19:58:35,671 - app.routes.basic_data - INFO - Registro ID 1: month=11, year=2025, clients_served=150
+2025-12-19 19:58:35,671 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=100000.0, sales_expenses=25000.0, input_product_expenses=25000.0
+2025-12-19 19:58:35,672 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=500.0
+2025-12-19 19:58:35,672 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=10000.0, sales_expenses=2500.0, input_product_expenses=2500.0
+2025-12-19 19:58:35,672 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=50.0
+2025-12-19 20:05:32,581 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-12-19 20:05:32,582 - app.routes.basic_data - INFO - Registro ID 1: month=11, year=2025, clients_served=150
+2025-12-19 20:05:32,582 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=100000.0, sales_expenses=25000.0, input_product_expenses=25000.0
+2025-12-19 20:05:32,583 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=500.0
+2025-12-19 20:05:32,583 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=10000.0, sales_expenses=2500.0, input_product_expenses=2500.0
+2025-12-19 20:05:32,583 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=50.0
+2025-12-19 20:05:41,818 - app.routes.basic_data_operations - INFO - Alteração detectada: Quantidade de Clientes Atendidos de 150 para 500
+2025-12-19 20:05:41,867 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-12-19 20:05:41,868 - app.routes.basic_data - INFO - Registro ID 1: month=11, year=2025, clients_served=500
+2025-12-19 20:05:41,868 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=100000.0, sales_expenses=25000.0, input_product_expenses=25000.0
+2025-12-19 20:05:41,868 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=500.0
+2025-12-19 20:05:41,869 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=10000.0, sales_expenses=2500.0, input_product_expenses=2500.0
+2025-12-19 20:05:41,869 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=50.0
+2025-12-19 20:05:47,452 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-12-19 20:05:47,453 - app.routes.basic_data - INFO - Registro ID 1: month=11, year=2025, clients_served=500
+2025-12-19 20:05:47,453 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=100000.0, sales_expenses=25000.0, input_product_expenses=25000.0
+2025-12-19 20:05:47,454 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=500.0
+2025-12-19 20:05:47,454 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=10000.0, sales_expenses=2500.0, input_product_expenses=2500.0
+2025-12-19 20:05:47,454 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=50.0
+2025-12-19 20:16:30,651 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2025-12-19 20:16:30,652 - app.routes.basic_data - INFO - Registro ID 1: month=11, year=2025, clients_served=500
+2025-12-19 20:16:30,652 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=100000.0, sales_expenses=25000.0, input_product_expenses=25000.0
+2025-12-19 20:16:30,653 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=None, other_fixed_costs=500.0
+2025-12-19 20:16:30,653 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=10000.0, sales_expenses=2500.0, input_product_expenses=2500.0
+2025-12-19 20:16:30,653 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=None, other_fixed_costs=50.0
