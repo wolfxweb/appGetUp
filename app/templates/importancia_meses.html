@@ -2,6 +2,11 @@
 
 {% block title %}Importância dos Meses - GetUp Gestão{% endblock %}
 
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+{{ super() }}
+{% endblock %}
+
 {% block extra_css %}
 <style>
     body {
@@ -132,36 +137,16 @@
             </div>
           </div>
 
-          <!-- Seção: Eventos que Influenciam as Vendas -->
-          <div id="tabelaEventosContainer" style="display: none;" class="mt-5">
-            <h5 class="mb-3">Eventos que Influenciam as Vendas da Loja</h5>
-            <div class="table-responsive">
-              <table class="table table-bordered table-sm">
-                <thead class="table-light">
-                  <tr>
-                    <th>Nome do Evento</th>
-                    <th>AUMENTAM</th>
-                    <th>DIMINUEM</th>
-                    <th>JAN</th>
-                    <th>FEV</th>
-                    <th>MAR</th>
-                    <th>ABR</th>
-                    <th>MAI</th>
-                    <th>JUN</th>
-                    <th>JUL</th>
-                    <th>AGO</th>
-                    <th>SET</th>
-                    <th>OUT</th>
-                    <th>NOV</th>
-                    <th>DEZ</th>
-                  </tr>
-                </thead>
-                <tbody id="tabelaEventos">
-                  <!-- Será preenchido via JavaScript -->
-                </tbody>
-              </table>
+          <!-- Gráfico de Barras: Quantidade de Vendas por Mês -->
+          <div id="graficoContainer" style="display: none;" class="mt-5">
+            <h5 class="mb-3">Quantidade de Vendas por Mês</h5>
+            <div class="card">
+              <div class="card-body">
+                <canvas id="graficoVendas"></canvas>
+              </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -209,7 +194,6 @@ async function popularAnos() {
                 mensagemSemDados.style.display = 'block';
                 mensagemSemDados.textContent = 'Nenhuma importância de mês cadastrada. Clique em "Cadastrar Importâncias dos Meses" para começar.';
                 document.getElementById('tabelaMesesContainer').style.display = 'none';
-                document.getElementById('tabelaEventosContainer').style.display = 'none';
                 return;
             }
             
@@ -302,7 +286,7 @@ async function carregarImportanciaMeses() {
             console.log('Nenhum mês encontrado para o ano:', ano);
             document.getElementById('mensagemSemDados').style.display = 'block';
             document.getElementById('tabelaMesesContainer').style.display = 'none';
-            document.getElementById('tabelaEventosContainer').style.display = 'none';
+            document.getElementById('graficoContainer').style.display = 'none';
             return;
         }
         
@@ -312,8 +296,8 @@ async function carregarImportanciaMeses() {
         
         preencherTabelaMeses(meses);
         
-        // Carregar eventos
-        await carregarEventos();
+        // Criar gráfico de barras
+        criarGraficoVendas(meses);
     } catch (error) {
         console.error('Erro ao carregar dados:', error);
         document.getElementById('mensagemSemDados').style.display = 'block';
@@ -363,44 +347,106 @@ function preencherTabelaMeses(meses) {
     }
 }
 
-async function carregarEventos() {
-    try {
-        const response = await fetch('/importancia-meses/api/sales-events');
-        if (!response.ok) throw new Error('Erro ao carregar eventos');
-        
-        const eventos = await response.json();
-        
-        if (eventos.length > 0) {
-            document.getElementById('tabelaEventosContainer').style.display = 'block';
-            renderizarTabelaEventos(eventos);
-        }
-    } catch (error) {
-        console.error('Erro ao carregar eventos:', error);
-    }
-}
+// Funções removidas - tabela de eventos não é mais exibida na tela principal
 
-function renderizarTabelaEventos(eventos) {
-    const tbody = document.getElementById('tabelaEventos');
-    tbody.innerHTML = '';
+let graficoVendas = null;
+
+function criarGraficoVendas(meses) {
+    const canvas = document.getElementById('graficoVendas');
+    if (!canvas) {
+        console.warn('[criarGraficoVendas] Canvas não encontrado');
+        return;
+    }
     
-    eventos.forEach(evento => {
-        const tr = document.createElement('tr');
-        const mesesAfetados = evento.meses_afetados || [];
+    // Destruir gráfico anterior se existir
+    if (graficoVendas) {
+        graficoVendas.destroy();
+        graficoVendas = null;
+    }
+    
+    // Preparar dados
+    const labels = [];
+    const dados = [];
+    
+    // Ordenar meses por número do mês (1-12)
+    const mesesOrdenados = [...meses].sort((a, b) => a.month - b.month);
+    
+    mesesOrdenados.forEach(mes => {
+        const quantidadeVendas = mes.quantidade_vendas_real !== null && mes.quantidade_vendas_real !== undefined 
+            ? mes.quantidade_vendas_real 
+            : mes.quantidade_vendas_estimada;
         
-        let mesesCells = '';
-        for (let i = 1; i <= 12; i++) {
-            const marcado = mesesAfetados.includes(i) ? 'X' : '';
-            mesesCells += `<td class="text-center">${marcado}</td>`;
+        if (quantidadeVendas !== null && quantidadeVendas !== undefined) {
+            labels.push(mesesNomes[mes.month]);
+            dados.push(Math.round(quantidadeVendas));
         }
-        
-        tr.innerHTML = `
-            <td>${evento.nome_evento}</td>
-            <td class="text-center">${evento.nota !== null && evento.nota !== undefined ? evento.nota.toFixed(2) : '0.00'}</td>
-            <td class="text-center">${evento.aumenta_vendas ? 'X' : ''}</td>
-            <td class="text-center">${evento.diminui_vendas ? 'X' : ''}</td>
-            ${mesesCells}
-        `;
-        tbody.appendChild(tr);
+    });
+    
+    // Se não houver dados, ocultar o gráfico
+    if (dados.length === 0) {
+        document.getElementById('graficoContainer').style.display = 'none';
+        return;
+    }
+    
+    // Exibir o gráfico
+    document.getElementById('graficoContainer').style.display = 'block';
+    
+    // Verificar se Chart está disponível
+    if (typeof Chart === 'undefined') {
+        console.error('[criarGraficoVendas] Chart.js não está disponível');
+        return;
+    }
+    
+    // Criar gráfico de barras verticais
+    const ctx = canvas.getContext('2d');
+    graficoVendas = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Quantidade de Vendas',
+                data: dados,
+                backgroundColor: 'rgba(108, 117, 125, 0.6)',
+                borderColor: 'rgba(108, 117, 125, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1,
+                        precision: 0
+                    },
+                    title: {
+                        display: true,
+                        text: 'Quantidade de Vendas'
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Mês'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'Vendas: ' + Math.round(context.parsed.y);
+                        }
+                    }
+                }
+            }
+        }
     });
 }
 
