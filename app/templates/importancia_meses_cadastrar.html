@@ -199,29 +199,34 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-secondary" id="btnSalvarEvento">Salvar</button>
+        <button type="button" class="btn btn-secondary" id="btnSalvarEvento" onclick="if(typeof window.salvarEvento === 'function') { window.salvarEvento(); } else { console.error('window.salvarEvento não encontrado'); alert('Erro: Função não encontrada. Recarregue a página.'); } return false;">Salvar</button>
       </div>
     </div>
   </div>
 </div>
 {% endblock %}
 
-{% block extra_js %}
+{% block scripts %}
 <script>
-const mesesNomes = ['', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
-let anoAtual = null;
-let basicDataIdSelecionado = null;
-let basicDataMap = {}; // {year-month: clients_served}
-let eventosList = [];
-let notasMeses = {}; // {month: nota}
-
-// Funções globais
-// Modal será aberto automaticamente via data-bs-toggle do Bootstrap
-
+// IMPORTANTE: Definir funções globais PRIMEIRO, antes de qualquer uso
 window.salvarEvento = async function() {
-    const nome = document.getElementById('eventoNome').value;
-    const aumenta = document.getElementById('eventoAumenta').checked;
-    const diminui = document.getElementById('eventoDiminui').checked;
+    console.log('=== salvarEvento chamada ===');
+    
+    const nomeInput = document.getElementById('eventoNome');
+    const aumentaInput = document.getElementById('eventoAumenta');
+    const diminuiInput = document.getElementById('eventoDiminui');
+    
+    if (!nomeInput) {
+        alert('Erro: Campo nome não encontrado.');
+        console.error('Campo eventoNome não encontrado');
+        return;
+    }
+    
+    const nome = nomeInput.value.trim();
+    const aumenta = aumentaInput ? aumentaInput.checked : false;
+    const diminui = diminuiInput ? diminuiInput.checked : false;
+    
+    console.log('Valores capturados:', { nome, aumenta, diminui });
     
     if (!nome) {
         alert('Por favor, informe o nome do evento.');
@@ -241,6 +246,8 @@ window.salvarEvento = async function() {
         }
     }
     
+    console.log('Meses afetados:', mesesAfetados);
+    
     try {
         const formData = new FormData();
         formData.append('nome_evento', nome);
@@ -248,27 +255,64 @@ window.salvarEvento = async function() {
         formData.append('diminui_vendas', diminui);
         formData.append('meses_afetados', JSON.stringify(mesesAfetados));
         
+        console.log('Enviando requisição para /importancia-meses/api/sales-event...');
         const response = await fetch('/importancia-meses/api/sales-event', {
             method: 'POST',
             body: formData
         });
         
+        console.log('Resposta recebida:', response.status, response.statusText);
+        
+        const responseData = await response.json().catch(() => {
+            console.error('Erro ao parsear JSON da resposta');
+            return { error: 'Erro ao processar resposta do servidor' };
+        });
+        
+        console.log('Dados da resposta:', responseData);
+        
+        // Verificar se a resposta foi bem-sucedida
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.error || 'Erro ao salvar evento');
+            const errorMsg = responseData.error || responseData.message || `Erro ${response.status}: ${response.statusText}`;
+            console.error('Erro na resposta do servidor:', errorMsg);
+            throw new Error(errorMsg);
         }
         
-        const result = await response.json();
-        if (result.success) {
-            const modalElement = document.getElementById('modalEvento');
-            if (modalElement) {
-                const modal = bootstrap.Modal.getInstance(modalElement);
-                if (modal) modal.hide();
-            }
-            
-            // Recarregar eventos
-            await carregarEventos();
+        // Verificar se o evento foi salvo com sucesso
+        const sucesso = responseData.success === true || responseData.id !== undefined;
+        console.log('Evento salvo com sucesso?', sucesso, 'responseData:', responseData);
+        
+        if (!sucesso) {
+            throw new Error('Resposta do servidor não indica sucesso');
         }
+        
+        // Fechar modal
+        const modalElement = document.getElementById('modalEvento');
+        if (modalElement) {
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            if (modal) {
+                modal.hide();
+                console.log('Modal fechado');
+            } else {
+                // Tentar fechar manualmente se a instância não existir
+                modalElement.classList.remove('show');
+                modalElement.style.display = 'none';
+                document.body.classList.remove('modal-open');
+                const backdrop = document.querySelector('.modal-backdrop');
+                if (backdrop) backdrop.remove();
+                console.log('Modal fechado manualmente');
+            }
+        }
+        
+        // Limpar formulário
+        const formEvento = document.getElementById('formEvento');
+        if (formEvento) formEvento.reset();
+        
+        // Recarregar eventos do servidor para atualizar a lista
+        console.log('Recarregando eventos após salvar...');
+        await carregarEventos();
+        
+        // Mostrar mensagem de sucesso
+        alert('Evento salvo com sucesso!');
     } catch (error) {
         console.error('Erro ao salvar evento:', error);
         alert('Erro ao salvar evento: ' + error.message);
@@ -321,25 +365,33 @@ const EVENTOS_PADRAO_HARDCODE = [
     { id: 22, nome_evento: "Volta às aulas", aumenta_vendas: false, diminui_vendas: false, meses_afetados: [], is_padrao: true }
 ];
 
+// Flag para evitar listener duplicado do select
+let selectListenerAdded = false;
+
 // Configurar seleção de dado básico
 function configurarSelectDadoBasico() {
     const select = document.getElementById('basicDataSelect');
+    if (!select) return;
     
-    select.addEventListener('change', async function() {
-        const selectedOption = this.options[this.selectedIndex];
-        if (selectedOption.value) {
-            basicDataIdSelecionado = parseInt(selectedOption.value);
-            anoAtual = parseInt(selectedOption.dataset.year);
-            
-            await carregarDadosBasicos();
-            await carregarImportanciaMesesPorBasicData();
-            await carregarEventos();
-        } else {
-            basicDataIdSelecionado = null;
-            anoAtual = null;
-            notasMeses = {};
-        }
-    });
+    // Adicionar listener apenas uma vez
+    if (!selectListenerAdded) {
+        selectListenerAdded = true;
+        select.addEventListener('change', async function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.value) {
+                basicDataIdSelecionado = parseInt(selectedOption.value);
+                anoAtual = parseInt(selectedOption.dataset.year);
+                
+                await carregarDadosBasicos();
+                await carregarImportanciaMesesPorBasicData();
+                await carregarEventos();
+            } else {
+                basicDataIdSelecionado = null;
+                anoAtual = null;
+                notasMeses = {};
+            }
+        });
+    }
 }
 
 async function carregarDadosBasicos() {
@@ -382,54 +434,60 @@ async function carregarImportanciaMesesPorBasicData() {
 
 async function carregarEventos() {
     try {
-        // SEMPRE carregar eventos hardcode primeiro
-        if (typeof EVENTOS_PADRAO_HARDCODE !== 'undefined' && EVENTOS_PADRAO_HARDCODE.length > 0) {
-            eventosList = [...EVENTOS_PADRAO_HARDCODE];
-            console.log(`[carregarEventos] Carregando ${eventosList.length} eventos padrão em hardcode`);
-        } else {
+        // Iniciar com eventos hardcode
+        if (typeof EVENTOS_PADRAO_HARDCODE === 'undefined' || EVENTOS_PADRAO_HARDCODE.length === 0) {
             console.error('[carregarEventos] ERRO: EVENTOS_PADRAO_HARDCODE não está definido!');
             eventosList = [];
             return;
         }
         
-        // Renderizar imediatamente com eventos hardcode
-        console.log('[carregarEventos] Chamando renderizarTabelaEventos()...');
-        renderizarTabelaEventos();
-        
-        // Tentar carregar eventos do servidor de forma não bloqueante
+        // Carregar eventos do servidor
         try {
             const response = await fetch('/importancia-meses/api/sales-events');
             if (response.ok) {
                 const eventosServidor = await response.json();
+                console.log(`[carregarEventos] Recebidos ${eventosServidor ? eventosServidor.length : 0} eventos do servidor`);
+                
                 if (Array.isArray(eventosServidor) && eventosServidor.length > 0) {
-                    console.log(`[carregarEventos] Recebidos ${eventosServidor.length} eventos do servidor, mesclando...`);
+                    // Separar eventos padrão e customizados do servidor
+                    const eventosPadraoServidor = eventosServidor.filter(e => e.is_padrao);
+                    const eventosCustomizadosServidor = eventosServidor.filter(e => !e.is_padrao);
                     
-                    // Mesclar eventos do servidor com hardcode (servidor tem prioridade)
-                    const eventosServidorMap = new Map();
-                    eventosServidor.forEach(e => eventosServidorMap.set(e.nome_evento.toLowerCase(), e));
+                    // Criar map de eventos padrão do servidor por nome (lowercase)
+                    const eventosPadraoServidorMap = new Map();
+                    eventosPadraoServidor.forEach(e => eventosPadraoServidorMap.set(e.nome_evento.toLowerCase(), e));
                     
-                    // Atualizar eventos hardcode com dados do servidor se existirem
-                    eventosList = eventosList.map(evento => {
-                        const servidor = eventosServidorMap.get(evento.nome_evento.toLowerCase());
-                        return servidor || evento;
+                    // Atualizar eventos hardcode com dados do servidor (se existirem)
+                    eventosList = EVENTOS_PADRAO_HARDCODE.map(evento => {
+                        const servidor = eventosPadraoServidorMap.get(evento.nome_evento.toLowerCase());
+                        return servidor ? servidor : evento;
                     });
                     
-                    // Adicionar eventos do servidor que não estão no hardcode
-                    eventosServidor.forEach(evento => {
-                        if (!eventosList.find(e => e.nome_evento.toLowerCase() === evento.nome_evento.toLowerCase())) {
+                    // Adicionar eventos customizados do servidor (que não são padrão)
+                    eventosCustomizadosServidor.forEach(evento => {
+                        if (!eventosList.find(e => e.id === evento.id)) {
                             eventosList.push(evento);
                         }
                     });
                     
-                    console.log(`[carregarEventos] Eventos mesclados: ${eventosList.length} total`);
-                    // Re-renderizar com eventos mesclados
-                    renderizarTabelaEventos();
+                    console.log(`[carregarEventos] Eventos mesclados: ${eventosList.length} total (${EVENTOS_PADRAO_HARDCODE.length} padrão + ${eventosCustomizadosServidor.length} customizados)`);
+                } else {
+                    // Nenhum evento no servidor, usar apenas hardcode
+                    eventosList = [...EVENTOS_PADRAO_HARDCODE];
+                    console.log('[carregarEventos] Nenhum evento no servidor, usando apenas hardcode');
                 }
+            } else {
+                console.warn('[carregarEventos] Erro na resposta do servidor:', response.status);
+                eventosList = [...EVENTOS_PADRAO_HARDCODE];
             }
         } catch (error) {
             console.warn('[carregarEventos] Erro ao carregar eventos do servidor (continuando com hardcode):', error);
-            // Continuar com eventos hardcode - já renderizados
+            eventosList = [...EVENTOS_PADRAO_HARDCODE];
         }
+        
+        // Sempre renderizar após carregar (sobrescreve o HTML do Jinja2)
+        console.log(`[carregarEventos] Renderizando ${eventosList.length} eventos na tabela...`);
+        renderizarTabelaEventos();
     } catch (error) {
         console.error('[carregarEventos] Erro crítico:', error);
         // Garantir que pelo menos os eventos hardcode sejam carregados
@@ -736,27 +794,29 @@ function renderizarEventosAgora() {
     console.log('=== RENDERIZAÇÃO CONCLUÍDA ===');
 }
 
-// Configurar event listeners para botões
+// Flag para evitar listeners duplicados
+let modalListenerAdded = false;
+
+// Configurar event listeners para botões (apenas resetar form quando modal abrir)
 function configurarEventListeners() {
-    // Botão salvar evento no modal
-    const btnSalvarEvento = document.getElementById('btnSalvarEvento');
-    if (btnSalvarEvento) {
-        btnSalvarEvento.addEventListener('click', function() {
-            if (typeof window.salvarEvento === 'function') {
-                window.salvarEvento();
-            }
-        });
-    }
+    console.log('[configurarEventListeners] Configurando listeners...');
     
-    // Resetar form quando modal for aberto
-    const modalEvento = document.getElementById('modalEvento');
-    if (modalEvento) {
-        modalEvento.addEventListener('show.bs.modal', function() {
-            const formEvento = document.getElementById('formEvento');
-            if (formEvento) {
-                formEvento.reset();
-            }
-        });
+    // Resetar form quando modal for aberto (adicionar apenas uma vez)
+    if (!modalListenerAdded) {
+        const modalEvento = document.getElementById('modalEvento');
+        if (modalEvento) {
+            modalListenerAdded = true;
+            modalEvento.addEventListener('show.bs.modal', function() {
+                console.log('[configurarEventListeners] Modal sendo aberto, resetando formulário');
+                const formEvento = document.getElementById('formEvento');
+                if (formEvento) {
+                    formEvento.reset();
+                }
+            });
+            console.log('[configurarEventListeners] Listener do modal adicionado');
+        }
+    } else {
+        console.log('[configurarEventListeners] Listener do modal já foi adicionado anteriormente');
     }
 }
 
