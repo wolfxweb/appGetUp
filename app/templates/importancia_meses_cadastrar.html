@@ -208,6 +208,14 @@
 
 {% block scripts %}
 <script>
+// Variáveis globais - DECLARAR PRIMEIRO
+const mesesNomes = ['', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+let anoAtual = null;
+let basicDataIdSelecionado = null;
+let basicDataMap = {}; // {year-month: clients_served}
+let eventosList = []; // Lista de eventos (padrão + customizados do usuário)
+let notasMeses = {}; // {month: nota}
+
 // IMPORTANTE: Definir funções globais PRIMEIRO, antes de qualquer uso
 window.salvarEvento = async function() {
     console.log('=== salvarEvento chamada ===');
@@ -279,7 +287,6 @@ window.salvarEvento = async function() {
         
         // Verificar se o evento foi salvo com sucesso
         const sucesso = responseData.success === true || responseData.id !== undefined;
-        console.log('Evento salvo com sucesso?', sucesso, 'responseData:', responseData);
         
         if (!sucesso) {
             throw new Error('Resposta do servidor não indica sucesso');

@@ -360,11 +360,12 @@ async def save_importancia_meses(
             
             year = basic_data_selecionado.year
             
-            # Buscar todos os dados básicos para o ano (para cálculos)
+            # Buscar todos os dados básicos para o ano e ano anterior (para cálculos de janeiro)
+            year_anterior = year - 1
             query = select(BasicData).where(
                 and_(
                     BasicData.user_id == current_user.id,
-                    BasicData.year == year
+                    or_(BasicData.year == year, BasicData.year == year_anterior)
                 )
             )
             result = await session.execute(query)
@@ -375,6 +376,24 @@ async def save_importancia_meses(
             for bd in basic_data_list:
                 key = f"{bd.year}-{bd.month:02d}"
                 basic_data_dict[key] = float(bd.clients_served) if bd.clients_served else 0
+            
+            # Buscar MesImportancia do ano anterior para obter nota e quantidade de dezembro (para cálculo de janeiro)
+            mes_importancia_ano_anterior = {}
+            query = select(MesImportancia).where(
+                and_(
+                    MesImportancia.user_id == current_user.id,
+                    MesImportancia.year == year_anterior,
+                    MesImportancia.month == 12  # Dezembro do ano anterior
+                )
+            )
+            result = await session.execute(query)
+            dez_ano_anterior = result.scalar_one_or_none()
+            if dez_ano_anterior:
+                mes_importancia_ano_anterior[12] = {
+                    'nota': dez_ano_anterior.nota_atribuida,
+                    'quantidade_real': dez_ano_anterior.quantidade_vendas_real,
+                    'quantidade_estimada': dez_ano_anterior.quantidade_vendas_estimada
+                }
             
             # Processar cada mês
             notas_meses = {}  # {month: nota}
@@ -392,9 +411,10 @@ async def save_importancia_meses(
             for month in range(1, 13):
                 nota_atual = notas_meses.get(month)
                 
-                # Para janeiro, comparar com dezembro
+                # Para janeiro, comparar com dezembro (do mesmo ano, ou ano anterior se não houver)
                 if month == 1:
-                    nota_anterior = notas_meses.get(12)
+                    # Tentar usar dezembro do mesmo ano primeiro, se não existir usar do ano anterior
+                    nota_anterior = notas_meses.get(12) or (mes_importancia_ano_anterior.get(12, {}).get('nota') if mes_importancia_ano_anterior else None)
                 else:
                     nota_anterior = notas_meses.get(month - 1)
                 
@@ -404,7 +424,11 @@ async def save_importancia_meses(
                 # Calcular quantidade de vendas
                 quantidade_anterior = None
                 if month == 1:
-                    quantidade_anterior = quantidades_real.get(12) or quantidades_estimada.get(12)
+                    # Tentar usar dezembro do mesmo ano primeiro, se não existir usar do ano anterior
+                    quantidade_anterior = (quantidades_real.get(12) or quantidades_estimada.get(12))
+                    if quantidade_anterior is None and mes_importancia_ano_anterior.get(12):
+                        quantidade_anterior = (mes_importancia_ano_anterior[12].get('quantidade_real') or 
+                                             mes_importancia_ano_anterior[12].get('quantidade_estimada'))
                 else:
                     quantidade_anterior = quantidades_real.get(month - 1) or quantidades_estimada.get(month - 1)
                 

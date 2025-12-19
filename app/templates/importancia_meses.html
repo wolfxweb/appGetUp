@@ -235,7 +235,25 @@ function preencherTabelaMeses(meses) {
     // Ordenar meses de 1 a 12
     meses.sort((a, b) => a.month - b.month);
     
+    // Garantir que temos dados para todos os 12 meses (criar objetos vazios se necessário)
+    const mesesMap = {};
     meses.forEach(mes => {
+        mesesMap[mes.month] = mes;
+    });
+    
+    // Preencher todos os 12 meses
+    const anoDoPrimeiroMes = meses.length > 0 ? meses[0].year : new Date().getFullYear();
+    for (let month = 1; month <= 12; month++) {
+        const mes = mesesMap[month] || {
+            year: anoDoPrimeiroMes,
+            month: month,
+            nota_atribuida: null,
+            ritmo_negocio_percentual: null,
+            quantidade_vendas_real: null,
+            quantidade_vendas_estimada: null,
+            peso_mes: null
+        };
+        
         const tr = document.createElement('tr');
         const quantidadeVendas = mes.quantidade_vendas_real !== null && mes.quantidade_vendas_real !== undefined 
             ? mes.quantidade_vendas_real 
@@ -244,13 +262,13 @@ function preencherTabelaMeses(meses) {
         tr.innerHTML = `
             <td>${mes.year}</td>
             <td class="mes-nome">${mesesNomes[mes.month]}</td>
-            <td>${mes.nota_atribuida !== null ? mes.nota_atribuida.toFixed(2) : '-'}</td>
-            <td>${mes.ritmo_negocio_percentual !== null ? mes.ritmo_negocio_percentual.toFixed(2) + '%' : '-'}</td>
+            <td>${mes.nota_atribuida !== null && mes.nota_atribuida !== undefined ? mes.nota_atribuida.toFixed(2) : '-'}</td>
+            <td>${mes.ritmo_negocio_percentual !== null && mes.ritmo_negocio_percentual !== undefined ? mes.ritmo_negocio_percentual.toFixed(2) + '%' : '-'}</td>
             <td>${quantidadeVendas !== null && quantidadeVendas !== undefined ? Math.round(quantidadeVendas) : '-'}</td>
-            <td>${mes.peso_mes !== null ? mes.peso_mes.toFixed(2) + '%' : '-'}</td>
+            <td>${mes.peso_mes !== null && mes.peso_mes !== undefined ? mes.peso_mes.toFixed(2) + '%' : '-'}</td>
         `;
         tbody.appendChild(tr);
-    });
+    }
 }
 
 async function carregarEventos() {
