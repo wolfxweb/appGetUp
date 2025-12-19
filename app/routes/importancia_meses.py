@@ -148,13 +148,26 @@ async def importancia_meses_cadastrar_page(
         result = await session.execute(query)
         basic_data_list = result.scalars().all()
     
+    # Preparar lista de eventos padrão para o template
+    eventos_padrao_template = []
+    for i, nome in enumerate(EVENTOS_PADRAO, start=1):
+        eventos_padrao_template.append({
+            "id": i,
+            "nome_evento": nome,
+            "aumenta_vendas": False,
+            "diminui_vendas": False,
+            "meses_afetados": [],
+            "is_padrao": True
+        })
+    
     return templates.TemplateResponse(
         "importancia_meses_cadastrar.html",
         {
             "request": request,
             "user": current_user,
             "basic_data_list": basic_data_list,
-            "active_page": "importancia_meses"
+            "active_page": "importancia_meses",
+            "eventos_padrao": eventos_padrao_template
         }
     )
 

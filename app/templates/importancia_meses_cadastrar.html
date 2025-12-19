@@ -86,7 +86,7 @@
           <div id="tabelaEventosContainer" class="mt-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
               <h5 class="mb-0">Eventos que Influenciam as Vendas da Loja</h5>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="abrirModalEvento()">
+              <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modalEvento">
                 <i class="bi bi-plus-circle"></i> Adicionar novo evento
               </button>
             </div>
@@ -112,7 +112,28 @@
                   </tr>
                 </thead>
                 <tbody id="tabelaEventos">
-                  <!-- Será preenchido via JavaScript -->
+                  {% if eventos_padrao %}
+                    {% for evento in eventos_padrao %}
+                    <tr>
+                      <td>{{ evento.nome_evento }}</td>
+                      <td class="text-center">
+                        <input type="checkbox" class="form-check-input evento-aumenta-checkbox" 
+                               data-event-id="{{ evento.id }}" {% if evento.aumenta_vendas %}checked{% endif %}>
+                      </td>
+                      <td class="text-center">
+                        <input type="checkbox" class="form-check-input evento-diminui-checkbox" 
+                               data-event-id="{{ evento.id }}" {% if evento.diminui_vendas %}checked{% endif %}>
+                      </td>
+                      {% for mes in range(1, 13) %}
+                      <td class="text-center">
+                        <input type="checkbox" class="form-check-input evento-mes-checkbox" 
+                               data-event-id="{{ evento.id }}" data-month="{{ mes }}" 
+                               {% if mes in (evento.meses_afetados or []) %}checked{% endif %}>
+                      </td>
+                      {% endfor %}
+                    </tr>
+                    {% endfor %}
+                  {% endif %}
                 </tbody>
               </table>
             </div>
@@ -133,12 +154,12 @@
 </div>
 
 <!-- Modal: Adicionar Evento -->
-<div class="modal fade" id="modalEvento" tabindex="-1">
+<div class="modal fade" id="modalEvento" tabindex="-1" aria-labelledby="modalEventoLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-secondary text-white">
-        <h5 class="modal-title">Adicionar Novo Evento</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        <h5 class="modal-title" id="modalEventoLabel">Adicionar Novo Evento</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form id="formEvento">
@@ -178,7 +199,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-secondary" onclick="salvarEvento()">Salvar</button>
+        <button type="button" class="btn btn-secondary" id="btnSalvarEvento">Salvar</button>
       </div>
     </div>
   </div>
@@ -193,6 +214,86 @@ let basicDataIdSelecionado = null;
 let basicDataMap = {}; // {year-month: clients_served}
 let eventosList = [];
 let notasMeses = {}; // {month: nota}
+
+// Funções globais
+// Modal será aberto automaticamente via data-bs-toggle do Bootstrap
+
+window.salvarEvento = async function() {
+    const nome = document.getElementById('eventoNome').value;
+    const aumenta = document.getElementById('eventoAumenta').checked;
+    const diminui = document.getElementById('eventoDiminui').checked;
+    
+    if (!nome) {
+        alert('Por favor, informe o nome do evento.');
+        return;
+    }
+    
+    if (!aumenta && !diminui) {
+        alert('Por favor, marque pelo menos um tipo de impacto (Aumentam ou Diminuem vendas).');
+        return;
+    }
+    
+    const mesesAfetados = [];
+    for (let i = 1; i <= 12; i++) {
+        const checkbox = document.getElementById(`mes${i}`);
+        if (checkbox && checkbox.checked) {
+            mesesAfetados.push(i);
+        }
+    }
+    
+    try {
+        const formData = new FormData();
+        formData.append('nome_evento', nome);
+        formData.append('aumenta_vendas', aumenta);
+        formData.append('diminui_vendas', diminui);
+        formData.append('meses_afetados', JSON.stringify(mesesAfetados));
+        
+        const response = await fetch('/importancia-meses/api/sales-event', {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || 'Erro ao salvar evento');
+        }
+        
+        const result = await response.json();
+        if (result.success) {
+            const modalElement = document.getElementById('modalEvento');
+            if (modalElement) {
+                const modal = bootstrap.Modal.getInstance(modalElement);
+                if (modal) modal.hide();
+            }
+            
+            // Recarregar eventos
+            await carregarEventos();
+        }
+    } catch (error) {
+        console.error('Erro ao salvar evento:', error);
+        alert('Erro ao salvar evento: ' + error.message);
+    }
+};
+
+window.deletarEvento = async function(eventId) {
+    if (!confirm('Tem certeza que deseja excluir este evento?')) {
+        return;
+    }
+    
+    try {
+        const response = await fetch(`/importancia-meses/api/sales-event/${eventId}`, {
+            method: 'DELETE'
+        });
+        
+        if (!response.ok) throw new Error('Erro ao excluir evento');
+        
+        // Recarregar eventos
+        await carregarEventos();
+    } catch (error) {
+        console.error('Erro ao excluir evento:', error);
+        alert('Erro ao excluir evento. Tente novamente.');
+    }
+};
 
 // Eventos padrão em hardcode
 const EVENTOS_PADRAO_HARDCODE = [
@@ -280,42 +381,61 @@ async function carregarImportanciaMesesPorBasicData() {
 }
 
 async function carregarEventos() {
-    // Sempre usar eventos padrão em hardcode primeiro
-    eventosList = [...EVENTOS_PADRAO_HARDCODE];
-    console.log(`Carregando ${eventosList.length} eventos padrão em hardcode`);
-    
-    // Tentar carregar eventos do servidor para mesclar com os hardcode
     try {
-        const response = await fetch('/importancia-meses/api/sales-events');
-        if (response.ok) {
-            const eventosServidor = await response.json();
-            if (Array.isArray(eventosServidor) && eventosServidor.length > 0) {
-                // Mesclar eventos do servidor com hardcode (servidor tem prioridade)
-                const eventosServidorMap = new Map();
-                eventosServidor.forEach(e => eventosServidorMap.set(e.nome_evento.toLowerCase(), e));
-                
-                // Atualizar eventos hardcode com dados do servidor se existirem
-                eventosList = eventosList.map(evento => {
-                    const servidor = eventosServidorMap.get(evento.nome_evento.toLowerCase());
-                    return servidor || evento;
-                });
-                
-                // Adicionar eventos do servidor que não estão no hardcode
-                eventosServidor.forEach(evento => {
-                    if (!eventosList.find(e => e.nome_evento.toLowerCase() === evento.nome_evento.toLowerCase())) {
-                        eventosList.push(evento);
-                    }
-                });
-                
-                console.log(`Eventos mesclados: ${eventosList.length} (${eventosServidor.length} do servidor)`);
+        // SEMPRE carregar eventos hardcode primeiro
+        if (typeof EVENTOS_PADRAO_HARDCODE !== 'undefined' && EVENTOS_PADRAO_HARDCODE.length > 0) {
+            eventosList = [...EVENTOS_PADRAO_HARDCODE];
+            console.log(`[carregarEventos] Carregando ${eventosList.length} eventos padrão em hardcode`);
+        } else {
+            console.error('[carregarEventos] ERRO: EVENTOS_PADRAO_HARDCODE não está definido!');
+            eventosList = [];
+            return;
+        }
+        
+        // Renderizar imediatamente com eventos hardcode
+        console.log('[carregarEventos] Chamando renderizarTabelaEventos()...');
+        renderizarTabelaEventos();
+        
+        // Tentar carregar eventos do servidor de forma não bloqueante
+        try {
+            const response = await fetch('/importancia-meses/api/sales-events');
+            if (response.ok) {
+                const eventosServidor = await response.json();
+                if (Array.isArray(eventosServidor) && eventosServidor.length > 0) {
+                    console.log(`[carregarEventos] Recebidos ${eventosServidor.length} eventos do servidor, mesclando...`);
+                    
+                    // Mesclar eventos do servidor com hardcode (servidor tem prioridade)
+                    const eventosServidorMap = new Map();
+                    eventosServidor.forEach(e => eventosServidorMap.set(e.nome_evento.toLowerCase(), e));
+                    
+                    // Atualizar eventos hardcode com dados do servidor se existirem
+                    eventosList = eventosList.map(evento => {
+                        const servidor = eventosServidorMap.get(evento.nome_evento.toLowerCase());
+                        return servidor || evento;
+                    });
+                    
+                    // Adicionar eventos do servidor que não estão no hardcode
+                    eventosServidor.forEach(evento => {
+                        if (!eventosList.find(e => e.nome_evento.toLowerCase() === evento.nome_evento.toLowerCase())) {
+                            eventosList.push(evento);
+                        }
+                    });
+                    
+                    console.log(`[carregarEventos] Eventos mesclados: ${eventosList.length} total`);
+                    // Re-renderizar com eventos mesclados
+                    renderizarTabelaEventos();
+                }
             }
+        } catch (error) {
+            console.warn('[carregarEventos] Erro ao carregar eventos do servidor (continuando com hardcode):', error);
+            // Continuar com eventos hardcode - já renderizados
         }
     } catch (error) {
-        console.error('Erro ao carregar eventos do servidor:', error);
-        // Continuar com eventos hardcode
+        console.error('[carregarEventos] Erro crítico:', error);
+        // Garantir que pelo menos os eventos hardcode sejam carregados
+        eventosList = [...EVENTOS_PADRAO_HARDCODE];
+        renderizarTabelaEventos();
     }
-    
-    renderizarTabelaEventos();
 }
 
 // Funções removidas - tabela movida para tela principal
@@ -347,22 +467,42 @@ function calcularQuantidadeVendas(month, year, ritmo, quantidadeAnterior) {
 // Função removida - cálculos em tempo real não são mais necessários na tela de cadastro
 
 function renderizarTabelaEventos() {
-    const tbody = document.getElementById('tabelaEventos');
+    // Tentar encontrar o elemento, com retry se não existir
+    let tbody = document.getElementById('tabelaEventos');
+    
     if (!tbody) {
-        console.error('Elemento tabelaEventos não encontrado!');
+        console.warn('[renderizarTabelaEventos] Elemento tabelaEventos não encontrado, tentando novamente em 100ms...');
+        setTimeout(() => {
+            renderizarTabelaEventos();
+        }, 100);
         return;
     }
     
+    // Se não houver eventos, usar hardcode
+    if (!eventosList || eventosList.length === 0) {
+        console.warn('[renderizarTabelaEventos] Lista vazia, usando eventos padrão em hardcode');
+        if (typeof EVENTOS_PADRAO_HARDCODE !== 'undefined' && EVENTOS_PADRAO_HARDCODE.length > 0) {
+            eventosList = [...EVENTOS_PADRAO_HARDCODE];
+            console.log(`[renderizarTabelaEventos] Carregados ${eventosList.length} eventos do hardcode`);
+        } else {
+            console.error('[renderizarTabelaEventos] ERRO: EVENTOS_PADRAO_HARDCODE não está definido!');
+            tbody.innerHTML = '<tr><td colspan="15" class="text-center text-danger">Erro: Eventos padrão não encontrados</td></tr>';
+            return;
+        }
+    }
+    
+    console.log(`[renderizarTabelaEventos] Iniciando renderização de ${eventosList.length} eventos`);
+    
+    // Limpar tabela
     tbody.innerHTML = '';
     
     if (!eventosList || eventosList.length === 0) {
-        console.warn('Nenhum evento encontrado para renderizar. Lista:', eventosList);
-        // Se não houver eventos, usar hardcode
-        eventosList = [...EVENTOS_PADRAO_HARDCODE];
-        console.log('Usando eventos padrão em hardcode');
+        console.error('[renderizarTabelaEventos] ERRO: eventosList ainda está vazio após tentar usar hardcode!');
+        tbody.innerHTML = '<tr><td colspan="15" class="text-center text-danger">Erro: Nenhum evento para renderizar</td></tr>';
+        return;
     }
     
-    console.log(`Renderizando ${eventosList.length} eventos`);
+    console.log(`[renderizarTabelaEventos] Renderizando ${eventosList.length} eventos`);
     eventosList.forEach(evento => {
         const tr = document.createElement('tr');
         const mesesAfetados = evento.meses_afetados || [];
@@ -392,83 +532,11 @@ function renderizarTabelaEventos() {
         `;
         tbody.appendChild(tr);
     });
+    
+    console.log(`[renderizarTabelaEventos] Renderização concluída: ${eventosList.length} eventos exibidos`);
 }
 
-window.abrirModalEvento = function() {
-    document.getElementById('formEvento').reset();
-    const modal = new bootstrap.Modal(document.getElementById('modalEvento'));
-    modal.show();
-};
-
-window.salvarEvento = async function() {
-    const nome = document.getElementById('eventoNome').value;
-    const aumenta = document.getElementById('eventoAumenta').checked;
-    const diminui = document.getElementById('eventoDiminui').checked;
-    
-    if (!nome) {
-        alert('Por favor, informe o nome do evento.');
-        return;
-    }
-    
-    if (!aumenta && !diminui) {
-        alert('Por favor, marque pelo menos um tipo de impacto (Aumentam ou Diminuem vendas).');
-        return;
-    }
-    
-    const mesesAfetados = [];
-    for (let i = 1; i <= 12; i++) {
-        if (document.getElementById(`mes${i}`).checked) {
-            mesesAfetados.push(i);
-        }
-    }
-    
-    if (mesesAfetados.length === 0) {
-        alert('Por favor, marque pelo menos um mês afetado.');
-        return;
-    }
-    
-    try {
-        const formData = new FormData();
-        formData.append('nome_evento', nome);
-        formData.append('aumenta_vendas', aumenta);
-        formData.append('diminui_vendas', diminui);
-        formData.append('meses_afetados', JSON.stringify(mesesAfetados));
-        
-        const response = await fetch('/importancia-meses/api/sales-event', {
-            method: 'POST',
-            body: formData
-        });
-        
-        if (!response.ok) throw new Error('Erro ao salvar evento');
-        
-        const result = await response.json();
-        if (result.success) {
-            const modal = bootstrap.Modal.getInstance(document.getElementById('modalEvento'));
-            modal.hide();
-            await carregarEventos();
-        }
-    } catch (error) {
-        console.error('Erro ao salvar evento:', error);
-        alert('Erro ao salvar evento. Tente novamente.');
-    }
-};
-
-window.deletarEvento = async function(eventId) {
-    if (!confirm('Tem certeza que deseja deletar este evento?')) return;
-    
-    try {
-        const response = await fetch(`/importancia-meses/api/sales-event/${eventId}`, {
-            method: 'DELETE'
-        });
-        
-        if (!response.ok) throw new Error('Erro ao deletar evento');
-        
-        await carregarEventos();
-    } catch (error) {
-        console.error('Erro ao deletar evento:', error);
-        alert('Erro ao deletar evento. Tente novamente.');
-    }
-};
+// Funções globais já definidas no início do script - não duplicar aqui
 
 async function salvarImportanciaMeses() {
     if (!basicDataIdSelecionado) {
@@ -534,11 +602,185 @@ async function salvarImportanciaMeses() {
     }
 }
 
-// Inicializar
-document.addEventListener('DOMContentLoaded', function() {
-    configurarSelectDadoBasico();
-    carregarEventos();
-});
+// Função para carregar eventos imediatamente (sem async se não necessário)
+function carregarEventosInmediatamente() {
+    try {
+        console.log('[carregarEventosInmediatamente] Carregando eventos hardcode...');
+        
+        // Garantir que eventosList tenha os eventos hardcode
+        if (!eventosList || eventosList.length === 0) {
+            if (typeof EVENTOS_PADRAO_HARDCODE !== 'undefined' && EVENTOS_PADRAO_HARDCODE.length > 0) {
+                eventosList = [...EVENTOS_PADRAO_HARDCODE];
+                console.log(`[carregarEventosInmediatamente] Carregados ${eventosList.length} eventos do hardcode`);
+            } else {
+                console.error('[carregarEventosInmediatamente] ERRO: EVENTOS_PADRAO_HARDCODE não definido!');
+                return;
+            }
+        }
+        
+        // Renderizar imediatamente
+        renderizarTabelaEventos();
+    } catch (error) {
+        console.error('[carregarEventosInmediatamente] Erro:', error);
+    }
+}
+
+// Renderizar eventos imediatamente quando o script carrega (se DOM já estiver pronto)
+(function() {
+    console.log('[IIFE] Script carregado, verificando se pode renderizar eventos...');
+    console.log('[IIFE] EVENTOS_PADRAO_HARDCODE definido?', typeof EVENTOS_PADRAO_HARDCODE !== 'undefined');
+    console.log('[IIFE] EVENTOS_PADRAO_HARDCODE length:', typeof EVENTOS_PADRAO_HARDCODE !== 'undefined' ? EVENTOS_PADRAO_HARDCODE.length : 'N/A');
+    
+    function tentarRenderizar() {
+        console.log('[tentarRenderizar] Tentando renderizar eventos...');
+        console.log('[tentarRenderizar] eventosList:', eventosList);
+        console.log('[tentarRenderizar] renderizarTabelaEventos definido?', typeof renderizarTabelaEventos === 'function');
+        
+        if (typeof EVENTOS_PADRAO_HARDCODE !== 'undefined' && EVENTOS_PADRAO_HARDCODE.length > 0) {
+            if (typeof eventosList !== 'undefined') {
+                eventosList = [...EVENTOS_PADRAO_HARDCODE];
+                console.log('[tentarRenderizar] eventosList preenchido com', eventosList.length, 'eventos');
+            }
+            if (typeof renderizarTabelaEventos === 'function') {
+                console.log('[tentarRenderizar] Chamando renderizarTabelaEventos()...');
+                renderizarTabelaEventos();
+            } else {
+                console.error('[tentarRenderizar] renderizarTabelaEventos não é uma função!');
+            }
+        } else {
+            console.error('[tentarRenderizar] EVENTOS_PADRAO_HARDCODE não está definido ou está vazio!');
+        }
+    }
+    
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+        setTimeout(tentarRenderizar, 50);
+        setTimeout(tentarRenderizar, 200);
+        setTimeout(tentarRenderizar, 500);
+    }
+})();
+
+// Função de inicialização segura
+function inicializarTela() {
+    try {
+        console.log('[inicializarTela] Iniciando configuração da tela...');
+        configurarSelectDadoBasico();
+        
+        // Carregar eventos imediatamente (hardcode primeiro)
+        carregarEventosInmediatamente();
+        
+        // Depois tentar carregar do servidor
+        carregarEventos();
+        
+        console.log('[inicializarTela] Inicialização concluída');
+    } catch (error) {
+        console.error('[inicializarTela] Erro na inicialização:', error);
+        // Tentar novamente após um delay
+        setTimeout(() => {
+            console.log('[inicializarTela] Tentando reinicializar...');
+            inicializarTela();
+        }, 500);
+    }
+}
+
+// Renderizar eventos imediatamente (função simples e direta)
+function renderizarEventosAgora() {
+    console.log('=== INICIANDO RENDERIZAÇÃO DE EVENTOS ===');
+    
+    const tbody = document.getElementById('tabelaEventos');
+    if (!tbody) {
+        console.error('ERRO: Elemento tabelaEventos não encontrado!');
+        setTimeout(renderizarEventosAgora, 100);
+        return;
+    }
+    
+    console.log('Elemento tabelaEventos encontrado:', tbody);
+    
+    // Garantir que eventosList tenha os eventos hardcode
+    if (!eventosList || eventosList.length === 0) {
+        if (typeof EVENTOS_PADRAO_HARDCODE !== 'undefined' && EVENTOS_PADRAO_HARDCODE.length > 0) {
+            eventosList = [...EVENTOS_PADRAO_HARDCODE];
+            console.log('Eventos hardcode carregados:', eventosList.length);
+        } else {
+            console.error('ERRO: EVENTOS_PADRAO_HARDCODE não está definido!');
+            tbody.innerHTML = '<tr><td colspan="15" class="text-center text-danger">Erro: Eventos padrão não encontrados</td></tr>';
+            return;
+        }
+    }
+    
+    console.log('Renderizando', eventosList.length, 'eventos...');
+    
+    // Limpar tabela
+    tbody.innerHTML = '';
+    
+    // Renderizar cada evento
+    eventosList.forEach((evento, index) => {
+        console.log(`Renderizando evento ${index + 1}:`, evento.nome_evento);
+        const tr = document.createElement('tr');
+        const mesesAfetados = evento.meses_afetados || [];
+        
+        let mesesCells = '';
+        for (let i = 1; i <= 12; i++) {
+            const checked = mesesAfetados.includes(i) ? 'checked' : '';
+            mesesCells += `<td class="text-center"><input type="checkbox" class="form-check-input evento-mes-checkbox" data-event-id="${evento.id}" data-month="${i}" ${checked}></td>`;
+        }
+        
+        tr.innerHTML = `
+            <td>${evento.nome_evento}</td>
+            <td class="text-center"><input type="checkbox" class="form-check-input evento-aumenta-checkbox" data-event-id="${evento.id}" ${evento.aumenta_vendas ? 'checked' : ''}></td>
+            <td class="text-center"><input type="checkbox" class="form-check-input evento-diminui-checkbox" data-event-id="${evento.id}" ${evento.diminui_vendas ? 'checked' : ''}></td>
+            ${mesesCells}
+        `;
+        tbody.appendChild(tr);
+    });
+    
+    console.log('=== RENDERIZAÇÃO CONCLUÍDA ===');
+}
+
+// Configurar event listeners para botões
+function configurarEventListeners() {
+    // Botão salvar evento no modal
+    const btnSalvarEvento = document.getElementById('btnSalvarEvento');
+    if (btnSalvarEvento) {
+        btnSalvarEvento.addEventListener('click', function() {
+            if (typeof window.salvarEvento === 'function') {
+                window.salvarEvento();
+            }
+        });
+    }
+    
+    // Resetar form quando modal for aberto
+    const modalEvento = document.getElementById('modalEvento');
+    if (modalEvento) {
+        modalEvento.addEventListener('show.bs.modal', function() {
+            const formEvento = document.getElementById('formEvento');
+            if (formEvento) {
+                formEvento.reset();
+            }
+        });
+    }
+}
+
+// Inicializar quando o DOM estiver pronto
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOMContentLoaded disparado');
+        configurarEventListeners();
+        inicializarTela();
+        setTimeout(renderizarEventosAgora, 50);
+    });
+} else {
+    // DOM já está pronto
+    console.log('DOM já está pronto');
+    configurarEventListeners();
+    inicializarTela();
+    setTimeout(renderizarEventosAgora, 50);
+}
+
+// Garantir que eventos sejam renderizados mesmo se houver algum problema
+setTimeout(renderizarEventosAgora, 100);
+setTimeout(renderizarEventosAgora, 300);
+setTimeout(renderizarEventosAgora, 500);
+setTimeout(renderizarEventosAgora, 1000);
 </script>
 {% endblock %}
 
