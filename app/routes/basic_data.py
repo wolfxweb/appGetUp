@@ -13,6 +13,7 @@ from app.models.basic_data import BasicData
 from app.models.basic_data_log import BasicDataLog
 from app.routes.auth import get_current_user
 from app.schemas.basic_data import BasicDataForm
+from app.utils.converters import safe_float
 
 router = APIRouter(prefix="/basic-data")
 
@@ -151,7 +152,7 @@ async def save_basic_data(
     sales_expenses: str = Form(...),
     input_product_expenses: str = Form(...),
     fixed_costs: str = Form(None),
-    ideal_profit_margin: float = Form(None),
+    ideal_profit_margin: str = Form(None),
     service_capacity: str = Form(None),
     pro_labore: str = Form(None),
     work_hours_per_week: float = Form(None),
@@ -206,8 +207,8 @@ async def save_basic_data(
             sales_expenses=convert_currency(sales_expenses),
             input_product_expenses=convert_currency(input_product_expenses),
             fixed_costs=convert_currency(fixed_costs) if fixed_costs else None,
-            ideal_profit_margin=float(ideal_profit_margin) if ideal_profit_margin else None,
-            service_capacity=service_capacity,
+            ideal_profit_margin=safe_float(ideal_profit_margin),
+            service_capacity=safe_float(service_capacity),
             pro_labore=convert_currency(pro_labore) if pro_labore else None,
             work_hours_per_week=float(work_hours_per_week) if work_hours_per_week else None,
             other_fixed_costs=convert_currency(other_fixed_costs) if other_fixed_costs else None,

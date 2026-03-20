@@ -527,7 +527,7 @@ function calculateAndDisplayDiagnosisComercio(data) {
     const gastosCompras = data.input_product_expenses || 0;
     const custosFixos = data.fixed_costs || data.other_fixed_costs || 0;
     const vendas = data.clients_served || 0;
-    const capacidadeAtendimento = parseInt(data.service_capacity) || 0;
+    const capacidadeAtendimento = parseFloat(data.service_capacity) || 0;
     const margemIdeal = (data.ideal_profit_margin || data.ideal_service_profit_margin || 0) / 100;
     
     // Cálculo da margem
@@ -638,7 +638,7 @@ function calculateAndDisplayDiagnosisAlimentacao(data) {
     const custoMOD = data.work_hours_per_week || 0; // Usando work_hours_per_week como custo MOD temporariamente
     const demaisCustosFixos = data.other_fixed_costs || 0;
     const vendas = data.clients_served || 0;
-    const capacidadeAtendimento = parseInt(data.service_capacity) || 0;
+    const capacidadeAtendimento = parseFloat(data.service_capacity) || 0;
     const margemIdeal = (data.ideal_profit_margin || data.ideal_service_profit_margin || 0) / 100;
     
     // Fórmula (C): SE(P7<0;"prejuízo";SE(P7=0;"margem";SE(P7>0; "lucro")))
@@ -736,7 +736,7 @@ function calculateAndDisplayDiagnosisIndustria(data) {
     const custoMOD = data.work_hours_per_week || 0; // Usando work_hours_per_week como custo MOD temporariamente
     const demaisCustosFixos = data.other_fixed_costs || 0;
     const vendas = data.clients_served || 0;
-    const capacidadeProducao = parseInt(data.service_capacity) || 0; // Capacidade de produção
+    const capacidadeProducao = parseFloat(data.service_capacity) || 0; // Capacidade de produção
     const margemIdeal = (data.ideal_profit_margin || data.ideal_service_profit_margin || 0) / 100;
     
     // Fórmula (C): SE(P7<0;"prejuízo";SE(P7=0;"margem";SE(P7>0; "lucro")))
@@ -834,7 +834,7 @@ function calculateAndDisplayDiagnosisServicos(data) {
     const custoMOD = data.work_hours_per_week || 0; // Usando work_hours_per_week como custo MOD
     const demaisCustosFixos = data.other_fixed_costs || 0;
     const vendas = data.clients_served || 0;
-    const capacidadeAtendimento = parseInt(data.service_capacity) || 0;
+    const capacidadeAtendimento = parseFloat(data.service_capacity) || 0;
     const margemIdeal = (data.ideal_profit_margin || data.ideal_service_profit_margin || 0) / 100;
     
     // Fórmula (C): SE(P7<0;"prejuízo";SE(P7=0;"margem";SE(P7>0; "lucro")))

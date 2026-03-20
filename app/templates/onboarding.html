@@ -43,7 +43,7 @@
                                         <label class="form-label fw-bold">1. No seu caso, qual percentual de lucro você considera ideal?</label>
                                         <p class="text-muted small mb-2">Muitos lojistas consideram adequado entre 10% e 20% do faturamento. Mas isso pode variar!</p>
                                         <div class="input-group" style="max-width: 150px;">
-                                            <input type="number" class="form-control" name="ideal_profit_margin" id="ideal_profit_margin" min="0" max="100" placeholder="Ex: 15" style="background-color: #F5F5F5;">
+                                            <input type="number" class="form-control" name="ideal_profit_margin" id="ideal_profit_margin" min="0" max="100" step="0.01" placeholder="Ex: 15 ou 15,5" style="background-color: #F5F5F5;">
                                             <span class="input-group-text">%</span>
                                         </div>
                                     </div>
@@ -51,7 +51,7 @@
                                     <div class="mb-4">
                                         <label class="form-label fw-bold">2. Hoje, aproximadamente quantas vendas sua estrutura consegue atender por mês?</label>
                                         <p class="text-muted small mb-2">Se ficar difícil estimar, pense no dia a dia: quantos clientes atende por dia, quantos viram vendas, quantos dias a loja funciona. Uma estimativa já é suficiente.</p>
-                                        <input type="text" class="form-control" name="service_capacity" id="service_capacity" placeholder="Ex: 150" style="background-color: #F5F5F5; max-width: 150px;">
+                                        <input type="number" class="form-control" name="service_capacity" id="service_capacity" min="0" step="0.01" placeholder="Ex: 150 ou 150,5" style="background-color: #F5F5F5; max-width: 150px;">
                                     </div>
 
                                     <button type="submit" class="btn btn-success btn-lg">Continuar para Dados Básicos</button>

@@ -179,7 +179,8 @@
     }
 
     async function submitForm() {
-        formData.activation_key = document.getElementById('activation_key')?.value || '';
+        const activationKey = (document.getElementById('activation_key')?.value || '').trim();
+        formData.activation_key = activationKey;
         const btn = document.getElementById('submit-btn');
         if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
 
@@ -193,7 +194,7 @@
         fd.append('activity_type', formData.activity_type);
         fd.append('specialty_area', formData.specialty_area);
         fd.append('password', formData.password);
-        fd.append('activation_key', formData.activation_key);
+        fd.append('activation_key', activationKey);
         fd.append('terms_accepted', 'true');
 
         try {
@@ -380,14 +381,14 @@
                             <!-- Etapa 5: Chave de ativação -->
                             <div id="step-5" class="wizard-step d-none">
                                 <p class="fs-5 mb-2">Perfeito, <span id="nome-step5"></span>!</p>
-                                <p class="mb-2">Esta etapa foi concluída com sucesso. Agora é só digitar sua chave de ativação.</p>
-                                <p class="text-muted small mb-3">A chave de ativação é necessária para acessar o sistema. Se você não possui uma chave, entre em contato com o administrador do sistema.</p>
-                                <div class="mb-4">
+                                <p class="mb-3">Esta etapa foi concluída com sucesso.<BR> Agora é só digitar sua chave de ativação.</p>
+                                <div class="mb-2">
                                     <input type="text" class="form-control form-control-lg" id="activation_key" placeholder="Chave de ativação" style="background-color: #F5F5F5;">
                                 </div>
+                                <p class="text-muted small mb-4">A chave de ativação é necessária para acessar o sistema. Se você não possui uma chave, entre em contato com o administrador do sistema.</p>
                                 <div class="text-center">
                                     <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
-                                    <button type="button" class="btn btn-success btn-lg" id="submit-btn" onclick="nextStep()">Finalizar cadastro</button>
+                                    <button type="button" class="btn btn-primary" id="submit-btn" onclick="nextStep()">Finalizar cadastro</button>
                                 </div>
                             </div>
 

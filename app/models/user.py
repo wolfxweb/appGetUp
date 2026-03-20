@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, ForeignKey
+from sqlalchemy import Column, Integer, Float, String, Boolean, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database.db import Base
@@ -37,9 +37,10 @@ class User(Base):
     specialty_area = Column(String, nullable=True)  # Área de Especialidade
     
     # Campos do onboarding (margem ideal e capacidade - coletados no cadastro)
-    ideal_profit_margin = Column(Integer, nullable=True)  # Percentual 0-100
-    service_capacity = Column(String, nullable=True)  # Capacidade de atendimento (vendas/mês)
-    onboarding_completed = Column(Boolean, default=False)  # Flag para fluxo pós-cadastro
+    ideal_profit_margin = Column(Float, nullable=True)  # Margem ideal % - permite null e decimais
+    service_capacity = Column(Float, nullable=True)  # Quantidade de vendas/mês - permite null e decimais
+    ja_acessou = Column(Boolean, nullable=True)  # Se o usuário já acessou o sistema - permite null
+    onboarding_completed = Column(Boolean, default=False, nullable=True)  # Flag para fluxo pós-cadastro
     
     # Relacionamento com Dados Básicos
     basic_data = relationship("BasicData", back_populates="user", cascade="all, delete-orphan")

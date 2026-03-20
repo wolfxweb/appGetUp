@@ -20,7 +20,7 @@ class BasicData(Base):
     # Campos específicos para Comércio e Indústria
     fixed_costs = Column(Float, nullable=True)
     ideal_profit_margin = Column(Float, nullable=True)
-    service_capacity = Column(String, nullable=True)
+    service_capacity = Column(Float, nullable=True)
     
     # Campos específicos para Serviços
     pro_labore = Column(Float, nullable=True)

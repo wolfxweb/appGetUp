@@ -16,6 +16,14 @@ from app.models.basic_data import BasicData
 from app.models.basic_data_log import BasicDataLog
 from app.routes.auth import get_current_user
 from app.schemas.basic_data import BasicDataForm
+from app.utils.converters import safe_float
+
+def _fmt_number(v):
+    """Formata número para exibição (inteiro ou decimal)."""
+    if v is None: return ""
+    f = safe_float(v)
+    if f is None: return str(v)
+    return f"{f:.0f}" if f == int(f) else f"{f:.2f}".rstrip('0').rstrip('.')
 
 router = APIRouter(prefix="/basic-data")
 
@@ -113,12 +121,11 @@ def compare_and_log_changes(db: AsyncSession, old_data_dict: dict, new_data: dic
                     # Fallback caso a formatação falhe
                     changes.append(f"{field_names[field]} alterado de {old_value} para {new_value}")
                     logger.info(f"Alteração detectada: {field_names[field]} de {old_value} para {new_value}")
-            # Formatar valores numéricos como inteiros (horas de trabalho, margens, etc.)
-            elif field in ['work_hours_per_week', 'ideal_profit_margin', 'ideal_service_profit_margin']:
+            # Formatar valores numéricos (podem ser inteiros ou decimais)
+            elif field in ['work_hours_per_week', 'ideal_profit_margin', 'ideal_service_profit_margin', 'service_capacity']:
                 try:
-                    # Formatar como inteiros
-                    old_formatted = f"{int(old_value)}"
-                    new_formatted = f"{int(new_value)}"
+                    old_formatted = _fmt_number(old_value)
+                    new_formatted = _fmt_number(new_value)
                     
                     changes.append(f"{field_names[field]} alterado de {old_formatted} para {new_formatted}")
                     logger.info(f"Alteração detectada: {field_names[field]} de {old_formatted} para {new_formatted}")
@@ -193,7 +200,7 @@ async def save_basic_data(
     sales_expenses: str = Form(...),
     input_product_expenses: str = Form(...),
     fixed_costs: str = Form(None),
-    ideal_profit_margin: float = Form(None),
+    ideal_profit_margin: str = Form(None),
     service_capacity: str = Form(None),
     pro_labore: str = Form(None),
     work_hours_per_week: float = Form(None),
@@ -271,8 +278,8 @@ async def save_basic_data(
             'sales_expenses': sales_expenses_float,
             'input_product_expenses': input_product_expenses_float,
             'fixed_costs': fixed_costs_float,
-            'ideal_profit_margin': ideal_profit_margin,
-            'service_capacity': service_capacity,
+            'ideal_profit_margin': safe_float(ideal_profit_margin),
+            'service_capacity': safe_float(service_capacity),
             'pro_labore': pro_labore_float,
             'work_hours_per_week': work_hours_per_week,
             'other_fixed_costs': other_fixed_costs_float,
@@ -451,18 +458,18 @@ async def save_basic_data(
                 db.add(fixed_costs_log)
             
             # Registrar margem de lucro ideal (se aplicável)
-            if ideal_profit_margin is not None:
+            if safe_float(ideal_profit_margin) is not None:
                 margin_log = BasicDataLog(
                     basic_data_id=new_basic_data.id,
-                    change_description=f"Margem de lucro ideal definida como {int(ideal_profit_margin)}%"
+                    change_description=f"Margem de lucro ideal definida como {_fmt_number(ideal_profit_margin)}%"
                 )
                 db.add(margin_log)
             
             # Registrar capacidade de atendimento (se aplicável)
-            if service_capacity:
+            if safe_float(service_capacity) is not None:
                 capacity_log = BasicDataLog(
                     basic_data_id=new_basic_data.id,
-                    change_description=f"Capacidade de atendimento definida como {service_capacity}"
+                    change_description=f"Capacidade de atendimento definida como {_fmt_number(service_capacity)}"
                 )
                 db.add(capacity_log)
             
@@ -685,7 +692,7 @@ async def update_basic_data(
     sales_expenses: str = Form(...),
     input_product_expenses: str = Form(...),
     fixed_costs: str = Form(None),
-    ideal_profit_margin: float = Form(None),
+    ideal_profit_margin: str = Form(None),
     service_capacity: str = Form(None),
     pro_labore: str = Form(None),
     work_hours_per_week: float = Form(None),
@@ -760,8 +767,8 @@ async def update_basic_data(
         existing_data.sales_expenses = convert_currency(sales_expenses)
         existing_data.input_product_expenses = convert_currency(input_product_expenses)
         existing_data.fixed_costs = convert_currency(fixed_costs) if fixed_costs else None
-        existing_data.ideal_profit_margin = float(ideal_profit_margin) if ideal_profit_margin else None
-        existing_data.service_capacity = service_capacity
+        existing_data.ideal_profit_margin = safe_float(ideal_profit_margin)
+        existing_data.service_capacity = safe_float(service_capacity)
         existing_data.pro_labore = convert_currency(pro_labore) if pro_labore else None
         existing_data.work_hours_per_week = float(work_hours_per_week) if work_hours_per_week else None
         existing_data.other_fixed_costs = convert_currency(other_fixed_costs) if other_fixed_costs else None
@@ -775,8 +782,8 @@ async def update_basic_data(
             'sales_expenses': convert_currency(sales_expenses),
             'input_product_expenses': convert_currency(input_product_expenses),
             'fixed_costs': convert_currency(fixed_costs) if fixed_costs else None,
-            'ideal_profit_margin': float(ideal_profit_margin) if ideal_profit_margin else None,
-            'service_capacity': service_capacity,
+            'ideal_profit_margin': safe_float(ideal_profit_margin),
+            'service_capacity': safe_float(service_capacity),
             'pro_labore': convert_currency(pro_labore) if pro_labore else None,
             'work_hours_per_week': float(work_hours_per_week) if work_hours_per_week else None,
             'other_fixed_costs': convert_currency(other_fixed_costs) if other_fixed_costs else None,

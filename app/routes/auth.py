@@ -15,6 +15,7 @@ from app.models.user import User
 from app.utils.auth import verify_password, get_password_hash, create_access_token, SECRET_KEY, ALGORITHM
 from app.utils.email import send_password_reset_email
 from app.models.basic_data import BasicData
+from app.utils.converters import safe_float
 from app.models.basic_data_log import BasicDataLog
 from app.core.auth import get_current_user
 import bcrypt
@@ -181,7 +182,7 @@ async def onboarding_page(request: Request, current_user=Depends(get_current_use
 @router.post("/onboarding")
 async def onboarding_submit(
     request: Request,
-    ideal_profit_margin: int = Form(None),
+    ideal_profit_margin: str = Form(None),
     service_capacity: str = Form(None),
     current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
@@ -189,8 +190,8 @@ async def onboarding_submit(
     if not current_user:
         return RedirectResponse(url="/login")
     try:
-        current_user.ideal_profit_margin = ideal_profit_margin
-        current_user.service_capacity = service_capacity
+        current_user.ideal_profit_margin = safe_float(ideal_profit_margin)
+        current_user.service_capacity = safe_float(service_capacity)
         current_user.onboarding_completed = True
         await db.commit()
         return RedirectResponse(url="/basic-data/new", status_code=303)
