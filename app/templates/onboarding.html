@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Bem-vindo ao SuccessWay{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-5" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+            <div class="card shadow" style="background-color: #F5F5F5;">
+                <div class="card-body p-5">
+                    <div class="row mb-4">
+                        <div class="col-12 text-center">
+                            <img src="{{ url_for('static', path='images/Logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 160px;">
+                        </div>
+                    </div>
+
+                    <div id="step-ana" class="onboarding-step">
+                        <div class="row">
+                            <div class="col-md-3 d-flex justify-content-center align-items-start">
+                                <img src="{{ url_for('static', path='images/user-register.jpg') }}" alt="Ana" class="img-fluid rounded" style="max-width: 120px;">
+                            </div>
+                            <div class="col-md-9">
+                                <h5 class="mb-3">Agora que nos conhecemos, quero lhe apresentar a Ana</h5>
+                                <p class="mb-2">Olá, {{ user.name }}.</p>
+                                <p class="mb-4">Estou por aqui, se você precisar, para uma ajudinha rápida. Quando me avistar é só acionar.</p>
+                                <p class="mb-4">Vamos trocar umas ideias sobre o que seus números estão dizendo?</p>
+                                <button type="button" class="btn btn-primary btn-lg" onclick="showOnboardingStep(2)">Sim, vamos</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="step-questions" class="onboarding-step d-none">
+                        <div class="row">
+                            <div class="col-md-3 d-flex justify-content-center align-items-start">
+                                <img src="{{ url_for('static', path='images/user-register.jpg') }}" alt="Ana" class="img-fluid rounded" style="max-width: 120px;">
+                            </div>
+                            <div class="col-md-9">
+                                <h5 class="mb-4">Esta é a primeira vez que vamos olhar juntos para os números do seu negócio.</h5>
+                                <p class="text-muted mb-4">Antes de avançarmos, quero matar duas curiosidades. Incluímos essas duas perguntas no cadastro porque são informações que não precisam ser coletadas todos os meses.</p>
+
+                                <form id="onboarding-form" method="post" action="/onboarding">
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold">1. No seu caso, qual percentual de lucro você considera ideal?</label>
+                                        <p class="text-muted small mb-2">Muitos lojistas consideram adequado entre 10% e 20% do faturamento. Mas isso pode variar!</p>
+                                        <div class="input-group" style="max-width: 150px;">
+                                            <input type="number" class="form-control" name="ideal_profit_margin" id="ideal_profit_margin" min="0" max="100" placeholder="Ex: 15" style="background-color: #F5F5F5;">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold">2. Hoje, aproximadamente quantas vendas sua estrutura consegue atender por mês?</label>
+                                        <p class="text-muted small mb-2">Se ficar difícil estimar, pense no dia a dia: quantos clientes atende por dia, quantos viram vendas, quantos dias a loja funciona. Uma estimativa já é suficiente.</p>
+                                        <input type="text" class="form-control" name="service_capacity" id="service_capacity" placeholder="Ex: 150" style="background-color: #F5F5F5; max-width: 150px;">
+                                    </div>
+
+                                    <button type="submit" class="btn btn-success btn-lg">Continuar para Dados Básicos</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showOnboardingStep(step) {
+        document.querySelectorAll('.onboarding-step').forEach(el => el.classList.add('d-none'));
+        const el = document.getElementById(step === 1 ? 'step-ana' : 'step-questions');
+        if (el) el.classList.remove('d-none');
+    }
+</script>
+{% endblock %}

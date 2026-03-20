@@ -36,6 +36,11 @@ class User(Base):
     company_activity = Column(String, nullable=True)  # Atividade da Empresa
     specialty_area = Column(String, nullable=True)  # Área de Especialidade
     
+    # Campos do onboarding (margem ideal e capacidade - coletados no cadastro)
+    ideal_profit_margin = Column(Integer, nullable=True)  # Percentual 0-100
+    service_capacity = Column(String, nullable=True)  # Capacidade de atendimento (vendas/mês)
+    onboarding_completed = Column(Boolean, default=False)  # Flag para fluxo pós-cadastro
+    
     # Relacionamento com Dados Básicos
     basic_data = relationship("BasicData", back_populates="user", cascade="all, delete-orphan")
     # basic_data_logs = relationship("BasicDataLog", back_populates="user", cascade="all, delete-orphan")

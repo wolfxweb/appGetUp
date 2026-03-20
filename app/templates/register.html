@@ -4,379 +4,218 @@
 
 {% block head %}
 <script>
-    // Definir as áreas de especialidade para cada atividade
+    // Dados do wizard
     const specialtyAreas = {
-        'Alimentação fora do Lar': [
-            'Bar', 'Bistrô', 'Boteco', 'Buffet', 'Cafeteria', 'Chef independente',
-            'Churrascaria', 'Confeitaria', 'Costelaria', 'Cozinheiro(a) independente',
-            'Delivery (dark kitchens)', 'Doceria', 'Fast food (em shopping center)',
-            'Food truck', 'Hamburgueria', 'Lanches de rua (ambulante)', 'Lanchonete',
-            'Loja de conveniência', 'Marmitex (Grab and Go)', 'Padaria', 'Padaria artesanal',
-            'Pastelaria', 'Pizzaria', 'Queijos e frios', 'Quiosque', 'Restaurante à lá carte',
-            'Restaurante self service', 'Salgadinhos', 'Sorveteria', 'Temakeria',
-            'Varejo alimentar', 'Outra atividade'
-        ],
-        'Comércio atacadista': [
-            'Artigos para deficiências físicas', 'Bebidas', 'Distribuidores de Alimentos',
-            'Eletrônicos', 'Equipamentos cirúrgicos', 'Equipamentos de Proteção Individual (EPIs)',
-            'Equipamentos para cozinhas industriais', 'Ferramentas e Ferragens',
-            'Materiais de Construção', 'Papelaria e Escritório', 'Produtos Agropecuários',
-            'Produtos de Autopeças', 'Produtos de Higiene Pessoal', 'Produtos de Iluminação',
-            'Produtos de Informática', 'Produtos de Limpeza', 'Produtos de Papel e Embalagens',
-            'Produtos Farmacêuticos', 'Produtos para Hotelaria e Restaurantes',
-            'Produtos para Panificação', 'Produtos para Pet Shops', 'Produtos Químicos',
-            'Produtos Têxteis', 'Outra atividade'
-        ],
-        'Comércio varejista': [
-            'Açougue', 'Adega', 'Armazém', 'Artigos para festas e eventos', 'Atelier de artes',
-            'Bicicletaria', 'Brechó de móveis usados', 'Brechó de roupas', 'Colchões',
-            'Farmácia de manipulação', 'Farmácia e drogaria', 'Floricultura',
-            'Lavanderia / tinturaria', 'Livraria e papelaria', 'Loja de antiguidades',
-            'Loja de artefatos de borracha', 'Loja de artigos de cama, mesa e banho',
-            'Loja de artigos decorativos', 'Loja de artigos para festas', 'Loja de artigos religiosos',
-            'Loja de bijuterias', 'Loja de brinquedos', 'Loja de calçados e acessórios',
-            'Loja de cosméticos', 'Loja de eletrônicos', 'Loja de equipamentos esportivos',
-            'Loja de ferragens e materiais de construção', 'Loja de flores e plantas artificiais',
-            'Loja de Instrumentos musicais', 'Loja de materiais esportivos', 'Loja de móveis e decoração',
-            'Loja de peças automotivas usadas', 'Loja de pisos e/ou tapetes', 'Loja de produtos Automotivos',
-            'Loja de produtos de Informática', 'Loja de produtos de limpeza e higiene',
-            'Loja de produtos Naturais e Suplementos', 'Loja de produtos para artesanato',
-            'Loja de produtos para Bebês', 'Loja de produtos para Jardinagem', 'Loja de rações',
-            'Loja de roupas e acessórios', 'Loja de suvenires', 'Loja de tintas',
-            'Loja de uniformes', 'Loja de utilidades para o Lar', 'Minimercados',
-            'Perfumaria', 'Persianas e cortinas', 'Pet Shops', 'Quitanda / frutaria',
-            'Tabacaria', 'Tinturaria', 'Venda de lanchas', 'Venda de motocicletas',
-            'Venda de produtos de defesa pessoal', 'Venda de produtos esportivos',
-            'Venda de produtos náuticos', 'Venda de veículos automotores', 'Outra atividade'
-        ],
-        'Indústria': [
-            'Água mineral', 'Artefatos de borracha', 'Artefatos de cimento', 'Artefatos religiosos',
-            'Artigos decorativos', 'Artigos para exercícios físicos e atividades esportivas',
-            'Artigos para festas e eventos', 'Ateliês de estamparia/serigrafia', 'Balas, pirulitos',
-            'Bebidas artesanais', 'Bijuterias', 'Biscoitos', 'Bombons e chocolates',
-            'Bordados e/ou crochê', 'Brindes', 'Brinquedos', 'Calçadista', 'Carpintaria',
-            'Cerâmica', 'Cervejas e outras bebidas alcoólicas', 'Confecção de roupas e/ou uniformes',
-            'Construtora', 'Cosméticos', 'Doces e conservas', 'Editora', 'Embalagens',
-            'Empreiteira', 'Equipamentos para ginástica e esportes', 'Estruturas metálicas',
-            'Facções têxteis', 'Fundição', 'Gelo', 'Gráfica', 'Gráfica rápida',
-            'Instrumentos musicais', 'Laticínio', 'Madeireira/serraria', 'Malharia',
-            'Marcenaria', 'Massas', 'Mineradora (extração de areia, brita, argila, pedra para construção)',
-            'Móveis de aço inox e/ou ferro e/ou alumínio', 'Móveis planejados', 'Olaria',
-            'Panificadora', 'Papelaria artesanal', 'Produtos de higiene pessoal',
-            'Produtos de limpeza', 'Queijos artesanais', 'Reciclagem', 'Refrigerantes e/ou sucos',
-            'Roupas de cama, mesa e banho', 'Serralheria', 'Sorvetes', 'Tecelagem',
-            'Têxteis técnicos', 'Usinagem', 'Utensílios domésticos', 'Velas', 'Outra atividade'
-        ],
-        'Prestação de serviços': [
-            'Academia de artes marciais', 'Academias de ginástica', 'Adestrador', 'Alfaiataria',
-            'Assistência técnica (eletrodomésticos, celulares, eletrônicos)', 'Ateliê de costuras',
-            'Aulas particulares', 'Aulas particulares e tutoria', 'Auto elétrica', 'Auto escola',
-            'Avaliação e consultoria imobiliária', 'Babás, cuidadores e diaristas',
-            'Bancos e cooperativas de crédito', 'Barbearia', 'Baterias automotivas', 'Berçário',
-            'Borracharia', 'Cabelereiro', 'Carpinteiro', 'Casa de eventos, buffet e festas',
-            'Centro de estética e spas', 'Chaveiro', 'Clínica de fisioterapia', 'Clínica de imagens',
-            'Clínica médica', 'Clínica odontológica', 'Clínica veterinária', 'Concerto de eletrônicos',
-            'Concerto de linha branca', 'Consultor(a)', 'Consultório médico', 'Consultório odontológico',
-            'Corretor(a) de imóveis', 'Cozinheiro(a)', 'Criação, edição e publicação de Web Sites',
-            'Cursos de idiomas', 'Decorador(a)', 'Desenvolvimento de software e aplicativos',
-            'Eletricista', 'Encanador', 'Enfermeira', 'Engenharia civil, elétrica, mecânica etc.',
-            'Engenharia de prompt (IA)', 'Escola profissionalizante e técnica', 'Escolas',
-            'Escritórios de advocacia', 'Esteticista', 'Faxineiro', 'Filmagem e edição de vídeo',
-            'Fisioterapeuta', 'Food truck', 'Fotógrafo(a)', 'Funerária', 'Gestão de resíduos',
-            'Guia turístico', 'Guincho', 'Jardineiro', 'Laboratório de diagnósticos',
-            'Lavanderia', 'Limpeza residencial e empresarial', 'Logística e armazenagem',
-            'Manicure', 'Manutenção predial e residencial', 'Marido de aluguel', 'Marketing digital',
-            'Massagista', 'Médico', 'Monitoramento e vigilância', 'Montador de móveis',
-            'Motorista de aplicativo', 'Mudanças e fretes', 'Oficina mecânica', 'Pedreiro',
-            'Personal trainer e fisioterapeuta', 'Pintor', 'Planejamento estratégico de conteúdo',
-            'Produção de conteúdo e design gráfico', 'Programador (TI)', 'Provedores de internet',
-            'Reformas e construção civil', 'Relações públicas e assessoria de imprensa',
-            'Restaurantes, bares e lanchonetes', 'Salão de beleza', 'Salões de beleza e barbearias',
-            'Saneamento', 'Segurança patrimonial e pessoal', 'Serviços de catering e buffet',
-            'Serviços de cobrança', 'Serviços de contabilidade', 'Serviços de diagnóstico por imagem',
-            'Serviços de enfermagem e homecare', 'Serviços de entregas', 'Serviços de massagem',
-            'Serviços de mediação e arbitragem', 'Suporte técnico e help desk', 'Tradutor',
-            'Transporte de mudanças', 'Transporte escolar', 'Universidades e faculdades',
-            'Veterinário', 'Outra atividade'
-        ]
+        'Alimentação fora do Lar': ['Bar', 'Bistrô', 'Boteco', 'Buffet', 'Cafeteria', 'Chef independente', 'Churrascaria', 'Confeitaria', 'Costelaria', 'Cozinheiro(a) independente', 'Delivery (dark kitchens)', 'Doceria', 'Fast food (em shopping center)', 'Food truck', 'Hamburgueria', 'Lanches de rua (ambulante)', 'Lanchonete', 'Loja de conveniência', 'Marmitex (Grab and Go)', 'Padaria', 'Padaria artesanal', 'Pastelaria', 'Pizzaria', 'Queijos e frios', 'Quiosque', 'Restaurante à lá carte', 'Restaurante self service', 'Salgadinhos', 'Sorveteria', 'Temakeria', 'Varejo alimentar', 'Outra atividade'],
+        'Comércio atacadista': ['Artigos para deficiências físicas', 'Bebidas', 'Distribuidores de Alimentos', 'Eletrônicos', 'Equipamentos cirúrgicos', 'Equipamentos de Proteção Individual (EPIs)', 'Equipamentos para cozinhas industriais', 'Ferramentas e Ferragens', 'Materiais de Construção', 'Papelaria e Escritório', 'Produtos Agropecuários', 'Produtos de Autopeças', 'Produtos de Higiene Pessoal', 'Produtos de Iluminação', 'Produtos de Informática', 'Produtos de Limpeza', 'Produtos de Papel e Embalagens', 'Produtos Farmacêuticos', 'Produtos para Hotelaria e Restaurantes', 'Produtos para Panificação', 'Produtos para Pet Shops', 'Produtos Químicos', 'Produtos Têxteis', 'Outra atividade'],
+        'Comércio varejista': ['Açougue', 'Adega', 'Armazém', 'Artigos para festas e eventos', 'Atelier de artes', 'Bicicletaria', 'Brechó de móveis usados', 'Brechó de roupas', 'Colchões', 'Farmácia de manipulação', 'Farmácia e drogaria', 'Floricultura', 'Lavanderia / tinturaria', 'Livraria e papelaria', 'Loja de antiguidades', 'Loja de artefatos de borracha', 'Loja de artigos de cama, mesa e banho', 'Loja de artigos decorativos', 'Loja de artigos para festas', 'Loja de artigos religiosos', 'Loja de bijuterias', 'Loja de brinquedos', 'Loja de calçados e acessórios', 'Loja de cosméticos', 'Loja de eletrônicos', 'Loja de equipamentos esportivos', 'Loja de ferragens e materiais de construção', 'Loja de flores e plantas artificiais', 'Loja de Instrumentos musicais', 'Loja de materiais esportivos', 'Loja de móveis e decoração', 'Loja de peças automotivas usadas', 'Loja de pisos e/ou tapetes', 'Loja de produtos Automotivos', 'Loja de produtos de Informática', 'Loja de produtos de limpeza e higiene', 'Loja de produtos Naturais e Suplementos', 'Loja de produtos para artesanato', 'Loja de produtos para Bebês', 'Loja de produtos para Jardinagem', 'Loja de rações', 'Loja de roupas e acessórios', 'Loja de suvenires', 'Loja de tintas', 'Loja de uniformes', 'Loja de utilidades para o Lar', 'Minimercados', 'Perfumaria', 'Persianas e cortinas', 'Pet Shops', 'Quitanda / frutaria', 'Tabacaria', 'Tinturaria', 'Venda de lanchas', 'Venda de motocicletas', 'Venda de produtos de defesa pessoal', 'Venda de produtos esportivos', 'Venda de produtos náuticos', 'Venda de veículos automotores', 'Outra atividade'],
+        'Indústria': ['Água mineral', 'Artefatos de borracha', 'Artefatos de cimento', 'Artefatos religiosos', 'Artigos decorativos', 'Artigos para exercícios físicos e atividades esportivas', 'Artigos para festas e eventos', 'Ateliês de estamparia/serigrafia', 'Balas, pirulitos', 'Bebidas artesanais', 'Bijuterias', 'Biscoitos', 'Bombons e chocolates', 'Bordados e/ou crochê', 'Brindes', 'Brinquedos', 'Calçadista', 'Carpintaria', 'Cerâmica', 'Cervejas e outras bebidas alcoólicas', 'Confecção de roupas e/ou uniformes', 'Construtora', 'Cosméticos', 'Doces e conservas', 'Editora', 'Embalagens', 'Empreiteira', 'Equipamentos para ginástica e esportes', 'Estruturas metálicas', 'Facções têxteis', 'Fundição', 'Gelo', 'Gráfica', 'Gráfica rápida', 'Instrumentos musicais', 'Laticínio', 'Madeireira/serraria', 'Malharia', 'Marcenaria', 'Massas', 'Mineradora (extração de areia, brita, argila, pedra para construção)', 'Móveis de aço inox e/ou ferro e/ou alumínio', 'Móveis planejados', 'Olaria', 'Panificadora', 'Papelaria artesanal', 'Produtos de higiene pessoal', 'Produtos de limpeza', 'Queijos artesanais', 'Reciclagem', 'Refrigerantes e/ou sucos', 'Roupas de cama, mesa e banho', 'Serralheria', 'Sorvetes', 'Tecelagem', 'Têxteis técnicos', 'Usinagem', 'Utensílios domésticos', 'Velas', 'Outra atividade'],
+        'Prestação de serviços': ['Academia de artes marciais', 'Academias de ginástica', 'Adestrador', 'Alfaiataria', 'Assistência técnica (eletrodomésticos, celulares, eletrônicos)', 'Ateliê de costuras', 'Aulas particulares', 'Aulas particulares e tutoria', 'Auto elétrica', 'Auto escola', 'Avaliação e consultoria imobiliária', 'Babás, cuidadores e diaristas', 'Bancos e cooperativas de crédito', 'Barbearia', 'Baterias automotivas', 'Berçário', 'Borracharia', 'Cabelereiro', 'Carpinteiro', 'Casa de eventos, buffet e festas', 'Centro de estética e spas', 'Chaveiro', 'Clínica de fisioterapia', 'Clínica de imagens', 'Clínica médica', 'Clínica odontológica', 'Clínica veterinária', 'Concerto de eletrônicos', 'Concerto de linha branca', 'Consultor(a)', 'Consultório médico', 'Consultório odontológico', 'Corretor(a) de imóveis', 'Cozinheiro(a)', 'Criação, edição e publicação de Web Sites', 'Cursos de idiomas', 'Decorador(a)', 'Desenvolvimento de software e aplicativos', 'Eletricista', 'Encanador', 'Enfermeira', 'Engenharia civil, elétrica, mecânica etc.', 'Engenharia de prompt (IA)', 'Escola profissionalizante e técnica', 'Escolas', 'Escritórios de advocacia', 'Esteticista', 'Faxineiro', 'Filmagem e edição de vídeo', 'Fisioterapeuta', 'Food truck', 'Fotógrafo(a)', 'Funerária', 'Gestão de resíduos', 'Guia turístico', 'Guincho', 'Jardineiro', 'Laboratório de diagnósticos', 'Lavanderia', 'Limpeza residencial e empresarial', 'Logística e armazenagem', 'Manicure', 'Manutenção predial e residencial', 'Marido de aluguel', 'Marketing digital', 'Massagista', 'Médico', 'Monitoramento e vigilância', 'Montador de móveis', 'Motorista de aplicativo', 'Mudanças e fretes', 'Oficina mecânica', 'Pedreiro', 'Personal trainer e fisioterapeuta', 'Pintor', 'Planejamento estratégico de conteúdo', 'Produção de conteúdo e design gráfico', 'Programador (TI)', 'Provedores de internet', 'Reformas e construção civil', 'Relações públicas e assessoria de imprensa', 'Restaurantes, bares e lanchonetes', 'Salão de beleza', 'Salões de beleza e barbearias', 'Saneamento', 'Segurança patrimonial e pessoal', 'Serviços de catering e buffet', 'Serviços de cobrança', 'Serviços de contabilidade', 'Serviços de diagnóstico por imagem', 'Serviços de enfermagem e homecare', 'Serviços de entregas', 'Serviços de massagem', 'Serviços de mediação e arbitragem', 'Suporte técnico e help desk', 'Tradutor', 'Transporte de mudanças', 'Transporte escolar', 'Universidades e faculdades', 'Veterinário', 'Outra atividade']
     };
 
-    // Mapeamento de estados
-    const estadosMap = {
-        'AC': 'Acre',
-        'AL': 'Alagoas',
-        'AP': 'Amapá',
-        'AM': 'Amazonas',
-        'BA': 'Bahia',
-        'CE': 'Ceará',
-        'DF': 'Distrito Federal',
-        'ES': 'Espírito Santo',
-        'GO': 'Goiás',
-        'MA': 'Maranhão',
-        'MT': 'Mato Grosso',
-        'MS': 'Mato Grosso do Sul',
-        'MG': 'Minas Gerais',
-        'PA': 'Pará',
-        'PB': 'Paraíba',
-        'PR': 'Paraná',
-        'PE': 'Pernambuco',
-        'PI': 'Piauí',
-        'RJ': 'Rio de Janeiro',
-        'RN': 'Rio Grande do Norte',
-        'RS': 'Rio Grande do Sul',
-        'RO': 'Rondônia',
-        'RR': 'Roraima',
-        'SC': 'Santa Catarina',
-        'SP': 'São Paulo',
-        'SE': 'Sergipe',
-        'TO': 'Tocantins'
-    };
+    let currentStep = 0;
+    const formData = { name: '', email: '', whatsapp: '', cep: '', state: '', city: '', activity_type: '', specialty_area: '', password: '', activation_key: '', terms_accepted: false };
 
-    // Função para carregar as áreas de especialidade
+    function showStep(step) {
+        document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('d-none'));
+        const el = document.getElementById('step-' + step);
+        if (el) el.classList.remove('d-none');
+        currentStep = step;
+
+        // Atualizar indicador de progresso (apenas para etapas 1-6)
+        const progressEl = document.getElementById('progress-indicator');
+        if (progressEl) {
+            if (step >= 1 && step <= 4) {
+                const stepNum = step === 1 ? 1 : step === 2 ? 2 : step === 3 ? 3 : 4;
+                progressEl.textContent = stepNum + ' de 6';
+                progressEl.classList.remove('d-none');
+            } else if (step === 4) {
+                progressEl.textContent = '4 a 6 de 6';
+                progressEl.classList.remove('d-none');
+            } else if (step === 5 || step === 6) {
+                progressEl.classList.add('d-none');
+            } else if (step === 0) {
+                progressEl.classList.add('d-none');
+            }
+        }
+    }
+
     function loadSpecialtyAreas() {
         const activityType = document.getElementById('activity_type').value;
-        const specialtyAreaSelect = document.getElementById('specialty_area');
-        
-        // Limpar opções existentes
-        specialtyAreaSelect.innerHTML = '<option value="" selected disabled>Selecione a área de especialidade</option>';
-        
-        // Habilitar o select
-        specialtyAreaSelect.disabled = false;
-        
-        // Adicionar novas opções
+        const select = document.getElementById('specialty_area');
+        select.innerHTML = '<option value="" selected disabled>Selecione o ramo de atuação</option>';
+        select.disabled = !activityType;
         if (activityType && specialtyAreas[activityType]) {
             specialtyAreas[activityType].forEach(area => {
-                const option = document.createElement('option');
-                option.value = area;
-                option.textContent = area;
-                specialtyAreaSelect.appendChild(option);
+                const opt = document.createElement('option');
+                opt.value = area;
+                opt.textContent = area;
+                select.appendChild(opt);
             });
         }
     }
 
-    // Função para buscar endereço por CEP
-    function buscarEnderecoPorCEP() {
-        const cepInput = document.getElementById('cep');
-        const stateSelect = document.getElementById('state');
-        const cityInput = document.getElementById('city');
-        
-        if (!cepInput || !stateSelect || !cityInput) {
-            console.error('Elementos não encontrados');
+    async function buscarCEP() {
+        const cep = document.getElementById('cep').value.replace(/\D/g, '');
+        if (cep.length !== 8) { showErr('Informe um CEP válido com 8 dígitos.'); return false; }
+        try {
+            const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+            const data = await res.json();
+            if (data.erro) { showErr('CEP não encontrado.'); return false; }
+            document.getElementById('state').value = data.uf || '';
+            document.getElementById('city').value = data.localidade || '';
+            formData.cep = cep;
+            formData.state = data.uf || '';
+            formData.city = data.localidade || '';
+            return true;
+        } catch (e) {
+            showErr('Erro ao buscar CEP. Tente novamente.');
+            return false;
+        }
+    }
+
+    async function handleStep3Continue() {
+        const state = document.getElementById('state').value;
+        const city = document.getElementById('city').value;
+        if (!state || !city) {
+            const ok = await buscarCEP();
+            if (ok && validateStep(3)) nextStep();
+        } else if (validateStep(3)) {
+            nextStep();
+        }
+    }
+
+    function maskCEP(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 8) v = v.slice(0, 8);
+        if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5);
+        e.target.value = v;
+    }
+
+    function maskWhatsApp(e) {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 11) v = v.slice(0, 11);
+        if (v.length > 2) v = '(' + v.slice(0, 2) + ') ' + v.slice(2);
+        if (v.length > 10) v = v.slice(0, 10) + '-' + v.slice(10);
+        e.target.value = v;
+    }
+
+    function validateStep(step) {
+        const err = document.getElementById('step-error');
+        if (err) err.classList.add('d-none');
+        if (step === 1) {
+            const name = document.getElementById('name').value.trim();
+            const terms = document.getElementById('terms_accepted').checked;
+            if (!name) { showErr('Por favor, informe como gostaria de ser chamado(a).'); return false; }
+            if (!terms) { showErr('Você precisa aceitar os termos e condições para continuar.'); return false; }
+            formData.name = name;
+            formData.terms_accepted = true;
+        } else if (step === 2) {
+            const at = document.getElementById('activity_type').value;
+            const sa = document.getElementById('specialty_area').value;
+            if (!at) { showErr('Selecione o setor de atuação.'); return false; }
+            if (!sa) { showErr('Selecione o ramo de atuação.'); return false; }
+            formData.activity_type = at;
+            formData.specialty_area = sa;
+        } else if (step === 3) {
+            const cep = document.getElementById('cep').value.replace(/\D/g, '');
+            const state = document.getElementById('state').value;
+            const city = document.getElementById('city').value;
+            if (cep.length !== 8) { showErr('Informe um CEP válido com 8 dígitos.'); return false; }
+            if (!state || !city) { showErr('Clique em Buscar para preencher estado e cidade.'); return false; }
+            formData.cep = cep;
+            formData.state = state;
+            formData.city = city;
+        } else if (step === 4) {
+            const email = document.getElementById('email').value.trim();
+            const whatsapp = document.getElementById('whatsapp').value.replace(/\D/g, '');
+            const password = document.getElementById('password').value;
+            if (!email) { showErr('Informe seu e-mail.'); return false; }
+            if (password.length < 6) { showErr('A senha deve ter pelo menos 6 caracteres.'); return false; }
+            formData.email = email;
+            formData.whatsapp = whatsapp || '';
+            formData.password = password;
+        }
+        return true;
+    }
+
+    function showErr(msg) {
+        const err = document.getElementById('step-error');
+        if (err) {
+            err.textContent = msg;
+            err.classList.remove('d-none');
+        }
+    }
+
+    function nextStep() {
+        if (currentStep === 1 && !validateStep(1)) return;
+        if (currentStep === 2 && !validateStep(2)) return;
+        if (currentStep === 3 && !validateStep(3)) return;
+        if (currentStep === 4 && !validateStep(4)) return;
+
+        if (currentStep === 6) {
+            submitForm();
             return;
         }
-        
-        const cep = cepInput.value.replace(/\D/g, '');
-        
-        if (cep.length !== 8) {
-            alert('Por favor, informe um CEP válido com 8 dígitos.');
-            return;
+        const next = currentStep + 1;
+        showStep(next);
+
+        if (next === 2) {
+            document.getElementById('nome-step2').textContent = ' ' + formData.name + ',';
+            loadSpecialtyAreas();
+        } else if (next === 3) {
+            document.getElementById('nome-step3').textContent = ' ' + formData.name + ',';
+        } else if (next === 6) {
+            document.getElementById('nome-final').textContent = formData.name;
         }
-        
-        // Mostrar loading
-        cepInput.disabled = true;
-        stateSelect.disabled = true;
-        cityInput.disabled = true;
-        
-        fetch(`https://viacep.com.br/ws/${cep}/json/`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.erro) {
-                    alert('CEP não encontrado. Verifique o número informado.');
-                    return;
-                }
-                
-                // Preencher os campos
-                if (data.uf && estadosMap[data.uf]) {
-                    stateSelect.value = data.uf;
-                }
-                
-                if (data.localidade) {
-                    cityInput.value = data.localidade;
-                }
-                
-                // Mostrar mensagem de sucesso
-                const successAlert = document.createElement('div');
-                successAlert.className = 'alert alert-success alert-dismissible fade show';
-                successAlert.innerHTML = `
-                    <strong>Endereço encontrado!</strong> Estado e cidade preenchidos automaticamente.
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                `;
-                
-                const form = document.querySelector('form');
-                if (form) {
-                    form.insertBefore(successAlert, form.firstChild);
-                }
-            })
-            .catch(error => {
-                console.error('Erro ao buscar CEP:', error);
-                alert('Erro ao buscar o CEP. Verifique sua conexão com a internet e tente novamente.');
-            })
-            .finally(() => {
-                // Reabilitar campos
-                cepInput.disabled = false;
-                stateSelect.disabled = false;
-                cityInput.disabled = false;
+    }
+
+    function prevStep() {
+        if (currentStep > 0) showStep(currentStep - 1);
+    }
+
+    async function submitForm() {
+        formData.activation_key = document.getElementById('activation_key')?.value || '';
+        const btn = document.getElementById('submit-btn');
+        if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+
+        const fd = new FormData();
+        fd.append('name', formData.name);
+        fd.append('email', formData.email);
+        fd.append('whatsapp', formData.whatsapp || '');
+        fd.append('cep', formData.cep);
+        fd.append('state', formData.state);
+        fd.append('city', formData.city);
+        fd.append('activity_type', formData.activity_type);
+        fd.append('specialty_area', formData.specialty_area);
+        fd.append('password', formData.password);
+        fd.append('activation_key', formData.activation_key);
+        fd.append('terms_accepted', 'true');
+
+        try {
+            const res = await fetch('/register', {
+                method: 'POST',
+                headers: { 'Accept': 'application/json' },
+                body: new URLSearchParams(fd)
             });
+            const data = await res.json();
+            if (res.ok && data.redirect) {
+                window.location.href = data.redirect;
+            } else {
+                showErr(data.detail || 'Erro ao cadastrar. Tente novamente.');
+                if (btn) { btn.disabled = false; btn.textContent = 'Finalizar cadastro'; }
+            }
+        } catch (e) {
+            showErr('Erro de conexão. Tente novamente.');
+            if (btn) { btn.disabled = false; btn.textContent = 'Finalizar cadastro'; }
+        }
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const activityTypeSelect = document.getElementById('activity_type');
-        if (activityTypeSelect) {
-            activityTypeSelect.addEventListener('change', loadSpecialtyAreas);
-            if (activityTypeSelect.value) {
-                loadSpecialtyAreas();
-            }
-        }
-
-        // Formatar WhatsApp
-        const whatsappInput = document.getElementById('whatsapp');
-        if (whatsappInput) {
-            whatsappInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                
-                if (value.length > 11) {
-                    value = value.substring(0, 11);
-                }
-                
-                if (value.length > 2) {
-                    value = '(' + value.substring(0, 2) + ') ' + value.substring(2);
-                }
-                if (value.length > 10) {
-                    value = value.substring(0, 10) + '-' + value.substring(10);
-                }
-                
-                e.target.value = value;
-            });
-        }
-
-        // Formatar CEP
-        const cepInput = document.getElementById('cep');
-        if (cepInput) {
-            cepInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length <= 8) {
-                    if (value.length > 5) {
-                        value = value.substring(0,5) + '-' + value.substring(5);
-                    }
-                    e.target.value = value;
-                }
-            });
-
-            // Buscar CEP ao pressionar Enter no campo
-            cepInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    buscarEnderecoPorCEP();
-                }
-            });
-        }
-
-        // Enviar formulário
-        const form = document.querySelector('form');
-        if (form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const formData = new FormData(form);
-                
-                fetch('/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'Accept': 'application/json'
-                    },
-                    body: new URLSearchParams(formData)
-                })
-                .then(async response => {
-                    const contentType = response.headers.get('content-type');
-                    if (!response.ok) {
-                        if (contentType && contentType.includes('application/json')) {
-                            const errorData = await response.json();
-                            if (Array.isArray(errorData)) {
-                                const errorMessages = errorData.map(error => {
-                                    if (error.loc && error.msg) {
-                                        const fieldName = error.loc[error.loc.length - 1];
-                                        let fieldLabel = '';
-                                        switch(fieldName) {
-                                            case 'name': fieldLabel = 'Nome'; break;
-                                            case 'email': fieldLabel = 'Email'; break;
-                                            case 'whatsapp': fieldLabel = 'WhatsApp'; break;
-                                            case 'cep': fieldLabel = 'CEP'; break;
-                                            case 'password': fieldLabel = 'Senha'; break;
-                                            case 'state': fieldLabel = 'Estado'; break;
-                                            case 'city': fieldLabel = 'Cidade'; break;
-                                            case 'activity_type': fieldLabel = 'Área de atuação'; break;
-                                            case 'specialty_area': fieldLabel = 'Atividade da empresa'; break;
-                                            case 'terms_accepted': fieldLabel = 'Termos e condições'; break;
-                                            default: fieldLabel = fieldName;
-                                        }
-                                        return `${fieldLabel}: ${error.msg}`;
-                                    }
-                                    return error.msg || JSON.stringify(error);
-                                });
-                                throw new Error(errorMessages.join('\n'));
-                            } else if (errorData.detail) {
-                                throw new Error(errorData.detail);
-                            } else {
-                                throw new Error(JSON.stringify(errorData));
-                            }
-                        } else {
-                            throw new Error('Erro interno do servidor. Por favor, tente novamente mais tarde.');
-                        }
-                    }
-                    if (contentType && contentType.includes('application/json')) {
-                        return response.json();
-                    }
-                    throw new Error('Resposta inválida do servidor');
-                })
-                .then(data => {
-                    if (data.redirect) {
-                        window.location.href = data.redirect;
-                    } else {
-                        window.location.href = '/login';
-                    }
-                })
-                .catch(error => {
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'alert alert-danger';
-                    errorDiv.style.whiteSpace = 'pre-line';
-                    
-                    // Tenta fazer o parse da mensagem de erro
-                    try {
-                        const errorObj = JSON.parse(error.message);
-                        if (Array.isArray(errorObj)) {
-                            errorDiv.textContent = errorObj.map(err => {
-                                if (err.loc && err.msg) {
-                                    const fieldName = err.loc[err.loc.length - 1];
-                                    const fieldLabel = document.querySelector(`label[for="${fieldName}"]`)?.textContent.trim() || fieldName;
-                                    return `${fieldLabel}: ${err.msg}`;
-                                }
-                                return err.msg || JSON.stringify(err);
-                            }).join('\n');
-                        } else {
-                            errorDiv.textContent = errorObj.detail || error.message;
-                        }
-                    } catch (e) {
-                        errorDiv.textContent = error.message || 'Erro ao cadastrar usuário. Por favor, tente novamente.';
-                    }
-                    
-                    const existingError = form.querySelector('.alert');
-                    if (existingError) {
-                        existingError.remove();
-                    }
-                    
-                    form.insertBefore(errorDiv, form.firstChild);
-                });
-            });
-        }
-
-        // Inicializar todos os tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl, {
-                html: true
-            })
-        });
+        document.getElementById('activity_type')?.addEventListener('change', loadSpecialtyAreas);
+        document.getElementById('cep')?.addEventListener('input', maskCEP);
+        document.getElementById('whatsapp')?.addEventListener('input', maskWhatsApp);
+        showStep(0);
     });
 </script>
 {% endblock %}
@@ -384,254 +223,140 @@
 {% block content %}
 <div class="container-fluid mt-5" style="background-color: #F5F5F5; min-height: 100vh;">
     <div class="row justify-content-center">
-        <div class="col-12">
+        <div class="col-12 col-lg-10">
             <div class="card shadow" style="background-color: #F5F5F5;">
                 <div class="card-body">
-                    <!-- Logo dentro do card -->
-                    <div class="row mb-4">
-                        <div class="col-12">
-                             <img src="{{ url_for('static', path='images/Logo.png') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <img src="{{ url_for('static', path='images/Logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 160px;">
+                        </div>
+                        <div class="col-6 text-end">
+                            <span id="progress-indicator" class="badge bg-secondary fs-6 d-none">1 de 6</span>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <!-- Coluna da Imagem (3 colunas) -->
-                        <div class="col-md-2">
-                            <div class="d-flex flex-column align-items-center">
+                    <div class="row g-4 align-items-start">
+                        <div class="col-auto">
+                            <img src="{{ url_for('static', path='images/user-register.jpg') }}" alt="João - Especialista em gestão comercial" class="img-fluid rounded" style="max-width: 150px;">
+                        </div>
+                        <div class="col">
+                            <div id="step-error" class="alert alert-danger d-none" role="alert"></div>
+
+                            <!-- Etapa 0: Intro -->
+                            <div id="step-0" class="wizard-step">
+                                <p class="mb-4">Olá! Eu sou o João.<br>Especialista em gestão comercial.</p>
+                                <p class="mb-4">Se você tem uma loja sabe o quanto é preciso trabalhar para vender bem.<br> Aqui no SuccessWay estarei ao seu lado para ajudar a transformar seus números em decisões que tragam mais lucro para sua loja.</p>
+                                <p class="mb-4">Vamos começar?</p>
+                                <div class="text-center mb-2">
+                                    <button type="button" class="btn btn-primary btn-lg" onclick="showStep(1); document.getElementById('progress-indicator').textContent='1 de 6'; document.getElementById('progress-indicator').classList.remove('d-none');">Sim, vamos</button>
+                                </div>
+                                <p class="text-center text-muted register-subtle">É rápido e prático!</p>
+                            </div>
+
+                            <!-- Etapa 1: Nome + Termos (1 de 6) -->
+                            <div id="step-1" class="wizard-step d-none">
+                                <p class="fs-5 mb-3">Como posso te chamar?</p>
+                                <p class="text-muted small mb-2">Primeiro nome ou apelido</p>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control form-control-lg" id="name" placeholder="Seu nome" style="background-color: #F5F5F5;" maxlength="50">
+                                </div>
+                                <p id="prazer-msg" class="mb-3 d-none"></p>
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" id="terms_accepted">
+                                    <label class="form-check-label" for="terms_accepted">
+                                        Li e aceito os <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">termos e condições</a>
+                                    </label>
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continuar</button>
+                            </div>
+
+                            <!-- Etapa 2: Setor + Ramo (2 de 6) -->
+                            <div id="step-2" class="wizard-step d-none">
+                                <p class="fs-5 mb-2">Ótimo<span id="nome-step2"></span>!</p>
+                                <p class="text-muted mb-3">Como você viu, o SuccessWay não acessa dados pessoais nem a identidade da sua loja.</p>
+                                <p class="mb-2">Em qual setor sua loja atua?</p>
+                                <div class="mb-3">
+                                    <select class="form-select form-select-lg" id="activity_type" style="background-color: #F5F5F5;">
+                                        <option value="" selected disabled>Selecione o setor</option>
+                                        <option value="Alimentação fora do Lar">Alimentação fora do Lar</option>
+                                        <option value="Comércio atacadista">Comércio atacadista</option>
+                                        <option value="Comércio varejista">Comércio varejista</option>
+                                        <option value="Indústria">Indústria</option>
+                                        <option value="Prestação de serviços">Prestação de serviços</option>
+                                    </select>
+                                </div>
+                                <p class="mb-2">Qual o seu ramo de atuação?</p>
                                 <div class="mb-4">
-                                    <img src="{{ url_for('static', path='images/user-register.jpg') }}" alt="Gestão de Custos" class="img-fluid" style="max-width: 200px;">
+                                    <select class="form-select form-select-lg" id="specialty_area" disabled style="background-color: #F5F5F5;">
+                                        <option value="" selected disabled>Selecione o ramo de atuação</option>
+                                    </select>
                                 </div>
+                                <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continuar</button>
+                            </div>
+
+                            <!-- Etapa 3: CEP (3 de 6) -->
+                            <div id="step-3" class="wizard-step d-none">
+                                <p class="fs-5 mb-2">Ótimo<span id="nome-step3"></span>!</p>
+                                <p class="text-muted mb-3">Utilizamos o CEP apenas para identificar sua região.</p>
+                                <p class="mb-2">Informe o CEP da loja</p>
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control form-control-lg" id="cep" placeholder="00000-000" style="background-color: #F5F5F5;" maxlength="9">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="buscarCEP()"><i class="bi bi-search"></i> Buscar</button>
+                                </div>
+                                <input type="hidden" id="state">
+                                <input type="hidden" id="city">
+                                <div class="mb-4">
+                                    <small class="text-muted" id="cep-result"></small>
+                                </div>
+                                <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
+                                <button type="button" class="btn btn-primary" id="btn-step3-continue" onclick="handleStep3Continue()">Continuar</button>
+                            </div>
+
+                            <!-- Etapa 4: Email, WhatsApp, Senha (4 a 6 de 6) -->
+                            <div id="step-4" class="wizard-step d-none">
+                                <p class="fs-5 mb-2">Porém, precisamos de algumas informações:</p>
+                                <p class="mb-2">Por favor, informe seu E-mail <span class="text-muted small">(4 de 6)</span></p>
+                                <p class="text-muted small mb-2">Importante para recuperar sua senha e receber atualizações.</p>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control form-control-lg" id="email" placeholder="seu@email.com" style="background-color: #F5F5F5;">
+                                </div>
+                                <p class="mb-2">O seu WhatsApp <span class="text-muted small">(5 de 6 - opcional)</span></p>
+                                <p class="text-muted small mb-2">Não é obrigatório. Além disso, você sempre poderá bloqueá-lo.</p>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control form-control-lg" id="whatsapp" placeholder="(00) 00000-0000" style="background-color: #F5F5F5;">
+                                </div>
+                                <p class="mb-2">Cadastre uma senha de acesso <span class="text-muted small">(6 de 6)</span></p>
+                                <p class="text-muted small mb-2">Recomendações para senha forte: use letras, números e símbolos.</p>
+                                <div class="mb-4">
+                                    <input type="password" class="form-control form-control-lg" id="password" placeholder="Mínimo 6 caracteres" style="background-color: #F5F5F5;" minlength="6">
+                                </div>
+                                <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continuar</button>
+                            </div>
+
+                            <!-- Etapa 5: Chave de ativação -->
+                            <div id="step-5" class="wizard-step d-none">
+                                <p class="fs-5 mb-2">Agora é só digitar sua chave de ativação</p>
+                                <p class="text-muted mb-3">A chave de ativação é necessária para acessar o sistema. Se você não possui uma chave, entre em contato com o administrador do sistema.</p>
+                                <div class="mb-4">
+                                    <input type="text" class="form-control form-control-lg" id="activation_key" placeholder="Chave de ativação" style="background-color: #F5F5F5;">
+                                </div>
+                                <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
+                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continuar</button>
+                            </div>
+
+                            <!-- Etapa 6: Perfeito / Concluído -->
+                            <div id="step-6" class="wizard-step d-none">
+                                <p class="fs-5 mb-3">Perfeito, <span id="nome-final"></span>!</p>
+                                <p class="mb-4">Esta etapa foi concluída com sucesso.</p>
+                                <button type="button" class="btn btn-success btn-lg" id="submit-btn" onclick="nextStep()">Finalizar cadastro</button>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- Coluna do Formulário (9 colunas) -->
-                        <div class="col-md-10">
-                   
-                            <div class="mb-4">
-                                <p class="mb-2" style="font-size: 1.2rem;">É uma grande satisfação ter você aqui conosco! Para começar vamos precisar de algumas informações.</p>
-                                <p class="mb-0" style="font-size: 1.2rem;">Qualquer dúvida é só clicar <img src="{{ url_for('static', path='images/icone_lampada.png') }}" alt="Ajuda" style="cursor: pointer; margin-left: 5px; height: 1.3rem; vertical-align: middle;" data-bs-toggle="modal" data-bs-target="#nameHelpModal"></p>
-                                <p class="mt-2" style="font-size: 1.2rem;">Recomendamos que leia o <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" class="text-primary">Termo de uso e confidencialidade</a>.</p>
-                            </div>
-
-                            <div class="card mb-5" style="background-color: #F0F0F0;">
-                                <div class="card-body">
-                                    {% if error %}
-                                    <div class="alert alert-danger">
-                                        <!-- Debug info -->
-                                        <pre style="background: #f8f9fa; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
-                                            Tipo do erro: {{ error.__class__.__name__ }}
-                                            Conteúdo do erro: {{ error }}
-                                            {% if error is sequence %}
-                                                É uma sequência
-                                                {% if error is mapping %}
-                                                    É um dicionário
-                                                {% endif %}
-                                            {% endif %}
-                                        </pre>
-                                        <!-- Fim do debug info -->
-                                        {% if error is sequence and error is not string %}
-                                            {% for err in error %}
-                                                {% if err is mapping %}
-                                                    {% if err.loc and err.msg %}
-                                                        <p>{{ err.loc[-1] }}: {{ err.msg }}</p>
-                                                    {% else %}
-                                                        <p>{{ err }}</p>
-                                                    {% endif %}
-                                                {% else %}
-                                                    <p>{{ err }}</p>
-                                                {% endif %}
-                                            {% endfor %}
-                                        {% elif error is mapping %}
-                                            {% for field, message in error.items() %}
-                                                <p>{{ field }}: {{ message }}</p>
-                                            {% endfor %}
-                                        {% else %}
-                                            <p>{{ error }}</p>
-                                        {% endif %}
-                                    </div>
-                                    {% endif %}
-
-                                    <form method="post" action="/register" class="needs-validation " novalidate>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="name" class="form-label">
-                                                    Como gosta de ser chamado(a)?
-                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" 
-                                                         alt="Ajuda" 
-                                                         style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; height: 1.1rem; color: #FFD700 !important;" 
-                                                         data-bs-toggle="modal" 
-                                                         data-bs-target="#nameHelpModal">
-                                                </label>
-                                                <input type="text" class="form-control" id="name" name="name" value="{{ user.name|default('', true) }}" required style="background-color: #F5F5F5;" autocomplete="name">
-                                                <div class="invalid-feedback">
-                                                    Por favor, informe seu nome.
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label for="email" class="form-label">
-                                                    Email
-                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" 
-                                                         alt="Ajuda" 
-                                                         style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; height: 1.1rem; color: #FFD700 !important;" 
-                                                         data-bs-toggle="modal" 
-                                                         data-bs-target="#emailHelpModal">
-                                                </label>
-                                                <input type="email" class="form-control" id="email" name="email" value="{{ user.email|default('', true) }}" required style="background-color: #F5F5F5;" autocomplete="email">
-                                                <div class="invalid-feedback">
-                                                    Por favor, informe um email válido.
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <input type="hidden" id="whatsapp" name="whatsapp" value="9999-9999">
-
-                                            <div class="col-md-4 mb-3">
-                                                <label for="cep" class="form-label">
-                                                    CEP
-                                                </label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" style="background-color: #F5F5F5;" autocomplete="postal-code">
-                                                    <button type="button" class="btn btn-outline-secondary" onclick="buscarEnderecoPorCEP()">
-                                                        <i class="bi bi-search"></i> Buscar
-                                                    </button>
-                                                </div>
-                                                <div class="invalid-feedback">
-                                                    Por favor, informe um CEP válido.
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-2 mb-3">
-                                                <label for="state" class="form-label">
-                                                    Estado
-                                                </label>
-                                                <select class="form-select" id="state" name="state" required style="background-color: #F5F5F5;">
-                                                    <option value="" selected disabled>Selecione</option>
-                                                    <option value="AC">Acre</option>
-                                                    <option value="AL">Alagoas</option>
-                                                    <option value="AP">Amapá</option>
-                                                    <option value="AM">Amazonas</option>
-                                                    <option value="BA">Bahia</option>
-                                                    <option value="CE">Ceará</option>
-                                                    <option value="DF">Distrito Federal</option>
-                                                    <option value="ES">Espírito Santo</option>
-                                                    <option value="GO">Goiás</option>
-                                                    <option value="MA">Maranhão</option>
-                                                    <option value="MT">Mato Grosso</option>
-                                                    <option value="MS">Mato Grosso do Sul</option>
-                                                    <option value="MG">Minas Gerais</option>
-                                                    <option value="PA">Pará</option>
-                                                    <option value="PB">Paraíba</option>
-                                                    <option value="PR">Paraná</option>
-                                                    <option value="PE">Pernambuco</option>
-                                                    <option value="PI">Piauí</option>
-                                                    <option value="RJ">Rio de Janeiro</option>
-                                                    <option value="RN">Rio Grande do Norte</option>
-                                                    <option value="RS">Rio Grande do Sul</option>
-                                                    <option value="RO">Rondônia</option>
-                                                    <option value="RR">Roraima</option>
-                                                    <option value="SC">Santa Catarina</option>
-                                                    <option value="SP">São Paulo</option>
-                                                    <option value="SE">Sergipe</option>
-                                                    <option value="TO">Tocantins</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label for="city" class="form-label">
-                                                    Cidade
-                                                </label>
-                                                <input type="text" class="form-control" id="city" name="city" value="{{ user.city|default('', true) }}" required style="background-color: #F5F5F5;" autocomplete="address-level2">
-                                                <div class="invalid-feedback">
-                                                    Por favor, informe a cidade.
-                                                </div>
-                                                </div>
-                                            </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="activity_type" class="form-label">
-                                                    Área de atuação
-                                                </label>
-                                                <select class="form-select" id="activity_type" name="activity_type" required style="background-color: #F5F5F5;">
-                                                    <option value="" selected disabled>Selecione o tipo de atividade</option>
-                                                    <option value="Alimentação fora do Lar">Alimentação fora do Lar</option>
-                                                    <option value="Comércio atacadista">Comércio atacadista</option>
-                                                    <option value="Comércio varejista">Comércio varejista</option>
-                                                    <option value="Indústria">Indústria</option>
-                                                    <option value="Prestação de serviços">Prestação de serviços</option>
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-6 mb-3">
-                                                <label for="specialty_area" class="form-label">
-                                                    Atividade da empresa
-                                                </label>
-                                                <select class="form-select" id="specialty_area" name="specialty_area" required disabled style="background-color: #F5F5F5;">
-                                                    <option value="" selected disabled>Selecione a atividade da empresa</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="password" class="form-label">
-                                                    Senha
-                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" 
-                                                         alt="Ajuda" 
-                                                         style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; height: 1.1rem; color: #FFD700 !important;" 
-                                                         data-bs-toggle="modal" 
-                                                         data-bs-target="#passwordHelpModal">
-                                                </label>
-                                                <input type="password" class="form-control" id="password" name="password" required style="background-color: #F5F5F5;" autocomplete="new-password">
-                                                <div class="invalid-feedback">
-                                                    A senha deve ter pelo menos 6 caracteres.
-                                                </div>
-                                            </div>
-                                        
-                                            <div class="col-md-6 mb-3">
-                                                <label for="activation_key" class="form-label">
-                                                    Chave de Ativação
-                                                    <img src="{{ url_for('static', path='images/icone_lampada.png') }}" 
-                                                         alt="Ajuda" 
-                                                         style="cursor: pointer; margin-left: 5px; font-size: 1.1rem; height: 1.1rem; color: #FFD700 !important;" 
-                                                         data-bs-toggle="modal" 
-                                                         data-bs-target="#activationKeyHelpModal">
-                                                </label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" style="background-color: #F5F5F5;">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12 mb-3">
-                                                <div class="form-check mt-4">
-                                                    <input type="checkbox" class="form-check-input" id="terms_accepted" name="terms_accepted" required>
-                                                    <label class="form-check-label" for="terms_accepted">
-                                                        Li e aceito os <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">termos e condições</a>
-                                                    </label>
-                                                    <div class="invalid-feedback">
-                                                        Você deve aceitar os termos e condições.
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Botões de Ação -->
-                                        <div class="row justify-content-center">
-                                            <div class="col-md-6">
-                                                <div class="d-grid gap-2">
-                                                    <button type="submit" class="btn bg-secondary text-white btn-lg">Cadastrar</button>
-                                                    <a href="/login" class="btn btn-outline-secondary">Já tem uma conta? Faça login</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="mt-4 text-center">
+                        <a href="/login" class="text-secondary">Já tem uma conta? Faça login</a>
                     </div>
                 </div>
             </div>
@@ -639,72 +364,31 @@
     </div>
 </div>
 
-<!-- Modal de Termos e Condições -->
-<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+<!-- Form oculto para submit -->
+<form id="register-form" method="post" action="/register" class="d-none">
+    <input type="hidden" name="name" id="f_name">
+    <input type="hidden" name="email" id="f_email">
+    <input type="hidden" name="whatsapp" id="f_whatsapp">
+    <input type="hidden" name="cep" id="f_cep">
+    <input type="hidden" name="state" id="f_state">
+    <input type="hidden" name="city" id="f_city">
+    <input type="hidden" name="activity_type" id="f_activity_type">
+    <input type="hidden" name="specialty_area" id="f_specialty_area">
+    <input type="hidden" name="password" id="f_password">
+    <input type="hidden" name="activation_key" id="f_activation_key">
+    <input type="hidden" name="terms_accepted" id="f_terms_accepted">
+</form>
+
+<!-- Modal Termos -->
+<div class="modal fade" id="termsModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #F5F5F5 !important; border-bottom: 1px solid #dee2e6;    ">
-                <h5 class="modal-title" id="termsModalLabel">Termo de Uso e Confidencialidade</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            <div class="modal-header" style="background-color: #F5F5F5;">
+                <h5 class="modal-title">Termo de Uso e Confidencialidade</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <p>Por favor, solicite o texto do Termo de Uso e Confidencialidade para o cliente.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Help Modals -->
-<div class="modal fade" id="nameHelpModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #F5F5F5 !important; border-bottom: 1px solid #dee2e6;    ">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <p>Dr./Dra./ Sr./Sra. – primeiro nome ou apelido. Gostaríamos de personalizar nossa comunicação aqui na plataforma, mas fique a vontade, se não quiser não precisa informar.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="emailHelpModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #F5F5F5 !important; border-bottom: 1px solid #dee2e6;    ">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <p>Seu email será usado para login e recuperação de senha. Certifique-se de usar um email válido e acessível.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="passwordHelpModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #F5F5F5 !important; border-bottom: 1px solid #dee2e6;">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <p>Sua senha deve ter pelo menos 6 caracteres. Use uma combinação de letras, números e símbolos para maior segurança.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="activationKeyHelpModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #F5F5F5 !important; border-bottom: 1px solid #dee2e6;">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <p>A chave de ativação é necessária para acessar o sistema. Se você não possui uma chave, entre em contato com o administrador do sistema.</p>
             </div>
         </div>
     </div>
@@ -713,44 +397,9 @@
 
 {% block extra_css %}
 <style>
-    body {
-        background-color: #F5F5F5 !important;
-    }
-    
-    .container-fluid {
-        background-color: #F5F5F5 !important;
-    }
-    
-    .card {
-        background-color: #F5F5F5 !important;
-    }
-    
-    .help-icon {
-        cursor: pointer;
-        margin-left: 5px;
-        color: #FFC107;
-        font-size: 1.1rem;
-    }
-    
-    .help-icon:hover {
-        opacity: 0.8;
-    }
-    
-    .form-label {
-        font-weight: 500;
-        display: flex;
-        align-items: center;
-    }
-    
-    .required:after {
-        content: "*";
-        color: red;
-        margin-left: 3px;
-    }
-
-    .input-group .btn {
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-    }
+    body { background-color: #F5F5F5 !important; }
+    .wizard-step { animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .register-subtle { color: #8a8a8a !important; font-size: 0.95rem; }
 </style>
-{% endblock %} 
+{% endblock %}
