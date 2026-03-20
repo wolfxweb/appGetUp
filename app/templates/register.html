@@ -22,19 +22,21 @@
         if (el) el.classList.remove('d-none');
         currentStep = step;
 
-        // Atualizar indicador de progresso (apenas para etapas 1-6)
+        // Atualizar indicador de progresso
         const progressEl = document.getElementById('progress-indicator');
         if (progressEl) {
-            if (step >= 1 && step <= 4) {
-                const stepNum = step === 1 ? 1 : step === 2 ? 2 : step === 3 ? 3 : 4;
-                progressEl.textContent = stepNum + ' de 6';
+            if (step === 1) {
+                progressEl.textContent = '1 de 6';
+                progressEl.classList.remove('d-none');
+            } else if (step === 2) {
+                progressEl.textContent = '2 de 6';
                 progressEl.classList.remove('d-none');
             } else if (step === 4) {
                 progressEl.textContent = '4 a 6 de 6';
                 progressEl.classList.remove('d-none');
-            } else if (step === 5 || step === 6) {
+            } else if (step === 5) {
                 progressEl.classList.add('d-none');
-            } else if (step === 0) {
+            } else {
                 progressEl.classList.add('d-none');
             }
         }
@@ -74,13 +76,15 @@
         }
     }
 
-    async function handleStep3Continue() {
+    async function handleStep2Continue() {
+        const cep = document.getElementById('cep').value.replace(/\D/g, '');
         const state = document.getElementById('state').value;
         const city = document.getElementById('city').value;
-        if (!state || !city) {
+        if (cep.length === 8 && (!state || !city)) {
             const ok = await buscarCEP();
-            if (ok && validateStep(3)) nextStep();
-        } else if (validateStep(3)) {
+            if (!ok) return;
+        }
+        if (validateStep(2)) {
             nextStep();
         }
     }
@@ -113,16 +117,15 @@
         } else if (step === 2) {
             const at = document.getElementById('activity_type').value;
             const sa = document.getElementById('specialty_area').value;
-            if (!at) { showErr('Selecione o setor de atuação.'); return false; }
-            if (!sa) { showErr('Selecione o ramo de atuação.'); return false; }
-            formData.activity_type = at;
-            formData.specialty_area = sa;
-        } else if (step === 3) {
             const cep = document.getElementById('cep').value.replace(/\D/g, '');
             const state = document.getElementById('state').value;
             const city = document.getElementById('city').value;
+            if (!at) { showErr('Selecione o setor de atuação.'); return false; }
+            if (!sa) { showErr('Selecione o ramo de atuação.'); return false; }
             if (cep.length !== 8) { showErr('Informe um CEP válido com 8 dígitos.'); return false; }
-            if (!state || !city) { showErr('Clique em Buscar para preencher estado e cidade.'); return false; }
+            if (!state || !city) { showErr('Informe um CEP válido e aguarde a busca ou tente outro CEP.'); return false; }
+            formData.activity_type = at;
+            formData.specialty_area = sa;
             formData.cep = cep;
             formData.state = state;
             formData.city = city;
@@ -144,34 +147,35 @@
         if (err) {
             err.textContent = msg;
             err.classList.remove('d-none');
+            err.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     }
 
     function nextStep() {
         if (currentStep === 1 && !validateStep(1)) return;
         if (currentStep === 2 && !validateStep(2)) return;
-        if (currentStep === 3 && !validateStep(3)) return;
         if (currentStep === 4 && !validateStep(4)) return;
 
-        if (currentStep === 6) {
+        if (currentStep === 5 || currentStep === 6) {
             submitForm();
             return;
         }
-        const next = currentStep + 1;
+        let next = currentStep + 1;
+        if (currentStep === 2) next = 4;
         showStep(next);
 
         if (next === 2) {
             document.getElementById('nome-step2').textContent = ' ' + formData.name + ',';
             loadSpecialtyAreas();
-        } else if (next === 3) {
-            document.getElementById('nome-step3').textContent = ' ' + formData.name + ',';
-        } else if (next === 6) {
-            document.getElementById('nome-final').textContent = formData.name;
+        } else if (next === 5) {
+            document.getElementById('nome-step5').textContent = formData.name;
         }
     }
 
     function prevStep() {
-        if (currentStep > 0) showStep(currentStep - 1);
+        if (currentStep === 4) showStep(2);
+        else if (currentStep === 5) showStep(4);
+        else if (currentStep > 0) showStep(currentStep - 1);
     }
 
     async function submitForm() {
@@ -214,7 +218,49 @@
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('activity_type')?.addEventListener('change', loadSpecialtyAreas);
         document.getElementById('cep')?.addEventListener('input', maskCEP);
+        document.getElementById('cep')?.addEventListener('blur', function() {
+            if (this.value.replace(/\D/g, '').length === 8) buscarCEP();
+        });
         document.getElementById('whatsapp')?.addEventListener('input', maskWhatsApp);
+
+        // Etapa 1: ao digitar o nome e sair do campo, mostrar "Prazer" e pergunta sobre termos
+        const nameInput = document.getElementById('name');
+        if (nameInput) {
+            nameInput.addEventListener('blur', function() {
+                const nome = this.value.trim();
+                const prazerBlock = document.getElementById('prazer-block');
+                const prazerNome = document.getElementById('prazer-nome');
+                if (nome && prazerBlock && prazerNome) {
+                    prazerNome.textContent = nome;
+                    prazerBlock.classList.remove('d-none');
+                }
+            });
+            nameInput.addEventListener('input', function() {
+                const nome = this.value.trim();
+                const prazerBlock = document.getElementById('prazer-block');
+                const prazerNome = document.getElementById('prazer-nome');
+                if (nome && prazerBlock && prazerNome) {
+                    prazerNome.textContent = nome;
+                    prazerBlock.classList.remove('d-none');
+                } else if (prazerBlock) {
+                    prazerBlock.classList.add('d-none');
+                    document.getElementById('terms_accepted').checked = false;
+                }
+            });
+        }
+
+        // Etapa 1: ao marcar os termos, avançar automaticamente
+        document.getElementById('terms_accepted')?.addEventListener('change', function() {
+            if (this.checked && currentStep === 1) {
+                const nome = document.getElementById('name')?.value.trim();
+                if (nome) {
+                    formData.name = nome;
+                    formData.terms_accepted = true;
+                    nextStep();
+                }
+            }
+        });
+
         showStep(0);
     });
 </script>
@@ -258,22 +304,24 @@
                                 <p class="fs-5 mb-3">Como posso te chamar?</p>
                                 <p class="text-muted small mb-2">Primeiro nome ou apelido</p>
                                 <div class="mb-3">
-                                    <input type="text" class="form-control form-control-lg" id="name" placeholder="Seu nome" style="background-color: #F5F5F5;" maxlength="50">
+                                    <input type="text" class="form-control form-control-lg" id="name" placeholder="Digite seu nome" style="background-color: #F5F5F5;" maxlength="50">
                                 </div>
-                                <p id="prazer-msg" class="mb-3 d-none"></p>
-                                <div class="form-check mb-4">
-                                    <input class="form-check-input" type="checkbox" id="terms_accepted">
-                                    <label class="form-check-label" for="terms_accepted">
-                                        Li e aceito os <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">termos e condições</a>
-                                    </label>
+                                <div id="prazer-block" class="d-none">
+                                    <p class="fs-5 mb-2">Prazer, <span id="prazer-nome"></span>!</p>
+                                    <p class="mb-3">Você já leu o Termo de uso e confidencialidade do SuccessWay?</p>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="terms_accepted">
+                                        <label class="form-check-label" for="terms_accepted">
+                                            Li e aceito os <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">termos e condições</a>
+                                        </label>
+                                    </div>
                                 </div>
-                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continuar</button>
                             </div>
 
-                            <!-- Etapa 2: Setor + Ramo (2 de 6) -->
+                            <!-- Etapa 2: Setor + Ramo + CEP (2 de 6) -->
                             <div id="step-2" class="wizard-step d-none">
                                 <p class="fs-5 mb-2">Ótimo<span id="nome-step2"></span>!</p>
-                                <p class="text-muted mb-3">Como você viu, o SuccessWay não acessa dados pessoais nem a identidade da sua loja.</p>
+                                <p class="text-muted mb-4">Como você viu, o SuccessWay não acessa dados pessoais nem a identidade da sua loja.</p>
                                 <p class="mb-2">Em qual setor sua loja atua?</p>
                                 <div class="mb-3">
                                     <select class="form-select form-select-lg" id="activity_type" style="background-color: #F5F5F5;">
@@ -286,78 +334,68 @@
                                     </select>
                                 </div>
                                 <p class="mb-2">Qual o seu ramo de atuação?</p>
-                                <div class="mb-4">
+                                <div class="mb-3">
                                     <select class="form-select form-select-lg" id="specialty_area" disabled style="background-color: #F5F5F5;">
                                         <option value="" selected disabled>Selecione o ramo de atuação</option>
                                     </select>
                                 </div>
-                                <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continuar</button>
-                            </div>
-
-                            <!-- Etapa 3: CEP (3 de 6) -->
-                            <div id="step-3" class="wizard-step d-none">
-                                <p class="fs-5 mb-2">Ótimo<span id="nome-step3"></span>!</p>
-                                <p class="text-muted mb-3">Utilizamos o CEP apenas para identificar sua região.</p>
                                 <p class="mb-2">Informe o CEP da loja</p>
-                                <div class="input-group mb-3">
+                                <p class="text-muted small mb-2">Utilizamos o CEP apenas para identificar sua região. Digite os 8 dígitos e clique em Continuar.</p>
+                                <div class="mb-3">
                                     <input type="text" class="form-control form-control-lg" id="cep" placeholder="00000-000" style="background-color: #F5F5F5;" maxlength="9">
-                                    <button type="button" class="btn btn-outline-secondary" onclick="buscarCEP()"><i class="bi bi-search"></i> Buscar</button>
                                 </div>
+                                <p class="mb-4">Porém, precisamos de algumas informações:</p>
                                 <input type="hidden" id="state">
                                 <input type="hidden" id="city">
-                                <div class="mb-4">
-                                    <small class="text-muted" id="cep-result"></small>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-step2-continue" onclick="handleStep2Continue()">Continuar</button>
                                 </div>
-                                <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
-                                <button type="button" class="btn btn-primary" id="btn-step3-continue" onclick="handleStep3Continue()">Continuar</button>
                             </div>
 
                             <!-- Etapa 4: Email, WhatsApp, Senha (4 a 6 de 6) -->
                             <div id="step-4" class="wizard-step d-none">
-                                <p class="fs-5 mb-2">Porém, precisamos de algumas informações:</p>
+                                <p class="fs-5 mb-4">Porém, precisamos de algumas informações:</p>
                                 <p class="mb-2">Por favor, informe seu E-mail <span class="text-muted small">(4 de 6)</span></p>
-                                <p class="text-muted small mb-2">Importante para recuperar sua senha e receber atualizações.</p>
-                                <div class="mb-3">
+                                <div class="mb-2">
                                     <input type="email" class="form-control form-control-lg" id="email" placeholder="seu@email.com" style="background-color: #F5F5F5;">
                                 </div>
+                                <p class="text-muted small mb-3">Importante para recuperar sua senha e receber atualizações.</p>
                                 <p class="mb-2">O seu WhatsApp <span class="text-muted small">(5 de 6 - opcional)</span></p>
-                                <p class="text-muted small mb-2">Não é obrigatório. Além disso, você sempre poderá bloqueá-lo.</p>
-                                <div class="mb-3">
+                                <div class="mb-2">
                                     <input type="text" class="form-control form-control-lg" id="whatsapp" placeholder="(00) 00000-0000" style="background-color: #F5F5F5;">
                                 </div>
+                                <p class="text-muted small mb-3">Não é obrigatório. Além disso, você sempre poderá bloqueá-lo.</p>
                                 <p class="mb-2">Cadastre uma senha de acesso <span class="text-muted small">(6 de 6)</span></p>
-                                <p class="text-muted small mb-2">Recomendações para senha forte: use letras, números e símbolos.</p>
-                                <div class="mb-4">
+                                <div class="mb-2">
                                     <input type="password" class="form-control form-control-lg" id="password" placeholder="Mínimo 6 caracteres" style="background-color: #F5F5F5;" minlength="6">
                                 </div>
-                                <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continuar</button>
+                                <p class="text-muted small mb-4">Recomendações para senha forte: use letras, números e símbolos.</p>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
+                                    <button type="button" class="btn btn-primary" onclick="nextStep()">Continuar</button>
+                                </div>
                             </div>
 
                             <!-- Etapa 5: Chave de ativação -->
                             <div id="step-5" class="wizard-step d-none">
-                                <p class="fs-5 mb-2">Agora é só digitar sua chave de ativação</p>
-                                <p class="text-muted mb-3">A chave de ativação é necessária para acessar o sistema. Se você não possui uma chave, entre em contato com o administrador do sistema.</p>
+                                <p class="fs-5 mb-2">Perfeito, <span id="nome-step5"></span>!</p>
+                                <p class="mb-2">Esta etapa foi concluída com sucesso. Agora é só digitar sua chave de ativação.</p>
+                                <p class="text-muted small mb-3">A chave de ativação é necessária para acessar o sistema. Se você não possui uma chave, entre em contato com o administrador do sistema.</p>
                                 <div class="mb-4">
                                     <input type="text" class="form-control form-control-lg" id="activation_key" placeholder="Chave de ativação" style="background-color: #F5F5F5;">
                                 </div>
-                                <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
-                                <button type="button" class="btn btn-primary" onclick="nextStep()">Continuar</button>
+                                <div class="text-center">
+                                    <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
+                                    <button type="button" class="btn btn-success btn-lg" id="submit-btn" onclick="nextStep()">Finalizar cadastro</button>
+                                </div>
                             </div>
 
-                            <!-- Etapa 6: Perfeito / Concluído -->
-                            <div id="step-6" class="wizard-step d-none">
-                                <p class="fs-5 mb-3">Perfeito, <span id="nome-final"></span>!</p>
-                                <p class="mb-4">Esta etapa foi concluída com sucesso.</p>
-                                <button type="button" class="btn btn-success btn-lg" id="submit-btn" onclick="nextStep()">Finalizar cadastro</button>
-                            </div>
+                            <!-- Etapa 6: Oculto - submit acontece do step 5 -->
+                            <div id="step-6" class="wizard-step d-none"></div>
                         </div>
                     </div>
 
-                    <div class="mt-4 text-center">
-                        <a href="/login" class="text-secondary">Já tem uma conta? Faça login</a>
-                    </div>
                 </div>
             </div>
         </div>
