@@ -1,0 +1,12 @@
+2026-03-20 21:15:23,328 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2026-03-20 21:15:23,328 - app.routes.basic_data - INFO - Registro ID 1: month=2, year=2026, clients_served=423
+2026-03-20 21:15:23,329 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=432.0, sales_expenses=432.0, input_product_expenses=432.0
+2026-03-20 21:15:23,329 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=432.0, other_fixed_costs=324.0
+2026-03-20 21:15:23,330 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=43.2, sales_expenses=43.2, input_product_expenses=43.2
+2026-03-20 21:15:23,330 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=43.2, other_fixed_costs=32.4
+2026-03-20 21:23:21,021 - app.routes.basic_data - INFO - Dados básicos encontrados: 1 registros
+2026-03-20 21:23:21,022 - app.routes.basic_data - INFO - Registro ID 2: month=2, year=2026, clients_served=3
+2026-03-20 21:23:21,022 - app.routes.basic_data - INFO - Valores monetários brutos: sales_revenue=3.0, sales_expenses=3.0, input_product_expenses=3.0
+2026-03-20 21:23:21,022 - app.routes.basic_data - INFO - Valores monetários brutos: fixed_costs=None, pro_labore=3.0, other_fixed_costs=3.0
+2026-03-20 21:23:21,022 - app.routes.basic_data - INFO - Valores formatados: sales_revenue=0.3, sales_expenses=0.3, input_product_expenses=0.3
+2026-03-20 21:23:21,023 - app.routes.basic_data - INFO - Valores formatados: fixed_costs=None, pro_labore=0.3, other_fixed_costs=0.3

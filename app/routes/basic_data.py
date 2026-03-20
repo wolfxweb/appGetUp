@@ -207,7 +207,7 @@ async def save_basic_data(
             sales_expenses=convert_currency(sales_expenses),
             input_product_expenses=convert_currency(input_product_expenses),
             fixed_costs=convert_currency(fixed_costs) if fixed_costs else None,
-            ideal_profit_margin=safe_float(ideal_profit_margin),
+            ideal_profit_margin=safe_float(ideal_profit_margin) or (float(ideal_service_profit_margin) if ideal_service_profit_margin is not None else None),
             service_capacity=safe_float(service_capacity),
             pro_labore=convert_currency(pro_labore) if pro_labore else None,
             work_hours_per_week=float(work_hours_per_week) if work_hours_per_week else None,

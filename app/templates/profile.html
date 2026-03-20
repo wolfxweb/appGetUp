@@ -452,7 +452,10 @@
                                 <div class="row">
                                     <!-- Segunda linha: CEP, Estado e Cidade -->
                                     <div class="col-md-4 mb-3">
-                                        <label for="cep" class="form-label">CEP</label>
+                                        <label for="cep" class="form-label">
+                                            CEP
+                                            <i class="bi bi-info-circle text-primary ms-1" style="cursor: pointer; font-size: 1.1rem;" data-bs-toggle="modal" data-bs-target="#cepHelpModal" title="Como funciona"></i>
+                                        </label>
                                         <div class="input-group">
                                             <input type="text" class="form-control" id="cep" name="cep" placeholder="00000-000" value="{{ user.cep if user.cep else '' }}">
                                             <button type="button" class="btn btn-outline-secondary" onclick="buscarEnderecoPorCEP()">
@@ -521,13 +524,29 @@
                                 </div>
 
                                 <div class="row">
-                                    <!-- Quarta linha: Chave de Ativação -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="activation_key" class="form-label">Chave de Ativação</label>
+                                    <!-- Chave de Ativação, Capacidade de Atendimento e Margem Ideal -->
+                                    <div class="col-md-4 mb-3">
+                                        <label for="activation_key" class="form-label">
+                                            Chave de Ativação
+                                            <i class="bi bi-info-circle text-primary ms-1" style="cursor: pointer; font-size: 1.1rem;" data-bs-toggle="modal" data-bs-target="#activationKeyHelpModal" title="O que é"></i>
+                                        </label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" value="{{ user.activation_key if user.activation_key else '' }}">
+                                            <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave" value="{{ user.activation_key if user.activation_key else '' }}">
                                             <button type="button" class="btn btn-secondary" id="activateBtn">Ativar Licença</button>
                                         </div>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="service_capacity" class="form-label">Capacidade de Atendimento</label>
+                                        <input type="number" class="form-control" id="service_capacity" name="service_capacity" min="0" step="0.01" placeholder="Ex: 150 ou 150,5" value="{{ user.service_capacity if user.service_capacity is not none else '' }}">
+                                        <small class="text-muted">Vendas/mês (estimativa)</small>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="ideal_profit_margin" class="form-label">Margem Ideal (%)</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="ideal_profit_margin" name="ideal_profit_margin" min="0" max="100" step="0.01" placeholder="Ex: 15 ou 15,5" value="{{ user.ideal_profit_margin if user.ideal_profit_margin is not none else '' }}">
+                                            <span class="input-group-text">%</span>
+                                        </div>
+                                        <small class="text-muted">Lucro ideal</small>
                                     </div>
                                 </div>
 
@@ -543,6 +562,40 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajuda CEP -->
+<div class="modal fade" id="cepHelpModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-geo-alt me-2"></i>Como funciona o CEP</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Campo CEP:</strong> Digite os 8 dígitos do CEP da sua loja ou negócio (com ou sem hífen).</p>
+                <p><strong>Botão Buscar:</strong> Após digitar o CEP completo, clique em <strong>Buscar</strong> para consultar automaticamente o endereço na base dos Correios. Os campos <strong>Estado</strong> e <strong>Cidade</strong> serão preenchidos automaticamente.</p>
+                <p class="text-muted small mb-0">Dica: você também pode pressionar Enter no campo CEP para disparar a busca.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Ajuda Chave de Ativação -->
+<div class="modal fade" id="activationKeyHelpModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-key me-2"></i>Chave de Ativação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>A <strong>Chave de Ativação</strong> é um código fornecido pelo administrador do sistema para habilitar o acesso completo à plataforma SuccessWay.</p>
+                <p>Se você ainda não possui uma chave, entre em contato com o administrador ou a equipe de suporte. Ao receber a chave, digite-a neste campo e clique em <strong>Ativar Licença</strong> para associá-la à sua conta.</p>
+                <p class="text-muted small mb-0">Usuários que já ativaram a licença verão a chave exibida neste campo.</p>
             </div>
         </div>
     </div>

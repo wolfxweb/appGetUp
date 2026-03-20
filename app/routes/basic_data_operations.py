@@ -171,6 +171,13 @@ async def new_basic_data_page(
     )
     existing_data = result.scalar_one_or_none()
 
+    # Preencher margem e capacidade do onboarding quando for novo registro
+    prefill_margin = None
+    prefill_capacity = None
+    if not existing_data and current_user:
+        prefill_margin = getattr(current_user, 'ideal_profit_margin', None)
+        prefill_capacity = getattr(current_user, 'service_capacity', None)
+
     return templates.TemplateResponse(
         "basic_data_form.html",
         {
@@ -184,7 +191,9 @@ async def new_basic_data_page(
             "current_page": 1,
             "total_pages": 1,
             "per_page": 10,
-            "total_logs": 0
+            "total_logs": 0,
+            "prefill_margin": prefill_margin,
+            "prefill_capacity": prefill_capacity
         }
     )
 
@@ -269,7 +278,8 @@ async def save_basic_data(
         logger.info(f"- pro_labore_float: {pro_labore_float}")
         logger.info(f"- other_fixed_costs_float: {other_fixed_costs_float}")
         
-        # Preparar os dados para atualização/inserção
+        # Preparar os dados para atualização/inserção (form envia ideal_service_profit_margin)
+        margin_val = safe_float(ideal_profit_margin) or (float(ideal_service_profit_margin) if ideal_service_profit_margin is not None else None)
         data_dict = {
             'month': month,
             'year': year,
@@ -278,12 +288,12 @@ async def save_basic_data(
             'sales_expenses': sales_expenses_float,
             'input_product_expenses': input_product_expenses_float,
             'fixed_costs': fixed_costs_float,
-            'ideal_profit_margin': safe_float(ideal_profit_margin),
+            'ideal_profit_margin': margin_val,
             'service_capacity': safe_float(service_capacity),
             'pro_labore': pro_labore_float,
             'work_hours_per_week': work_hours_per_week,
             'other_fixed_costs': other_fixed_costs_float,
-            'ideal_service_profit_margin': ideal_service_profit_margin,
+            'ideal_service_profit_margin': margin_val,
             'is_current': is_current_bool,
             'activity_type': current_user.activity_type
         }
@@ -767,12 +777,13 @@ async def update_basic_data(
         existing_data.sales_expenses = convert_currency(sales_expenses)
         existing_data.input_product_expenses = convert_currency(input_product_expenses)
         existing_data.fixed_costs = convert_currency(fixed_costs) if fixed_costs else None
-        existing_data.ideal_profit_margin = safe_float(ideal_profit_margin)
+        margin_val = safe_float(ideal_profit_margin) or (float(ideal_service_profit_margin) if ideal_service_profit_margin is not None else None)
+        existing_data.ideal_profit_margin = margin_val
+        existing_data.ideal_service_profit_margin = margin_val
         existing_data.service_capacity = safe_float(service_capacity)
         existing_data.pro_labore = convert_currency(pro_labore) if pro_labore else None
         existing_data.work_hours_per_week = float(work_hours_per_week) if work_hours_per_week else None
         existing_data.other_fixed_costs = convert_currency(other_fixed_costs) if other_fixed_costs else None
-        existing_data.ideal_service_profit_margin = float(ideal_service_profit_margin) if ideal_service_profit_margin else None
         existing_data.is_current = is_current.lower() == 'true' if isinstance(is_current, str) else bool(is_current)
 
         # Registrar as alterações comparando valores antigos com os novos
@@ -782,12 +793,12 @@ async def update_basic_data(
             'sales_expenses': convert_currency(sales_expenses),
             'input_product_expenses': convert_currency(input_product_expenses),
             'fixed_costs': convert_currency(fixed_costs) if fixed_costs else None,
-            'ideal_profit_margin': safe_float(ideal_profit_margin),
+            'ideal_profit_margin': margin_val,
             'service_capacity': safe_float(service_capacity),
             'pro_labore': convert_currency(pro_labore) if pro_labore else None,
             'work_hours_per_week': float(work_hours_per_week) if work_hours_per_week else None,
             'other_fixed_costs': convert_currency(other_fixed_costs) if other_fixed_costs else None,
-            'ideal_service_profit_margin': float(ideal_service_profit_margin) if ideal_service_profit_margin else None,
+            'ideal_service_profit_margin': margin_val,
             'is_current': is_current.lower() == 'true' if isinstance(is_current, str) else bool(is_current)
         })
 

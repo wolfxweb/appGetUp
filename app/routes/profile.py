@@ -9,6 +9,7 @@ from app.database.db import get_db
 from app.models.user import User
 from app.models.license import License
 from app.routes.auth import get_current_user
+from app.utils.converters import safe_float
 
 router = APIRouter()
 
@@ -59,6 +60,8 @@ async def update_profile(
     city: str = Form(None),
     complement: str = Form(None),
     activation_key: str = Form(None),
+    ideal_profit_margin: str = Form(None),
+    service_capacity: str = Form(None),
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
@@ -136,6 +139,8 @@ async def update_profile(
             current_user.state = state
             current_user.city = city
             current_user.complement = complement
+            current_user.ideal_profit_margin = safe_float(ideal_profit_margin)
+            current_user.service_capacity = safe_float(service_capacity)
 
             try:
                 await db.commit()

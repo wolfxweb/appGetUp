@@ -57,13 +57,13 @@
         }
     }
 
-    async function buscarCEP() {
+    async function buscarCEP(silent) {
         const cep = document.getElementById('cep').value.replace(/\D/g, '');
-        if (cep.length !== 8) { showErr('Informe um CEP válido com 8 dígitos.'); return false; }
+        if (cep.length !== 8) { if (!silent) showErr('Informe um CEP válido com 8 dígitos.'); return false; }
         try {
             const res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
             const data = await res.json();
-            if (data.erro) { showErr('CEP não encontrado.'); return false; }
+            if (data.erro) { if (!silent) showErr('CEP não encontrado.'); return false; }
             document.getElementById('state').value = data.uf || '';
             document.getElementById('city').value = data.localidade || '';
             formData.cep = cep;
@@ -71,18 +71,21 @@
             formData.city = data.localidade || '';
             return true;
         } catch (e) {
-            showErr('Erro ao buscar CEP. Tente novamente.');
+            if (!silent) showErr('Erro ao buscar CEP. Tente novamente.');
             return false;
         }
     }
 
     async function handleStep2Continue() {
+        const err = document.getElementById('step-error');
+        if (err) err.classList.add('d-none');
         const cep = document.getElementById('cep').value.replace(/\D/g, '');
-        const state = document.getElementById('state').value;
-        const city = document.getElementById('city').value;
-        if (cep.length === 8 && (!state || !city)) {
-            const ok = await buscarCEP();
-            if (!ok) return;
+        if (cep.length === 8) {
+            const state = document.getElementById('state').value;
+            const city = document.getElementById('city').value;
+            if (!state || !city) {
+                await buscarCEP(true);
+            }
         }
         if (validateStep(2)) {
             nextStep();
@@ -118,17 +121,14 @@
             const at = document.getElementById('activity_type').value;
             const sa = document.getElementById('specialty_area').value;
             const cep = document.getElementById('cep').value.replace(/\D/g, '');
-            const state = document.getElementById('state').value;
-            const city = document.getElementById('city').value;
             if (!at) { showErr('Selecione o setor de atuação.'); return false; }
             if (!sa) { showErr('Selecione o ramo de atuação.'); return false; }
             if (cep.length !== 8) { showErr('Informe um CEP válido com 8 dígitos.'); return false; }
-            if (!state || !city) { showErr('Informe um CEP válido e aguarde a busca ou tente outro CEP.'); return false; }
             formData.activity_type = at;
             formData.specialty_area = sa;
             formData.cep = cep;
-            formData.state = state;
-            formData.city = city;
+            formData.state = document.getElementById('state').value || '';
+            formData.city = document.getElementById('city').value || '';
         } else if (step === 4) {
             const email = document.getElementById('email').value.trim();
             const whatsapp = document.getElementById('whatsapp').value.replace(/\D/g, '');
