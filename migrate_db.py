@@ -29,6 +29,18 @@ def migrate_database():
                 print(f"Adicionando coluna {column_name}...")
                 cursor.execute(f"ALTER TABLE basic_data ADD COLUMN {column_name} {column_type}")
         
+        cursor.execute("PRAGMA table_info(users)")
+        user_columns = [col[1] for col in cursor.fetchall()]
+        for col_name, col_type in (
+            ("ideal_profit_margin", "REAL"),
+            ("service_capacity", "REAL"),
+            ("ja_acessou", "INTEGER"),
+            ("onboarding_completed", "INTEGER"),
+        ):
+            if col_name not in user_columns:
+                print(f"Adicionando coluna {col_name} em users...")
+                cursor.execute(f"ALTER TABLE users ADD COLUMN {col_name} {col_type}")
+        
         # Commit das alterações
         conn.commit()
         print("Migração concluída com sucesso!")

@@ -36,6 +36,10 @@ async def check_license_middleware(request: Request, call_next):
         if current_user.access_level == "Administrador":
             return await call_next(request)
 
+        # Fluxo pós-cadastro (Ana) — permitir antes de licença
+        if request.url.path.startswith("/onboarding"):
+            return await call_next(request)
+
         # Para usuários não-admin, verificar se tem chave de ativação
         if not current_user.activation_key:
             return RedirectResponse(url="/profile", status_code=status.HTTP_303_SEE_OTHER)

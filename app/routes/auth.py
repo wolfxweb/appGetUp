@@ -17,6 +17,7 @@ from app.utils.email import send_password_reset_email
 from app.models.basic_data import BasicData
 from app.models.basic_data_log import BasicDataLog
 from app.core.auth import get_current_user
+from app.utils.converters import safe_float
 import bcrypt
 
 router = APIRouter()
@@ -134,7 +135,8 @@ async def register(
             city=city,
             complement=complement,
             company_activity=company_activity,
-            specialty_area=specialty_area
+            specialty_area=specialty_area,
+            onboarding_completed=False,
         )
         
         db.add(new_user)
@@ -148,7 +150,7 @@ async def register(
         
         # Configurar cookie com o token e redirecionar
         response = JSONResponse(
-            content={"redirect": "/dashboard"},
+            content={"redirect": "/onboarding"},
             status_code=200
         )
         response.set_cookie(
@@ -166,6 +168,40 @@ async def register(
             status_code=500,
             content={"detail": f"Erro ao criar conta: {str(e)}"}
         )
+
+@router.get("/onboarding", response_class=HTMLResponse)
+async def onboarding_page(request: Request, current_user=Depends(get_current_user)):
+    if not current_user:
+        return RedirectResponse(url="/login")
+    oc = getattr(current_user, "onboarding_completed", None)
+    if oc is True:
+        return RedirectResponse(url="/basic-data/new")
+    if oc is None:
+        return RedirectResponse(url="/dashboard")
+    return templates.TemplateResponse("onboarding.html", {
+        "request": request,
+        "user": current_user,
+    })
+
+@router.post("/onboarding")
+async def onboarding_submit(
+    request: Request,
+    ideal_profit_margin: str = Form(None),
+    service_capacity: str = Form(None),
+    current_user=Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    if not current_user:
+        return RedirectResponse(url="/login")
+    try:
+        current_user.ideal_profit_margin = safe_float(ideal_profit_margin)
+        current_user.service_capacity = safe_float(service_capacity)
+        current_user.onboarding_completed = True
+        current_user.ja_acessou = True
+        await db.commit()
+        return RedirectResponse(url="/basic-data/new", status_code=303)
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"detail": str(e)})
 
 @router.get("/login", response_class=HTMLResponse)
 async def login_page(request: Request):
@@ -198,8 +234,10 @@ async def login(
         )
         
         # Configurar cookie com o token e redirecionar
+        oc = getattr(user, "onboarding_completed", None)
+        redirect_url = "/onboarding" if oc is False else "/dashboard"
         response = JSONResponse(
-            content={"redirect": "/dashboard"},
+            content={"redirect": redirect_url},
             status_code=200
         )
         response.set_cookie(
@@ -370,6 +408,8 @@ async def edit_basic_data_page(
 async def dashboard_page(request: Request, current_user = Depends(get_current_user)):
     if not current_user:
         return RedirectResponse(url="/login")
+    if getattr(current_user, "onboarding_completed", None) is False:
+        return RedirectResponse(url="/onboarding")
     now = datetime.now(ZoneInfo("America/Sao_Paulo"))
     return templates.TemplateResponse("dashboard.html", {
         "request": request,

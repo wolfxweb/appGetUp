@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, func, ForeignKey
+from sqlalchemy import Column, Integer, Float, String, Boolean, DateTime, func, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database.db import Base
@@ -35,6 +35,12 @@ class User(Base):
     complement = Column(String, nullable=True)  # Complemento
     company_activity = Column(String, nullable=True)  # Atividade da Empresa
     specialty_area = Column(String, nullable=True)  # Área de Especialidade
+    
+    # Pós-cadastro: perguntas da Ana (margem e capacidade) + flag de fluxo
+    ideal_profit_margin = Column(Float, nullable=True)
+    service_capacity = Column(Float, nullable=True)
+    ja_acessou = Column(Boolean, nullable=True)
+    onboarding_completed = Column(Boolean, default=False, nullable=True)
     
     # Relacionamento com Dados Básicos
     basic_data = relationship("BasicData", back_populates="user", cascade="all, delete-orphan")

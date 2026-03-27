@@ -164,6 +164,12 @@ async def new_basic_data_page(
     )
     existing_data = result.scalar_one_or_none()
 
+    prefill_margin = None
+    prefill_capacity = None
+    if not existing_data:
+        prefill_margin = getattr(current_user, "ideal_profit_margin", None)
+        prefill_capacity = getattr(current_user, "service_capacity", None)
+
     return templates.TemplateResponse(
         "basic_data_form.html",
         {
@@ -177,7 +183,9 @@ async def new_basic_data_page(
             "current_page": 1,
             "total_pages": 1,
             "per_page": 10,
-            "total_logs": 0
+            "total_logs": 0,
+            "prefill_margin": prefill_margin,
+            "prefill_capacity": prefill_capacity,
         }
     )
 
