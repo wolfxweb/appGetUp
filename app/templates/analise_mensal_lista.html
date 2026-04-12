@@ -1,0 +1,456 @@
+{% extends "base.html" %}
+
+{% block title %}Lista de Análises Mensais - GetUp Gestão{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #F5F5F5 !important;
+    }
+    .container-fluid, .container {
+        background-color: #F5F5F5 !important;
+    }
+    .card, .card-body {
+        background-color: #F0F0F0 !important;
+    }
+    .card-header.bg-secondary {
+        background-color: #6c757d !important;
+        color: white !important;
+    }
+    .btn-primary i, .btn-danger i, .btn-secondary i {
+        color: white !important;
+    }
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+        color: white;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: white;
+    }
+    .btn-primary {
+        background-color: rgb(1, 57, 44) !important;
+        border-color: rgb(1, 57, 44) !important;
+    }
+    .btn-primary:hover {
+        background-color: rgb(2, 70, 54) !important;
+        border-color: rgb(2, 70, 54) !important;
+    }
+    .form-control, .form-select {
+        background-color: #F5F5F5 !important;
+    }
+    .table-responsive {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+    .analise-badge {
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+    }
+    .analise-badge.positivo {
+        background-color: #d4edda;
+        color: #155724;
+    }
+    .analise-badge.negativo {
+        background-color: #f8d7da;
+        color: #721c24;
+    }
+    .analise-badge.neutro {
+        background-color: #fff3cd;
+        color: #856404;
+    }
+    .metric-summary {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #dee2e6;
+    }
+    .metric-summary .value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: rgb(1, 57, 44);
+    }
+    .metric-summary .label {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <div class="col-md-12 mb-4 d-flex justify-content-between align-items-center">
+                <img src="/static/images/Logo.png" alt="Logo" height="40">
+            </div>
+            
+            <!-- Navigation Buttons -->
+            <div class="row mb-4 justify-content-center">
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
+                </div>
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/analise-mensal" class="btn btn-secondary w-100">Nova Análise</a>
+                </div>
+            </div>
+
+            <!-- Main card -->
+            <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="card-title mb-0">Histórico de Análises Mensais</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Year Filter -->
+                    <div class="row mb-4 align-items-end">
+                        <div class="col-md-6">
+                            <label for="anoSelect" class="form-label">Selecione o Ano:</label>
+                            <select class="form-select" id="anoSelect">
+                                <option value="">Selecione um ano...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <a href="/analise-mensal" class="btn btn-primary">
+                                <i class="bi bi-plus-circle"></i> Nova Análise Mensal
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Summary Metrics -->
+                    <div class="metric-summary" id="metricSummary" style="display: none;">
+                        <div class="row text-center">
+                            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                                <div class="value" id="totalAnalises">0</div>
+                                <div class="label">Total de Análises</div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                                <div class="value" id="faturamentoTotal">R$ 0,00</div>
+                                <div class="label">Faturamento Total</div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="value" id="ticketMedio">R$ 0,00</div>
+                                <div class="label">Ticket Médio</div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="value" id="margemMedia">0%</div>
+                                <div class="label">Margem Média</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Empty State Message -->
+                    <div id="mensagemSemDados" class="alert alert-info" style="display: none;">
+                        Nenhuma análise mensal cadastrada. Clique em "Nova Análise Mensal" para começar.
+                    </div>
+
+                    <!-- Analysis List Table -->
+                    <div id="tabelaAnalisesContainer" style="display: none;">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Mês</th>
+                                        <th>Ano</th>
+                                        <th>Faturamento</th>
+                                        <th>Clientes</th>
+                                        <th>Custos Fixos</th>
+                                        <th>Custos Variáveis</th>
+                                        <th>Resultado</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabelaAnalises">
+                                    <!-- Will be populated via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div class="modal fade" id="modalExcluir" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="background-color: #F0F0F0;">
+                <div class="modal-header bg-secondary text-white">
+                    <h5 class="modal-title">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="mb-0">Tem certeza que deseja excluir esta análise?</p>
+                    <p class="text-muted small">Esta ação não pode ser desfeita.</p>
+                </div>
+                <div class="modal-footer justify-content-center">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btnConfirmarExcluir">
+                        <i class="bi bi-trash"></i> Excluir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const mesesNomes = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+const mesesShort = ['', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'];
+let idParaExcluir = null;
+let modalExcluir = null;
+
+// Format currency
+function formatCurrency(value) {
+    if (value === null || value === undefined) return '-';
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+}
+
+// Format percentage
+function formatPercent(value) {
+    if (value === null || value === undefined) return '-';
+    return value.toFixed(1) + '%';
+}
+
+// Populate year dropdown
+async function popularAnos() {
+    console.log('[popularAnos] Iniciando...');
+    const select = document.getElementById('anoSelect');
+    const mensagemSemDados = document.getElementById('mensagemSemDados');
+    
+    if (!select) {
+        console.error('[popularAnos] Elemento anoSelect não encontrado!');
+        return;
+    }
+    
+    try {
+        console.log('[popularAnos] Fazendo requisição para /analise-mensal/api/available-years...');
+        const response = await fetch('/analise-mensal/api/available-years', {
+            credentials: 'include'
+        });
+        console.log('[popularAnos] Response status:', response.status, response.statusText);
+        
+        if (response.ok) {
+            const data = await response.json();
+            const anos = data.years || [];
+            console.log('[popularAnos] Anos recebidos:', anos);
+            
+            if (!Array.isArray(anos) || anos.length === 0) {
+                console.log('[popularAnos] Nenhum ano encontrado');
+                select.style.display = 'none';
+                mensagemSemDados.style.display = 'block';
+                mensagemSemDados.textContent = 'Nenhuma análise mensal cadastrada. Clique em "Nova Análise Mensal" para começar.';
+                document.getElementById('tabelaAnalisesContainer').style.display = 'none';
+                document.getElementById('metricSummary').style.display = 'none';
+                return;
+            }
+            
+            select.style.display = 'block';
+            mensagemSemDados.style.display = 'none';
+            select.innerHTML = '<option value="">Selecione um ano...</option>';
+            
+            anos.sort((a, b) => b - a);
+            anos.forEach(ano => {
+                const option = document.createElement('option');
+                option.value = ano;
+                option.textContent = ano;
+                select.appendChild(option);
+            });
+            
+            if (anos.length > 0) {
+                select.value = anos[0];
+                console.log('[popularAnos] Selecionando ano:', anos[0]);
+                await carregarAnalises();
+            }
+        } else {
+            console.error('[popularAnos] Erro na resposta:', response.status);
+            const errorText = await response.text();
+            console.error('[popularAnos] Erro detalhado:', errorText);
+            select.style.display = 'none';
+            mensagemSemDados.style.display = 'block';
+            mensagemSemDados.textContent = 'Erro ao carregar dados. Tente novamente.';
+        }
+    } catch (error) {
+        console.error('[popularAnos] Erro ao carregar anos:', error);
+        select.style.display = 'none';
+        mensagemSemDados.style.display = 'block';
+        mensagemSemDados.textContent = 'Erro ao carregar dados. Tente novamente.';
+    }
+    
+    if (!select.hasAttribute('data-listener-added')) {
+        select.setAttribute('data-listener-added', 'true');
+        select.addEventListener('change', function() {
+            if (this.value) {
+                console.log('[popularAnos] Ano alterado para:', this.value);
+                carregarAnalises();
+            }
+        });
+    }
+}
+
+// Load analyses for selected year
+async function carregarAnalises() {
+    const ano = document.getElementById('anoSelect').value;
+    if (!ano) {
+        console.log('Nenhum ano selecionado');
+        return;
+    }
+    
+    console.log('Carregando análises para o ano:', ano);
+    
+    try {
+        const response = await fetch(`/analise-mensal/api/listar?ano=${ano}`, {
+            credentials: 'include'
+        });
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) throw new Error('Erro ao carregar dados');
+        
+        const data = await response.json();
+        const analises = data.analises || [];
+        console.log('Análises recebidas:', analises);
+        
+        if (analises.length === 0) {
+            console.log('Nenhuma análise encontrada para o ano:', ano);
+            document.getElementById('mensagemSemDados').style.display = 'block';
+            document.getElementById('tabelaAnalisesContainer').style.display = 'none';
+            document.getElementById('metricSummary').style.display = 'none';
+            return;
+        }
+        
+        document.getElementById('mensagemSemDados').style.display = 'none';
+        document.getElementById('tabelaAnalisesContainer').style.display = 'block';
+        document.getElementById('metricSummary').style.display = 'block';
+        
+        preencherTabelaAnalises(analises);
+        atualizarMetricas(analises);
+    } catch (error) {
+        console.error('Erro ao carregar dados:', error);
+        document.getElementById('mensagemSemDados').style.display = 'block';
+        document.getElementById('mensagemSemDados').textContent = 'Erro ao carregar dados. Tente novamente.';
+    }
+}
+
+// Fill the analyses table
+function preencherTabelaAnalises(analises) {
+    const tbody = document.getElementById('tabelaAnalises');
+    tbody.innerHTML = '';
+    
+    // Sort by month (1-12)
+    analises.sort((a, b) => a.mes - b.mes);
+    
+    analises.forEach(analise => {
+        const tr = document.createElement('tr');
+        
+        // Calculate result (simplified - would need full calculation based on actual data)
+        const resultado = analise.resultado !== undefined && analise.resultado !== null 
+            ? analise.resultado 
+            : null;
+        
+        let resultadoBadge = '';
+        if (resultado !== null) {
+            if (resultado > 0) {
+                resultadoBadge = `<span class="analise-badge positivo">${formatCurrency(resultado)}</span>`;
+            } else if (resultado < 0) {
+                resultadoBadge = `<span class="analise-badge negativo">${formatCurrency(resultado)}</span>`;
+            } else {
+                resultadoBadge = `<span class="analise-badge neutro">${formatCurrency(resultado)}</span>`;
+            }
+        } else {
+            resultadoBadge = '-';
+        }
+        
+        tr.innerHTML = `
+            <td class="fw-bold">${mesesShort[analise.mes]}</td>
+            <td>${analise.ano}</td>
+            <td>${formatCurrency(analise.faturamento)}</td>
+            <td>${analise.quant_clientes || '-'}</td>
+            <td>${formatCurrency(analise.custo_fixo_total)}</td>
+            <td>${formatCurrency(analise.custo_mercadorias)}</td>
+            <td>${resultadoBadge}</td>
+            <td>
+                <div class="btn-group btn-group-sm" role="group">
+                    <a href="/analise-mensal/edit/${analise.id}" class="btn btn-secondary" title="Editar">
+                        <i class="bi bi-pencil"></i>
+                    </a>
+                    <button class="btn btn-danger btn-sm" onclick="excluirAnalise(${analise.id})" title="Excluir">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Update summary metrics
+function atualizarMetricas(analises) {
+    const total = analises.length;
+    const faturamentoTotal = analises.reduce((sum, a) => sum + (a.faturamento || 0), 0);
+    const ticketMedio = total > 0 ? faturamentoTotal / analises.reduce((sum, a) => sum + (a.quant_clientes || 0), 0) : 0;
+    
+    // Simplified margin calculation
+    const margemMedia = total > 0 
+        ? analises.reduce((sum, a) => {
+            if (a.faturamento && a.faturamento > 0) {
+                const custoTotal = (a.custo_fixo_total || 0) + (a.custo_mercadorias || 0) + (a.gastos_vendas || 0);
+                return sum + ((a.faturamento - custoTotal) / a.faturamento * 100);
+            }
+            return sum;
+        }, 0) / total 
+        : 0;
+    
+    document.getElementById('totalAnalises').textContent = total;
+    document.getElementById('faturamentoTotal').textContent = formatCurrency(faturamentoTotal);
+    document.getElementById('ticketMedio').textContent = formatCurrency(ticketMedio);
+    document.getElementById('margemMedia').textContent = formatPercent(margemMedia);
+}
+
+// Delete analysis
+async function excluirAnalise(id) {
+    idParaExcluir = id;
+    modalExcluir.show();
+}
+
+async function confirmarExclusao() {
+    if (!idParaExcluir) return;
+    
+    try {
+        const response = await fetch(`/analise-mensal/api/${idParaExcluir}`, {
+            method: 'DELETE',
+            credentials: 'include'
+        });
+        
+        modalExcluir.hide();
+        
+        if (response.ok) {
+            await carregarAnalises();
+        } else {
+            alert('Erro ao excluir análise.');
+        }
+    } catch (error) {
+        console.error('Erro ao excluir análise:', error);
+        modalExcluir.hide();
+        alert('Erro ao excluir análise.');
+    }
+    
+    idParaExcluir = null;
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar modal de exclusão
+    modalExcluir = new bootstrap.Modal(document.getElementById('modalExcluir'));
+    
+    // Listener para botão de confirmar exclusão
+    document.getElementById('btnConfirmarExcluir').addEventListener('click', confirmarExclusao);
+    
+    popularAnos();
+});
+</script>
+{% endblock %}
