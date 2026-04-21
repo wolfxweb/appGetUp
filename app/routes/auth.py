@@ -175,7 +175,7 @@ async def onboarding_page(request: Request, current_user=Depends(get_current_use
         return RedirectResponse(url="/login")
     oc = getattr(current_user, "onboarding_completed", None)
     if oc is True:
-        return RedirectResponse(url="/basic-data/new")
+        return RedirectResponse(url="/analise-mensal")
     if oc is None:
         return RedirectResponse(url="/dashboard")
     return templates.TemplateResponse("onboarding.html", {
@@ -199,7 +199,7 @@ async def onboarding_submit(
         current_user.onboarding_completed = True
         current_user.ja_acessou = True
         await db.commit()
-        return RedirectResponse(url="/basic-data/new", status_code=303)
+        return RedirectResponse(url="/analise-mensal", status_code=303)
     except Exception as e:
         return JSONResponse(status_code=500, content={"detail": str(e)})
 
