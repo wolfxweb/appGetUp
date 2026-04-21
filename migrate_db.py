@@ -44,38 +44,73 @@ def migrate_database():
         # Commit das alterações
         conn.commit()
         
-        # Criar novas tabelas se não existirem
-        print("Verificando novas tabelas...")
+        # Verificar e adicionar colunas na analise_mensal
+        print("Verificando colunas na tabela analise_mensal...")
+        cursor.execute("PRAGMA table_info(analise_mensal)")
+        analise_columns = [col[1] for col in cursor.fetchall()]
         
-        # Tabela analise_mensal
-        cursor.execute("""
-            CREATE TABLE IF NOT EXISTS analise_mensal (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                user_id INTEGER NOT NULL,
-                mes INTEGER NOT NULL,
-                ano INTEGER NOT NULL,
-                capacidade_atendimento FLOAT,
-                faturamento FLOAT,
-                quant_clientes INTEGER,
-                gastos_vendas FLOAT,
-                custo_mercadorias FLOAT,
-                custo_fixo_total FLOAT,
-                ticket_medio FLOAT,
-                margem_bruta FLOAT,
-                ponto_equilibrio FLOAT,
-                margem_seguranca FLOAT,
-                custo_total FLOAT,
-                resultado FLOAT,
-                percentual_margem FLOAT,
-                corresponde_caixa BOOLEAN,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-                UNIQUE (user_id, mes, ano)
-            )
-        """)
+        # Se a tabela tem colunas antigas como 'competencia_mes', precisamos recriar
+        if "competencia_mes" in analise_columns:
+            print("Detectada estrutura antiga (competencia_mes). Recriando tabela analise_mensal...")
+            cursor.execute("DROP TABLE analise_mensal")
+            analise_columns = []
         
+        if not analise_columns:
+            # Tabela não existe, criar do zero
+            print("Criando tabela analise_mensal do zero...")
+            cursor.execute("""
+                CREATE TABLE analise_mensal (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    user_id INTEGER NOT NULL,
+                    mes INTEGER NOT NULL,
+                    ano INTEGER NOT NULL,
+                    capacidade_atendimento FLOAT,
+                    faturamento FLOAT,
+                    quant_clientes INTEGER,
+                    gastos_vendas FLOAT,
+                    custo_mercadorias FLOAT,
+                    custo_fixo_total FLOAT,
+                    ticket_medio FLOAT,
+                    margem_bruta FLOAT,
+                    ponto_equilibrio FLOAT,
+                    margem_seguranca FLOAT,
+                    custo_total FLOAT,
+                    resultado FLOAT,
+                    percentual_margem FLOAT,
+                    corresponde_caixa BOOLEAN,
+                    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+                    UNIQUE (user_id, mes, ano)
+                )
+            """)
+        else:
+            # Tabela existe, adicionar colunas faltantes
+            cols_to_add = {
+                "mes": "INTEGER NOT NULL DEFAULT 1",
+                "ano": "INTEGER NOT NULL DEFAULT 2024",
+                "capacidade_atendimento": "FLOAT",
+                "faturamento": "FLOAT",
+                "quant_clientes": "INTEGER",
+                "gastos_vendas": "FLOAT",
+                "custo_mercadorias": "FLOAT",
+                "custo_fixo_total": "FLOAT",
+                "ticket_medio": "FLOAT",
+                "margem_bruta": "FLOAT",
+                "ponto_equilibrio": "FLOAT",
+                "margem_seguranca": "FLOAT",
+                "custo_total": "FLOAT",
+                "resultado": "FLOAT",
+                "percentual_margem": "FLOAT",
+                "corresponde_caixa": "BOOLEAN"
+            }
+            for col, col_type in cols_to_add.items():
+                if col not in analise_columns:
+                    print(f"Adicionando coluna {col} em analise_mensal...")
+                    cursor.execute(f"ALTER TABLE analise_mensal ADD COLUMN {col} {col_type}")
+
         # Tabela custo_fixo
+        print("Verificando tabela custo_fixo...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS custo_fixo (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
