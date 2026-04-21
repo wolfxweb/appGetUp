@@ -15,6 +15,9 @@ echo "📦 Instalando dependências"
 pip install --upgrade pip
 pip install -r requirements.txt --break-system-packages
 
+echo "🗄️ Rodando migrações do banco de dados"
+python3 migrate_db.py
+
 echo "🔁 Reiniciando serviço"
 systemctl daemon-reload
 systemctl restart appgetup

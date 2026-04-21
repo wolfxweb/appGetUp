@@ -55,6 +55,10 @@ async def analise_mensal(
     db: AsyncSession = Depends(get_db)
 ):
     """Tela principal do wizard de analise mensal"""
+    if not current_user:
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse(url="/login")
+        
     return templates.TemplateResponse("analise_mensal.html", {
         "request": request,
         "user": current_user,
@@ -70,6 +74,10 @@ async def analise_mensal_lista(
     db: AsyncSession = Depends(get_db)
 ):
     """Tela de listagem/historico de analises mensais"""
+    if not current_user:
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse(url="/login")
+        
     return templates.TemplateResponse("analise_mensal_lista.html", {
         "request": request,
         "user": current_user,
@@ -86,6 +94,10 @@ async def editar_analise(
     db: AsyncSession = Depends(get_db)
 ):
     """Tela de edicao de analise mensal existente"""
+    if not current_user:
+        from fastapi.responses import RedirectResponse
+        return RedirectResponse(url="/login")
+        
     # Buscar a analise para verificar se existe e pertence ao usuario
     result = await db.execute(
         select(AnaliseMensal).filter(
@@ -116,6 +128,9 @@ async def verificar_analise_existente(
     db: AsyncSession = Depends(get_db)
 ):
     """Verifica se ja existe analise para o mes/ano informado"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+        
     try:
         result = await db.execute(
             select(AnaliseMensal).filter(
@@ -142,6 +157,9 @@ async def get_available_years(
     db: AsyncSession = Depends(get_db)
 ):
     """Retorna todos os anos que tem analise para o usuario"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+        
     result = await db.execute(
         select(AnaliseMensal.ano)
         .filter(AnaliseMensal.user_id == current_user.id)
@@ -163,6 +181,9 @@ async def listar_analises(
     db: AsyncSession = Depends(get_db)
 ):
     """Lista as analises do usuario com filtros e paginacao"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+        
     query = select(AnaliseMensal).filter(AnaliseMensal.user_id == current_user.id)
     
     # Aplicar filtros
@@ -211,53 +232,6 @@ async def listar_analises(
         "pagina": page,
         "por_pagina": per_page
     }
-# ==================== API: BUSCAR ANALISE POR ID ====================
-@router.get("/analise-mensal/api/{analise_id}")
-async def get_analise_by_id(
-    analise_id: int,
-    current_user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db)
-):
-    """Busca uma analise mensal pelo ID"""
-    try:
-        result = await db.execute(
-            select(AnaliseMensal).filter(
-                AnaliseMensal.id == analise_id,
-                AnaliseMensal.user_id == current_user.id
-            )
-        )
-        analise = result.scalar_one_or_none()
-        
-        if not analise:
-            raise HTTPException(status_code=404, detail="Análise não encontrada")
-        
-        return {
-            "id": analise.id,
-            "mes": analise.mes,
-            "ano": analise.ano,
-            "capacidade_atendimento": analise.capacidade_atendimento,
-            "faturamento": analise.faturamento,
-            "quant_clientes": analise.quant_clientes,
-            "gastos_vendas": analise.gastos_vendas,
-            "custo_mercadorias": analise.custo_mercadorias,
-            "custo_fixo_total": analise.custo_fixo_total,
-            "ticket_medio": analise.ticket_medio,
-            "margem_bruta": analise.margem_bruta,
-            "ponto_equilibrio": analise.ponto_equilibrio,
-            "margem_seguranca": analise.margem_seguranca,
-            "custo_total": analise.custo_total,
-            "resultado": analise.resultado,
-            "percentual_margem": analise.percentual_margem,
-            "corresponde_caixa": analise.corresponde_caixa,
-            "created_at": analise.created_at.isoformat() if analise.created_at else None,
-            "updated_at": analise.updated_at.isoformat() if analise.updated_at else None
-        }
-    except HTTPException:
-        raise
-    except Exception as e:
-        logger.error(f"Erro ao buscar análise: {str(e)}")
-        raise HTTPException(status_code=500, detail=str(e))
-
 
 # ==================== API: CUSTOS FIXOS ====================
 
@@ -267,6 +241,9 @@ async def listar_custos_fixos(
     db: AsyncSession = Depends(get_db)
 ):
     """Lista os custos fixos do usuario"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+        
     result = await db.execute(
         select(CustoFixo).filter(CustoFixo.user_id == current_user.id)
     )
@@ -341,6 +318,9 @@ async def atualizar_custo_fixo(
     db: AsyncSession = Depends(get_db)
 ):
     """Atualiza um custo fixo existente"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+        
     result = await db.execute(
         select(CustoFixo).filter(
             CustoFixo.id == custo_id,
@@ -368,6 +348,9 @@ async def excluir_custo_fixo(
     db: AsyncSession = Depends(get_db)
 ):
     """Exclui um custo fixo"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+        
     result = await db.execute(
         select(CustoFixo).filter(
             CustoFixo.id == custo_id,
@@ -398,6 +381,9 @@ async def salvar_analise(
     Se ja existe para (mes, ano, user_id), atualiza.
     Caso contrario, cria novo registro.
     """
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+        
     try:
         # Verificar se ja existe analise para este mes/ano
         result = await db.execute(
@@ -486,6 +472,9 @@ async def excluir_analise(
     db: AsyncSession = Depends(get_db)
 ):
     """Exclui uma analise mensal"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+        
     result = await db.execute(
         select(AnaliseMensal).filter(
             AnaliseMensal.id == analise_id,
@@ -501,3 +490,55 @@ async def excluir_analise(
     await db.commit()
     
     return {"success": True, "message": "Análise excluída com sucesso"}
+
+
+# ==================== API: BUSCAR ANALISE POR ID ====================
+@router.get("/analise-mensal/api/{analise_id}")
+async def get_analise_by_id(
+    analise_id: int,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Busca uma analise mensal pelo ID"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Não autorizado")
+        
+    try:
+        result = await db.execute(
+            select(AnaliseMensal).filter(
+                AnaliseMensal.id == analise_id,
+                AnaliseMensal.user_id == current_user.id
+            )
+        )
+        analise = result.scalar_one_or_none()
+        
+        if not analise:
+            raise HTTPException(status_code=404, detail="Análise não encontrada")
+        
+        return {
+            "id": analise.id,
+            "mes": analise.mes,
+            "ano": analise.ano,
+            "capacidade_atendimento": analise.capacidade_atendimento,
+            "faturamento": analise.faturamento,
+            "quant_clientes": analise.quant_clientes,
+            "gastos_vendas": analise.gastos_vendas,
+            "custo_mercadorias": analise.custo_mercadorias,
+            "custo_fixo_total": analise.custo_fixo_total,
+            "ticket_medio": analise.ticket_medio,
+            "margem_bruta": analise.margem_bruta,
+            "ponto_equilibrio": analise.ponto_equilibrio,
+            "margem_seguranca": analise.margem_seguranca,
+            "custo_total": analise.custo_total,
+            "resultado": analise.resultado,
+            "percentual_margem": analise.percentual_margem,
+            "corresponde_caixa": analise.corresponde_caixa,
+            "created_at": analise.created_at.isoformat() if analise.created_at else None,
+            "updated_at": analise.updated_at.isoformat() if analise.updated_at else None
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Erro ao buscar análise: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+

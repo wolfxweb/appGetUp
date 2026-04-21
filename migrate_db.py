@@ -43,6 +43,52 @@ def migrate_database():
         
         # Commit das alterações
         conn.commit()
+        
+        # Criar novas tabelas se não existirem
+        print("Verificando novas tabelas...")
+        
+        # Tabela analise_mensal
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS analise_mensal (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                mes INTEGER NOT NULL,
+                ano INTEGER NOT NULL,
+                capacidade_atendimento FLOAT,
+                faturamento FLOAT,
+                quant_clientes INTEGER,
+                gastos_vendas FLOAT,
+                custo_mercadorias FLOAT,
+                custo_fixo_total FLOAT,
+                ticket_medio FLOAT,
+                margem_bruta FLOAT,
+                ponto_equilibrio FLOAT,
+                margem_seguranca FLOAT,
+                custo_total FLOAT,
+                resultado FLOAT,
+                percentual_margem FLOAT,
+                corresponde_caixa BOOLEAN,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
+                UNIQUE (user_id, mes, ano)
+            )
+        """)
+        
+        # Tabela custo_fixo
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS custo_fixo (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                nome VARCHAR(255) NOT NULL,
+                valor FLOAT NOT NULL,
+                categoria VARCHAR(100),
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
+            )
+        """)
+        
+        conn.commit()
         print("Migração concluída com sucesso!")
         
     except Exception as e:

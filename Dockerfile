@@ -35,5 +35,5 @@ RUN chmod -R 777 /app
 # Expose port (mudar para 8080 para corresponder ao Easy Panel)
 EXPOSE 8080
 
-# Command to run the application (sem reload para produção)
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+# Command to run the application (roda migrações antes)
+CMD ["sh", "-c", "python migrate_db.py && uvicorn app.main:app --host 0.0.0.0 --port 8080"]

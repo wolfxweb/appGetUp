@@ -56,6 +56,10 @@ class User(Base):
     
     # Relacionamento com Produtos
     produtos = relationship("Produto", back_populates="user", cascade="all, delete-orphan")
+    
+    # Análises e Custos
+    analises_mensais = relationship("AnaliseMensal", back_populates="user", cascade="all, delete-orphan")
+    custo_fixo = relationship("CustoFixo", back_populates="user", cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<User(id={self.id}, email={self.email})>" 
