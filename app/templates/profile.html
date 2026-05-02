@@ -520,11 +520,23 @@
                                     </div>
                                 </div>
 
-                                <div class="row">
-                                    <!-- Quarta linha: Chave de Ativação -->
-                                    <div class="col-md-6 mb-3">
-                                        <label for="activation_key" class="form-label">Chave de Ativação</label>
-                                        <div class="input-group">
+	                                <div class="row">
+	                                    <!-- Quarta linha: Dados do onboarding -->
+	                                    <div class="col-md-6 mb-3">
+	                                        <label for="ideal_profit_margin" class="form-label">Margem de lucro ideal (%)</label>
+	                                        <input type="number" class="form-control" id="ideal_profit_margin" name="ideal_profit_margin" min="0" max="100" step="0.01" value="{{ user.ideal_profit_margin if user.ideal_profit_margin is not none else '' }}">
+	                                    </div>
+	                                    <div class="col-md-6 mb-3">
+	                                        <label for="service_capacity" class="form-label">Capacidade de atendimento mensal</label>
+	                                        <input type="number" class="form-control" id="service_capacity" name="service_capacity" min="0" step="0.01" value="{{ user.service_capacity if user.service_capacity is not none else '' }}">
+	                                    </div>
+	                                </div>
+
+	                                <div class="row">
+	                                    <!-- Quinta linha: Chave de Ativação -->
+	                                    <div class="col-md-6 mb-3">
+	                                        <label for="activation_key" class="form-label">Chave de Ativação</label>
+	                                        <div class="input-group">
                                             <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" value="{{ user.activation_key if user.activation_key else '' }}">
                                             <button type="button" class="btn btn-secondary" id="activateBtn">Ativar Licença</button>
                                         </div>

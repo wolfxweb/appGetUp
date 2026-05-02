@@ -464,6 +464,8 @@ async def update_profile(
     complement: str = Form(None),
     company_activity: str = Form(None),
     specialty_area: str = Form(None),
+    ideal_profit_margin: str = Form(None),
+    service_capacity: str = Form(None),
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
@@ -487,6 +489,8 @@ async def update_profile(
         current_user.complement = complement
         current_user.company_activity = company_activity
         current_user.specialty_area = specialty_area
+        current_user.ideal_profit_margin = safe_float(ideal_profit_margin)
+        current_user.service_capacity = safe_float(service_capacity)
 
         db.commit()
 
