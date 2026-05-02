@@ -14,26 +14,33 @@
                         </div>
                     </div>
 
-                    <div id="step-ana" class="onboarding-step">
-                        <div class="row">
-                            <div class="col-md-3 d-flex justify-content-center align-items-start">
-                                <img src="{{ url_for('static', path='images/user-register.jpg') }}" alt="Ana" class="img-fluid rounded" style="max-width: 120px;">
-                            </div>
-                            <div class="col-md-9">
-                                <h5 class="mb-3">Agora que nos conhecemos, quero lhe apresentar a Ana</h5>
-                                <p class="mb-2">Olá, {{ user.name }}.</p>
-                                <p class="mb-4">Estou por aqui, se você precisar, para uma ajudinha rápida. Quando me avistar é só acionar.</p>
-                                <p class="mb-4">Vamos trocar umas ideias sobre o que seus números estão dizendo?</p>
-                                <button type="button" class="btn btn-primary btn-lg" onclick="showOnboardingStep(2)">Sim, vamos</button>
-                            </div>
-                        </div>
-                    </div>
+	                    <div id="step-ana" class="onboarding-step">
+	                        <div class="row g-4 align-items-start">
+	                            <div class="col-md-3 d-flex justify-content-center align-items-start">
+	                                <img src="{{ url_for('static', path='images/Rosto João sem fundo.png') }}" alt="João" class="img-fluid rounded onboarding-character onboarding-character-joao">
+	                            </div>
+	                            <div class="col-md-9">
+	                                <h5 class="mb-4">Agora que nos conhecemos, quero lhe apresentar a Ana</h5>
+	                                <div class="row g-4 align-items-start">
+	                                    <div class="col-md-8">
+	                                        <p class="mb-2">Olá, {{ user.name }}.</p>
+	                                        <p class="mb-4">Estou por aqui, se você precisar, para uma ajudinha rápida. Quando me avistar é só acionar.</p>
+	                                        <p class="mb-4">Vamos trocar umas ideias sobre o que seus números estão dizendo?</p>
+	                                        <button type="button" class="btn btn-primary btn-lg" onclick="showOnboardingStep(2)">Sim, vamos</button>
+	                                    </div>
+	                                    <div class="col-md-4 d-flex justify-content-center align-items-start">
+	                                        <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="img-fluid onboarding-character onboarding-character-ana">
+	                                    </div>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
 
                     <div id="step-questions" class="onboarding-step d-none">
-                        <div class="row">
-                            <div class="col-md-3 d-flex justify-content-center align-items-start">
-                                <img src="{{ url_for('static', path='images/user-register.jpg') }}" alt="Ana" class="img-fluid rounded" style="max-width: 120px;">
-                            </div>
+	                        <div class="row">
+	                            <div class="col-md-3 d-flex justify-content-center align-items-start">
+	                                <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="img-fluid onboarding-character onboarding-character-ana">
+	                            </div>
                             <div class="col-md-9">
                                 <h5 class="mb-4">Esta é a primeira vez que vamos olhar juntos para os números do seu negócio.</h5>
                                 <p class="text-muted mb-4">Antes de avançarmos, quero matar duas curiosidades. Incluímos essas duas perguntas no cadastro porque são informações que não precisam ser coletadas todos os meses.</p>
@@ -65,11 +72,32 @@
     </div>
 </div>
 
-<script>
-    function showOnboardingStep(step) {
-        document.querySelectorAll('.onboarding-step').forEach(el => el.classList.add('d-none'));
-        const el = document.getElementById(step === 1 ? 'step-ana' : 'step-questions');
-        if (el) el.classList.remove('d-none');
+	<script>
+	    function showOnboardingStep(step) {
+	        document.querySelectorAll('.onboarding-step').forEach(el => el.classList.add('d-none'));
+	        const el = document.getElementById(step === 1 ? 'step-ana' : 'step-questions');
+	        if (el) el.classList.remove('d-none');
+	    }
+	</script>
+	{% endblock %}
+
+{% block extra_css %}
+<style>
+    .onboarding-character {
+        max-width: 150px;
     }
-</script>
+    .onboarding-character-joao {
+        max-width: 150px;
+    }
+    .onboarding-character-ana {
+        max-width: 170px;
+    }
+    @media (max-width: 767.98px) {
+        .onboarding-character,
+        .onboarding-character-joao,
+        .onboarding-character-ana {
+            max-width: 130px;
+        }
+    }
+</style>
 {% endblock %}
