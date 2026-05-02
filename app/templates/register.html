@@ -99,6 +99,12 @@
             'Veterinário', 'Outra atividade'
         ]
     };
+    specialtyAreas['Atacado e varejo'] = [
+        ...new Set([
+            ...specialtyAreas['Comércio atacadista'],
+            ...specialtyAreas['Comércio varejista']
+        ])
+    ];
 
     let currentStep = 0;
     const formData = { name: '', email: '', whatsapp: '', cep: '', state: '', city: '', activity_type: '', specialty_area: '', password: '', activation_key: '', terms_accepted: false };
@@ -475,7 +481,7 @@ function showStep(step) {
 {% endblock %}
 
 {% block content %}
-<div class="container-fluid mt-5" style="background-color: #F5F5F5; min-height: 100vh;">
+<div id="register-page" class="container-fluid mt-5" style="background-color: #F5F5F5; min-height: 100vh;">
     <div id="global-error" class="alert alert-danger alert-dismissible d-none position-fixed top-0 start-50 translate-middle-x mt-3 shadow" role="alert" style="z-index: 1080; min-width: 320px; max-width: 90vw;"></div>
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
@@ -497,10 +503,13 @@ function showStep(step) {
                         <div class="col">
                             <div id="step-error" class="alert alert-danger d-none" role="alert"></div>
 
-                            <div id="step-0" class="wizard-step">
-                                <p class="mb-4">Olá! Eu sou o João.<br>Especialista em gestão comercial.</p>
-                                <p class="mb-4">Se você tem uma loja sabe o quanto é preciso trabalhar para vender bem.<br> Aqui no SuccessWay estarei ao seu lado para ajudar a transformar seus números em decisões que tragam mais lucro para sua loja.</p>
-                                <p class="mb-4">Vamos começar?</p>
+                            <div id="step-0" class="wizard-step register-start-step">
+                                <div class="register-intro">
+                                    <p class="register-intro-title mb-1">Olá! Eu sou o João.</p>
+                                    <p class="register-intro-subtitle mb-4">Especialista em gestão comercial.</p>
+                                    <p class="mb-4">Se você tem uma loja sabe o quanto é preciso trabalhar para vender bem.<br> Aqui no SuccessWay estarei ao seu lado para ajudar a transformar seus números em decisões que tragam mais lucro para sua loja.</p>
+                                    <p class="register-intro-title mb-4">Vamos começar?</p>
+                                </div>
                                 <div class="text-center mb-2">
                                     <button type="button" class="btn btn-primary btn-lg" onclick="showStep(1); document.getElementById('progress-indicator').textContent='1 de 4'; document.getElementById('progress-indicator').classList.remove('d-none');">Sim, vamos</button>
                                 </div>
@@ -527,30 +536,27 @@ function showStep(step) {
 
                             <div id="step-2" class="wizard-step d-none">
                                 <p class="fs-5 mb-2">Ótimo<span id="nome-step2"></span>!</p>
-                                <p class="text-muted mb-4">Como você viu, o SuccessWay não acessa dados pessoais nem a identidade da sua loja.</p>
-                                <p class="mb-2">Em qual setor sua loja atua?</p>
+                                <p class="fs-5 text-muted mb-4">Como você viu, o SuccessWay não acessa dados pessoais nem a identidade da sua loja.</p>
+                                <p class="fs-5 mb-2">Em qual setor sua loja atua?</p>
                                 <div class="mb-3">
                                     <select class="form-select form-select-lg" id="activity_type" style="background-color: #F5F5F5;">
                                         <option value="" selected disabled>Selecione o setor</option>
-                                        <option value="Alimentação fora do Lar">Alimentação fora do Lar</option>
                                         <option value="Comércio atacadista">Comércio atacadista</option>
                                         <option value="Comércio varejista">Comércio varejista</option>
-                                        <option value="Indústria">Indústria</option>
-                                        <option value="Prestação de serviços">Prestação de serviços</option>
+                                        <option value="Atacado e varejo">Atacado e varejo</option>
                                     </select>
                                 </div>
-                                <p class="mb-2">Qual o seu ramo de atuação?</p>
+                                <p class="fs-5 mb-2">Qual o seu ramo de atuação?</p>
                                 <div class="mb-3">
                                     <select class="form-select form-select-lg" id="specialty_area" disabled style="background-color: #F5F5F5;">
                                         <option value="" selected disabled>Selecione o ramo de atuação</option>
                                     </select>
                                 </div>
-                                <p class="mb-2">Informe o CEP da loja</p>
-                                <p class="text-muted small mb-2">Utilizamos o CEP apenas para identificar sua região. Digite os 8 dígitos e clique em Continuar.</p>
+                                <p class="fs-5 mb-2">Informe o CEP da loja</p>
+                                <p class="text-muted small mb-2">Utilizamos o CEP apenas para identificar sua região.</p>
                                 <div class="mb-3">
                                     <input type="text" class="form-control form-control-lg" id="cep" placeholder="00000-000" style="background-color: #F5F5F5;" maxlength="9">
                                 </div>
-                                <p class="mb-4">Porém, precisamos de algumas informações:</p>
                                 <input type="hidden" id="state">
                                 <input type="hidden" id="city">
                                 <div class="text-center">
@@ -560,23 +566,20 @@ function showStep(step) {
                             </div>
 
                             <div id="step-3" class="wizard-step d-none">
-                                <p class="fs-5 mb-4">Porém, precisamos de algumas informações:</p>
-                                <p class="mb-2">Por favor, informe seu E-mail</p>
+                                <p class="fs-5 mb-2">Por favor, informe seu E-mail</p>
                                 <div class="mb-2">
                                     <input type="email" class="form-control form-control-lg" id="email" placeholder="seu@email.com" style="background-color: #F5F5F5;">
                                     <div id="email-error" class="invalid-feedback d-none"></div>
                                 </div>
                                 <p class="text-muted small mb-3">Importante para recuperar sua senha e receber atualizações.</p>
-                                <p class="mb-2">O seu WhatsApp <span class="text-muted small">(opcional)</span></p>
+                                <p class="fs-5 mb-2">O seu WhatsApp <span class="text-muted small">(opcional)</span></p>
                                 <div class="mb-2">
                                     <input type="text" class="form-control form-control-lg" id="whatsapp" placeholder="(00) 00000-0000" style="background-color: #F5F5F5;">
                                 </div>
-                                <p class="text-muted small mb-3">Não é obrigatório. Além disso, você sempre poderá bloqueá-lo.</p>
-                                <p class="mb-2">Cadastre uma senha de acesso</p>
+                                <p class="fs-5 mb-2">Cadastre uma senha de acesso</p>
                                 <div class="mb-2">
-                                    <input type="password" class="form-control form-control-lg" id="password" placeholder="Mínimo 6 caracteres" style="background-color: #F5F5F5;" minlength="6">
+                                    <input type="password" class="form-control form-control-lg" id="password" style="background-color: #F5F5F5;" minlength="6">
                                 </div>
-                                <p class="text-muted small mb-4">Recomendações para senha forte: use letras, números e símbolos.</p>
                                 <div class="text-center">
                                     <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
                                     <button type="button" class="btn btn-primary" onclick="nextStep()">Continuar</button>
@@ -640,6 +643,30 @@ function showStep(step) {
     body { background-color: #F5F5F5 !important; }
     .wizard-step { animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    #register-page .form-control,
+    #register-page .form-select {
+        font-size: 1rem !important;
+        width: 50%;
+    }
     .register-subtle { color: #8a8a8a !important; font-size: 0.95rem; }
+    .register-start-step {
+        max-width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .register-intro { width: 100%; }
+    .register-intro-title { font-size: 1.25rem; line-height: 1.5; }
+    .register-intro-subtitle { color: #8a8a8a !important; }
+    @media (max-width: 767.98px) {
+        #register-page .form-control,
+        #register-page .form-select {
+            width: 100%;
+        }
+        .register-start-step {
+            max-width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
 </style>
 {% endblock %}
