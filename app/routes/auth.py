@@ -60,11 +60,27 @@ async def get_current_user(request: Request, db: AsyncSession = Depends(get_db))
 
 @router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
-    return templates.TemplateResponse("register.html", {
+    response = templates.TemplateResponse("register.html", {
         "request": request,
         "user": None,  # Explicitamente passar None para o usuário
         "now": datetime.now()
     })
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+    response.headers["Pragma"] = "no-cache"
+    response.headers["Expires"] = "0"
+    return response
+
+@router.get("/register/check-email")
+async def check_register_email(
+    email: str,
+    db: AsyncSession = Depends(get_db)
+):
+    result = await db.execute(select(User).filter(User.email == email))
+    user_exists = result.scalar_one_or_none()
+    return {
+        "exists": bool(user_exists),
+        "detail": "Este e-mail já está cadastrado. Faça login ou use outro e-mail." if user_exists else ""
+    }
 
 @router.post("/register")
 async def register(
@@ -72,7 +88,7 @@ async def register(
     response: Response,
     name: str = Form(...),
     email: str = Form(...),
-    whatsapp: str = Form(...),
+    whatsapp: str = Form(""),
     activity_type: str = Form(...),
     password: str = Form(...),
     activation_key: str = Form(None),
@@ -100,8 +116,11 @@ async def register(
         user_exists = result.scalar_one_or_none()
         if user_exists:
             return JSONResponse(
-                status_code=400,
-                content={"detail": "Email já cadastrado"}
+                status_code=200,
+                content={
+                    "detail": "Este e-mail já está cadastrado. Faça login ou use outro e-mail.",
+                    "error": "email_exists"
+                }
             )
         
         if not terms_accepted:

@@ -103,24 +103,26 @@
     let currentStep = 0;
     const formData = { name: '', email: '', whatsapp: '', cep: '', state: '', city: '', activity_type: '', specialty_area: '', password: '', activation_key: '', terms_accepted: false };
 
-    function showStep(step) {
+function showStep(step) {
         document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('d-none'));
         const el = document.getElementById('step-' + step);
         if (el) el.classList.remove('d-none');
         currentStep = step;
+        const sidebarImg = document.getElementById('sidebar-joao-img');
+        if (sidebarImg) {
+            if (step === 2) {
+                sidebarImg.src = "{{ url_for('static', path='images/João definitivo apresentando.jpg') }}";
+            } else if (step >= 3) {
+                sidebarImg.src = "{{ url_for('static', path='images/João definitivo escrevendo.jpg') }}";
+            } else {
+                sidebarImg.src = "{{ url_for('static', path='images/Rosto João sem fundo.png') }}";
+            }
+        }
         const progressEl = document.getElementById('progress-indicator');
         if (progressEl) {
-            if (step === 1) {
-                progressEl.textContent = '1 de 6';
+            if (step >= 1 && step <= 4) {
+                progressEl.textContent = `${step} de 4`;
                 progressEl.classList.remove('d-none');
-            } else if (step === 2) {
-                progressEl.textContent = '2 de 6';
-                progressEl.classList.remove('d-none');
-            } else if (step === 4) {
-                progressEl.textContent = '4 a 6 de 6';
-                progressEl.classList.remove('d-none');
-            } else if (step === 5) {
-                progressEl.classList.add('d-none');
             } else {
                 progressEl.classList.add('d-none');
             }
@@ -214,7 +216,7 @@
             formData.cep = cep;
             formData.state = document.getElementById('state').value || '';
             formData.city = document.getElementById('city').value || '';
-        } else if (step === 4) {
+        } else if (step === 3) {
             const email = document.getElementById('email').value.trim();
             const whatsapp = document.getElementById('whatsapp').value.replace(/\D/g, '');
             const password = document.getElementById('password').value;
@@ -227,40 +229,140 @@
         return true;
     }
 
+    function showGlobalErr(msg) {
+        const globalErr = document.getElementById('global-error');
+        if (!globalErr) return;
+        globalErr.innerHTML = `
+            <strong>Atenção:</strong> ${msg}
+            <button type="button" class="btn-close" aria-label="Fechar" onclick="document.getElementById('global-error').classList.add('d-none')"></button>
+        `;
+        globalErr.classList.remove('d-none');
+    }
+
     function showErr(msg) {
         const err = document.getElementById('step-error');
         if (err) {
-            err.textContent = msg;
+            err.innerHTML = `
+                <span>${msg}</span>
+                <button type="button" class="btn-close" aria-label="Fechar" onclick="document.getElementById('step-error').classList.add('d-none')"></button>
+            `;
+            err.classList.add('alert-dismissible', 'show');
             err.classList.remove('d-none');
             err.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
+        showGlobalErr(msg);
     }
 
-    function nextStep() {
+    function showEmailErr(msg) {
+        const emailInput = document.getElementById('email');
+        const emailErr = document.getElementById('email-error');
+        emailInput?.classList.add('is-invalid');
+        if (emailErr) {
+            emailErr.textContent = msg;
+            emailErr.classList.remove('d-none');
+            emailErr.style.display = 'block';
+        }
+    }
+
+    function clearEmailErr() {
+        const emailInput = document.getElementById('email');
+        const emailErr = document.getElementById('email-error');
+        emailInput?.classList.remove('is-invalid');
+        if (emailErr) {
+            emailErr.textContent = '';
+            emailErr.classList.add('d-none');
+            emailErr.style.display = 'none';
+        }
+    }
+
+    async function checkEmailAlreadyRegistered() {
+        const emailInput = document.getElementById('email');
+        const email = emailInput?.value.trim() || '';
+        if (!email) return false;
+
+        try {
+            const res = await fetch(`/register/check-email?email=${encodeURIComponent(email)}`, {
+                headers: { 'Accept': 'application/json' },
+                cache: 'no-store'
+            });
+            const data = await res.json().catch(() => ({}));
+            if (data.exists) {
+                const msg = data.detail || 'Este e-mail já está cadastrado. Faça login ou use outro e-mail.';
+                showEmailErr(msg);
+                emailInput?.focus();
+                return true;
+            }
+        } catch (e) {
+            return false;
+        }
+
+        clearEmailErr();
+        return false;
+    }
+
+    function showSubmitErr(msg) {
+        document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('d-none'));
+        const step4 = document.getElementById('step-4');
+        if (step4) step4.classList.remove('d-none');
+        currentStep = 4;
+
+        const progressEl = document.getElementById('progress-indicator');
+        if (progressEl) {
+            progressEl.textContent = '4 de 4';
+            progressEl.classList.remove('d-none');
+        }
+
+        const nameEl = document.getElementById('nome-step5');
+        if (nameEl && formData.name) nameEl.textContent = formData.name;
+
+        showGlobalErr(msg);
+        const step4Err = document.getElementById('submit-error-step4');
+        if (!step4Err) return;
+        step4Err.textContent = msg;
+        step4Err.classList.remove('d-none');
+        step4Err.removeAttribute('hidden');
+        step4Err.style.display = 'block';
+        step4Err.setAttribute('aria-live', 'assertive');
+
+        const activationKey = document.getElementById('activation_key');
+        if (activationKey) {
+            activationKey.classList.add('is-invalid');
+            activationKey.focus();
+        }
+
+        requestAnimationFrame(() => {
+            step4Err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    }
+
+    async function nextStep() {
         if (currentStep === 1 && !validateStep(1)) return;
         if (currentStep === 2 && !validateStep(2)) return;
-        if (currentStep === 4 && !validateStep(4)) return;
+        if (currentStep === 3) {
+            if (!validateStep(3)) return;
+            const emailExists = await checkEmailAlreadyRegistered();
+            if (emailExists) return;
+        }
 
-        if (currentStep === 5 || currentStep === 6) {
+        if (currentStep === 4 || currentStep === 5) {
             submitForm();
             return;
         }
         let next = currentStep + 1;
-        if (currentStep === 2) next = 4;
         showStep(next);
 
         if (next === 2) {
             const el = document.getElementById('nome-step2');
             if (el) el.textContent = ' ' + formData.name + ',';
             loadSpecialtyAreas();
-        } else if (next === 5) {
+        } else if (next === 4) {
             const el5 = document.getElementById('nome-step5');
             if (el5) el5.textContent = formData.name;
         }
     }
 
     function prevStep() {
-        if (currentStep === 4) showStep(2);
+        if (currentStep === 4) showStep(3);
         else if (currentStep === 5) showStep(4);
         else if (currentStep > 0) showStep(currentStep - 1);
     }
@@ -269,6 +371,13 @@
         const activationKey = (document.getElementById('activation_key')?.value || '').trim();
         formData.activation_key = activationKey;
         const btn = document.getElementById('submit-btn');
+        const step4Err = document.getElementById('submit-error-step4');
+        if (step4Err) {
+            step4Err.classList.add('d-none');
+            step4Err.textContent = '';
+            step4Err.style.display = 'none';
+        }
+        document.getElementById('activation_key')?.classList.remove('is-invalid');
         if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
 
         const fd = new FormData();
@@ -294,11 +403,22 @@
             if (res.ok && data.redirect) {
                 window.location.href = data.redirect;
             } else {
-                showErr(data.detail || 'Erro ao cadastrar. Tente novamente.');
+                const detail = (data && typeof data.detail === 'string') ? data.detail : '';
+                const normalizedDetail = detail.toLowerCase();
+                if (data.error === 'email_exists' || (normalizedDetail.includes('email') && normalizedDetail.includes('cadastrado'))) {
+                    const msg = detail || 'Este e-mail já está cadastrado. Faça login ou use outro e-mail.';
+                    showSubmitErr(msg);
+                } else {
+                    const msg = (res.status === 400 || data.error)
+                        ? (detail || 'Não foi possível concluir o cadastro. Verifique os dados e tente novamente.')
+                        : (detail || 'Erro ao cadastrar. Tente novamente.');
+                    showSubmitErr(msg);
+                }
                 if (btn) { btn.disabled = false; btn.textContent = 'Finalizar cadastro'; }
             }
         } catch (e) {
-            showErr('Erro de conexão. Tente novamente.');
+            const msg = 'Erro de conexão. Tente novamente.';
+            showSubmitErr(msg);
             if (btn) { btn.disabled = false; btn.textContent = 'Finalizar cadastro'; }
         }
     }
@@ -310,6 +430,7 @@
             if (this.value.replace(/\D/g, '').length === 8) buscarCEP(true);
         });
         document.getElementById('whatsapp')?.addEventListener('input', maskWhatsApp);
+        document.getElementById('email')?.addEventListener('input', clearEmailErr);
 
         const nameInput = document.getElementById('name');
         if (nameInput) {
@@ -355,6 +476,7 @@
 
 {% block content %}
 <div class="container-fluid mt-5" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div id="global-error" class="alert alert-danger alert-dismissible d-none position-fixed top-0 start-50 translate-middle-x mt-3 shadow" role="alert" style="z-index: 1080; min-width: 320px; max-width: 90vw;"></div>
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
             <div class="card shadow" style="background-color: #F5F5F5;">
@@ -364,13 +486,13 @@
                             <img src="{{ url_for('static', path='images/Logo.png') }}" alt="Logo" class="img-fluid" style="max-width: 160px;">
                         </div>
                         <div class="col-6 text-end">
-                            <span id="progress-indicator" class="badge bg-secondary fs-6 d-none">1 de 6</span>
+                            <span id="progress-indicator" class="badge bg-secondary fs-6 d-none">1 de 4</span>
                         </div>
                     </div>
 
                     <div class="row g-4 align-items-start">
                         <div class="col-auto">
-                            <img src="{{ url_for('static', path='images/Rosto João sem fundo.png') }}" alt="João" class="img-fluid rounded" style="max-width: 150px;">
+                            <img id="sidebar-joao-img" src="{{ url_for('static', path='images/Rosto João sem fundo.png') }}" alt="João" class="img-fluid rounded" style="max-width: 150px;">
                         </div>
                         <div class="col">
                             <div id="step-error" class="alert alert-danger d-none" role="alert"></div>
@@ -380,7 +502,7 @@
                                 <p class="mb-4">Se você tem uma loja sabe o quanto é preciso trabalhar para vender bem.<br> Aqui no SuccessWay estarei ao seu lado para ajudar a transformar seus números em decisões que tragam mais lucro para sua loja.</p>
                                 <p class="mb-4">Vamos começar?</p>
                                 <div class="text-center mb-2">
-                                    <button type="button" class="btn btn-primary btn-lg" onclick="showStep(1); document.getElementById('progress-indicator').textContent='1 de 6'; document.getElementById('progress-indicator').classList.remove('d-none');">Sim, vamos</button>
+                                    <button type="button" class="btn btn-primary btn-lg" onclick="showStep(1); document.getElementById('progress-indicator').textContent='1 de 4'; document.getElementById('progress-indicator').classList.remove('d-none');">Sim, vamos</button>
                                 </div>
                                 <p class="text-center text-muted register-subtle">É rápido e prático!</p>
                             </div>
@@ -405,9 +527,6 @@
 
                             <div id="step-2" class="wizard-step d-none">
                                 <p class="fs-5 mb-2">Ótimo<span id="nome-step2"></span>!</p>
-                                <div class="text-center mb-3">
-                                    <img src="{{ url_for('static', path='images/João definitivo escrevendo.jpg') }}" alt="João" class="img-fluid rounded" style="max-width: 150px;">
-                                </div>
                                 <p class="text-muted mb-4">Como você viu, o SuccessWay não acessa dados pessoais nem a identidade da sua loja.</p>
                                 <p class="mb-2">Em qual setor sua loja atua?</p>
                                 <div class="mb-3">
@@ -440,22 +559,20 @@
                                 </div>
                             </div>
 
-                            <div id="step-4" class="wizard-step d-none">
+                            <div id="step-3" class="wizard-step d-none">
                                 <p class="fs-5 mb-4">Porém, precisamos de algumas informações:</p>
-                                <div class="text-center mb-3">
-                                    <img src="{{ url_for('static', path='images/João definitivo escrevendo.jpg') }}" alt="João" class="img-fluid rounded" style="max-width: 150px;">
-                                </div>
-                                <p class="mb-2">Por favor, informe seu E-mail <span class="text-muted small">(4 de 6)</span></p>
+                                <p class="mb-2">Por favor, informe seu E-mail</p>
                                 <div class="mb-2">
                                     <input type="email" class="form-control form-control-lg" id="email" placeholder="seu@email.com" style="background-color: #F5F5F5;">
+                                    <div id="email-error" class="invalid-feedback d-none"></div>
                                 </div>
                                 <p class="text-muted small mb-3">Importante para recuperar sua senha e receber atualizações.</p>
-                                <p class="mb-2">O seu WhatsApp <span class="text-muted small">(5 de 6 - opcional)</span></p>
+                                <p class="mb-2">O seu WhatsApp <span class="text-muted small">(opcional)</span></p>
                                 <div class="mb-2">
                                     <input type="text" class="form-control form-control-lg" id="whatsapp" placeholder="(00) 00000-0000" style="background-color: #F5F5F5;">
                                 </div>
                                 <p class="text-muted small mb-3">Não é obrigatório. Além disso, você sempre poderá bloqueá-lo.</p>
-                                <p class="mb-2">Cadastre uma senha de acesso <span class="text-muted small">(6 de 6)</span></p>
+                                <p class="mb-2">Cadastre uma senha de acesso</p>
                                 <div class="mb-2">
                                     <input type="password" class="form-control form-control-lg" id="password" placeholder="Mínimo 6 caracteres" style="background-color: #F5F5F5;" minlength="6">
                                 </div>
@@ -466,23 +583,21 @@
                                 </div>
                             </div>
 
-                            <div id="step-5" class="wizard-step d-none">
+                            <div id="step-4" class="wizard-step d-none">
                                 <p class="fs-5 mb-2">Perfeito, <span id="nome-step5"></span>!</p>
                                 <p class="mb-3">Esta etapa foi concluída com sucesso.<BR> Agora é só digitar sua chave de ativação.</p>
-                                <div class="text-center mb-3">
-                                    <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="img-fluid rounded" style="max-width: 150px;">
-                                </div>
                                 <div class="mb-2">
                                     <input type="text" class="form-control form-control-lg" id="activation_key" placeholder="Chave de ativação" style="background-color: #F5F5F5;">
                                 </div>
                                 <p class="text-muted small mb-4">A chave de ativação é necessária para acessar o sistema. Se você não possui uma chave, entre em contato com o administrador do sistema.</p>
+                                <div id="submit-error-step4" class="alert alert-danger d-none" role="alert" style="display: none;"></div>
                                 <div class="text-center">
                                     <button type="button" class="btn btn-outline-secondary me-2" onclick="prevStep()">Voltar</button>
                                     <button type="button" class="btn btn-primary" id="submit-btn" onclick="nextStep()">Finalizar cadastro</button>
                                 </div>
                             </div>
 
-                            <div id="step-6" class="wizard-step d-none"></div>
+                            <div id="step-5" class="wizard-step d-none"></div>
                         </div>
                     </div>
                 </div>
