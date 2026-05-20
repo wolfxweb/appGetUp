@@ -157,8 +157,9 @@
                                         <th>Ano</th>
                                         <th>Faturamento</th>
                                         <th>Clientes</th>
+                                        <th>Gastos Vendas</th>
+                                        <th>Custo Mercadorias</th>
                                         <th>Custos Fixos</th>
-                                        <th>Custos Variáveis</th>
                                         <th>Resultado</th>
                                         <th>Ações</th>
                                     </tr>
@@ -370,8 +371,9 @@ function preencherTabelaAnalises(analises) {
             <td>${analise.ano}</td>
             <td>${formatCurrency(analise.faturamento)}</td>
             <td>${analise.quant_clientes || '-'}</td>
-            <td>${formatCurrency(analise.custo_fixo_total)}</td>
+            <td>${formatCurrency(analise.gastos_vendas)}</td>
             <td>${formatCurrency(analise.custo_mercadorias)}</td>
+            <td>${formatCurrency(analise.custo_fixo_total)}</td>
             <td>${resultadoBadge}</td>
             <td>
                 <div class="btn-group btn-group-sm" role="group">
