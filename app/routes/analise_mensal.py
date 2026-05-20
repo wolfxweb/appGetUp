@@ -30,16 +30,17 @@ class CustoFixoSchema(BaseModel):
 class AnaliseMensalSchema(BaseModel):
     mes: int
     ano: int
+    quant_clientes: int
     capacidade_atendimento: Optional[float] = None
     faturamento: float
-    quant_clientes: int
     gastos_vendas: float
     custo_mercadorias: float
     custo_fixo_total: float
     corresponde_caixa: Optional[bool] = None
-    # Campos calculados (opcionais na entrada)
+    # Campos calculados
     ticket_medio: Optional[float] = None
     margem_bruta: Optional[float] = None
+    margem_contribuicao_por_cliente: Optional[float] = None
     ponto_equilibrio: Optional[float] = None
     margem_seguranca: Optional[float] = None
     custo_total: Optional[float] = None
@@ -216,6 +217,7 @@ async def listar_analises(
             "quant_clientes": a.quant_clientes,
             "ticket_medio": a.ticket_medio,
             "margem_bruta": a.margem_bruta,
+            "margem_contribuicao_por_cliente": a.margem_contribuicao_por_cliente,
             "ponto_equilibrio": a.ponto_equilibrio,
             "margem_seguranca": a.margem_seguranca,
             "custo_total": a.custo_total,
@@ -397,17 +399,17 @@ async def salvar_analise(
         
         if analise_existente:
             # ATUALIZAR registro existente
+            analise_existente.quant_clientes = data.quant_clientes
             analise_existente.capacidade_atendimento = data.capacidade_atendimento
             analise_existente.faturamento = data.faturamento
-            analise_existente.quant_clientes = data.quant_clientes
             analise_existente.gastos_vendas = data.gastos_vendas
             analise_existente.custo_mercadorias = data.custo_mercadorias
             analise_existente.custo_fixo_total = data.custo_fixo_total
             analise_existente.corresponde_caixa = data.corresponde_caixa
-            
             # Campos calculados
             analise_existente.ticket_medio = data.ticket_medio
             analise_existente.margem_bruta = data.margem_bruta
+            analise_existente.margem_contribuicao_por_cliente = data.margem_contribuicao_por_cliente
             analise_existente.ponto_equilibrio = data.ponto_equilibrio
             analise_existente.margem_seguranca = data.margem_seguranca
             analise_existente.custo_total = data.custo_total
@@ -431,15 +433,16 @@ async def salvar_analise(
                 user_id=current_user.id,
                 mes=data.mes,
                 ano=data.ano,
+                quant_clientes=data.quant_clientes,
                 capacidade_atendimento=data.capacidade_atendimento,
                 faturamento=data.faturamento,
-                quant_clientes=data.quant_clientes,
                 gastos_vendas=data.gastos_vendas,
                 custo_mercadorias=data.custo_mercadorias,
                 custo_fixo_total=data.custo_fixo_total,
                 corresponde_caixa=data.corresponde_caixa,
                 ticket_medio=data.ticket_medio,
                 margem_bruta=data.margem_bruta,
+                margem_contribuicao_por_cliente=data.margem_contribuicao_por_cliente,
                 ponto_equilibrio=data.ponto_equilibrio,
                 margem_seguranca=data.margem_seguranca,
                 custo_total=data.custo_total,
@@ -519,14 +522,15 @@ async def get_analise_by_id(
             "id": analise.id,
             "mes": analise.mes,
             "ano": analise.ano,
+            "quant_clientes": analise.quant_clientes,
             "capacidade_atendimento": analise.capacidade_atendimento,
             "faturamento": analise.faturamento,
-            "quant_clientes": analise.quant_clientes,
             "gastos_vendas": analise.gastos_vendas,
             "custo_mercadorias": analise.custo_mercadorias,
             "custo_fixo_total": analise.custo_fixo_total,
             "ticket_medio": analise.ticket_medio,
             "margem_bruta": analise.margem_bruta,
+            "margem_contribuicao_por_cliente": analise.margem_contribuicao_por_cliente,
             "ponto_equilibrio": analise.ponto_equilibrio,
             "margem_seguranca": analise.margem_seguranca,
             "custo_total": analise.custo_total,

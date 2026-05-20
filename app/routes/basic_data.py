@@ -88,6 +88,16 @@ async def basic_data_page(
             }
         )
 
+@router.get("/api/latest")
+async def get_latest_basic_data(
+    current_user = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db)
+):
+    """Retorna o lucro ideal configurado no cadastro do usuário."""
+    from fastapi.responses import JSONResponse
+    ideal = getattr(current_user, 'ideal_profit_margin', None)
+    return JSONResponse({"ideal_profit_margin": ideal})
+
 @router.post("/delete/{data_id}")
 async def delete_basic_data(
     request: Request,

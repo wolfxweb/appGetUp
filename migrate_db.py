@@ -72,6 +72,7 @@ def migrate_database():
                     custo_fixo_total FLOAT,
                     ticket_medio FLOAT,
                     margem_bruta FLOAT,
+                    margem_contribuicao_por_cliente FLOAT,
                     ponto_equilibrio FLOAT,
                     margem_seguranca FLOAT,
                     custo_total FLOAT,
@@ -97,6 +98,7 @@ def migrate_database():
                 "custo_fixo_total": "FLOAT",
                 "ticket_medio": "FLOAT",
                 "margem_bruta": "FLOAT",
+                "margem_contribuicao_por_cliente": "FLOAT",
                 "ponto_equilibrio": "FLOAT",
                 "margem_seguranca": "FLOAT",
                 "custo_total": "FLOAT",
@@ -108,6 +110,43 @@ def migrate_database():
                 if col not in analise_columns:
                     print(f"Adicionando coluna {col} em analise_mensal...")
                     cursor.execute(f"ALTER TABLE analise_mensal ADD COLUMN {col} {col_type}")
+
+        # Recalcular ponto_equilibrio e margem_seguranca com fórmula correta (R$)
+        # e preencher margem_contribuicao_por_cliente para registros existentes
+        print("Recalculando campos de analise_mensal com fórmulas corrigidas...")
+        cursor.execute("""
+            UPDATE analise_mensal
+            SET
+                margem_bruta = CASE
+                    WHEN faturamento IS NOT NULL AND gastos_vendas IS NOT NULL AND custo_mercadorias IS NOT NULL
+                    THEN faturamento - gastos_vendas - custo_mercadorias
+                    ELSE margem_bruta
+                END,
+                margem_contribuicao_por_cliente = CASE
+                    WHEN faturamento IS NOT NULL AND gastos_vendas IS NOT NULL
+                         AND custo_mercadorias IS NOT NULL AND quant_clientes > 0
+                    THEN (faturamento - gastos_vendas - custo_mercadorias) / quant_clientes
+                    ELSE NULL
+                END,
+                ponto_equilibrio = CASE
+                    WHEN custo_fixo_total IS NOT NULL AND faturamento IS NOT NULL
+                         AND (faturamento - COALESCE(gastos_vendas,0) - COALESCE(custo_mercadorias,0)) > 0
+                    THEN custo_fixo_total * faturamento
+                         / (faturamento - COALESCE(gastos_vendas,0) - COALESCE(custo_mercadorias,0))
+                    ELSE NULL
+                END,
+                margem_seguranca = CASE
+                    WHEN faturamento > 0
+                         AND custo_fixo_total IS NOT NULL
+                         AND (faturamento - COALESCE(gastos_vendas,0) - COALESCE(custo_mercadorias,0)) > 0
+                    THEN ((faturamento - (custo_fixo_total * faturamento
+                          / (faturamento - COALESCE(gastos_vendas,0) - COALESCE(custo_mercadorias,0))))
+                         / faturamento) * 100
+                    ELSE NULL
+                END
+            WHERE faturamento IS NOT NULL
+        """)
+        conn.commit()
 
         # Tabela custo_fixo
         print("Verificando tabela custo_fixo...")

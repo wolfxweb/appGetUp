@@ -57,75 +57,6 @@
         border: 1px solid #dee2e6;
     }
     
-    /* Step Indicators */
-    .step-indicator {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 30px;
-        position: relative;
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-    
-    .step-indicator::before {
-        content: '';
-        position: absolute;
-        top: 20px;
-        left: 40px;
-        right: 40px;
-        height: 3px;
-        background-color: #dee2e6;
-        z-index: 0;
-    }
-    
-    .step-indicator .step {
-        text-align: center;
-        position: relative;
-        z-index: 1;
-        flex: 1;
-        min-width: 60px;
-        max-width: 90px;
-    }
-    
-    .step-indicator .step-number {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background-color: #dee2e6;
-        color: #6c757d;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        margin-bottom: 8px;
-        transition: all 0.3s ease;
-        font-size: 0.85rem;
-    }
-    
-    .step-indicator .step.active .step-number {
-        background-color: rgb(1, 57, 44);
-        color: white;
-    }
-    
-    .step-indicator .step.completed .step-number {
-        background-color: #28a745;
-        color: white;
-    }
-    
-    .step-indicator .step-label {
-        font-size: 0.75rem;
-        color: #6c757d;
-        font-weight: 500;
-    }
-    
-    .step-indicator .step.active .step-label {
-        color: rgb(1, 57, 44);
-        font-weight: bold;
-    }
-    
-    .step-indicator .step.completed .step-label {
-        color: #28a745;
-    }
     
     /* Step Content */
     .wizard-step {
@@ -146,6 +77,7 @@
     .wizard-nav {
         display: flex;
         justify-content: space-between;
+        align-items: center;
         margin-top: 30px;
         padding-top: 20px;
         border-top: 1px solid #dee2e6;
@@ -369,6 +301,44 @@
     .final-message.danger {
         background-color: #ffebee;
     }
+
+    /* Persona (Ana) com balão — layout dos slides */
+    .slide-persona-row {
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    .persona-img {
+        width: 90px;
+        height: auto;
+        flex-shrink: 0;
+        object-fit: contain;
+    }
+    .persona-balloon {
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        padding: 12px 16px;
+        position: relative;
+        flex: 1;
+        font-size: 0.95rem;
+    }
+    .persona-balloon::before {
+        content: '';
+        position: absolute;
+        left: -12px;
+        top: 20px;
+        border: 6px solid transparent;
+        border-right-color: #dee2e6;
+    }
+    .persona-balloon::after {
+        content: '';
+        position: absolute;
+        left: -10px;
+        top: 21px;
+        border: 5px solid transparent;
+        border-right-color: #fff;
+    }
 </style>
 {% endblock %}
 
@@ -406,74 +376,24 @@
                         <input type="hidden" id="edit-analise-id" value="">
                         {% endif %}
                         
-                        <!-- Step Indicators - 12 Steps -->
-                        <div class="step-indicator" id="step-indicators">
-                            <div class="step active" data-step="0">
-                                <div class="step-number">0</div>
-                                <div class="step-label">Intro</div>
-                            </div>
-                            <div class="step" data-step="1">
-                                <div class="step-number">1</div>
-                                <div class="step-label">Mês</div>
-                            </div>
-                            <div class="step" data-step="2">
-                                <div class="step-number">2</div>
-                                <div class="step-label">Capacidade</div>
-                            </div>
-                            <div class="step" data-step="3">
-                                <div class="step-number">3</div>
-                                <div class="step-label">Faturamento</div>
-                            </div>
-                            <div class="step" data-step="4">
-                                <div class="step-number">4</div>
-                                <div class="step-label">Clientes</div>
-                            </div>
-                            <div class="step" data-step="5">
-                                <div class="step-number">5</div>
-                                <div class="step-label">Gastos</div>
-                            </div>
-                            <div class="step" data-step="6">
-                                <div class="step-number">6</div>
-                                <div class="step-label">Custo Mercadorias</div>
-                            </div>
-                            <div class="step" data-step="7">
-                                <div class="step-number">7</div>
-                                <div class="step-label">Custos Fixos</div>
-                            </div>
-                            <div class="step" data-step="8">
-                                <div class="step-number">8</div>
-                                <div class="step-label">Margem Segurança</div>
-                            </div>
-                            <div class="step" data-step="9">
-                                <div class="step-number">9</div>
-                                <div class="step-label">Resultado</div>
-                            </div>
-                            <div class="step" data-step="10">
-                                <div class="step-number">10</div>
-                                <div class="step-label">Avaliação</div>
-                            </div>
-                            <div class="step" data-step="11">
-                                <div class="step-number">11</div>
-                                <div class="step-label">Fim</div>
-                            </div>
-                        </div>
 
-                        <!-- ==================== STEP 0: INTRODUCAO ==================== -->
+                        <!-- ==================== STEP 0: INTRODUCAO + MES/ANO (Slide 1) ==================== -->
                         <div class="wizard-step active" id="step-0">
-                            <div class="intro-content">
-                                <img src="/static/images/Logo.png" alt="Logo">
-                                <h4>Olá! Vamos fazer a análise mensal?</h4>
-                                <p>Vamos analisar como foi o desempenho da sua loja neste mês. Responda algumas perguntas simples e no final você terá uma visão completa do seu negócio.</p>
-                                <p class="mt-3"><strong>Com apenas 5 informações simples já podemos começar a entender como sua loja está funcionando.</strong></p>
-                                <p class="text-muted mt-2"><i class="bi bi-lightbulb"></i> Se você puder anotar os dados de alguns meses, isso será muito útil.</p>
-                                <button class="btn btn-primary mt-4" onclick="nextStep()">Começar Análise</button>
+                            <div class="slide-persona-row mb-4">
+                                <img src="/static/images/joao-sem-fundo.png" alt="João" class="persona-img">
+                                <div class="persona-balloon">
+                                    <p class="mb-2"><strong>Análise mensal</strong></p>
+                                    <p class="mb-1">Agora vamos iniciar nosso trabalho conjunto. Como esta é a primeira vez, quero destacar que será muito útil que:</p>
+                                    <ul class="mb-2 ps-3">
+                                        <li>anote os dados de alguns meses anteriores;</li>
+                                        <li>mantenha as informações atualizadas.</li>
+                                    </ul>
+                                    <p class="mb-0">São apenas 5 informações simples porém indispensáveis para entender como sua loja está funcionando.</p>
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- ==================== STEP 1: SELECIONAR MES/ANO ==================== -->
-                        <div class="wizard-step" id="step-1">
-                            <h5 class="mb-4">Mês e Ano da Análise</h5>
-                            
+                            <p class="fw-semibold mb-2">Indique o mês cujos dados você irá informar</p>
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="mes" class="form-label">Mês</label>
@@ -503,65 +423,70 @@
                                     </select>
                                 </div>
                             </div>
-                            
-                            <div id="aviso-atualizacao" class="mt-3">
+
+                            <div id="aviso-atualizacao" class="mt-1 mb-3">
                                 <i class="bi bi-info-circle"></i>
                                 <span id="aviso-texto"></span>
                             </div>
-                            
-                            <div class="wizard-nav">
-                                <div></div>
-                                <button class="btn btn-primary" onclick="nextStep()">Continuar >>></button>
+
+                            <div class="text-center mt-3">
+                                <p class="fw-semibold mb-2">Podemos começar?</p>
+                                <button class="btn btn-primary" onclick="nextStep()">Sim, vamos!</button>
                             </div>
                         </div>
 
-                        <!-- ==================== STEP 2: CAPACIDADE ==================== -->
+                        <!-- step-1 mantido vazio para não quebrar navegação numérica -->
+                        <div class="wizard-step" id="step-1" style="display:none!important;"></div>
+
+                        <!-- ==================== STEP 2: CAPACIDADE + CLIENTES (Slide 2) ==================== -->
                         <div class="wizard-step" id="step-2">
-                            <h5 class="mb-4">Capacidade de Atendimento</h5>
-                            
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="capacidade" class="form-label">Capacidade</label>
-                                    <input type="number" class="form-control" id="capacidade" placeholder="Ex: 2300" step="1" min="0">
-                                    <small class="text-muted">Número máximo de clientes que pode atender no mês</small>
+                            <div class="slide-persona-row mb-4">
+                                <img src="/static/images/joao-sem-fundo.png" alt="João" class="persona-img">
+                                <div class="persona-balloon">
+                                    <p class="mb-1"><strong>Para começar, me conta:</strong></p>
+                                    <p class="mb-0">Para quantos <strong>clientes</strong> a loja vendeu em <span id="label-mes-step2" class="text-primary fw-semibold">______</span>?</p>
                                 </div>
                             </div>
-                            
-                            <div class="wizard-nav">
-                                <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <button class="btn btn-primary" onclick="nextStep()">Continuar >>></button>
-                            </div>
-                        </div>
 
-                        <!-- ==================== STEP 3: FATURAMENTO ==================== -->
-                        <div class="wizard-step" id="step-3">
-                            <h5 class="mb-4">Faturamento Total</h5>
-                            
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="faturamento" class="form-label">Faturamento (R$)</label>
-                                    <input type="number" class="form-control" id="faturamento" placeholder="Ex: 65000.00" step="0.01" required>
-                                </div>
-                            </div>
-                            
-                            <div class="wizard-nav">
-                                <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <button class="btn btn-primary" onclick="nextStep()">Continuar >>></button>
-                            </div>
-                        </div>
-
-                        <!-- ==================== STEP 4: QUANTIDADE DE CLIENTES ==================== -->
-                        <div class="wizard-step" id="step-4">
-                            <h5 class="mb-4">Clientes do Mês</h5>
-                            
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="quant_clientes" class="form-label">Quantidade de Clientes</label>
+                                    <label for="quant_clientes" class="form-label">Vendas realizadas (clientes atendidos)</label>
                                     <input type="number" class="form-control" id="quant_clientes" placeholder="Ex: 2000" required>
                                 </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="capacidade" class="form-label">Capacidade de atendimento (máximo no mês)</label>
+                                    <input type="number" class="form-control" id="capacidade" placeholder="Ex: 2300" step="1" min="0">
+                                </div>
                             </div>
-                            
-                            <!-- Resultado do ticket medio - aparece apos input -->
+
+                            <!-- Comparação visual Vendas x Capacidade -->
+                            <div id="cap-comparacao" class="mt-2 mb-3" style="display:none; max-width:420px;">
+                                <div class="mb-2">
+                                    <div class="d-flex justify-content-between small mb-1">
+                                        <span>Vendas realizadas</span>
+                                        <span id="cap-pct-vendas" class="fw-bold"></span>
+                                    </div>
+                                    <div class="progress" style="height:14px;">
+                                        <div id="cap-bar-vendas" class="progress-bar" style="background:rgb(1,57,44); width:0%;"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="d-flex justify-content-between small mb-1">
+                                        <span>Capacidade de atendimento</span>
+                                        <span class="fw-bold">100%</span>
+                                    </div>
+                                    <div class="progress" style="height:14px;">
+                                        <div class="progress-bar w-100" style="background:#adb5bd;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- F1: comentário de capacidade -->
+                            <div class="conditional-text" id="f1-capacidade">
+                                <p id="f1-texto"></p>
+                            </div>
+
+                            <!-- Resultado ticket médio (move para cá do step-4) -->
                             <div id="resumo-faturamento" class="results-summary mt-4" style="display: none;">
                                 <div class="summary-item">
                                     <div class="label">Faturamento</div>
@@ -576,316 +501,375 @@
                                     <div class="value" id="resumo-tm">-</div>
                                 </div>
                             </div>
-                            
-                            <!-- F2: Ticket Medio - texto aparece apos input -->
                             <div class="conditional-text info" id="f2-ticket-medio">
                                 <p id="f2-texto"></p>
                             </div>
-                            
+
                             <div class="wizard-nav">
                                 <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <button class="btn btn-primary" onclick="nextStep()">Continuar >>></button>
+                                <div class="text-center">
+                                    <p class="fw-semibold mb-1 small">Vamos continuar?</p>
+                                    <button class="btn btn-primary" onclick="nextStep()">Sim, vamos!</button>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- ==================== STEP 5: GASTOS COM VENDAS (CUSTOS VARIÁVEIS) ==================== -->
-                        <div class="wizard-step" id="step-5">
-                            <h5 class="mb-4">Gastos com Vendas</h5>
-                            
+                        <!-- ==================== STEP 3: FATURAMENTO (Slide 3) ==================== -->
+                        <div class="wizard-step" id="step-3">
+                            <div class="slide-persona-row mb-4">
+                                <img src="/static/images/joao-sem-fundo.png" alt="João" class="persona-img">
+                                <div class="persona-balloon">
+                                    <p class="mb-0">Em <span id="label-mes-step3" class="text-primary fw-semibold">______</span>, quanto a loja <strong>faturou</strong> com as vendas?</p>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label for="gastos_vendas" class="form-label">Total Gastos com Vendas (R$)</label>
-                                    <input type="number" class="form-control" id="gastos_vendas" placeholder="Ex: 6900.00" step="0.01" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="gastos_vendas_pct" class="form-label">% sobre Faturamento</label>
-                                    <input type="text" class="form-control" id="gastos_vendas_pct" readonly>
+                                    <label for="faturamento" class="form-label">Faturamento (R$)</label>
+                                    <input type="number" class="form-control" id="faturamento" placeholder="Ex: 65000.00" step="0.01" required>
                                 </div>
                             </div>
-                            
-                            <div class="mt-4">
-                                <button class="btn btn-secondary btn-sm" onclick="abrirModalGastoVariavel()">
-                                    <i class="bi bi-plus-circle"></i> Cadastrar/editar gastos com vendas
-                                </button>
-                            </div>
-                            
-                            <!-- Tabela de gastos cadastrados -->
-                            <div class="mt-3">
-                                <h6>Gastos com Vendas Cadastrados</h6>
-                                <table class="table table-striped table-custos" id="tabela-gastos">
-                                    <thead>
-                                        <tr>
-                                            <th>Nome</th>
-                                            <th>Categoria</th>
-                                            <th>Valor</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="gastos-cadastrados">
-                                    </tbody>
-                                </table>
-                                <p id="sem-gastos" class="text-muted">Nenhum gasto com vendas cadastrado.</p>
-                            </div>
-                            
-                            <!-- Resultado Margem Bruta -->
-                            <div id="resumo-margem-gastos" class="results-summary mt-4" style="display: none;">
+
+                            <!-- F2: Ticket Médio (fórmula 2 do Excel) -->
+                            <div id="resumo-faturamento-f3" class="results-summary mt-3" style="display:none;">
                                 <div class="summary-item">
-                                    <div class="label">Margem Bruta</div>
-                                    <div class="value" id="resumo-mb-gastos">-</div>
+                                    <div class="label">Faturamento</div>
+                                    <div class="value" id="resumo-fat-f3">-</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Clientes</div>
+                                    <div class="value" id="resumo-cli-f3">-</div>
+                                </div>
+                                <div class="summary-item">
+                                    <div class="label">Ticket Médio</div>
+                                    <div class="value" id="resumo-tm-f3">-</div>
                                 </div>
                             </div>
-                            
-                            <!-- F3: Margem Bruta após custo mercadorias -->
-                            <div class="conditional-text" id="f3-sobra">
-                                <p id="f3-texto"></p>
+                            <div class="conditional-text info" id="f2-ticket-medio-f3">
+                                <p id="f2-texto-f3"></p>
                             </div>
-                            
+
                             <div class="wizard-nav">
                                 <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <button class="btn btn-primary" onclick="nextStep()">Continuar >>></button>
+                                <div class="text-center">
+                                    <p class="fw-semibold mb-1 small">Agora vamos verificar os custos. OK?</p>
+                                    <button class="btn btn-primary" onclick="nextStep()">Vamos!</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- step-4 fundido com step-2 -->
+                        <div class="wizard-step" id="step-4" style="display:none!important;"></div>
+
+                        <!-- ==================== STEP 5: GASTOS COM VENDAS (Slide 4) ==================== -->
+                        <div class="wizard-step" id="step-5">
+
+                            <div class="slide-persona-row mb-4">
+                                <img src="/static/images/joao-sem-fundo.png" alt="João" class="persona-img">
+                                <div class="persona-balloon">
+                                    <p class="mb-2">Até aqui vimos que <strong id="s5-clientes">—</strong> clientes gastaram em média <strong id="s5-ticket">—</strong>, gerando um faturamento de <strong id="s5-fat">—</strong>.</p>
+                                    <p class="mb-0">Aproximadamente, quanto somaram os <strong>gastos com vendas</strong>?</p>
+                                </div>
+                            </div>
+
+                            <div class="row align-items-start">
+                                <!-- Coluna esquerda: input + tabela -->
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="gastos_vendas" class="form-label fw-semibold">
+                                            Total Gastos com Vendas (R$)
+                                        </label>
+                                        <input type="number" class="form-control" id="gastos_vendas" placeholder="Ex: 6900.00" step="0.01" required>
+                                        <small class="text-muted" id="gastos_vendas_pct_label"></small>
+                                        <input type="hidden" id="gastos_vendas_pct">
+                                    </div>
+
+                                    <!-- F3: comentário contextual -->
+                                    <div class="conditional-text" id="f3-sobra">
+                                        <p id="f3-texto"></p>
+                                    </div>
+                                    <div class="conditional-text" id="f3-sobram">
+                                        <p id="f3-sobram-texto"></p>
+                                    </div>
+                                </div>
+
+                                <!-- Coluna direita: gráfico de pizza (slide 4) -->
+                                <div class="col-md-6 d-flex flex-column align-items-center">
+                                    <p class="text-muted small mb-2 text-center">Composição do faturamento</p>
+                                    <div style="max-width:260px; width:100%;">
+                                        <canvas id="chart-gastos-pizza"></canvas>
+                                    </div>
+                                    <div id="chart-gastos-legenda" class="mt-2 text-center" style="display:none;">
+                                        <small><span class="badge" style="background:#c8a84b;">■</span> Gastos com Vendas &nbsp;
+                                        <span class="badge" style="background:#aaa;">■</span> Restante</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Resumo (oculto, mantido por compatibilidade com JS existente) -->
+                            <div id="resumo-vendas" class="results-summary mt-3" style="display: none;">
+                                <div class="summary-item"><div class="label">Faturamento</div><div class="value" id="resumo-fat2">-</div></div>
+                                <div class="summary-item"><div class="label">Gastos</div><div class="value" id="resumo-gv">-</div></div>
+                                <div class="summary-item"><div class="label">Sobram</div><div class="value" id="resumo-sobram">-</div></div>
+                            </div>
+                            <div id="resumo-margem-gastos" class="results-summary mt-2" style="display: none;">
+                                <div class="summary-item"><div class="label">Margem Bruta</div><div class="value" id="resumo-mb-gastos">-</div></div>
+                            </div>
+
+                            <div class="wizard-nav mt-4">
+                                <button class="btn btn-secondary" onclick="prevStep()">&#171; Voltar</button>
+                                <div class="text-center">
+                                    <p class="fw-semibold mb-1 small">Vamos verificar o custo das mercadorias</p>
+                                    <button class="btn btn-primary" onclick="nextStep()">Vamos!</button>
+                                </div>
                             </div>
                         </div>
 
                         <!-- ==================== STEP 6: CUSTO DAS MERCADORIAS ==================== -->
                         <div class="wizard-step" id="step-6">
-                            <h5 class="mb-4">Custo das Mercadorias</h5>
-                            
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="custo_mercadorias" class="form-label">Custo das Mercadorias (R$)</label>
-                                    <input type="number" class="form-control" id="custo_mercadorias" placeholder="Ex: 20000.00" step="0.01" required>
+
+                            <!-- João: pergunta -->
+                            <div class="slide-persona-row mb-3">
+                                <img src="/static/images/joao-sem-fundo.png" alt="João" class="persona-img">
+                                <div class="persona-balloon">
+                                    <p class="mb-0">Aproximadamente, quanto custaram as <strong>mercadorias vendidas</strong> no mês?</p>
                                 </div>
                             </div>
-                            
-                            <!-- Resultado Margem Bruta -->
-                            <div id="resumo-margem" class="results-summary mt-4" style="display: none;">
-                                <div class="summary-item">
-                                    <div class="label">Margem Bruta</div>
-                                    <div class="value" id="resumo-mb">-</div>
+
+                            <!-- 3 colunas: input+resultados | gráfico | Ana+balão -->
+                            <div class="row align-items-start g-3">
+
+                                <!-- Coluna 1: input + resultados -->
+                                <div class="col-md-4">
+                                    <div class="mb-3">
+                                        <label for="custo_mercadorias" class="form-label fw-semibold">Custo das Mercadorias (R$)</label>
+                                        <input type="number" class="form-control" id="custo_mercadorias" placeholder="Ex: 20000.00" step="0.01" required>
+                                    </div>
+
+                                    <div id="resumo-margem" class="results-summary mt-3" style="display: none;">
+                                        <div class="summary-item">
+                                            <div class="label">Margem Bruta</div>
+                                            <div class="value" id="resumo-mb">-</div>
+                                        </div>
+                                    </div>
+
+                                    <div id="f4-margem-contrib" class="conditional-text info mt-3" style="display:none;">
+                                        <p id="f4-contrib-texto"></p>
+                                    </div>
+
+                                    <div class="conditional-text" id="f4-margem-bruta">
+                                        <p id="f4-texto"></p>
+                                    </div>
+
+                                    <div class="conditional-text" id="f5-margem-custo">
+                                        <p id="f5-texto"></p>
+                                    </div>
                                 </div>
+
+                                <!-- Coluna 2: gráfico pizza -->
+                                <div class="col-md-4 d-flex flex-column align-items-center">
+                                    <p class="text-muted small mb-2 text-center">Composição do faturamento</p>
+                                    <div style="max-width:220px; width:100%;">
+                                        <canvas id="chart-mercadorias-pizza"></canvas>
+                                    </div>
+                                    <div id="chart-merc-legenda" class="mt-2 text-center" style="display:none;">
+                                        <small>
+                                            <span class="badge" style="background:#c8a84b;">■</span> Gastos com Vendas<br>
+                                            <span class="badge" style="background:#8B6914;">■</span> Custo Mercadorias<br>
+                                            <span class="badge" style="background:#aaa;">■</span> Margem Bruta
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <!-- Coluna 3: Ana + balão -->
+                                <div class="col-md-4">
+                                    <div class="slide-persona-row flex-column align-items-center text-center">
+                                        <img src="/static/images/ana-sem-fundo.png" alt="Ana" class="persona-img mb-2">
+                                        <div class="persona-balloon">
+                                            <p class="mb-0">A margem bruta é o quanto sobra do faturamento para cobrir os custos administrativos e operacionais da loja e gerar lucro. Por isso também é chamada de <strong>Margem de Contribuição</strong>.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
-                            
-                            <!-- F5: Margem Bruta vs Custo Fixo - texto condicional -->
-                            <div class="conditional-text" id="f5-margem-custo">
-                                <p id="f5-texto"></p>
-                            </div>
-                            
-                            <div class="wizard-nav">
-                                <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <button class="btn btn-primary" onclick="nextStep()">Continuar >>></button>
+
+                            <div class="wizard-nav mt-4">
+                                <button class="btn btn-secondary" onclick="prevStep()">&#171; Voltar</button>
+                                <div class="text-center">
+                                    <p class="fw-semibold mb-1 small">Para concluir, vamos ver quanto a loja demanda para funcionar</p>
+                                    <button class="btn btn-primary" onclick="nextStep()">Vamos!</button>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- ==================== STEP 7: CUSTOS FIXOS ==================== -->
+                        <!-- ==================== STEP 7: CUSTOS FIXOS (Slide 6) ==================== -->
                         <div class="wizard-step" id="step-7">
-                            <h5 class="mb-4">Custos Fixos</h5>
-                            
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="custo_fixo_total" class="form-label">Total Custos Fixos (R$)</label>
-                                    <input type="number" class="form-control" id="custo_fixo_total" placeholder="Ex: 15211.00" step="0.01" required>
+
+                            <!-- Linha: João à esquerda + balão -->
+                            <div class="slide-persona-row mb-4">
+                                <img src="/static/images/joao-sem-fundo.png" alt="João" class="persona-img">
+                                <div class="persona-balloon">
+                                    <p class="mb-1"><strong>Agora uma última informação:</strong></p>
+                                    <p class="mb-0">Qual o <strong>custo de funcionamento e administração</strong> da loja?</p>
                                 </div>
                             </div>
-                            
-                            <div class="mt-4">
-                                <button class="btn btn-secondary btn-sm" onclick="abrirModalCustoFixo()">
-                                    <i class="bi bi-plus-circle"></i> Cadastrar/editar custos fixos
-                                </button>
-                                <span id="custo-success-msg" class="text-success ms-3" style="display: none;"></span>
-                            </div>
-                            
-                            <!-- Tabela de custos cadastrados -->
-                            <div class="mt-3">
-                                <h6>Custos Fixos Cadastrados</h6>
-                                <table class="table table-striped table-custos" id="tabela-custos">
-                                    <thead>
-                                        <tr>
-                                            <th>Nome</th>
-                                            <th>Categoria</th>
-                                            <th>Valor</th>
-                                            <th>Ações</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="custos-cadastrados">
-                                    </tbody>
-                                </table>
-                                <p id="sem-custos" class="text-muted">Nenhum custo fixo cadastrado.</p>
-                            </div>
-                            
-                            <!-- Resultado Margem Segurança -->
-                            <div id="resumo-ponto" class="results-summary mt-4" style="display: none;">
-                                <div class="summary-item">
-                                    <div class="label">Ponto de Equilíbrio</div>
-                                    <div class="value" id="resumo-pe">-</div>
+
+                            <!-- 2 colunas: input+resultados | Ana clicável -->
+                            <div class="row align-items-start g-3">
+
+                                <!-- Coluna esquerda: input + resultados -->
+                                <div class="col-md-8">
+                                    <div class="mb-3">
+                                        <label for="custo_fixo_total" class="form-label">Total Custos Fixos (R$)</label>
+                                        <input type="number" class="form-control" id="custo_fixo_total" placeholder="Ex: 15211.00" step="0.01" required>
+                                    </div>
+
+                                    <span id="custo-success-msg" class="text-success" style="display: none;"></span>
+
+                                    <!-- Resultado Ponto de Equilíbrio -->
+                                    <div id="resumo-ponto" class="results-summary mt-3" style="display: none;">
+                                        <div class="summary-item">
+                                            <div class="label">Ponto de Equilíbrio</div>
+                                            <div class="value" id="resumo-pe">-</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- F6: comentário fórmula 5 -->
+                                    <div class="conditional-text info" id="f6-margem-seg">
+                                        <p id="f6-texto"></p>
+                                    </div>
                                 </div>
+
+                                <!-- Coluna direita: Ana clicável -->
+                                <div class="col-md-4 d-flex flex-column align-items-center text-center">
+                                    <a href="/basic-data" target="_blank" title="Acessar tela de Custos Fixos" style="text-decoration:none;">
+                                        <img src="/static/images/ana-sem-fundo.png" alt="Ana" class="persona-img mb-2" style="cursor:pointer; transition: transform .2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                    </a>
+                                    <div class="persona-balloon text-start">
+                                        <p class="mb-0">Este valor é chamado de <strong>Custo Fixo</strong> porque ele será o mesmo tanto em um mês bom, quanto num mês fraco de vendas.</p>
+                                    </div>
+                                </div>
+
                             </div>
-                            
-                            <!-- F6: Margem de Segurança -->
-                            <div class="conditional-text info" id="f6-margem-seg">
-                                <p id="f6-texto"></p>
-                            </div>
-                            
-                            <div class="wizard-nav">
-                                <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <button class="btn btn-primary" onclick="nextStep()">Continuar >>></button>
+
+                            <div class="wizard-nav mt-4">
+                                <button class="btn btn-secondary" onclick="prevStep()">&#171; Voltar</button>
+                                <div class="text-center">
+                                    <p class="fw-semibold mb-1 small">Vamos ver o que mais suas informações estão nos mostrando?</p>
+                                    <button class="btn btn-primary" onclick="nextStep()">Vamos!</button>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- ==================== STEP 8: RESULTADOS - MARGEM DE SEGURANÇA (F7) ==================== -->
+                        <!-- ==================== STEP 8: RESULTADOS (Slide 7) — F6+F7+F8+F9 ==================== -->
                         <div class="wizard-step" id="step-8">
-                            <h5 class="mb-4">Vamos ver o que os números revelam!</h5>
-                            
-                            <div class="alert alert-info">
-                                <i class="bi bi-graph-up"></i> Já entendemos como foi o mês de <strong id="resultado-mes-7"></strong>. Agora é hora de usar esses números para melhorar os próximos resultados!
-                            </div>
-                            
-                            <!-- Card: Margem de Segurança (F7) -->
-                            <div class="result-card primary" id="card-f7-margem-seg">
-                                <div class="result-title">Margem de Segurança - Quanto sua loja pode cair antes de ter prejuízo?</div>
-                                <div class="result-value" id="f7-margem-seg">0%</div>
-                                <div class="result-description" id="f7-desc"></div>
-                            </div>
-                            
-                            <!-- Resumo ate aqui -->
-                            <div class="results-summary mt-4">
-                                <div class="summary-item">
-                                    <div class="label">Faturamento</div>
-                                    <div class="value" id="res7-fat">-</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="label">Margem Bruta</div>
-                                    <div class="value" id="res7-mb">-</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="label">Custos Fixos</div>
-                                    <div class="value" id="res7-cf">-</div>
-                                </div>
-                            </div>
-                            
-                            <div class="wizard-nav">
-                                <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <button class="btn btn-primary" onclick="nextStep()">Ver Resultado do Mês >>></button>
-                            </div>
-                        </div>
 
-                        <!-- ==================== STEP 9: RESULTADOS - RESULTADO DO MÊS (F8) ==================== -->
-                        <div class="wizard-step" id="step-9">
-                            <h5 class="mb-4">Resultado do Mês</h5>
-                            
-                            <!-- Card: Resultado do Mes (F8) -->
-                            <div class="result-card" id="card-f8-resultado">
-                                <div class="result-title">Custo Total e Resultado do Mês</div>
-                                <div class="result-value" id="f8-custo-total">R$ 0,00</div>
-                                <div class="result-description" id="f8-desc"></div>
-                            </div>
-                            
-                            <!-- Card: Ticket Médio -->
-                            <div class="result-card">
-                                <div class="result-title">Ticket Médio</div>
-                                <div class="result-value" id="f8-ticket-medio">R$ 0,00</div>
-                                <div class="result-description" id="f8-tm-desc"></div>
-                            </div>
-                            
-                            <!-- Card: Margem Bruta -->
-                            <div class="result-card">
-                                <div class="result-title">Margem Bruta</div>
-                                <div class="result-value" id="f8-margem-bruta">R$ 0,00</div>
-                                <div class="result-description" id="f8-mb-desc"></div>
-                            </div>
-                            
-                            <div class="wizard-nav">
-                                <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <button class="btn btn-primary" onclick="nextStep()">Ver Avaliação >>></button>
-                            </div>
-                        </div>
+                            <!-- Linha superior: cards de resultado + gráfico lado a lado -->
+                            <div class="row align-items-start g-4">
 
-                        <!-- ==================== STEP 10: AVALIAÇÃO + CONFIRMAÇÃO DO CAIXA ==================== -->
-                        <div class="wizard-step" id="step-10">
-                            <h5 class="mb-4">Avaliação do Resultado</h5>
-                            
-                            <!-- Lucro Ideal info -->
-                            <div class="input-hint mb-4">
-                                <i class="bi bi-bullseye"></i> Seu lucro ideal: <strong id="lucro-ideal-info">20%</strong>
-                            </div>
-                            
-                            <!-- Card: Avaliacao Final (F9) -->
-                            <div class="result-card" id="card-f9-avaliacao">
-                                <div class="result-title">Avaliação Final</div>
-                                <div class="result-value" id="f9-percentual">0%</div>
-                                <div class="result-description" id="f9-desc"></div>
-                            </div>
-                            
-                            <!-- Comparativo -->
-                            <div class="results-summary mt-4">
-                                <div class="summary-item">
-                                    <div class="label">Seu Lucro Ideal</div>
-                                    <div class="value" id="comp-lucro-ideal">20%</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="label">Resultado Obtido</div>
-                                    <div class="value" id="comp-resultado">0%</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="label">Diferença</div>
-                                    <div class="value" id="comp-diferenca">-</div>
-                                </div>
-                            </div>
-                            
-                            <!-- Confirmação do Caixa -->
-                            <div class="result-card mt-4" id="card-f10-corresponde">
-                                <div class="result-title">Este valor corresponde ao que você apurou no caixa, no fechamento do mês?</div>
-                                
-                                <div class="mt-3">
-                                    <div class="form-check form-check-inline me-4">
-                                        <input class="form-check-input" type="radio" name="corresponde_caixa" id="corresponde_sim" value="true">
-                                        <label class="form-check-label" for="corresponde_sim">
-                                            <strong>Sim, corresponde</strong>
-                                        </label>
+                                <!-- Coluna esquerda: cards das fórmulas -->
+                                <div class="col-md-6">
+                                    <div class="result-card primary mb-3" id="card-f6-pe">
+                                        <div class="result-title">Ponto de Equilíbrio</div>
+                                        <div class="result-value" id="f6-pe-valor">R$ 0,00</div>
+                                        <div class="result-description" id="f6-pe-desc"></div>
                                     </div>
-                                    <div class="form-check form-check-inline">
-                                        <input class="form-check-input" type="radio" name="corresponde_caixa" id="corresponde_nao" value="false">
-                                        <label class="form-check-label" for="corresponde_nao">
-                                            <strong>Não corresponde</strong>
-                                        </label>
-                                        <button type="button" class="btn btn-sm btn-secondary ms-2" data-bs-toggle="modal" data-bs-target="#modalAna" id="btn-ver-ana" style="display: none;" onclick="prepararModalAna()">
-                                            <i class="bi bi-person-circle"></i> Ver o que a Ana tem a dizer
-                                        </button>
+                                    <div class="result-card primary mb-3" id="card-f7-margem-seg">
+                                        <div class="result-title">Margem de Segurança</div>
+                                        <div class="result-value" id="f7-margem-seg">0%</div>
+                                        <div class="result-description" id="f7-desc"></div>
+                                    </div>
+                                    <div class="result-card mb-3" id="card-f8-resultado">
+                                        <div class="result-title">Resultado do Mês</div>
+                                        <div class="result-value" id="f8-custo-total">R$ 0,00</div>
+                                        <div class="result-description" id="f8-desc"></div>
+                                    </div>
+                                    <div class="result-card mb-3" id="card-f9-avaliacao">
+                                        <div class="result-title">Avaliação Final</div>
+                                        <div class="result-value" id="f9-percentual">0%</div>
+                                        <div class="result-description" id="f9-desc"></div>
                                     </div>
                                 </div>
-                                
-                                <!-- F11: Resposta condicional -->
-                                <div class="conditional-text mt-3" id="f11-resposta" style="display: none;">
-                                    <p id="f11-texto"></p>
+
+                                <!-- Coluna direita: gráfico pizza -->
+                                <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
+                                    <p class="text-muted small mb-2 text-center">Como o faturamento se divide</p>
+                                    <div style="max-width:280px; width:100%;">
+                                        <canvas id="chart-resultado-pizza"></canvas>
+                                    </div>
+                                    <div id="chart-resultado-legenda" class="mt-2 text-center" style="display:none;">
+                                        <small class="d-flex flex-wrap justify-content-center gap-2">
+                                            <span><span class="badge" style="background:#d4bc5a;">■</span> Custo das Vendas</span>
+                                            <span><span class="badge" style="background:#8B6914;">■</span> Custo Mercadorias</span>
+                                            <span><span class="badge" style="background:#5c4a1e;">■</span> Custos Fixos</span>
+                                            <span><span class="badge" style="background:#2e7d32;">■</span> Margem</span>
+                                        </small>
+                                    </div>
                                 </div>
                             </div>
-                            
-                            <!-- Resumo Final -->
-                            <div class="card mt-4">
-                                <div class="card-header bg-secondary text-white">
-                                    <h5 class="mb-0">Resumo da Análise</h5>
-                                </div>
-                                <div class="card-body">
+
+                            <!-- Linha inferior: resumos abaixo do gráfico -->
+                            <div class="row mt-3 g-2">
+                                <div class="col-12">
                                     <div class="results-summary">
                                         <div class="summary-item">
-                                            <div class="label">Mês</div>
-                                            <div class="value" id="resumo-final-mes">-</div>
-                                        </div>
-                                        <div class="summary-item">
                                             <div class="label">Faturamento</div>
-                                            <div class="value" id="resumo-final-fat">-</div>
+                                            <div class="value" id="res7-fat">-</div>
                                         </div>
                                         <div class="summary-item">
-                                            <div class="label">Resultado</div>
-                                            <div class="value" id="resumo-final-res">-</div>
+                                            <div class="label">Margem Bruta</div>
+                                            <div class="value" id="res7-mb">-</div>
+                                        </div>
+                                        <div class="summary-item">
+                                            <div class="label">Custos Fixos</div>
+                                            <div class="value" id="res7-cf">-</div>
+                                        </div>
+                                        <div class="summary-item">
+                                            <div class="label">Lucro Ideal</div>
+                                            <div class="value" id="comp-lucro-ideal">20%</div>
+                                        </div>
+                                        <div class="summary-item">
+                                            <div class="label">Resultado Obtido</div>
+                                            <div class="value" id="comp-resultado">0%</div>
+                                        </div>
+                                        <div class="summary-item">
+                                            <div class="label">Diferença</div>
+                                            <div class="value" id="comp-diferenca">-</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="wizard-nav">
-                                <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <button class="btn btn-primary" onclick="salvarAnalise()">Salvar Análise</button>
+
+                            <!-- Campos ocultos por compatibilidade JS -->
+                            <span id="lucro-ideal-info" style="display:none;"></span>
+                            <span id="f8-ticket-medio" style="display:none;"></span>
+                            <span id="f8-tm-desc" style="display:none;"></span>
+                            <span id="f8-margem-bruta" style="display:none;"></span>
+                            <span id="f8-mb-desc" style="display:none;"></span>
+                            <span id="resultado-mes-7" style="display:none;"></span>
+
+                            <div class="wizard-nav mt-4">
+                                <button class="btn btn-secondary" onclick="prevStep()">&#171; Voltar</button>
+                                <button class="btn btn-success" onclick="salvarAnalise()">
+                                    <i class="bi bi-check-circle"></i> Salvar Análise
+                                </button>
                             </div>
+                        </div>
+
+                        <!-- steps 9 e 10 pulados -->
+                        <div class="wizard-step" id="step-9" style="display:none!important;"></div>
+
+                        <!-- ==================== STEP 10: oculto — campos mantidos para compatibilidade JS ==================== -->
+                        <!-- step-10 removido — inputs ocultos mantidos para compatibilidade JS -->
+                        <div class="wizard-step" id="step-10" style="display:none!important;">
+                            <input type="radio" name="corresponde_caixa" id="corresponde_sim" value="true" style="display:none;">
+                            <input type="radio" name="corresponde_caixa" id="corresponde_nao" value="false" style="display:none;">
+                            <span id="f11-resposta" style="display:none;"><span id="f11-texto"></span></span>
+                            <span id="resumo-final-mes" style="display:none;"></span>
+                            <span id="resumo-final-fat" style="display:none;"></span>
+                            <span id="resumo-final-res" style="display:none;"></span>
+                            <span id="card-f10-corresponde" style="display:none;"></span>
+                            <span id="btn-ver-ana" style="display:none;"></span>
                         </div>
 
                         <!-- ==================== STEP 11: CONFIRMAÇÃO ==================== -->
@@ -986,11 +970,12 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script>
 // ==================== VARIAVEIS GLOBAIS ====================
 let currentStep = 0;
 let modalCustoFixo = null;
-let lucroIdeal = 20; // Valor padrao, sera buscado do usuario
+let lucroIdeal = 0.20; // Valor padrão decimal (20%). buscarLucroIdeal() atualiza com o valor real
 let editingAnaliseId = null; // ID da análise sendo editada (null = nova análise)
 
 const formData = {
@@ -1006,6 +991,7 @@ const formData = {
     // Campos calculados
     ticket_medio: 0,
     margem_bruta: 0,
+    margem_contribuicao_por_cliente: 0,
     ponto_equilibrio: 0,
     margem_seguranca: 0,
     custo_total: 0,
@@ -1038,6 +1024,7 @@ async function carregarAnaliseExistente(analiseId) {
         formData.corresponde_caixa = data.corresponde_caixa;
         formData.ticket_medio = data.ticket_medio || 0;
         formData.margem_bruta = data.margem_bruta || 0;
+        formData.margem_contribuicao_por_cliente = data.margem_contribuicao_por_cliente || 0;
         formData.ponto_equilibrio = data.ponto_equilibrio || 0;
         formData.margem_seguranca = data.margem_seguranca || 0;
         formData.custo_total = data.custo_total || 0;
@@ -1060,8 +1047,12 @@ async function carregarAnaliseExistente(analiseId) {
             if (correspondeRadio) correspondeRadio.checked = true;
         }
         
-        // Ir para o step do mês (step 1) para revisar e editar
-        showStep(1);
+        // Ir para o step de capacidade/clientes para revisar e editar
+        showStep(2);
+
+        // Atualizar label de mês e barra de capacidade
+        atualizarLabelMesStep2();
+        atualizarBarraCapacidade();
         
         // Atualizar cálculos
         atualizarCalculosParciais();
@@ -1095,10 +1086,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Event listeners para calculo automatico
     document.getElementById('faturamento').addEventListener('input', atualizarCalculosParciais);
-    document.getElementById('quant_clientes').addEventListener('input', atualizarCalculosParciais);
+    document.getElementById('quant_clientes').addEventListener('input', () => { atualizarBarraCapacidade(); atualizarCalculosParciais(); });
+    document.getElementById('capacidade').addEventListener('input', () => { atualizarBarraCapacidade(); atualizarCalculosParciais(); });
     document.getElementById('gastos_vendas').addEventListener('input', atualizarCalculosParciais);
     document.getElementById('custo_mercadorias').addEventListener('input', atualizarCalculosParciais);
     document.getElementById('custo_fixo_total').addEventListener('input', atualizarCalculosParciais);
+
+    // Atualizar labels de mês nos steps quando mês/ano mudar
+    ['mes', 'ano'].forEach(id => {
+        document.getElementById(id).addEventListener('change', atualizarLabelMes);
+    });
+    atualizarLabelMes();
     
     // Listener para correspondencia ao caixa
     document.querySelectorAll('input[name="corresponde_caixa"]').forEach(el => {
@@ -1125,13 +1123,6 @@ function showStep(step) {
     const stepEl = document.getElementById('step-' + step);
     if (stepEl) stepEl.classList.add('active');
     
-    // Atualizar indicadores
-    document.querySelectorAll('.step-indicator .step').forEach((el, idx) => {
-        el.classList.remove('active', 'completed');
-        if (idx < step) el.classList.add('completed');
-        if (idx === step) el.classList.add('active');
-    });
-    
     // Atualizar indicador de progresso
     const progressEl = document.getElementById('progress-indicator');
     if (progressEl) {
@@ -1145,34 +1136,42 @@ function showStep(step) {
     
     currentStep = step;
     
-    // Accoes por step
-    if (step === 7) {
-        calcularResultadosF7();
+    // Accoes por step (graficos e resultados ao ENTRAR no step correto)
+    capturarDados();
+    if (step === 5) {
+        atualizarBalaoBalloonStep5();
+        setTimeout(() => atualizarGraficoGastos(), 80);
+    } else if (step === 6) {
+        setTimeout(() => atualizarGraficoMercadorias(), 80);
     } else if (step === 8) {
-        calcularResultadosF8();
-    } else if (step === 9) {
+        calcularResultadosF7();
+        setTimeout(() => atualizarGraficoResultado(), 80);
+    } else if (step === 10) {
         calcularResultadosF9();
     }
 }
 
+const SKIPPED_STEPS = new Set([1, 4, 9, 10]);
+
 function nextStep() {
     if (!validateStep(currentStep)) return;
-    
-    // Capturar dados antes de avanvar
     capturarDados();
-    
-    showStep(currentStep + 1);
+    let next = currentStep + 1;
+    while (SKIPPED_STEPS.has(next)) next++;
+    showStep(next);
 }
 
 function prevStep() {
     if (currentStep > 0) {
-        showStep(currentStep - 1);
+        let prev = currentStep - 1;
+        while (prev > 0 && SKIPPED_STEPS.has(prev)) prev--;
+        showStep(prev);
     }
 }
 
 // ==================== VALIDACAO ====================
 function validateStep(step) {
-    if (step === 1) {
+    if (step === 0 || step === 1) {
         const mes = document.getElementById('mes').value;
         const ano = document.getElementById('ano').value;
         if (!mes || !ano) {
@@ -1224,14 +1223,6 @@ function validateStep(step) {
             return false;
         }
     }
-    else if (step === 10) {
-        const correspondeSim = document.getElementById('corresponde_sim').checked;
-        const correspondeNao = document.getElementById('corresponde_nao').checked;
-        if (!correspondeSim && !correspondeNao) {
-            alert('Informe se o valor corresponde ao caixa.');
-            return false;
-        }
-    }
     return true;
 }
 
@@ -1264,27 +1255,46 @@ function atualizarCalculosParciais() {
     const ticketMedio = (faturamento > 0 && quant_clientes > 0) ? faturamento / quant_clientes : 0;
     const sobraFaturamento = faturamento - gastos_vendas;
     const margemBruta = faturamento - gastos_vendas - custo_mercadorias;
-    const pontoEquilibrio = (margemBruta > 0 && ticketMedio > 0) ? custo_fixo_total / (margemBruta / quant_clientes) : 0;
+    const margemContribPorCliente = (quant_clientes > 0 && margemBruta > 0) ? margemBruta / quant_clientes : 0;
+    // ponto_equilibrio em R$ de faturamento: custo_fixo / (margem_bruta / faturamento)
+    const pontoEquilibrio = (margemBruta > 0 && faturamento > 0) ? custo_fixo_total * faturamento / margemBruta : 0;
     
-    // F2: Ticket Medio (Step 3)
+    // F2: Ticket Medio — exibe nos dois lugares (step-2 e step-3)
     const resumoFaturamento = document.getElementById('resumo-faturamento');
     const f2TicketMedio = document.getElementById('f2-ticket-medio');
+    const resumoFatF3 = document.getElementById('resumo-faturamento-f3');
+    const f2TicketMedioF3 = document.getElementById('f2-ticket-medio-f3');
     if (quant_clientes > 0 && faturamento > 0) {
+        // step-2 (resumo-faturamento)
         if (resumoFaturamento) resumoFaturamento.style.display = 'grid';
         const resumoFat = document.getElementById('resumo-fat');
         const resumoCli = document.getElementById('resumo-cli');
-        const resumoTm = document.getElementById('resumo-tm');
+        const resumoTm  = document.getElementById('resumo-tm');
         if (resumoFat) resumoFat.textContent = formatCurrency(faturamento);
         if (resumoCli) resumoCli.textContent = quant_clientes;
-        if (resumoTm) resumoTm.textContent = formatCurrency(ticketMedio);
-        
+        if (resumoTm)  resumoTm.textContent  = formatCurrency(ticketMedio);
         if (f2TicketMedio) {
             f2TicketMedio.classList.add('show', 'info');
             const f2Texto = document.getElementById('f2-texto');
             if (f2Texto) f2Texto.textContent = `Ou seja, cada cliente gerou em média ${formatCurrency(ticketMedio)} de faturamento.`;
         }
+        // step-3 (resumo-faturamento-f3)
+        if (resumoFatF3) resumoFatF3.style.display = 'grid';
+        const resumoFatF3El = document.getElementById('resumo-fat-f3');
+        const resumoCliF3   = document.getElementById('resumo-cli-f3');
+        const resumoTmF3    = document.getElementById('resumo-tm-f3');
+        if (resumoFatF3El) resumoFatF3El.textContent = formatCurrency(faturamento);
+        if (resumoCliF3)   resumoCliF3.textContent   = quant_clientes;
+        if (resumoTmF3)    resumoTmF3.textContent    = formatCurrency(ticketMedio);
+        if (f2TicketMedioF3) {
+            f2TicketMedioF3.classList.add('show', 'info');
+            const f2TextoF3 = document.getElementById('f2-texto-f3');
+            if (f2TextoF3) f2TextoF3.textContent = `Ou seja, cada cliente gerou em média ${formatCurrency(ticketMedio)} de faturamento.`;
+        }
     } else {
         if (f2TicketMedio) f2TicketMedio.classList.remove('show');
+        if (resumoFatF3) resumoFatF3.style.display = 'none';
+        if (f2TicketMedioF3) f2TicketMedioF3.classList.remove('show');
     }
     
     // F1: Capacidade vs Clientes
@@ -1356,11 +1366,15 @@ function atualizarCalculosParciais() {
         }
     }
     
+    // Atualizar gráficos de pizza conforme step ativo
+    atualizarGraficoGastos();
+    atualizarGraficoMercadorias();
+
     // F6: Margem de Seguranca
     const resumoPonto = document.getElementById('resumo-ponto');
     const f6MargemSeg = document.getElementById('f6-margem-seg');
     if (custo_fixo_total > 0 && margemBruta > 0 && quant_clientes > 0 && ticketMedio > 0 && faturamento > 0) {
-        const pe = custo_fixo_total / (margemBruta / quant_clientes);
+        const pe = faturamento > 0 && margemBruta > 0 ? custo_fixo_total * faturamento / margemBruta : 0;
         const margemSeg = ((faturamento - pe) / faturamento) * 100;
         
         if (margemSeg > 0) {
@@ -1379,66 +1393,109 @@ function atualizarCalculosParciais() {
 
 // ==================== CALCULAR RESULTADOS FINAIS ====================
 function calcularResultadosF7() {
-    // Ja captura os dados
     capturarDados();
-    
-    // Verificar se step 7 esta ativo
-    const step7 = document.getElementById('step-7');
-    if (!step7 || !step7.classList.contains('active')) return;
-    
-    // Calculos
-    formData.ticket_medio = formData.faturamento / formData.quant_clientes;
+
+    const step8 = document.getElementById('step-8');
+    if (!step8 || !step8.classList.contains('active')) return;
+
+    // Cálculos base
+    formData.ticket_medio = formData.quant_clientes > 0 ? formData.faturamento / formData.quant_clientes : 0;
     formData.margem_bruta = formData.faturamento - formData.gastos_vendas - formData.custo_mercadorias;
-    formData.ponto_equilibrio = formData.custo_fixo_total / (formData.margem_bruta / formData.quant_clientes);
-    formData.margem_seguranca = ((formData.faturamento - formData.ponto_equilibrio) / formData.faturamento) * 100;
-    
-    // Mes
-    const el = document.getElementById('resultado-mes-7');
-    if (el) el.textContent = `${getMonthName(formData.mes)}/${formData.ano}`;
-    
-    // Resumo
+    formData.margem_contribuicao_por_cliente = formData.quant_clientes > 0 ? formData.margem_bruta / formData.quant_clientes : 0;
+    formData.ponto_equilibrio = formData.margem_bruta > 0 ? formData.custo_fixo_total * formData.faturamento / formData.margem_bruta : 0;
+    formData.margem_seguranca = formData.faturamento > 0 ? ((formData.faturamento - formData.ponto_equilibrio) / formData.faturamento) * 100 : 0;
+    formData.custo_total = formData.gastos_vendas + formData.custo_mercadorias + formData.custo_fixo_total;
+    formData.resultado = formData.faturamento - formData.custo_total;
+    formData.percentual_margem = formData.faturamento > 0 ? (formData.resultado / formData.faturamento) * 100 : 0;
+
+    // Resumo numérico
     const elFat = document.getElementById('res7-fat');
-    const elMb = document.getElementById('res7-mb');
-    const elCf = document.getElementById('res7-cf');
+    const elMb  = document.getElementById('res7-mb');
+    const elCf  = document.getElementById('res7-cf');
     if (elFat) elFat.textContent = formatCurrency(formData.faturamento);
-    if (elMb) elMb.textContent = formatCurrency(formData.margem_bruta);
-    if (elCf) elCf.textContent = formatCurrency(formData.custo_fixo_total);
-    
-    // F7: Margem de Seguranca
-    const elF7 = document.getElementById('f7-margem-seg');
+    if (elMb)  elMb.textContent  = formatCurrency(formData.margem_bruta);
+    if (elCf)  elCf.textContent  = formatCurrency(formData.custo_fixo_total);
+
+    // F6: Ponto de Equilíbrio
+    const elPe     = document.getElementById('f6-pe-valor');
+    const descPe   = document.getElementById('f6-pe-desc');
+    const cardPe   = document.getElementById('card-f6-pe');
+    if (elPe) elPe.textContent = formatCurrency(formData.ponto_equilibrio);
+    if (descPe) descPe.textContent = `Para cobrir todos os custos, a loja precisa faturar pelo menos ${formatCurrency(formData.ponto_equilibrio)} por mês.`;
+    if (cardPe) cardPe.className = formData.faturamento >= formData.ponto_equilibrio ? 'result-card success mb-3' : 'result-card danger mb-3';
+
+    // F7: Margem de Segurança
+    const elF7   = document.getElementById('f7-margem-seg');
+    const descF7 = document.getElementById('f7-desc');
+    const cardF7 = document.getElementById('card-f7-margem-seg');
     if (elF7) elF7.textContent = formData.margem_seguranca.toFixed(1) + '%';
-    
-    let f7Msg = '';
-    let f7Class = '';
+    let f7Msg = '', f7Class = '';
     if (formData.margem_seguranca < 10) {
-        f7Msg = 'Esse indicador mostra que o seu negócio poderá registrar prejuízo com pequena queda nas vendas.';
+        f7Msg = 'Seu negócio poderá registrar prejuízo com pequena queda nas vendas.';
         f7Class = 'danger';
     } else if (formData.margem_seguranca < 25) {
-        f7Msg = 'Esse indicador mostra que o seu negócio conta com pouca margem para enfrentar quedas nas vendas.';
+        f7Msg = 'Seu negócio conta com pouca margem para enfrentar quedas nas vendas.';
         f7Class = 'warning';
     } else if (formData.margem_seguranca < 40) {
-        f7Msg = 'Esse indicador mostra que o seu negócio conta com boa margem para enfrentar quedas nas vendas.';
+        f7Msg = 'Seu negócio conta com boa margem para enfrentar quedas nas vendas.';
         f7Class = 'success';
     } else {
-        f7Msg = 'Esse indicador mostra que o seu negócio está bem preparado para enfrentar quedas nas vendas.';
+        f7Msg = 'Seu negócio está bem preparado para enfrentar quedas nas vendas.';
         f7Class = 'success';
     }
-    
-    const cardF7 = document.getElementById('card-f7-margem-seg');
-    const descF7 = document.getElementById('f7-desc');
-    if (cardF7) cardF7.className = `result-card ${f7Class}`;
+    if (cardF7) cardF7.className = `result-card ${f7Class} mb-3`;
     if (descF7) descF7.textContent = f7Msg;
+
+    // F8: Resultado do Mês
+    const cardF8 = document.getElementById('card-f8-resultado');
+    const elRes  = document.getElementById('f8-custo-total');
+    const descF8 = document.getElementById('f8-desc');
+    const f8Class = formData.resultado >= 0 ? 'success' : 'danger';
+    if (cardF8) cardF8.className = `result-card ${f8Class} mb-3`;
+    if (elRes) elRes.textContent = formatCurrency(formData.resultado);
+    if (descF8) {
+        if (formData.resultado > 0) {
+            descF8.textContent = `Lucro de ${formatCurrency(formData.resultado)} (${formData.percentual_margem.toFixed(1)}% do faturamento).`;
+        } else if (formData.resultado < 0) {
+            descF8.textContent = `Prejuízo de ${formatCurrency(Math.abs(formData.resultado))} (${formData.percentual_margem.toFixed(1)}% do faturamento).`;
+        } else {
+            descF8.textContent = 'Margem zero — nem lucro, nem prejuízo.';
+        }
+    }
+
+    // F9: Avaliação Final (comparativo com lucro ideal)
+    const cardF9 = document.getElementById('card-f9-avaliacao');
+    const elF9   = document.getElementById('f9-percentual');
+    const descF9 = document.getElementById('f9-desc');
+    const elCompIdeal  = document.getElementById('comp-lucro-ideal');
+    const elCompResult = document.getElementById('comp-resultado');
+    const elCompDiff   = document.getElementById('comp-diferenca');
+    const idealPct = lucroIdeal * 100;
+    const diferenca = formData.percentual_margem - idealPct;
+    if (elF9) elF9.textContent = formData.percentual_margem.toFixed(1) + '%';
+    if (elCompIdeal)  elCompIdeal.textContent  = idealPct.toFixed(0) + '%';
+    if (elCompResult) elCompResult.textContent = formData.percentual_margem.toFixed(1) + '%';
+    if (elCompDiff)   elCompDiff.textContent   = (diferenca >= 0 ? '+' : '') + diferenca.toFixed(1) + '%';
+    const f9Class = diferenca >= 0 ? 'success' : (diferenca >= -10 ? 'warning' : 'danger');
+    if (cardF9) cardF9.className = `result-card ${f9Class} mb-3`;
+    if (descF9) {
+        if (diferenca >= 0) {
+            descF9.textContent = `Atingiu seu lucro ideal de ${idealPct.toFixed(0)}%! Resultado ${diferenca.toFixed(1)}% acima da meta.`;
+        } else {
+            descF9.textContent = `Resultado ${Math.abs(diferenca).toFixed(1)}% abaixo do lucro ideal de ${idealPct.toFixed(0)}%.`;
+        }
+    }
 }
 
 function calcularResultadosF8() {
-    // Verificar se step 8 esta ativo
-    const step8 = document.getElementById('step-8');
-    if (!step8 || !step8.classList.contains('active')) return;
+    // Verificar se step 9 esta ativo (resultado do mes)
+    const step9 = document.getElementById('step-9');
+    if (!step9 || !step9.classList.contains('active')) return;
     
-    // Ja captura os dados
     capturarDados();
     
-    // Calculos ja feitos em F7
+    formData.ticket_medio = formData.quant_clientes > 0 ? formData.faturamento / formData.quant_clientes : 0;
+    formData.margem_bruta = formData.faturamento - formData.gastos_vendas - formData.custo_mercadorias;
     formData.custo_total = formData.gastos_vendas + formData.custo_mercadorias + formData.custo_fixo_total;
     formData.resultado = formData.faturamento - formData.custo_total;
     formData.percentual_margem = (formData.resultado / formData.faturamento) * 100;
@@ -1476,9 +1533,9 @@ function calcularResultadosF8() {
 }
 
 function calcularResultadosF9() {
-    // Verificar se step 9 esta ativo
-    const step9 = document.getElementById('step-9');
-    if (!step9 || !step9.classList.contains('active')) return;
+    // Verificar se step 10 esta ativo (avaliacao)
+    const step10 = document.getElementById('step-10');
+    if (!step10 || !step10.classList.contains('active')) return;
     
     // Ja captura os dados
     capturarDados();
@@ -1488,15 +1545,16 @@ function calcularResultadosF9() {
     const elCompIdeal = document.getElementById('comp-lucro-ideal');
     const elCompResult = document.getElementById('comp-resultado');
     const elCompDiff = document.getElementById('comp-diferenca');
-    if (elLucroIdeal) elLucroIdeal.textContent = (lucroIdeal * 100).toFixed(0) + '%';
-    if (elCompIdeal) elCompIdeal.textContent = (lucroIdeal * 100).toFixed(0) + '%';
+    const idealPctF9 = lucroIdeal * 100; // lucroIdeal é decimal (ex: 0.20 = 20%)
+    if (elLucroIdeal) elLucroIdeal.textContent = idealPctF9.toFixed(0) + '%';
+    if (elCompIdeal) elCompIdeal.textContent = idealPctF9.toFixed(0) + '%';
     if (elCompResult) elCompResult.textContent = formData.percentual_margem.toFixed(1) + '%';
     
-    const diferenca = formData.percentual_margem - (lucroIdeal * 100);
+    const diferenca = formData.percentual_margem - idealPctF9;
     if (elCompDiff) elCompDiff.textContent = (diferenca >= 0 ? '+' : '') + diferenca.toFixed(1) + '%';
     
     // F9: Avaliacao
-    const relacaoLucro = (formData.percentual_margem / (lucroIdeal * 100)) * 100;
+    const relacaoLucro = idealPctF9 > 0 ? (formData.percentual_margem / idealPctF9) * 100 : 0;
     let avaliacaoFinal = '';
     let avaliacaoClass = '';
     
@@ -1683,48 +1741,10 @@ async function verificarAnaliseExistente() {
 
 // ==================== CUSTOS FIXOS ====================
 async function carregarCustosFixos() {
+    // Tabela de custos fixos foi removida do slide; função mantida apenas para compatibilidade.
     try {
-        const response = await fetch('/analise-mensal/api/custos-fixos', {
-            credentials: 'include'
-        });
-        const data = await response.json();
-        
-        const tbody = document.getElementById('custos-cadastrados');
-        const semCustos = document.getElementById('sem-custos');
-        
-        if (data.custos && data.custos.length > 0) {
-            tbody.innerHTML = '';
-            let total = 0;
-            
-            data.custos.forEach(custo => {
-                total += custo.valor;
-                const nomeEscaped = custo.nome.replace(/'/g, "\\'").replace(/"/g, '\\"');
-                const catEscaped = custo.categoria.replace(/'/g, "\\'").replace(/"/g, '\\"');
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${custo.nome}</td>
-                        <td>${custo.categoria}</td>
-                        <td>${formatCurrency(custo.valor)}</td>
-                        <td>
-                            <button class="btn btn-sm btn-primary me-1" onclick="editarCustoFixo(${custo.id}, '${nomeEscaped}', ${custo.valor}, '${catEscaped}')">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button class="btn btn-sm btn-danger" onclick="excluirCustoFixo(${custo.id})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-            
-            // Atualizar total de custos fixos
-            document.getElementById('custo_fixo_total').value = total.toFixed(2);
-            
-            semCustos.style.display = 'none';
-        } else {
-            tbody.innerHTML = '';
-            semCustos.style.display = 'block';
-        }
+        // Não carrega mais tabela — o campo custo_fixo_total é preenchido manualmente.
+        return;
     } catch (error) {
         console.error('Erro ao carregar custos fixos:', error);
     }
@@ -1813,8 +1833,6 @@ async function excluirCustoFixo(id) {
 
 // ==================== SALVAR ANALISE ====================
 async function salvarAnalise() {
-    if (!validateStep(10)) return;
-    
     capturarDados();
     
     // Atualizar F11
@@ -1976,15 +1994,8 @@ function atualizarTabelaGastos() {
 }
 
 function calcularTotalGastos() {
-    const total = gastosVariaveis.reduce((sum, g) => sum + g.valor, 0);
-    document.getElementById('gastos_vendas').value = total.toFixed(2);
-    
-    // Atualizar % sobre faturamento
-    capturarDados();
-    if (formData.faturamento > 0) {
-        const pct = (total / formData.faturamento) * 100;
-        document.getElementById('gastos_vendas_pct').value = pct.toFixed(1) + '%';
-    }
+    // Mantido para compatibilidade, mas a tabela de detalhamento foi removida do slide.
+    // O valor de gastos_vendas agora é sempre digitado manualmente.
 }
 
 // Modal da Ana
@@ -2154,4 +2165,176 @@ function verificarDiferencaCaixa() {
         </div>
     </div>
 </div>
+
+<script>
+// ==================== GRÁFICOS DE PIZZA (Chart.js) ====================
+
+let chartGastos = null;
+let chartMercadorias = null;
+let chartResultado = null;
+
+const COR_GASTOS   = '#c8a84b';
+const COR_CUSTO    = '#8B6914';
+const COR_FIXO     = '#5c4a1e';
+const COR_MARGEM   = '#2e7d32';
+const COR_RESTANTE = '#aaaaaa';
+
+function criarOuAtualizarPizza(canvasId, chart, labels, dados, cores) {
+    if (typeof Chart === 'undefined') return chart;
+    const ctx = document.getElementById(canvasId);
+    if (!ctx) return chart;
+
+    if (chart) {
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = dados;
+        chart.data.datasets[0].backgroundColor = cores;
+        chart.update();
+        return chart;
+    }
+
+    return new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: dados,
+                backgroundColor: cores,
+                borderWidth: 1,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    callbacks: {
+                        label: (ctx) => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`
+                    }
+                }
+            }
+        }
+    });
+}
+
+const NOMES_MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+function atualizarLabelMes() {
+    const mes = parseInt(document.getElementById('mes').value);
+    const ano = document.getElementById('ano').value;
+    const texto = (mes && ano) ? NOMES_MESES[mes - 1] + '/' + ano : (mes ? NOMES_MESES[mes - 1] : '______');
+    ['label-mes-step2', 'label-mes-step3'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = texto;
+    });
+}
+
+function atualizarLabelMesStep2() { atualizarLabelMes(); }
+
+function atualizarBalaoBalloonStep5() {
+    capturarDados();
+    const fat = formData.faturamento || 0;
+    const cli = formData.quant_clientes || 0;
+    const tm  = (cli > 0 && fat > 0) ? fat / cli : 0;
+    const s5c = document.getElementById('s5-clientes');
+    const s5t = document.getElementById('s5-ticket');
+    const s5f = document.getElementById('s5-fat');
+    if (s5c) s5c.textContent = cli > 0 ? cli : '—';
+    if (s5t) s5t.textContent = tm  > 0 ? formatCurrency(tm) : '—';
+    if (s5f) s5f.textContent = fat > 0 ? formatCurrency(fat) : '—';
+}
+
+function atualizarBarraCapacidade() {
+    const clientes = parseInt(document.getElementById('quant_clientes').value) || 0;
+    const cap = parseInt(document.getElementById('capacidade').value) || 0;
+    const comp = document.getElementById('cap-comparacao');
+    if (!comp) return;
+    if (clientes > 0 && cap > 0) {
+        const pct = Math.min(100, Math.round((clientes / cap) * 100));
+        comp.style.display = 'block';
+        document.getElementById('cap-pct-vendas').textContent = pct + '%';
+        document.getElementById('cap-bar-vendas').style.width = pct + '%';
+    } else {
+        comp.style.display = 'none';
+    }
+}
+
+function atualizarGraficoGastos() {
+    const fat = formData.faturamento || 0;
+    const gv  = formData.gastos_vendas || parseFloat(document.getElementById('gastos_vendas').value) || 0;
+    if (fat <= 0) return;
+
+    const gvPct    = Math.min(100, Math.max(0, (gv / fat) * 100));
+    const restoPct = Math.max(0, 100 - gvPct);
+
+    chartGastos = criarOuAtualizarPizza(
+        'chart-gastos-pizza', chartGastos,
+        ['Gastos com Vendas', 'Restante'],
+        [gvPct, restoPct],
+        [COR_GASTOS, COR_RESTANTE]
+    );
+
+    const leg = document.getElementById('chart-gastos-legenda');
+    if (leg) leg.style.display = gv > 0 ? 'block' : 'none';
+
+    const lbl = document.getElementById('gastos_vendas_pct_label');
+    if (lbl && gv > 0) lbl.textContent = `${gvPct.toFixed(1)}% do faturamento`;
+}
+
+function atualizarGraficoMercadorias() {
+    const fat = formData.faturamento || 0;
+    const gv  = formData.gastos_vendas || 0;
+    const cm  = formData.custo_mercadorias || parseFloat(document.getElementById('custo_mercadorias').value) || 0;
+    if (fat <= 0) return;
+
+    const gvPct = Math.max(0, (gv / fat) * 100);
+    const cmPct = Math.max(0, (cm / fat) * 100);
+    const mbPct = Math.max(0, 100 - gvPct - cmPct);
+
+    chartMercadorias = criarOuAtualizarPizza(
+        'chart-mercadorias-pizza', chartMercadorias,
+        ['Gastos com Vendas', 'Custo das Mercadorias', 'Margem Bruta'],
+        [gvPct, cmPct, mbPct],
+        [COR_GASTOS, COR_CUSTO, COR_RESTANTE]
+    );
+
+    const leg = document.getElementById('chart-merc-legenda');
+    if (leg) leg.style.display = cm > 0 ? 'block' : 'none';
+
+    // Texto de margem de contribuição por cliente (Slide 5)
+    const mc  = (formData.margem_contribuicao_por_cliente > 0)
+        ? formData.margem_contribuicao_por_cliente
+        : (cm > 0 && formData.quant_clientes > 0 ? (fat - gv - cm) / formData.quant_clientes : 0);
+    const el  = document.getElementById('f4-margem-contrib');
+    const txt = document.getElementById('f4-contrib-texto');
+    if (el && txt && mc > 0) {
+        el.style.display = 'block';
+        txt.innerHTML = `Cada venda realizada gerou em média <strong>${formatCurrency(mc)}</strong> de margem de contribuição.`;
+    }
+}
+
+function atualizarGraficoResultado() {
+    const fat = formData.faturamento || 0;
+    const gv  = formData.gastos_vendas || 0;
+    const cm  = formData.custo_mercadorias || 0;
+    const cf  = formData.custo_fixo_total || 0;
+    const res = formData.resultado || 0;
+    if (fat <= 0) return;
+
+    const gvPct  = Math.max(0, (gv  / fat) * 100);
+    const cmPct  = Math.max(0, (cm  / fat) * 100);
+    const cfPct  = Math.max(0, (cf  / fat) * 100);
+    const resPct = Math.max(0, (res / fat) * 100);
+
+    chartResultado = criarOuAtualizarPizza(
+        'chart-resultado-pizza', chartResultado,
+        ['Custo das Vendas', 'Custo das Mercadorias', 'Custos Fixos', 'Margem'],
+        [gvPct, cmPct, cfPct, resPct],
+        [COR_GASTOS, COR_CUSTO, COR_FIXO, COR_MARGEM]
+    );
+
+    const leg = document.getElementById('chart-resultado-legenda');
+    if (leg) leg.style.display = 'block';
+}
+</script>
 {% endblock %}
