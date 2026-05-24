@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+
+{% block title %}{% if edit_mode %}Editar{% else %}Nova{% endif %} Análise Mensal — Cadastro Rápido{% endblock %}
+
+{% block extra_css %}
+<style>
+    body { background-color: #F5F5F5 !important; }
+    .card, .card-body { background-color: #F0F0F0 !important; }
+    .card-header.bg-secondary { background-color: #6c757d !important; color: white !important; }
+    .form-control, .form-select { background-color: #F5F5F5 !important; }
+    .btn-primary {
+        background-color: rgb(1, 57, 44) !important;
+        border-color: rgb(1, 57, 44) !important;
+    }
+    .btn-primary:hover {
+        background-color: rgb(2, 70, 54) !important;
+        border-color: rgb(2, 70, 54) !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <div class="col-md-12 mb-4">
+                <img src="/static/images/Logo.png" alt="Logo" height="40">
+            </div>
+
+            <div class="row mb-4 justify-content-center">
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
+                </div>
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/analise-mensal/cadastro" class="btn btn-secondary w-100">Cadastro rápido</a>
+                </div>
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/analise-mensal" class="btn btn-secondary w-100">Análise guiada</a>
+                </div>
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/analise-mensal/lista" class="btn btn-secondary w-100">Histórico</a>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-secondary text-white d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <h4 class="card-title mb-0">
+                        {% if edit_mode %}Editar{% else %}Cadastro rápido —{% endif %} Análise Mensal
+                    </h4>
+                    <a href="/analise-mensal" class="btn btn-sm btn-light text-dark">
+                        <i class="bi bi-arrow-right-circle me-1"></i> Análise guiada
+                    </a>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-4">
+                        Informe os valores do mês. Depois de salvar, você pode abrir a <strong>análise guiada</strong> no histórico para ver gráficos e orientações em detalhe.
+                    </p>
+
+                    <div id="aviso-duplicata" class="alert alert-warning" style="display: none;"></div>
+
+                    <form id="formCadastroRapido" onsubmit="return false;">
+                        {% if edit_mode and analise_id %}
+                        <input type="hidden" id="edit-analise-id" value="{{ analise_id }}">
+                        {% endif %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="mes" class="form-label">Mês *</label>
+                                <select class="form-select" id="mes" required {% if edit_mode %}disabled{% endif %}>
+                                    <option value="">Selecione...</option>
+                                    {% for m in range(1, 13) %}
+                                    <option value="{{ m }}" {% if m == current_month %}selected{% endif %}>
+                                        {{ ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][m-1] }}
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                                {% if edit_mode %}<input type="hidden" id="mes-hidden" value="{{ current_month }}">{% endif %}
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="ano" class="form-label">Ano *</label>
+                                <select class="form-select" id="ano" required {% if edit_mode %}disabled{% endif %}>
+                                    <option value="">Selecione...</option>
+                                    {% for y in range(current_year - 3, current_year + 2) %}
+                                    <option value="{{ y }}" {% if y == current_year %}selected{% endif %}>{{ y }}</option>
+                                    {% endfor %}
+                                </select>
+                                {% if edit_mode %}<input type="hidden" id="ano-hidden" value="{{ current_year }}">{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="capacidade" class="form-label">Capacidade de atendimento *</label>
+                                <input type="number" class="form-control" id="capacidade" min="1" step="1" required
+                                       placeholder="Ex: 120">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="quant_clientes" class="form-label">Quantidade de clientes *</label>
+                                <input type="number" class="form-control" id="quant_clientes" min="1" step="1" required
+                                       placeholder="Ex: 85">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="faturamento" class="form-label">Faturamento (R$) *</label>
+                                <input type="number" class="form-control" id="faturamento" min="0.01" step="0.01" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="gastos_vendas" class="form-label">Gastos com vendas (R$) *</label>
+                                <input type="number" class="form-control" id="gastos_vendas" min="0" step="0.01" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="custo_mercadorias" class="form-label">Custo das mercadorias (R$) *</label>
+                                <input type="number" class="form-control" id="custo_mercadorias" min="0" step="0.01" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="custo_fixo_total" class="form-label">Custo fixo total (R$) *</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="custo_fixo_total" readonly required
+                                           placeholder="Gerencie os custos fixos">
+                                    <button type="button" class="btn btn-secondary" onclick="abrirModalGerenciarCustosFixos()">
+                                        <i class="bi bi-list-ul"></i> Gerenciar
+                                    </button>
+                                </div>
+                                <span id="custo-success-msg" class="text-success small" style="display: none;"></span>
+                            </div>
+                        </div>
+
+                        <div class="row mt-4">
+                            <div class="col-12 text-center">
+                                <button type="button" class="btn btn-secondary me-2" onclick="window.location.href='/analise-mensal/lista'">Cancelar</button>
+                                <button type="button" class="btn btn-primary" id="btn-salvar-cadastro" onclick="salvarCadastroRapido()">
+                                    <i class="bi bi-check-circle"></i> {% if edit_mode %}Atualizar{% else %}Salvar{% endif %} análise
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include "partials/analise_mensal_custos_fixos_modals.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='js/analise_mensal_calculos.js') }}"></script>
+<script src="{{ url_for('static', path='js/analise_mensal_custos_fixos.js') }}"></script>
+<script>
+const editMode = {{ 'true' if edit_mode else 'false' }};
+const analiseIdEdicao = {{ analise_id if analise_id else 'null' }};
+
+document.addEventListener('DOMContentLoaded', function() {
+    initCustosFixosModais();
+    carregarCustosFixos();
+
+    if (editMode && analiseIdEdicao) {
+        carregarAnaliseParaEdicao(analiseIdEdicao);
+    } else {
+        document.getElementById('mes').addEventListener('change', verificarDuplicata);
+        document.getElementById('ano').addEventListener('change', verificarDuplicata);
+    }
+});
+
+function getMesAno() {
+    const mesEl = document.getElementById('mes');
+    const anoEl = document.getElementById('ano');
+    const mes = editMode
+        ? parseInt(document.getElementById('mes-hidden')?.value || mesEl.value)
+        : parseInt(mesEl.value);
+    const ano = editMode
+        ? parseInt(document.getElementById('ano-hidden')?.value || anoEl.value)
+        : parseInt(anoEl.value);
+    return { mes, ano };
+}
+
+async function verificarDuplicata() {
+    const { mes, ano } = getMesAno();
+    const aviso = document.getElementById('aviso-duplicata');
+    if (!mes || !ano) {
+        aviso.style.display = 'none';
+        return;
+    }
+    try {
+        const response = await fetch(`/analise-mensal/api/existe?mes=${mes}&ano=${ano}`, { credentials: 'include' });
+        if (!response.ok) return;
+        const data = await response.json();
+        if (data.existe) {
+            aviso.innerHTML = `Já existe uma análise para este mês/ano. <a href="/analise-mensal/cadastro/${data.analise_id}">Editar registro existente</a>.`;
+            aviso.style.display = 'block';
+        } else {
+            aviso.style.display = 'none';
+        }
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+async function carregarAnaliseParaEdicao(id) {
+    try {
+        const response = await fetch(`/analise-mensal/api/${id}`, { credentials: 'include' });
+        if (!response.ok) throw new Error('Não encontrada');
+        const data = await response.json();
+
+        document.getElementById('capacidade').value = data.capacidade_atendimento || '';
+        document.getElementById('quant_clientes').value = data.quant_clientes || '';
+        document.getElementById('faturamento').value = data.faturamento || '';
+        document.getElementById('gastos_vendas').value = data.gastos_vendas || '';
+        document.getElementById('custo_mercadorias').value = data.custo_mercadorias || '';
+
+        await carregarCustosFixos(data.custo_fixo_total);
+        const salvo = parseFloat(data.custo_fixo_total) || 0;
+        if (salvo > 0) atualizarTotalCustosFixos(salvo);
+    } catch (error) {
+        console.error(error);
+        alert('Erro ao carregar análise.');
+    }
+}
+
+function validarCadastroRapido() {
+    const { mes, ano } = getMesAno();
+    if (!mes || !ano) {
+        alert('Selecione o mês e o ano.');
+        return false;
+    }
+    const capacidade = parseFloat(document.getElementById('capacidade').value);
+    const clientes = parseInt(document.getElementById('quant_clientes').value);
+    const faturamento = parseFloat(document.getElementById('faturamento').value);
+    const gastos = parseFloat(document.getElementById('gastos_vendas').value);
+    const mercadorias = parseFloat(document.getElementById('custo_mercadorias').value);
+    const custoFixo = parseFloat(document.getElementById('custo_fixo_total').value) || 0;
+
+    if (!capacidade || capacidade <= 0) {
+        alert('Informe a capacidade de atendimento.');
+        return false;
+    }
+    if (!clientes || clientes <= 0) {
+        alert('Informe a quantidade de clientes.');
+        return false;
+    }
+    if (!faturamento || faturamento <= 0) {
+        alert('Informe o faturamento.');
+        return false;
+    }
+    if (isNaN(gastos)) {
+        alert('Informe os gastos com vendas.');
+        return false;
+    }
+    if (isNaN(mercadorias)) {
+        alert('Informe o custo das mercadorias.');
+        return false;
+    }
+    if (custoFixo <= 0) {
+        alert('Cadastre pelo menos um custo fixo em Gerenciar.');
+        return false;
+    }
+    return true;
+}
+
+function montarPayload() {
+    const { mes, ano } = getMesAno();
+    const base = {
+        mes,
+        ano,
+        capacidade_atendimento: parseFloat(document.getElementById('capacidade').value) || 0,
+        quant_clientes: parseInt(document.getElementById('quant_clientes').value) || 0,
+        faturamento: parseFloat(document.getElementById('faturamento').value) || 0,
+        gastos_vendas: parseFloat(document.getElementById('gastos_vendas').value) || 0,
+        custo_mercadorias: parseFloat(document.getElementById('custo_mercadorias').value) || 0,
+        custo_fixo_total: parseFloat(document.getElementById('custo_fixo_total').value) || 0,
+        corresponde_caixa: null,
+    };
+    return Object.assign(base, calcularCamposAnalise(base));
+}
+
+async function salvarCadastroRapido() {
+    if (!validarCadastroRapido()) return;
+
+    const btn = document.getElementById('btn-salvar-cadastro');
+    btn.disabled = true;
+    const textoOriginal = btn.innerHTML;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Salvando...';
+
+    try {
+        const payload = montarPayload();
+        const response = await fetch('/analise-mensal/api/salvar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload),
+        });
+
+        if (tratarErroAuth(response)) return;
+
+        const data = await response.json();
+        if (data.success) {
+            window.location.href = '/analise-mensal/lista?saved=1';
+        } else {
+            alert(data.message || 'Erro ao salvar análise.');
+        }
+    } catch (error) {
+        console.error(error);
+        alert('Erro ao salvar análise.');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = textoOriginal;
+    }
+}
+</script>
+{% endblock %}

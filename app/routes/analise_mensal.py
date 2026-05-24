@@ -7,6 +7,7 @@ from typing import Optional
 from pydantic import BaseModel
 from datetime import datetime
 import logging
+from fastapi.responses import RedirectResponse
 
 from app.database.db import get_db
 from app.models.analise_mensal import AnaliseMensal
@@ -48,6 +49,56 @@ class AnaliseMensalSchema(BaseModel):
     percentual_margem: Optional[float] = None
 
 
+def calcular_campos_analise(data: AnaliseMensalSchema) -> dict:
+    """Recalcula campos derivados (espelha analise_mensal_calculos.js)."""
+    fat = data.faturamento or 0
+    gv = data.gastos_vendas or 0
+    cm = data.custo_mercadorias or 0
+    cf = data.custo_fixo_total or 0
+    qc = data.quant_clientes or 0
+
+    ticket_medio = fat / qc if qc > 0 else 0
+    margem_bruta = fat - gv - cm
+    margem_contribuicao_por_cliente = margem_bruta / qc if qc > 0 else 0
+
+    margem_por_cliente = margem_bruta / qc if qc > 0 else 0
+    pe_clientes = cf / margem_por_cliente if margem_bruta > 0 and margem_por_cliente > 0 else None
+    pe_faturamento = pe_clientes * ticket_medio if pe_clientes is not None and ticket_medio > 0 else None
+
+    ponto_equilibrio = pe_faturamento or 0
+    margem_seguranca = None
+    if pe_faturamento is not None and pe_faturamento > 0 and fat > 0:
+        margem_seguranca = ((fat - pe_faturamento) / fat) * 100
+
+    custo_total = gv + cm + cf
+    resultado = fat - custo_total
+    percentual_margem = (resultado / fat) * 100 if fat > 0 else 0
+
+    return {
+        "ticket_medio": ticket_medio,
+        "margem_bruta": margem_bruta,
+        "margem_contribuicao_por_cliente": margem_contribuicao_por_cliente,
+        "ponto_equilibrio": ponto_equilibrio,
+        "margem_seguranca": margem_seguranca,
+        "custo_total": custo_total,
+        "resultado": resultado,
+        "percentual_margem": percentual_margem,
+    }
+
+
+def _aplicar_campos_calculados(data: AnaliseMensalSchema) -> AnaliseMensalSchema:
+    calc = calcular_campos_analise(data)
+    data.ticket_medio = calc["ticket_medio"]
+    data.margem_bruta = calc["margem_bruta"]
+    data.margem_contribuicao_por_cliente = calc["margem_contribuicao_por_cliente"]
+    data.ponto_equilibrio = calc["ponto_equilibrio"]
+    data.margem_seguranca = calc["margem_seguranca"]
+    data.custo_total = calc["custo_total"]
+    data.resultado = calc["resultado"]
+    data.percentual_margem = calc["percentual_margem"]
+    return data
+
+
 # ==================== TELA PRINCIPAL (WIZARD) ====================
 @router.get("/analise-mensal", response_class=HTMLResponse)
 async def analise_mensal(
@@ -63,7 +114,8 @@ async def analise_mensal(
     return templates.TemplateResponse("analise_mensal.html", {
         "request": request,
         "user": current_user,
-        "active_page": "analise_mensal"
+        "active_page": "analise_mensal",
+        "modo_detalhe": False,
     })
 
 
@@ -86,38 +138,100 @@ async def analise_mensal_lista(
     })
 
 
-# ==================== EDITAR ANALISE EXISTENTE ====================
-@router.get("/analise-mensal/edit/{analise_id}", response_class=HTMLResponse)
-async def editar_analise(
+# ==================== CADASTRO RAPIDO ====================
+@router.get("/analise-mensal/cadastro", response_class=HTMLResponse)
+async def analise_mensal_cadastro_novo(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+):
+    """Formulário único para cadastro rápido de análise mensal."""
+    if not current_user:
+        return RedirectResponse(url="/login")
+    now = datetime.now()
+    return templates.TemplateResponse("analise_mensal_cadastro.html", {
+        "request": request,
+        "user": current_user,
+        "active_page": "analise_mensal_cadastro",
+        "edit_mode": False,
+        "analise_id": None,
+        "current_year": now.year,
+        "current_month": now.month,
+    })
+
+
+@router.get("/analise-mensal/cadastro/{analise_id}", response_class=HTMLResponse)
+async def analise_mensal_cadastro_editar(
     analise_id: int,
     request: Request,
     current_user: User = Depends(get_current_user),
-    db: AsyncSession = Depends(get_db)
+    db: AsyncSession = Depends(get_db),
 ):
-    """Tela de edicao de analise mensal existente"""
+    """Edição rápida de análise mensal existente."""
     if not current_user:
-        from fastapi.responses import RedirectResponse
         return RedirectResponse(url="/login")
-        
-    # Buscar a analise para verificar se existe e pertence ao usuario
+
     result = await db.execute(
         select(AnaliseMensal).filter(
             AnaliseMensal.id == analise_id,
-            AnaliseMensal.user_id == current_user.id
+            AnaliseMensal.user_id == current_user.id,
         )
     )
     analise = result.scalar_one_or_none()
-    
     if not analise:
-        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Análise não encontrada")
-    
+
+    return templates.TemplateResponse("analise_mensal_cadastro.html", {
+        "request": request,
+        "user": current_user,
+        "active_page": "analise_mensal_cadastro",
+        "edit_mode": True,
+        "analise_id": analise_id,
+        "current_year": analise.ano,
+        "current_month": analise.mes,
+    })
+
+
+# ==================== VER ANALISE (WIZARD DETALHE) ====================
+@router.get("/analise-mensal/ver/{analise_id}", response_class=HTMLResponse)
+async def ver_analise_mensal(
+    analise_id: int,
+    request: Request,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Wizard em modo detalhe — visualização guiada dos resultados."""
+    if not current_user:
+        return RedirectResponse(url="/login")
+
+    result = await db.execute(
+        select(AnaliseMensal).filter(
+            AnaliseMensal.id == analise_id,
+            AnaliseMensal.user_id == current_user.id,
+        )
+    )
+    analise = result.scalar_one_or_none()
+    if not analise:
+        raise HTTPException(status_code=404, detail="Análise não encontrada")
+
     return templates.TemplateResponse("analise_mensal.html", {
         "request": request,
         "user": current_user,
         "active_page": "analise_mensal",
-        "analise_id": analise_id
+        "analise_id": analise_id,
+        "modo_detalhe": True,
     })
+
+
+# ==================== EDITAR (redireciona para cadastro rápido) ====================
+@router.get("/analise-mensal/edit/{analise_id}", response_class=HTMLResponse)
+async def editar_analise(
+    analise_id: int,
+    current_user: User = Depends(get_current_user),
+):
+    """Compatibilidade: edição via cadastro rápido."""
+    if not current_user:
+        return RedirectResponse(url="/login")
+    return RedirectResponse(url=f"/analise-mensal/cadastro/{analise_id}", status_code=303)
 
 
 # ==================== API: VERIFICAR SE JA EXISTE ====================
@@ -388,7 +502,9 @@ async def salvar_analise(
     """
     if not current_user:
         raise HTTPException(status_code=401, detail="Não autorizado")
-        
+
+    data = _aplicar_campos_calculados(data)
+
     try:
         # Verificar se ja existe analise para este mes/ano
         result = await db.execute(

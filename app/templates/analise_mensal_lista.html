@@ -95,7 +95,10 @@
                     <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
                 </div>
                 <div class="col-6 col-md-2 mb-2 mb-md-0">
-                    <a href="/analise-mensal" class="btn btn-secondary w-100">Nova Análise</a>
+                    <a href="/analise-mensal" class="btn btn-secondary w-100">Análise Mensal</a>
+                </div>
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/analise-mensal/cadastro" class="btn btn-secondary w-100">Cadastro rápido</a>
                 </div>
             </div>
 
@@ -105,6 +108,10 @@
                     <h4 class="card-title mb-0">Histórico de Análises Mensais</h4>
                 </div>
                 <div class="card-body">
+                    <div id="alert-saved" class="alert alert-success alert-dismissible fade show" role="alert" style="display: none;">
+                        Análise mensal salva com sucesso.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                    </div>
                     <!-- Year Filter -->
                     <div class="row mb-4 align-items-end">
                         <div class="col-md-6">
@@ -112,11 +119,6 @@
                             <select class="form-select" id="anoSelect">
                                 <option value="">Selecione um ano...</option>
                             </select>
-                        </div>
-                        <div class="col-md-6 text-end">
-                            <a href="/analise-mensal" class="btn btn-primary">
-                                <i class="bi bi-plus-circle"></i> Nova Análise Mensal
-                            </a>
                         </div>
                     </div>
 
@@ -144,7 +146,7 @@
 
                     <!-- Empty State Message -->
                     <div id="mensagemSemDados" class="alert alert-info" style="display: none;">
-                        Nenhuma análise mensal cadastrada. Clique em "Nova Análise Mensal" para começar.
+                        Nenhuma análise mensal cadastrada. Use <strong>Cadastro rápido</strong> ou <strong>Análise guiada</strong> para começar.
                     </div>
 
                     <!-- Analysis List Table -->
@@ -377,7 +379,10 @@ function preencherTabelaAnalises(analises) {
             <td>${resultadoBadge}</td>
             <td>
                 <div class="btn-group btn-group-sm" role="group">
-                    <a href="/analise-mensal/edit/${analise.id}" class="btn btn-secondary" title="Editar">
+                    <a href="/analise-mensal/ver/${analise.id}" class="btn btn-primary" title="Ver análise guiada">
+                        <i class="bi bi-eye"></i>
+                    </a>
+                    <a href="/analise-mensal/cadastro/${analise.id}" class="btn btn-secondary" title="Editar valores">
                         <i class="bi bi-pencil"></i>
                     </a>
                     <button class="btn btn-danger btn-sm" onclick="excluirAnalise(${analise.id})" title="Excluir">
@@ -446,6 +451,13 @@ async function confirmarExclusao() {
 
 // Initialize
 document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('saved') === '1') {
+        const alertSaved = document.getElementById('alert-saved');
+        if (alertSaved) alertSaved.style.display = 'block';
+        window.history.replaceState({}, '', window.location.pathname);
+    }
+
     // Inicializar modal de exclusão
     modalExcluir = new bootstrap.Modal(document.getElementById('modalExcluir'));
     

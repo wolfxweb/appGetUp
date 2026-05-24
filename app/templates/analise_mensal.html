@@ -453,14 +453,23 @@
                     <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
                 </div>
                 <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/analise-mensal/cadastro" class="btn btn-secondary w-100">Cadastro rápido</a>
+                </div>
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/analise-mensal" class="btn btn-secondary w-100">Análise guiada</a>
+                </div>
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
                     <a href="/analise-mensal/lista" class="btn btn-secondary w-100">Histórico</a>
                 </div>
             </div>
 
             <!-- Wizard Card -->
             <div class="card shadow mb-4" style="background-color: #F0F0F0;">
-                <div class="card-header bg-secondary text-white">
-                    <h4 class="card-title mb-0">Análise Mensal</h4>
+                <div class="card-header bg-secondary text-white d-flex flex-wrap align-items-center justify-content-between gap-2">
+                    <h4 class="card-title mb-0">Análise Mensal — guiada</h4>
+                    <a href="/analise-mensal/cadastro" class="btn btn-sm btn-light text-dark">
+                        <i class="bi bi-pencil-square me-1"></i> Cadastro rápido
+                    </a>
                 </div>
                 <div class="card-body">
                     {% set img_joao_escrevendo = url_for('static', path='images/João definitivo escrevendo.jpg') %}
@@ -473,6 +482,13 @@
                         <input type="hidden" id="edit-analise-id" value="{{ analise_id }}">
                         {% else %}
                         <input type="hidden" id="edit-analise-id" value="">
+                        {% endif %}
+                        <input type="hidden" id="modo-detalhe" value="{{ '1' if modo_detalhe else '' }}">
+                        {% if modo_detalhe and analise_id %}
+                        <div class="alert alert-info d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3" id="banner-modo-detalhe">
+                            <span>Você está visualizando a análise guiada com os dados já cadastrados.</span>
+                            <a href="/analise-mensal/cadastro/{{ analise_id }}" class="btn btn-sm btn-outline-primary">Editar valores</a>
+                        </div>
                         {% endif %}
                         
 
@@ -1108,100 +1124,18 @@
     </div>
 </div>
 
-<!-- MODAL: GERENCIAR CUSTOS FIXOS (abre ao clicar na Ana) -->
-<div class="modal fade" id="modalGerenciarCustosFixos" tabindex="-1" aria-labelledby="modalGerenciarCustosFixosLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header bg-secondary text-white">
-                <h5 class="modal-title" id="modalGerenciarCustosFixosLabel">Custos Fixos</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-muted small mb-3">Este valor é chamado de <strong>Custo Fixo</strong> porque ele será o mesmo tanto em um mês bom, quanto num mês fraco de vendas.</p>
-                <button type="button" class="btn btn-secondary btn-sm mb-3" onclick="abrirModalCustoFixo()">
-                    <i class="bi bi-plus-circle"></i> Adicionar custo fixo
-                </button>
-                <span id="custo-success-msg-modal" class="text-success ms-2 small" style="display: none;"></span>
-                <div class="table-responsive">
-                    <table class="table table-striped table-custos mb-0" id="tabela-custos">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Categoria</th>
-                                <th>Valor</th>
-                                <th style="width: 100px;">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="custos-cadastrados"></tbody>
-                    </table>
-                </div>
-                <p id="sem-custos" class="text-muted mt-3 mb-0">Nenhum custo fixo cadastrado. Clique em &quot;Adicionar custo fixo&quot;.</p>
-                <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
-                    <span class="fw-semibold">Total Custos Fixos</span>
-                    <span class="fs-5 fw-bold text-primary" id="modal-custos-total">R$ 0,00</span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Concluir</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- MODAL: CADASTRAR/EDITAR CUSTO FIXO -->
-<div class="modal fade" id="modalCustoFixo" tabindex="-1" aria-labelledby="modalCustoFixoLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-secondary text-white">
-                <h5 class="modal-title" id="modalCustoFixoLabel">Cadastrar Custo Fixo</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="custo_fixo_id">
-                <div class="mb-3">
-                    <label for="custo_nome" class="form-label">Nome do Custo</label>
-                    <input type="text" class="form-control" id="custo_nome" placeholder="Ex: Aluguel" required>
-                </div>
-                <div class="mb-3">
-                    <label for="custo_valor" class="form-label">Valor (R$)</label>
-                    <input type="number" class="form-control" id="custo_valor" placeholder="Ex: 1500.00" step="0.01" required>
-                </div>
-                <div class="mb-3">
-                    <label for="custo_categoria" class="form-label">Categoria</label>
-                    <select class="form-select" id="custo_categoria" required>
-                        <option value="">Selecione...</option>
-                        <option value="Aluguel">Aluguel</option>
-                        <option value="Salarios">Salários</option>
-                        <option value="Luz">Luz</option>
-                        <option value="Agua">Água</option>
-                        <option value="Telefone">Telefone</option>
-                        <option value="Internet">Internet</option>
-                        <option value="Marketing">Marketing</option>
-                        <option value="Seguros">Seguros</option>
-                        <option value="Manutencao">Manutenção</option>
-                        <option value="Impostos">Impostos</option>
-                        <option value="Pro-labore">Pro-labore</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="salvarCustoFixo()">Salvar Custo</button>
-            </div>
-        </div>
-    </div>
-</div>
+{% include "partials/analise_mensal_custos_fixos_modals.html" %}
 {% endblock %}
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="{{ url_for('static', path='js/analise_mensal_calculos.js') }}"></script>
+<script src="{{ url_for('static', path='js/analise_mensal_custos_fixos.js') }}"></script>
 <script>
 // ==================== VARIAVEIS GLOBAIS ====================
 let currentStep = 0;
-let modalCustoFixo = null;
-let modalGerenciarCustosFixos = null;
 let modalAna = null;
+let modoDetalhe = false;
 let lucroIdeal = 0.20; // Valor padrão decimal (20%). buscarLucroIdeal() atualiza com o valor real
 let editingAnaliseId = null; // ID da análise sendo editada (null = nova análise)
 
@@ -1282,7 +1216,7 @@ async function carregarAnaliseExistente(analiseId) {
         atualizarBarraCapacidade();
         
         // Atualizar cálculos
-        await carregarCustosFixos();
+        await carregarCustosFixos(data.custo_fixo_total);
         sincronizarRadiosCaixaVisiveis();
         atualizarCalculosParciais();
         atualizarF11();
@@ -1294,12 +1228,72 @@ async function carregarAnaliseExistente(analiseId) {
     }
 }
 
+async function carregarAnaliseParaDetalhe(analiseId) {
+    try {
+        const response = await fetch(`/analise-mensal/api/${analiseId}`, {
+            credentials: 'include'
+        });
+        if (!response.ok) throw new Error('Análise não encontrada');
+        const data = await response.json();
+
+        formData.mes = data.mes;
+        formData.ano = data.ano;
+        formData.capacidade_atendimento = data.capacidade_atendimento || 0;
+        formData.faturamento = data.faturamento || 0;
+        formData.quant_clientes = data.quant_clientes || 0;
+        formData.gastos_vendas = data.gastos_vendas || 0;
+        formData.custo_mercadorias = data.custo_mercadorias || 0;
+        formData.custo_fixo_total = data.custo_fixo_total || 0;
+        formData.corresponde_caixa = data.corresponde_caixa;
+        Object.assign(formData, calcularCamposAnalise(formData));
+
+        document.getElementById('mes').value = data.mes;
+        document.getElementById('ano').value = data.ano;
+        document.getElementById('capacidade').value = data.capacidade_atendimento || '';
+        document.getElementById('faturamento').value = data.faturamento || '';
+        document.getElementById('quant_clientes').value = data.quant_clientes || '';
+        document.getElementById('gastos_vendas').value = data.gastos_vendas || '';
+        document.getElementById('custo_mercadorias').value = data.custo_mercadorias || '';
+        document.getElementById('custo_fixo_total').value = data.custo_fixo_total || '';
+
+        if (data.corresponde_caixa !== null && data.corresponde_caixa !== undefined) {
+            const correspondeRadio = document.querySelector(`input[name="corresponde_caixa"][value="${data.corresponde_caixa}"]`);
+            if (correspondeRadio) correspondeRadio.checked = true;
+        }
+
+        await carregarCustosFixos(data.custo_fixo_total);
+        const salvo = parseFloat(data.custo_fixo_total) || 0;
+        if (salvo > 0) atualizarTotalCustosFixos(salvo);
+
+        aplicarModoDetalheUI();
+        atualizarLabelMes();
+        atualizarBarraCapacidade();
+        sincronizarRadiosCaixaVisiveis();
+        atualizarCalculosParciais();
+        atualizarF11();
+        showStep(8);
+        calcularResultadosF7();
+    } catch (error) {
+        console.error('Erro ao carregar análise para detalhe:', error);
+        alert('Erro ao carregar dados da análise. Tente novamente.');
+    }
+}
+
+function aplicarModoDetalheUI() {
+    document.querySelectorAll('.wizard-step input:not([type="hidden"]), .wizard-step select, .wizard-step textarea').forEach(el => {
+        el.disabled = true;
+    });
+    document.querySelectorAll('.wizard-nav .btn-success, #btn-step9-confirmar').forEach(el => {
+        el.style.display = 'none';
+    });
+    const step8Next = document.querySelector('#step-8 .wizard-nav .btn-primary');
+    if (step8Next) step8Next.style.display = 'none';
+}
+
 // ==================== INICIALIZACAO ====================
 document.addEventListener('DOMContentLoaded', function() {
-    showStep(0);
-    
-    modalCustoFixo = new bootstrap.Modal(document.getElementById('modalCustoFixo'));
-    modalGerenciarCustosFixos = new bootstrap.Modal(document.getElementById('modalGerenciarCustosFixos'));
+    modoDetalhe = document.getElementById('modo-detalhe')?.value === '1';
+    initCustosFixosModais();
     const modalAnaEl = document.getElementById('modalAna');
     if (modalAnaEl) modalAna = new bootstrap.Modal(modalAnaEl);
 
@@ -1311,11 +1305,11 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('custo_mercadorias').addEventListener('input', atualizarCalculosParciais);
 
     const analiseIdInput = document.getElementById('edit-analise-id');
-    if (analiseIdInput && analiseIdInput.value) {
+    if (modoDetalhe && analiseIdInput && analiseIdInput.value) {
         editingAnaliseId = parseInt(analiseIdInput.value);
-        console.log('Modo edição - ID:', editingAnaliseId);
-        carregarAnaliseExistente(editingAnaliseId);
+        carregarAnaliseParaDetalhe(editingAnaliseId);
     } else {
+        showStep(0);
         carregarCustosFixos();
     }
 
@@ -1745,31 +1739,17 @@ function calcularResultadosF7() {
     if (!step8 || !step8.classList.contains('active')) return;
 
     const fat = formData.faturamento || 0;
-    const gv = formData.gastos_vendas || 0;
-    const cm = formData.custo_mercadorias || 0;
     const cf = formData.custo_fixo_total || 0;
-    const qc = formData.quant_clientes || 0;
 
-    formData.ticket_medio = qc > 0 ? fat / qc : 0;
-    formData.margem_bruta = fat - gv - cm;
-    formData.margem_contribuicao_por_cliente = qc > 0 ? formData.margem_bruta / qc : 0;
+    Object.assign(formData, calcularCamposAnalise(formData));
 
-    const margemPorCliente = qc > 0 ? formData.margem_bruta / qc : 0;
+    const margemPorCliente = formData.quant_clientes > 0 ? formData.margem_bruta / formData.quant_clientes : 0;
     const peClientes = (formData.margem_bruta > 0 && margemPorCliente > 0)
         ? cf / margemPorCliente
         : null;
     const peFaturamento = (peClientes != null && formData.ticket_medio > 0)
         ? peClientes * formData.ticket_medio
         : null;
-
-    formData.ponto_equilibrio = peFaturamento || 0;
-    formData.margem_seguranca = (peFaturamento != null && peFaturamento > 0 && fat > 0)
-        ? ((fat - peFaturamento) / fat) * 100
-        : null;
-
-    formData.custo_total = gv + cm + cf;
-    formData.resultado = fat - formData.custo_total;
-    formData.percentual_margem = fat > 0 ? (formData.resultado / fat) * 100 : 0;
 
     const elFat = document.getElementById('res7-fat');
     const elMb  = document.getElementById('res7-mb');
@@ -2129,170 +2109,6 @@ async function verificarAnaliseExistente() {
     }
 }
 
-// ==================== CUSTOS FIXOS ====================
-function atualizarTotalCustosFixos(total) {
-    const campoTotal = document.getElementById('custo_fixo_total');
-    const modalTotal = document.getElementById('modal-custos-total');
-    const valor = Number(total) || 0;
-    if (campoTotal) campoTotal.value = valor > 0 ? valor.toFixed(2) : '';
-    if (modalTotal) modalTotal.textContent = formatCurrency(valor);
-    formData.custo_fixo_total = valor;
-    atualizarCalculosParciais();
-}
-
-function abrirModalGerenciarCustosFixos() {
-    carregarCustosFixos().then(() => {
-        if (modalGerenciarCustosFixos) modalGerenciarCustosFixos.show();
-    });
-}
-
-function tratarErroAuth(response) {
-    if (response.status === 401) {
-        alert('Sua sessão expirou. Faça login novamente.');
-        window.location.href = '/login';
-        return true;
-    }
-    return false;
-}
-
-async function carregarCustosFixos() {
-    try {
-        const response = await fetch('/analise-mensal/api/custos-fixos', {
-            credentials: 'include'
-        });
-        if (tratarErroAuth(response)) return;
-        const data = await response.json();
-
-        const tbody = document.getElementById('custos-cadastrados');
-        const semCustos = document.getElementById('sem-custos');
-        const tabela = document.getElementById('tabela-custos');
-
-        if (data.custos && data.custos.length > 0) {
-            tbody.innerHTML = '';
-            let total = 0;
-
-            data.custos.forEach(custo => {
-                total += custo.valor;
-                const nomeEscaped = custo.nome.replace(/'/g, "\\'").replace(/"/g, '\\"');
-                const catEscaped = custo.categoria.replace(/'/g, "\\'").replace(/"/g, '\\"');
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${custo.nome}</td>
-                        <td>${custo.categoria}</td>
-                        <td>${formatCurrency(custo.valor)}</td>
-                        <td>
-                            <button type="button" class="btn btn-sm btn-primary me-1" onclick="editarCustoFixo(${custo.id}, '${nomeEscaped}', ${custo.valor}, '${catEscaped}')">
-                                <i class="bi bi-pencil"></i>
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger" onclick="excluirCustoFixo(${custo.id})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-
-            atualizarTotalCustosFixos(total);
-            if (semCustos) semCustos.style.display = 'none';
-            if (tabela) tabela.style.display = '';
-        } else {
-            if (tbody) tbody.innerHTML = '';
-            atualizarTotalCustosFixos(0);
-            if (semCustos) semCustos.style.display = 'block';
-            if (tabela) tabela.style.display = 'none';
-        }
-    } catch (error) {
-        console.error('Erro ao carregar custos fixos:', error);
-    }
-}
-
-function abrirModalCustoFixo() {
-    document.getElementById('custo_fixo_id').value = '';
-    document.getElementById('custo_nome').value = '';
-    document.getElementById('custo_valor').value = '';
-    document.getElementById('custo_categoria').value = '';
-    document.getElementById('modalCustoFixoLabel').textContent = 'Cadastrar Custo Fixo';
-    modalCustoFixo.show();
-}
-
-function editarCustoFixo(id, nome, valor, categoria) {
-    document.getElementById('custo_fixo_id').value = id;
-    document.getElementById('custo_nome').value = nome;
-    document.getElementById('custo_valor').value = valor;
-    document.getElementById('custo_categoria').value = categoria;
-    document.getElementById('modalCustoFixoLabel').textContent = 'Editar Custo Fixo';
-    modalCustoFixo.show();
-}
-
-async function salvarCustoFixo() {
-    const id = document.getElementById('custo_fixo_id').value;
-    const nome = document.getElementById('custo_nome').value;
-    const valor = parseFloat(document.getElementById('custo_valor').value);
-    const categoria = document.getElementById('custo_categoria').value;
-    
-    if (!nome || !valor || !categoria) {
-        alert('Preencha todos os campos.');
-        return;
-    }
-    
-    const method = id ? 'PUT' : 'POST';
-    const url = id ? `/analise-mensal/api/custos-fixos/${id}` : '/analise-mensal/api/custos-fixos';
-    
-    try {
-        const response = await fetch(url, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ nome, valor, categoria })
-        });
-        
-        if (tratarErroAuth(response)) return;
-
-        const data = await response.json();
-        
-        if (response.ok) {
-            modalCustoFixo.hide();
-            await carregarCustosFixos();
-            const msg = id ? 'Custo fixo atualizado com sucesso!' : 'Custo fixo cadastrado com sucesso!';
-            ['custo-success-msg', 'custo-success-msg-modal'].forEach(elId => {
-                const el = document.getElementById(elId);
-                if (el) {
-                    el.textContent = msg;
-                    el.style.display = 'inline';
-                    setTimeout(() => { el.style.display = 'none'; }, 3000);
-                }
-            });
-        } else {
-            alert('Erro ao salvar: ' + (data.detail || 'Erro desconhecido'));
-        }
-    } catch (error) {
-        console.error('Erro ao salvar custo fixo:', error);
-        alert('Erro ao salvar custo fixo.');
-    }
-}
-
-async function excluirCustoFixo(id) {
-    if (!confirm('Tem certeza que deseja excluir este custo fixo?')) return;
-    
-    try {
-        const response = await fetch(`/analise-mensal/api/custos-fixos/${id}`, {
-            method: 'DELETE',
-            credentials: 'include'
-        });
-
-        if (tratarErroAuth(response)) return;
-        
-        if (response.ok) {
-            carregarCustosFixos();
-        } else {
-            alert('Erro ao excluir custo fixo.');
-        }
-    } catch (error) {
-        console.error('Erro ao excluir custo fixo:', error);
-        alert('Erro ao excluir custo fixo.');
-    }
-}
-
 // ==================== SALVAR ANALISE ====================
 async function confirmarESalvarAnalise() {
     const btn = document.getElementById('btn-step9-confirmar');
@@ -2354,13 +2170,6 @@ function getMonthName(mes) {
     const meses = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     return meses[parseInt(mes)] || '';
-}
-
-function formatCurrency(valor) {
-    return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    }).format(valor);
 }
 
 function mascaraMonetaria(input) {
