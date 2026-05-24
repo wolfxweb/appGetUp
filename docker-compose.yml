@@ -8,6 +8,9 @@ services:
       - sqlite_data:/app/app/database
     environment:
       - DATABASE_URL=sqlite:///./app/database/app.db
+      - SECRET_KEY=${SECRET_KEY}
+      - ALGORITHM=${ALGORITHM}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
     command: >
       sh -c "python migrate_db.py &&
              uvicorn app.main:app --host 0.0.0.0 --port 9090 --reload"

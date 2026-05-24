@@ -16,7 +16,6 @@ from app.utils.auth import verify_password, get_password_hash, create_access_tok
 from app.utils.email import send_password_reset_email
 from app.models.basic_data import BasicData
 from app.models.basic_data_log import BasicDataLog
-from app.core.auth import get_current_user
 from app.utils.converters import safe_float
 import bcrypt
 
@@ -24,39 +23,31 @@ router = APIRouter()
 
 templates = Jinja2Templates(directory="app/templates")
 
-# Dependência para obter o usuário atual
-async def get_current_user(request: Request, db: AsyncSession = Depends(get_db)):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Não autorizado",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    
-    token = request.cookies.get("access_token")
-    if not token:
+async def _user_from_email(db: AsyncSession, email: str):
+    if not email:
         return None
-    
-    try:
-        token_type, token_value = token.split()
-        if token_type.lower() != "bearer":
-            return None
-        
-        payload = jwt.decode(token_value, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        
-        if email is None:
-            return None
-        
-    except (JWTError, ValueError):
-        return None
-    
-    # Use the provided database session
     result = await db.execute(select(User).filter(User.email == email))
-    user = result.scalar_one_or_none()
-    if user is None:
-        return None
-    
-    return user
+    return result.scalar_one_or_none()
+
+
+# Dependência para obter o usuário atual (JWT no cookie + fallback na sessão)
+async def get_current_user(request: Request, db: AsyncSession = Depends(get_db)):
+    email = None
+    token = request.cookies.get("access_token")
+
+    if token:
+        try:
+            token_type, token_value = token.split(" ", 1)
+            if token_type.lower() == "bearer":
+                payload = jwt.decode(token_value, SECRET_KEY, algorithms=[ALGORITHM])
+                email = payload.get("sub")
+        except (JWTError, ValueError):
+            email = None
+
+    if not email:
+        email = request.session.get("user_email")
+
+    return await _user_from_email(db, email)
 
 @router.get("/register", response_class=HTMLResponse)
 async def register_page(request: Request):
@@ -172,12 +163,14 @@ async def register(
             content={"redirect": "/onboarding"},
             status_code=200
         )
+        request.session["user_email"] = email
         response.set_cookie(
             key="access_token",
             value=f"Bearer {access_token}",
             httponly=True,
             max_age=1800,
-            samesite="lax"
+            samesite="lax",
+            path="/",
         )
         
         return response
@@ -255,6 +248,7 @@ async def login(
         # Configurar cookie com o token e redirecionar
         oc = getattr(user, "onboarding_completed", None)
         redirect_url = "/onboarding" if oc is False else "/dashboard"
+        request.session["user_email"] = user.email
         response = JSONResponse(
             content={"redirect": redirect_url},
             status_code=200
@@ -264,7 +258,8 @@ async def login(
             value=f"Bearer {access_token}",
             httponly=True,
             max_age=1800,
-            samesite="lax"
+            samesite="lax",
+            path="/",
         )
         
         return response
@@ -371,9 +366,10 @@ async def reset_password(
         )
 
 @router.get("/logout")
-async def logout():
+async def logout(request: Request):
+    request.session.clear()
     response = RedirectResponse(url="/login")
-    response.delete_cookie("access_token")
+    response.delete_cookie("access_token", path="/")
     return response
 
 @router.get("/edit/{data_id}", response_class=HTMLResponse)
