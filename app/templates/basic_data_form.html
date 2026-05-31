@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% set persist_target = persist_target|default('basic_data') %}
+{% set is_analise = persist_target == 'analise_mensal' %}
 
 {% block title %}{% if edit_mode %}Editar{% else %}Novo{% endif %} Dados Básicos{% endblock %}
 
@@ -178,7 +180,19 @@
 
                         <!-- Coluna do Formulário (9 colunas) -->
                         <div class="col-md-9">
-                            <!-- Nova linha com os 4 botões -->
+                            {% if is_analise %}
+                            <div class="row mb-4 justify-content-center">
+                                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                                    <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
+                                </div>
+                                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                                    <a href="/analise-mensal" class="btn btn-secondary w-100">Análise Mensal</a>
+                                </div>
+                                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                                    <a href="/analise-mensal/lista" class="btn btn-secondary w-100">Histórico</a>
+                                </div>
+                            </div>
+                            {% else %}
                             <div class="row mb-4">
                                 <div class="col-12 col-md-3 mb-2 mb-md-0">
                                     <a href="/dashboard" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
@@ -190,23 +204,20 @@
                                         Diagnóstico
                                     </a>
                                 </div>
-                                <!--
-                                <div class="col-12 col-md-3 mb-2 mb-md-0">
-                                    <a href="/simulador" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
-                                        Simulador
-                                    </a>
-                                </div>
-                                -->
                                 <div class="col-12 col-md-3">
                                     <button type="button" class="btn btn-secondary w-100" style="background-color: #6c757d; border-color: #6c757d; color: white;">
                                         Calculadora de preços
                                     </button>
                                 </div>
                             </div>
+                            {% endif %}
                             <div class="card" style="background-color: #F0F0F0;">
                                 <div class="card-body">
+                                    {% if is_analise and not edit_mode %}
+                                    <div id="aviso-duplicata" class="alert alert-warning" style="display: none;"></div>
+                                    {% endif %}
                                     {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
-                                    <form method="post" action="{% if edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
+                                    <form method="post" action="{% if is_analise %}#{% elif edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
                                         {% if show_confirm %}
                                         <input type="hidden" name="confirm_update" value="true">
                                         {% endif %}
@@ -404,14 +415,20 @@
                                                 <button type="button" class="btn btn-secondary me-2" style="background-color: #6c757d; border-color: #6c757d;" onclick="document.getElementById('basicDataForm').reset();">
                                                     Limpar
                                                 </button>
+                                                {% if is_analise %}
+                                                <button type="button" class="btn btn-secondary me-2" id="btnSalvarAnalise" style="background-color: #6c757d; border-color: #6c757d;">
+                                                    {% if edit_mode %}Atualizar{% else %}Salvar{% endif %}
+                                                </button>
+                                                {% else %}
                                                 <button type="submit" class="btn btn-secondary me-2" style="background-color: #6c757d; border-color: #6c757d;">
                                                     {% if edit_mode %}Atualizar{% else %}Salvar{% endif %}
                                                 </button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12 text-center">
-                                                <a href="/basic-data/" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
+                                                <a href="{% if is_analise %}/analise-mensal/lista{% else %}/basic-data/{% endif %}" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
                                                     Histórico
                                                 </a>
                                             </div>
@@ -419,7 +436,7 @@
                                     </form>
                                     {% else %}
                                     <!-- Formulario dados basicos  comercio e industria-->
-                                    <form method="post" action="{% if edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
+                                    <form method="post" action="{% if is_analise %}#{% elif edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
                                         {% if show_confirm %}
                                         <input type="hidden" name="confirm_update" value="true">
                                         {% endif %}
@@ -582,14 +599,20 @@
                                                 <button type="button" class="btn btn-secondary me-2" style="background-color: #6c757d; border-color: #6c757d;" onclick="document.getElementById('basicDataForm').reset();">
                                                     Limpar
                                                 </button>
+                                                {% if is_analise %}
+                                                <button type="button" class="btn btn-secondary me-2" id="btnSalvarAnalise" style="background-color: #6c757d; border-color: #6c757d;">
+                                                    {% if edit_mode %}Atualizar{% else %}Salvar{% endif %}
+                                                </button>
+                                                {% else %}
                                                 <button type="submit" class="btn btn-secondary me-2" style="background-color: #6c757d; border-color: #6c757d;">
                                                     {% if edit_mode %}Atualizar{% else %}Salvar{% endif %}
                                                 </button>
+                                                {% endif %}
                                             </div>
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12 text-center">
-                                                <a href="/basic-data/" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
+                                                <a href="{% if is_analise %}/analise-mensal/lista{% else %}/basic-data/{% endif %}" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
                                                     Histórico
                                                 </a>
                                             </div>
@@ -606,7 +629,7 @@
     </div>
 
     <!-- Tabela de Logs - Movida para fora do card principal -->
-    {% if edit_mode %}
+    {% if edit_mode and not is_analise %}
     <div class="row mt-4 mb-5">
         <div class="col-12">
             <div class="card" style="background-color: #F0F0F0;">
@@ -940,7 +963,14 @@
     </div>
 </div>
 
+{% if is_analise %}
+<script src="{{ url_for('static', path='js/analise_mensal_calculos.js') }}"></script>
+<script src="{{ url_for('static', path='js/dados_basicos_form_analise.js') }}"></script>
+{% endif %}
 <script>
+    const PERSIST_TARGET = '{{ persist_target }}';
+    window.EDIT_MODE_ANALISE = {{ 'true' if edit_mode and is_analise else 'false' }};
+
     // Função para formatar valores monetários
     function formatarMoeda(valor) {
         if (!valor) return '';
@@ -1266,11 +1296,17 @@
             }
         }
         
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            updateHiddenFields();
-            form.submit();
-        });
+        if (PERSIST_TARGET === 'analise_mensal') {
+            if (typeof initDadosBasicosAnalise === 'function') {
+                initDadosBasicosAnalise();
+            }
+        } else if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                updateHiddenFields();
+                form.submit();
+            });
+        }
     });
 </script>
 {% endblock %}

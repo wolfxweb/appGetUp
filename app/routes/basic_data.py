@@ -51,6 +51,11 @@ async def basic_data_page(
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
+    if not current_user:
+        return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
+    # Histórico unificado na análise mensal (tabela analise_mensal)
+    return RedirectResponse(url="/analise-mensal/lista", status_code=status.HTTP_303_SEE_OTHER)
+
     try:
         # Buscar dados básicos do usuário atual
         result = await db.execute(

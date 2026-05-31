@@ -14,6 +14,8 @@ from app.models.analise_mensal import AnaliseMensal
 from app.models.custo_fixo import CustoFixo
 from app.models.user import User
 from app.routes.auth import get_current_user
+from app.utils.analise_form_adapter import form_context_for_analise_cadastro
+from app.utils.sync_basic_data_analise import sync_basic_data_to_analise_mensal
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -138,24 +140,29 @@ async def analise_mensal_lista(
     })
 
 
-# ==================== CADASTRO RAPIDO ====================
+# ==================== DADOS BÁSICOS (cadastro em analise_mensal) ====================
 @router.get("/analise-mensal/cadastro", response_class=HTMLResponse)
 async def analise_mensal_cadastro_novo(
     request: Request,
     current_user: User = Depends(get_current_user),
 ):
-    """Formulário único para cadastro rápido de análise mensal."""
+    """Formulário de Dados Básicos (UI legada, persiste em analise_mensal)."""
     if not current_user:
         return RedirectResponse(url="/login")
     now = datetime.now()
-    return templates.TemplateResponse("analise_mensal_cadastro.html", {
+    ctx = form_context_for_analise_cadastro(
+        edit_mode=False,
+        analise=None,
+        current_month=now.month,
+        current_year=now.year,
+        prefill_margin=getattr(current_user, "ideal_profit_margin", None),
+        prefill_capacity=getattr(current_user, "service_capacity", None),
+    )
+    return templates.TemplateResponse("basic_data_form.html", {
         "request": request,
         "user": current_user,
         "active_page": "analise_mensal_cadastro",
-        "edit_mode": False,
-        "analise_id": None,
-        "current_year": now.year,
-        "current_month": now.month,
+        **ctx,
     })
 
 
@@ -166,7 +173,7 @@ async def analise_mensal_cadastro_editar(
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Edição rápida de análise mensal existente."""
+    """Edição de Dados Básicos (registro em analise_mensal)."""
     if not current_user:
         return RedirectResponse(url="/login")
 
@@ -180,14 +187,17 @@ async def analise_mensal_cadastro_editar(
     if not analise:
         raise HTTPException(status_code=404, detail="Análise não encontrada")
 
-    return templates.TemplateResponse("analise_mensal_cadastro.html", {
+    ctx = form_context_for_analise_cadastro(
+        edit_mode=True,
+        analise=analise,
+        current_month=analise.mes,
+        current_year=analise.ano,
+    )
+    return templates.TemplateResponse("basic_data_form.html", {
         "request": request,
         "user": current_user,
         "active_page": "analise_mensal_cadastro",
-        "edit_mode": True,
-        "analise_id": analise_id,
-        "current_year": analise.ano,
-        "current_month": analise.mes,
+        **ctx,
     })
 
 
@@ -274,6 +284,11 @@ async def get_available_years(
     """Retorna todos os anos que tem analise para o usuario"""
     if not current_user:
         raise HTTPException(status_code=401, detail="Não autorizado")
+
+    try:
+        await sync_basic_data_to_analise_mensal(current_user.id, db)
+    except Exception as e:
+        logger.warning(f"Sync basic_data -> analise_mensal: {e}")
         
     result = await db.execute(
         select(AnaliseMensal.ano)
@@ -298,6 +313,11 @@ async def listar_analises(
     """Lista as analises do usuario com filtros e paginacao"""
     if not current_user:
         raise HTTPException(status_code=401, detail="Não autorizado")
+
+    try:
+        await sync_basic_data_to_analise_mensal(current_user.id, db)
+    except Exception as e:
+        logger.warning(f"Sync basic_data -> analise_mensal: {e}")
         
     query = select(AnaliseMensal).filter(AnaliseMensal.user_id == current_user.id)
     
@@ -494,7 +514,7 @@ async def salvar_analise(
     data: AnaliseMensalSchema,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
-):
+) -> JSONResponse:
     """
     Salva uma analise mensal.
     Se ja existe para (mes, ano, user_id), atualiza.

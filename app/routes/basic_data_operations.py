@@ -148,46 +148,8 @@ async def new_basic_data_page(
     if not current_user:
         return RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
 
-    # Obter o mês e ano atual
-    now = datetime.now()
-    current_month = now.month
-    current_year = now.year
-
-    # Verificar se já existe um registro para o mês atual
-    result = await db.execute(
-        select(BasicData)
-        .filter(
-            BasicData.user_id == current_user.id,
-            BasicData.month == current_month,
-            BasicData.year == current_year
-        )
-    )
-    existing_data = result.scalar_one_or_none()
-
-    prefill_margin = None
-    prefill_capacity = None
-    if not existing_data:
-        prefill_margin = getattr(current_user, "ideal_profit_margin", None)
-        prefill_capacity = getattr(current_user, "service_capacity", None)
-
-    return templates.TemplateResponse(
-        "basic_data_form.html",
-        {
-            "request": request,
-            "user": current_user,
-            "current_month": current_month,
-            "current_year": current_year,
-            "existing_data": existing_data,
-            "edit_mode": False,
-            "logs": [],
-            "current_page": 1,
-            "total_pages": 1,
-            "per_page": 10,
-            "total_logs": 0,
-            "prefill_margin": prefill_margin,
-            "prefill_capacity": prefill_capacity,
-        }
-    )
+    # Cadastro unificado: mesma tela e tabela analise_mensal
+    return RedirectResponse(url="/analise-mensal/cadastro", status_code=status.HTTP_303_SEE_OTHER)
 
 @router.post("/save")
 async def save_basic_data(
