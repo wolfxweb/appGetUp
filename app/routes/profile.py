@@ -62,6 +62,9 @@ async def update_profile(
     activation_key: str = Form(None),
     ideal_profit_margin: str = Form(None),
     service_capacity: str = Form(None),
+    production_hours: str = Form(None),
+    estimated_loss_percentage: str = Form(None),
+    has_product_sheet: str = Form(None),
     current_user = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
@@ -141,6 +144,9 @@ async def update_profile(
             current_user.complement = complement
             current_user.ideal_profit_margin = safe_float(ideal_profit_margin)
             current_user.service_capacity = safe_float(service_capacity)
+            current_user.production_hours = safe_float(production_hours)
+            current_user.estimated_loss_percentage = safe_float(estimated_loss_percentage)
+            current_user.has_product_sheet = has_product_sheet if has_product_sheet else None
 
             try:
                 await db.commit()

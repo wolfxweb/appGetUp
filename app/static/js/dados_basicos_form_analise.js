@@ -52,7 +52,8 @@
         }
         const clientesEl = document.getElementById('clients_served');
         const clientes = clientesEl ? parseInt(clientesEl.value, 10) : 0;
-        const faturamento = converterParaNumero(document.getElementById('sales_revenue').value);
+        const salesRevenueEl = document.getElementById('sales_revenue');
+        const faturamento = salesRevenueEl ? converterParaNumero(salesRevenueEl.value) : 0;
         const custoFixo = getCustoFixoTotal();
 
         if (clientesEl && clientesEl.hasAttribute('required') && (!clientes || clientes < 0)) {
@@ -60,11 +61,16 @@
             return false;
         }
         if (!faturamento || faturamento <= 0) {
-            alert('Informe o faturamento.');
+            const fromCadastro = document.querySelector('[data-from-cadastro="1"]');
+            if (!fromCadastro) {
+                alert('Informe o faturamento ou cadastre seus produtos no perfil da loja.');
+            } else {
+                alert('Faturamento não encontrado no cadastro. Cadastre produtos ou atualize seu perfil.');
+            }
             return false;
         }
         if (custoFixo <= 0) {
-            alert('Informe os custos fixos (pró-labore e/ou demais custos fixos).');
+            alert('Informe os custos fixos (pró-labore e/ou demais custos fixos) ou cadastre custos fixos no sistema.');
             return false;
         }
         return true;

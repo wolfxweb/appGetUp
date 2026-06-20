@@ -6,7 +6,6 @@ from sqlalchemy import select
 from datetime import datetime, timedelta
 import secrets
 from jose import jwt, JWTError
-from sqlalchemy.orm import Session
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -168,7 +167,7 @@ async def register(
             key="access_token",
             value=f"Bearer {access_token}",
             httponly=True,
-            max_age=1800,
+            max_age=31536000,  # 1 ano — token nao expira mais
             samesite="lax",
             path="/",
         )
@@ -187,7 +186,7 @@ async def onboarding_page(request: Request, current_user=Depends(get_current_use
         return RedirectResponse(url="/login")
     oc = getattr(current_user, "onboarding_completed", None)
     if oc is True:
-        return RedirectResponse(url="/analise-mensal")
+        return RedirectResponse(url="/dashboard")
     if oc is None:
         return RedirectResponse(url="/dashboard")
     return templates.TemplateResponse("onboarding.html", {
@@ -200,6 +199,9 @@ async def onboarding_submit(
     request: Request,
     ideal_profit_margin: str = Form(None),
     service_capacity: str = Form(None),
+    production_hours: str = Form(None),
+    estimated_loss_percentage: str = Form(None),
+    has_product_sheet: str = Form(None),
     current_user=Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
@@ -208,10 +210,13 @@ async def onboarding_submit(
     try:
         current_user.ideal_profit_margin = safe_float(ideal_profit_margin)
         current_user.service_capacity = safe_float(service_capacity)
+        current_user.production_hours = safe_float(production_hours)
+        current_user.estimated_loss_percentage = safe_float(estimated_loss_percentage)
+        current_user.has_product_sheet = has_product_sheet if has_product_sheet else None
         current_user.onboarding_completed = True
         current_user.ja_acessou = True
         await db.commit()
-        return RedirectResponse(url="/analise-mensal", status_code=303)
+        return RedirectResponse(url="/dashboard", status_code=303)
     except Exception as e:
         return JSONResponse(status_code=500, content={"detail": str(e)})
 
@@ -257,7 +262,7 @@ async def login(
             key="access_token",
             value=f"Bearer {access_token}",
             httponly=True,
-            max_age=1800,
+            max_age=31536000,  # 1 ano — token nao expira mais
             samesite="lax",
             path="/",
         )
@@ -431,73 +436,3 @@ async def dashboard_page(request: Request, current_user = Depends(get_current_us
         "user": current_user,
         "now": now
     })
-
-@router.get("/profile")
-async def profile(request: Request, current_user: User = Depends(get_current_user)):
-    return templates.TemplateResponse("profile.html", {
-        "request": request,
-        "user": current_user
-    })
-
-@router.post("/profile")
-async def update_profile(
-    request: Request,
-    name: str = Form(...),
-    email: str = Form(...),
-    whatsapp: str = Form(None),
-    activity_type: str = Form(...),
-    gender: str = Form(None),
-    birth_day: int = Form(None),
-    birth_month: int = Form(None),
-    married: str = Form(None),
-    children: str = Form(None),
-    grandchildren: str = Form(None),
-    cep: str = Form(None),
-    street: str = Form(None),
-    neighborhood: str = Form(None),
-    city: str = Form(None),
-    state: str = Form(None),
-    complement: str = Form(None),
-    company_activity: str = Form(None),
-    specialty_area: str = Form(None),
-    ideal_profit_margin: str = Form(None),
-    service_capacity: str = Form(None),
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    try:
-        # Atualizar os dados do usuário
-        current_user.name = name
-        current_user.email = email
-        current_user.whatsapp = whatsapp
-        current_user.activity_type = activity_type
-        current_user.gender = gender
-        current_user.birth_day = birth_day
-        current_user.birth_month = birth_month
-        current_user.married = married
-        current_user.children = children
-        current_user.grandchildren = grandchildren
-        current_user.cep = cep
-        current_user.street = street
-        current_user.neighborhood = neighborhood
-        current_user.city = city
-        current_user.state = state
-        current_user.complement = complement
-        current_user.company_activity = company_activity
-        current_user.specialty_area = specialty_area
-        current_user.ideal_profit_margin = safe_float(ideal_profit_margin)
-        current_user.service_capacity = safe_float(service_capacity)
-
-        db.commit()
-
-        return templates.TemplateResponse("profile.html", {
-            "request": request,
-            "user": current_user,
-            "success_message": "Perfil atualizado com sucesso!"
-        })
-    except Exception as e:
-        return templates.TemplateResponse("profile.html", {
-            "request": request,
-            "user": current_user,
-            "error_message": f"Erro ao atualizar perfil: {str(e)}"
-        }) 

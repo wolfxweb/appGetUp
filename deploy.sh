@@ -17,6 +17,7 @@ pip install -r requirements.txt --break-system-packages
 
 echo "🗄️ Rodando migrações do banco de dados"
 python3 migrate_db.py
+python3 migration_estimativas.py
 
 echo "🔁 Reiniciando serviço"
 systemctl daemon-reload

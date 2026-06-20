@@ -16,6 +16,7 @@ from app.models.user import User
 from app.routes.auth import get_current_user
 from app.utils.analise_form_adapter import form_context_for_analise_cadastro
 from app.utils.sync_basic_data_analise import sync_basic_data_to_analise_mensal
+from app.utils.cadastro_prefill import build_cadastro_prefill
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -145,11 +146,13 @@ async def analise_mensal_lista(
 async def analise_mensal_cadastro_novo(
     request: Request,
     current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
 ):
     """Formulário de Dados Básicos (UI legada, persiste em analise_mensal)."""
     if not current_user:
         return RedirectResponse(url="/login")
     now = datetime.now()
+    cadastro_prefill = await build_cadastro_prefill(current_user, db)
     ctx = form_context_for_analise_cadastro(
         edit_mode=False,
         analise=None,
@@ -157,6 +160,7 @@ async def analise_mensal_cadastro_novo(
         current_year=now.year,
         prefill_margin=getattr(current_user, "ideal_profit_margin", None),
         prefill_capacity=getattr(current_user, "service_capacity", None),
+        cadastro_prefill=cadastro_prefill,
     )
     return templates.TemplateResponse("basic_data_form.html", {
         "request": request,

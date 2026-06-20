@@ -1,63 +1,65 @@
-from app.database.db import engine
 import sqlite3
 import os
+import shutil
+import datetime
 
 def migrate_database():
-    print("Iniciando migração do banco de dados...")
-    
-    # Caminho correto do banco de dados
+    print("Iniciando migracao do banco de dados...")
+
     db_path = os.path.join('app', 'database', 'app.db')
     print(f"Usando banco de dados: {db_path}")
-    
-    # Conectar ao banco de dados
+
+    if not os.path.exists(db_path):
+        print("Banco de dados nao encontrado. Sera criado pelo SQLAlchemy.")
+        return
+
     conn = sqlite3.connect(db_path)
     cursor = conn.cursor()
-    
+
     try:
-        # Verificar se as colunas existem antes de adicionar
+        # --- basic_data ---
         cursor.execute("PRAGMA table_info(basic_data)")
         columns = [column[1] for column in cursor.fetchall()]
-        
-        # Adicionar novas colunas se não existirem
-        new_columns = {
+
+        for column_name, column_type in {
             'other_fixed_costs': 'FLOAT',
             'ideal_service_profit_margin': 'FLOAT'
-        }
-        
-        for column_name, column_type in new_columns.items():
+        }.items():
             if column_name not in columns:
-                print(f"Adicionando coluna {column_name}...")
+                print(f"Adicionando coluna {column_name} em basic_data...")
                 cursor.execute(f"ALTER TABLE basic_data ADD COLUMN {column_name} {column_type}")
-        
+
+        # --- users ---
         cursor.execute("PRAGMA table_info(users)")
         user_columns = [col[1] for col in cursor.fetchall()]
-        for col_name, col_type in (
-            ("ideal_profit_margin", "REAL"),
-            ("service_capacity", "REAL"),
-            ("ja_acessou", "INTEGER"),
-            ("onboarding_completed", "INTEGER"),
-        ):
+
+        for col_name, col_type in [
+            ("ideal_profit_margin",       "REAL"),
+            ("service_capacity",          "REAL"),
+            ("ja_acessou",                "INTEGER"),
+            ("onboarding_completed",      "INTEGER"),
+            ("production_hours",          "REAL"),
+            ("estimated_loss_percentage", "REAL"),
+            ("has_product_sheet",         "TEXT"),
+        ]:
             if col_name not in user_columns:
                 print(f"Adicionando coluna {col_name} em users...")
                 cursor.execute(f"ALTER TABLE users ADD COLUMN {col_name} {col_type}")
-        
-        # Commit das alterações
+
         conn.commit()
-        
-        # Verificar e adicionar colunas na analise_mensal
-        print("Verificando colunas na tabela analise_mensal...")
+
+        # --- analise_mensal ---
+        print("Verificando tabela analise_mensal...")
         cursor.execute("PRAGMA table_info(analise_mensal)")
         analise_columns = [col[1] for col in cursor.fetchall()]
-        
-        # Se a tabela tem colunas antigas como 'competencia_mes', precisamos recriar
+
         if "competencia_mes" in analise_columns:
-            print("Detectada estrutura antiga (competencia_mes). Recriando tabela analise_mensal...")
+            print("Estrutura antiga detectada. Recriando tabela analise_mensal...")
             cursor.execute("DROP TABLE analise_mensal")
             analise_columns = []
-        
+
         if not analise_columns:
-            # Tabela não existe, criar do zero
-            print("Criando tabela analise_mensal do zero...")
+            print("Criando tabela analise_mensal...")
             cursor.execute("""
                 CREATE TABLE analise_mensal (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -86,7 +88,6 @@ def migrate_database():
                 )
             """)
         else:
-            # Tabela existe, adicionar colunas faltantes
             cols_to_add = {
                 "mes": "INTEGER NOT NULL DEFAULT 1",
                 "ano": "INTEGER NOT NULL DEFAULT 2024",
@@ -104,51 +105,14 @@ def migrate_database():
                 "custo_total": "FLOAT",
                 "resultado": "FLOAT",
                 "percentual_margem": "FLOAT",
-                "corresponde_caixa": "BOOLEAN"
+                "corresponde_caixa": "BOOLEAN",
             }
             for col, col_type in cols_to_add.items():
                 if col not in analise_columns:
                     print(f"Adicionando coluna {col} em analise_mensal...")
                     cursor.execute(f"ALTER TABLE analise_mensal ADD COLUMN {col} {col_type}")
 
-        # Recalcular ponto_equilibrio e margem_seguranca com fórmula correta (R$)
-        # e preencher margem_contribuicao_por_cliente para registros existentes
-        print("Recalculando campos de analise_mensal com fórmulas corrigidas...")
-        cursor.execute("""
-            UPDATE analise_mensal
-            SET
-                margem_bruta = CASE
-                    WHEN faturamento IS NOT NULL AND gastos_vendas IS NOT NULL AND custo_mercadorias IS NOT NULL
-                    THEN faturamento - gastos_vendas - custo_mercadorias
-                    ELSE margem_bruta
-                END,
-                margem_contribuicao_por_cliente = CASE
-                    WHEN faturamento IS NOT NULL AND gastos_vendas IS NOT NULL
-                         AND custo_mercadorias IS NOT NULL AND quant_clientes > 0
-                    THEN (faturamento - gastos_vendas - custo_mercadorias) / quant_clientes
-                    ELSE NULL
-                END,
-                ponto_equilibrio = CASE
-                    WHEN custo_fixo_total IS NOT NULL AND faturamento IS NOT NULL
-                         AND (faturamento - COALESCE(gastos_vendas,0) - COALESCE(custo_mercadorias,0)) > 0
-                    THEN custo_fixo_total * faturamento
-                         / (faturamento - COALESCE(gastos_vendas,0) - COALESCE(custo_mercadorias,0))
-                    ELSE NULL
-                END,
-                margem_seguranca = CASE
-                    WHEN faturamento > 0
-                         AND custo_fixo_total IS NOT NULL
-                         AND (faturamento - COALESCE(gastos_vendas,0) - COALESCE(custo_mercadorias,0)) > 0
-                    THEN ((faturamento - (custo_fixo_total * faturamento
-                          / (faturamento - COALESCE(gastos_vendas,0) - COALESCE(custo_mercadorias,0))))
-                         / faturamento) * 100
-                    ELSE NULL
-                END
-            WHERE faturamento IS NOT NULL
-        """)
-        conn.commit()
-
-        # Tabela custo_fixo
+        # --- custo_fixo ---
         print("Verificando tabela custo_fixo...")
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS custo_fixo (
@@ -161,15 +125,15 @@ def migrate_database():
                 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
             )
         """)
-        
+
         conn.commit()
-        print("Migração concluída com sucesso!")
-        
+        print("Migracao concluida com sucesso!")
+
     except Exception as e:
-        print(f"Erro durante a migração: {str(e)}")
+        print(f"Erro durante a migracao: {str(e)}")
         conn.rollback()
     finally:
         conn.close()
 
 if __name__ == "__main__":
-    migrate_database() 
+    migrate_database()

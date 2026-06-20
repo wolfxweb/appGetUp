@@ -2,6 +2,61 @@
 
 {% block title %}Bem-vindo ao SuccessWay{% endblock %}
 
+{% block extra_css %}
+<style>
+    .onboarding-character { max-width: 150px; }
+    .onboarding-character-joao { max-width: 150px; }
+    .onboarding-character-ana { max-width: 170px; }
+    @media (max-width: 767.98px) {
+        .onboarding-character,
+        .onboarding-character-joao,
+        .onboarding-character-ana { max-width: 130px; }
+    }
+    .campo-vermelho label.form-label { color: #dc3545; }
+    .campo-vermelho input.form-control { border-color: #dc3545; }
+    .nao-aplica-badge {
+        display: inline-block;
+        background: #1565C0;
+        color: #fff;
+        font-size: 0.75rem;
+        border-radius: 4px;
+        padding: 3px 8px;
+        margin-top: 4px;
+    }
+    .ana-trigger {
+        max-width: 44px;
+        cursor: pointer;
+        transition: transform 0.15s;
+    }
+    .ana-trigger:hover { transform: scale(1.1); }
+    .ana-trigger-wrap { display: inline-flex; align-items: center; }
+    .ana-balloon-popup {
+        position: absolute;
+        bottom: calc(100% + 8px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1565C0;
+        color: #fff;
+        border-radius: 8px;
+        padding: 10px 14px;
+        font-size: 0.82rem;
+        line-height: 1.45;
+        width: 240px;
+        z-index: 100;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    .ana-balloon-popup::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 7px solid transparent;
+        border-top-color: #1565C0;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid mt-5" style="background-color: #F5F5F5; min-height: 100vh;">
     <div class="row justify-content-center">
@@ -14,90 +69,184 @@
                         </div>
                     </div>
 
-	                    <div id="step-ana" class="onboarding-step">
-	                        <div class="row g-4 align-items-start">
-	                            <div class="col-md-3 d-flex justify-content-center align-items-start">
-	                                <img src="{{ url_for('static', path='images/Rosto João sem fundo.png') }}" alt="João" class="img-fluid rounded onboarding-character onboarding-character-joao">
-	                            </div>
-	                            <div class="col-md-9">
-	                                <h5 class="mb-4">Agora que nos conhecemos, quero lhe apresentar a Ana</h5>
-	                                <div class="row g-4 align-items-start">
-	                                    <div class="col-md-8">
-	                                        <p class="mb-2">Olá, {{ user.name }}.</p>
-	                                        <p class="mb-4">Estou por aqui, se você precisar, para uma ajudinha rápida. Quando me avistar é só acionar.</p>
-	                                        <p class="mb-4">Vamos trocar umas ideias sobre o que seus números estão dizendo?</p>
-	                                        <button type="button" class="btn btn-primary btn-lg" onclick="showOnboardingStep(2)">Sim, vamos</button>
-	                                    </div>
-	                                    <div class="col-md-4 d-flex justify-content-center align-items-start">
-	                                        <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="img-fluid onboarding-character onboarding-character-ana">
-	                                    </div>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-
-                    <div id="step-questions" class="onboarding-step d-none">
-	                        <div class="row">
-	                            <div class="col-md-3 d-flex justify-content-center align-items-start">
-	                                <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="img-fluid onboarding-character onboarding-character-ana">
-	                            </div>
+                    <!-- STEP 1: João apresenta Ana -->
+                    <div id="step-ana" class="onboarding-step">
+                        <div class="row g-4 align-items-start">
+                            <div class="col-md-3 d-flex justify-content-center align-items-start">
+                                <img src="{{ url_for('static', path='images/Rosto João sem fundo.png') }}" alt="João" class="img-fluid rounded onboarding-character onboarding-character-joao">
+                            </div>
                             <div class="col-md-9">
-                                <h5 class="mb-4">Esta é a primeira vez que vamos olhar juntos para os números do seu negócio.</h5>
-                                <p class="text-muted mb-4">Antes de avançarmos, quero matar duas curiosidades. Incluímos essas duas perguntas no cadastro porque são informações que não precisam ser coletadas todos os meses.</p>
+                                <h5 class="mb-4">Agora que nos conhecemos, quero lhe apresentar a Ana</h5>
+                                <div class="row g-4 align-items-start">
+                                    <div class="col-md-8">
+                                        <p class="mb-2">Olá, {{ user.name }}.</p>
+                                        <p class="mb-4">Estou por aqui, se você precisar, para uma ajudinha rápida. Quando me avistar é só acionar.</p>
+                                        <p class="mb-4">Vamos trocar umas ideias sobre o que seus números estão dizendo?</p>
+                                        <button type="button" class="btn btn-primary btn-lg" onclick="goToEstimativas()">Sim, vamos</button>
+                                    </div>
+                                    <div class="col-md-4 d-flex justify-content-center align-items-start">
+                                        <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="img-fluid onboarding-character onboarding-character-ana">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: Estimativas de análise (margem, horas, clientes, perdas, ficha técnica — tudo em uma única tela) -->
+                    <div id="step-estimativas" class="onboarding-step d-none">
+                        <div class="row">
+                            <div class="col-md-3 d-flex justify-content-center align-items-start">
+                                <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="img-fluid onboarding-character onboarding-character-ana">
+                            </div>
+                            <div class="col-md-9">
+                                <p class="mb-4">Para melhor análise, vamos precisar que você nos dê sua opinião ou estimativa sobre as seguintes questões:</p>
 
                                 <form id="onboarding-form" method="post" action="/onboarding">
+                                    <!-- Q1: Margem de lucro -->
                                     <div class="mb-4">
-                                        <label class="form-label fw-bold">1. No seu caso, qual percentual de lucro você considera ideal?</label>
-                                        <p class="text-muted small mb-2">Muitos lojistas consideram adequado entre 10% e 20% do faturamento. Mas isso pode variar!</p>
-                                        <div class="input-group" style="max-width: 180px;">
+                                        <label class="form-label fw-bold">Qual a margem de lucro que considera ideal?</label>
+                                        <div class="input-group" style="max-width: 160px;">
                                             <input type="number" class="form-control" name="ideal_profit_margin" id="ideal_profit_margin" min="0" max="100" step="0.01" placeholder="Ex: 15" style="background-color: #F5F5F5;">
                                             <span class="input-group-text">%</span>
                                         </div>
                                     </div>
 
-                                    <div class="mb-4">
-                                        <label class="form-label fw-bold">2. Hoje, aproximadamente quantas vendas sua estrutura consegue atender por mês?</label>
-                                        <p class="text-muted small mb-2">Se ficar difícil estimar, pense no dia a dia: quantos clientes atende por dia, quantos viram vendas, quantos dias a loja funciona. Uma estimativa já é suficiente.</p>
-                                        <input type="number" class="form-control" name="service_capacity" id="service_capacity" min="0" step="0.01" placeholder="Ex: 150" style="background-color: #F5F5F5; max-width: 180px;">
+                                    <!-- Q2: Horas produção (vermelho — não aplica para Comércio) -->
+                                    <div class="mb-4 campo-vermelho" id="campo-horas">
+                                        <label class="form-label fw-bold">Em um mês normal, quantas horas efetivamente sua equipe de produção (mão de obra direta) trabalha?</label>
+                                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                                            <div class="input-group" style="max-width: 160px;">
+                                                <input type="number" class="form-control" name="production_hours" id="production_hours" min="0" step="0.5" placeholder="Ex: 160" style="background-color: #F5F5F5;">
+                                                <span class="input-group-text">hs.</span>
+                                            </div>
+                                            <div class="ana-trigger-wrap position-relative">
+                                                <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="ana-trigger" onclick="toggleBalloon('balloon-horas')" title="Clique para dica da Ana">
+                                                <div id="balloon-horas" class="ana-balloon-popup" style="display:none;">
+                                                    Considere que existem perdas com espera por materiais, retrabalhos, treinamentos, reuniões, pausas, licenças, férias, manutenções, etc.
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary btn-lg">Continuar para Dados Básicos</button>
+                                    <!-- Q3: Clientes/pedidos -->
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold">Atualmente quantos clientes/pedidos consegue atender em um mês?</label>
+                                        <input type="number" class="form-control" name="service_capacity" id="service_capacity" min="0" step="1" placeholder="Ex: 150" style="background-color: #F5F5F5; max-width: 160px;">
+                                    </div>
+
+                                    <!-- Q4: % perdas -->
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold">Qual o percentual estimado de perdas do seu negócio?</label>
+                                        <div class="d-flex align-items-center gap-3 flex-wrap">
+                                            <div class="input-group" style="max-width: 160px;">
+                                                <input type="number" class="form-control" name="estimated_loss_percentage" id="estimated_loss_percentage" min="0" max="100" step="0.1" placeholder="Ex: 5" style="background-color: #F5F5F5;">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                            <div class="ana-trigger-wrap position-relative">
+                                                <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="ana-trigger" onclick="toggleBalloon('balloon-perdas')" title="Clique para dica da Ana">
+                                                <div id="balloon-perdas" class="ana-balloon-popup" style="display:none;">
+                                                    Considere mercadorias vencidas, avarias, furtos, desperdícios, erros e descartes.
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Q5: Ficha técnica (vermelho — não aplica para Comércio nem Serviços) -->
+                                    <div class="mb-4 campo-vermelho" id="campo-ficha">
+                                        <label class="form-label fw-bold">Você utiliza/possui a ficha técnica de seus produtos?</label>
+                                        <div class="d-flex align-items-center gap-4 mt-1 flex-wrap">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="has_product_sheet" id="ficha_sim" value="Sim">
+                                                <label class="form-check-label" for="ficha_sim">Sim</label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="has_product_sheet" id="ficha_nao" value="Não">
+                                                <label class="form-check-label" for="ficha_nao">Não</label>
+                                            </div>
+                                            <div class="ana-trigger-wrap position-relative">
+                                                <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="ana-trigger" onclick="showOnboardingStep('step-ficha-tecnica')" title="Clique para explicação da Ana">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary btn-lg mt-2">Continuar para Dados Básicos</button>
                                 </form>
                             </div>
                         </div>
                     </div>
+
+                    <!-- STEP 3: Explicação da Ana sobre Ficha Técnica (slide 12) -->
+                    <div id="step-ficha-tecnica" class="onboarding-step d-none">
+                        <div class="row g-4 align-items-start">
+                            <div class="col-md-3 d-flex justify-content-center align-items-start">
+                                <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="img-fluid onboarding-character onboarding-character-ana">
+                            </div>
+                            <div class="col-md-9">
+                                <p class="mb-3">Você sabe exatamente quanto custa produzir cada item que vende? A Ficha Técnica foi criada para responder esta pergunta.</p>
+                                <p class="mb-3">Nela você registra os insumos, materiais e componentes utilizados; suas quantidades, custos, rendimento, tempo de preparo e orientações de produção.</p>
+                                <p class="mb-3">Com uma ficha técnica atualizada fica muito mais fácil calcular preços, planejar compras, controlar desperdícios, manter a qualidade dos produtos e proteger sua lucratividade.</p>
+                                <p class="mb-4">Não importa o tamanho da empresa. Se você produz, vale a pena ter fichas técnicas.</p>
+                                <button type="button" class="btn btn-primary btn-lg" onclick="showOnboardingStep('step-estimativas')">Voltar</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-	<script>
-	    function showOnboardingStep(step) {
-	        document.querySelectorAll('.onboarding-step').forEach(el => el.classList.add('d-none'));
-	        const el = document.getElementById(step === 1 ? 'step-ana' : 'step-questions');
-	        if (el) el.classList.remove('d-none');
-	    }
-	</script>
-	{% endblock %}
-
-{% block extra_css %}
-<style>
-    .onboarding-character {
-        max-width: 150px;
+<script>
+    // Balão da Ana: clique abre/fecha, clique fora fecha
+    function toggleBalloon(id) {
+        const all = document.querySelectorAll('.ana-balloon-popup');
+        all.forEach(b => { if (b.id !== id) b.style.display = 'none'; });
+        const el = document.getElementById(id);
+        if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
     }
-    .onboarding-character-joao {
-        max-width: 150px;
-    }
-    .onboarding-character-ana {
-        max-width: 170px;
-    }
-    @media (max-width: 767.98px) {
-        .onboarding-character,
-        .onboarding-character-joao,
-        .onboarding-character-ana {
-            max-width: 130px;
+    document.addEventListener('click', function(e) {
+        if (!e.target.classList.contains('ana-trigger')) {
+            document.querySelectorAll('.ana-balloon-popup').forEach(b => b.style.display = 'none');
         }
+    });
+
+    // activity_type do usuário (passado pelo Jinja)
+    const activityType = "{{ user.activity_type | default('') }}";
+
+    function showOnboardingStep(stepId) {
+        document.querySelectorAll('.onboarding-step').forEach(el => el.classList.add('d-none'));
+        const el = document.getElementById(stepId);
+        if (el) el.classList.remove('d-none');
     }
-</style>
+
+    function goToEstimativas() {
+        // Mostrar/ocultar campos vermelhos conforme activity_type
+        const tipo = activityType.toLowerCase();
+        const campoHoras = document.getElementById('campo-horas');
+        const campoFicha = document.getElementById('campo-ficha');
+
+        // Horas: não aplica para Comércio (lojista) — atacadista, varejista, atacado e varejo
+        const ehComercio = tipo.includes('comerc') || tipo.includes('atacado e varejo');
+        const ehServicos = tipo.includes('servi');
+        const ehIndustria = tipo.includes('indústria') || tipo.includes('industria') || tipo.includes('alimenta');
+
+        if (ehComercio) {
+            campoHoras.style.display = 'none';
+            document.getElementById('production_hours').removeAttribute('required');
+        } else {
+            campoHoras.style.display = '';
+        }
+
+        // Ficha técnica: não aplica para Comércio nem Serviços → só Indústria/Alimentação fora do lar
+        if (ehComercio || ehServicos) {
+            campoFicha.style.display = 'none';
+            document.querySelectorAll('[name="has_product_sheet"]').forEach(r => r.removeAttribute('required'));
+        } else {
+            campoFicha.style.display = '';
+        }
+
+        showOnboardingStep('step-estimativas');
+    }
+</script>
 {% endblock %}

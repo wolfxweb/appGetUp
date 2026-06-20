@@ -4,6 +4,16 @@
 
 {% block extra_css %}
 <style>
+    /* Ocultar spin buttons (setas) dos inputs numéricos */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    input[type=number] {
+        -moz-appearance: textfield;
+    }
+
     body {
         background-color: #F5F5F5 !important;
     }
@@ -134,6 +144,27 @@
         color: #6c757d;
     }
     
+    /* Resultado conversacional (step 8) */
+    .resultado-texto-container {
+        max-width: 680px;
+    }
+    .resultado-texto-bloco {
+        background: #f8f9fa;
+        border-left: 4px solid #6c757d;
+        border-radius: 0 8px 8px 0;
+        padding: 14px 18px;
+        margin-bottom: 14px;
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #343a40;
+    }
+    .resultado-texto-bloco.resultado-destaque {
+        background: #e8f5e9;
+        border-left-color: rgb(1, 57, 44);
+        font-size: 1.08rem;
+        font-weight: 500;
+    }
+
     /* Result Card */
     .result-card {
         background-color: #f8f9fa;
@@ -526,9 +557,9 @@
                                     <label for="ano" class="form-label">Ano</label>
                                     <select class="form-select" id="ano" required>
                                         <option value="">Selecione o ano...</option>
-                                        <option value="2024">2024</option>
-                                        <option value="2025" selected>2025</option>
-                                        <option value="2026">2026</option>
+                                        {% for y in range(2005, 2036) %}
+                                        <option value="{{ y }}" {% if y == 2026 %}selected{% endif %}>{{ y }}</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
@@ -702,9 +733,22 @@
                                     </div>
                                 </div>
 
-                                <!-- Coluna direita: gráfico de pizza (slide 4) -->
+                                <!-- Coluna direita: Ana + gráfico de pizza (slide 4) -->
                                 <div class="col-md-6 d-flex flex-column align-items-center">
-                                    <p class="text-muted small mb-2 text-center">Composição do faturamento</p>
+                                    <!-- Ana com link para Gastos com Vendas -->
+                                    <div class="d-flex align-items-center gap-2 mb-2 justify-content-center">
+                                        <img src="/static/images/ana-sem-fundo.png"
+                                             alt="Ana — detalhar gastos com vendas"
+                                             class="persona-img persona-img-pequena"
+                                             role="button"
+                                             tabindex="0"
+                                             style="max-width:60px; cursor:pointer; transition:transform .2s;"
+                                             title="Clique para ver o detalhamento dos Gastos com Vendas"
+                                             onclick="abrirModalGerenciarGastosVendas()"
+                                             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirModalGerenciarGastosVendas();}">
+                                        <small class="text-muted">Clique na Ana para<br>detalhar os gastos</small>
+                                    </div>
+                                    <p class="text-muted small mb-2 text-center fw-semibold">Custos s/Faturamento</p>
                                     <div style="max-width:260px; width:100%;">
                                         <canvas id="chart-gastos-pizza"></canvas>
                                     </div>
@@ -722,7 +766,7 @@
                                 <div class="summary-item"><div class="label">Sobram</div><div class="value" id="resumo-sobram">-</div></div>
                             </div>
                             <div id="resumo-margem-gastos" class="results-summary mt-2" style="display: none;">
-                                <div class="summary-item"><div class="label">Margem Bruta</div><div class="value" id="resumo-mb-gastos">-</div></div>
+                                <div class="summary-item"><div class="label">Margem de Contribuição</div><div class="value" id="resumo-mb-gastos">-</div></div>
                             </div>
 
                             <div class="wizard-nav mt-4">
@@ -737,11 +781,22 @@
                         <!-- ==================== STEP 6: CUSTO DAS MERCADORIAS ==================== -->
                         <div class="wizard-step" id="step-6">
 
-                            <!-- João: pergunta -->
+                            <!-- João: pergunta (varia conforme o setor do usuário) -->
+                            {% set tipo_custo = (user.activity_type or '') | lower %}
+                            {% if 'indústria' in tipo_custo or 'industria' in tipo_custo or 'alimenta' in tipo_custo %}
+                                {% set custo_label = 'Custo dos Insumos e Produção (R$)' %}
+                                {% set custo_pergunta = 'Aproximadamente, quanto custaram os <strong>insumos, produtos de terceiros, mão de obra direta e demais despesas relativas à produção</strong> necessária para atender as vendas do mês?' %}
+                            {% elif 'serviç' in tipo_custo or 'servic' in tipo_custo %}
+                                {% set custo_label = 'Custo dos Insumos e Serviços (R$)' %}
+                                {% set custo_pergunta = 'Aproximadamente, quanto custaram os <strong>insumos, produtos de terceiros, mão de obra direta e demais despesas relativas aos serviços</strong> realizados no mês?' %}
+                            {% else %}
+                                {% set custo_label = 'Custo das Mercadorias (R$)' %}
+                                {% set custo_pergunta = 'Aproximadamente, quanto custaram as <strong>mercadorias vendidas</strong> no mês?' %}
+                            {% endif %}
                             <div class="slide-persona-row mb-3">
                                 <img src="{{ img_joao_escrevendo }}" alt="João" class="persona-img persona-img-escrevendo">
                                 <div class="persona-balloon">
-                                    <p class="mb-0">Aproximadamente, quanto custaram as <strong>mercadorias vendidas</strong> no mês?</p>
+                                    <p class="mb-0">{{ custo_pergunta | safe }}</p>
                                 </div>
                             </div>
 
@@ -751,13 +806,13 @@
                                 <!-- Coluna 1: input + resultados -->
                                 <div class="col-md-4">
                                     <div class="mb-3">
-                                        <label for="custo_mercadorias" class="form-label fw-semibold">Custo das Mercadorias (R$)</label>
+                                        <label for="custo_mercadorias" class="form-label fw-semibold">{{ custo_label }}</label>
                                         <input type="number" class="form-control" id="custo_mercadorias" placeholder="Ex: 20000.00" step="0.01" required>
                                     </div>
 
                                     <div id="resumo-margem" class="results-summary mt-3" style="display: none;">
                                         <div class="summary-item">
-                                            <div class="label">Margem Bruta</div>
+                                            <div class="label">Margem de Contribuição</div>
                                             <div class="value" id="resumo-mb">-</div>
                                         </div>
                                     </div>
@@ -777,7 +832,7 @@
 
                                 <!-- Coluna 2: gráfico pizza -->
                                 <div class="col-md-4 d-flex flex-column align-items-center">
-                                    <p class="text-muted small mb-2 text-center">Composição do faturamento</p>
+                                    <p class="text-muted small mb-2 text-center fw-semibold">Custos s/Faturamento</p>
                                     <div style="max-width:220px; width:100%;">
                                         <canvas id="chart-mercadorias-pizza"></canvas>
                                     </div>
@@ -785,7 +840,7 @@
                                         <small>
                                             <span class="badge" style="background:#c8a84b;">■</span> Gastos com Vendas<br>
                                             <span class="badge" style="background:#8B6914;">■</span> Custo Mercadorias<br>
-                                            <span class="badge" style="background:#aaa;">■</span> Margem Bruta
+                                            <span class="badge" style="background:#aaa;">■</span> Margem de Contribuição
                                         </small>
                                     </div>
                                 </div>
@@ -816,27 +871,37 @@
                             </div>
                         </div>
 
-                        <!-- ==================== STEP 7: CUSTOS FIXOS (Slide 6) ==================== -->
+                        <!-- ==================== STEP 7: CUSTOS FIXOS (Slide 8) ==================== -->
                         <div class="wizard-step" id="step-7">
 
-                            <!-- Linha: João à esquerda + balão -->
-                            <div class="slide-persona-row mb-4">
+                            <!-- João + balão + Ana pequena inline -->
+                            <div class="slide-persona-row mb-3">
                                 <img src="{{ img_joao_escrevendo }}" alt="João" class="persona-img persona-img-escrevendo">
                                 <div class="persona-balloon">
                                     <p class="mb-1"><strong>Agora uma última informação:</strong></p>
                                     <p class="mb-0">Qual o <strong>custo de funcionamento e administração</strong> da loja?</p>
                                 </div>
+                                <!-- Ana pequena ao lado da pergunta do João -->
+                                <img src="/static/images/ana-sem-fundo.png"
+                                     alt="Ana — saiba mais sobre Custos Fixos"
+                                     class="persona-img persona-img-pequena ms-2 ana-custos-fixos-trigger"
+                                     role="button"
+                                     tabindex="0"
+                                     style="max-width:56px; cursor:pointer;"
+                                     title="Clique para entender e cadastrar os Custos Fixos"
+                                     onclick="abrirModalGerenciarCustosFixos()"
+                                     onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); abrirModalGerenciarCustosFixos(); }">
                             </div>
 
-                            <!-- 2 colunas: input+resultados | Ana clicável -->
+                            <!-- Layout: input + resultados | gráfico -->
                             <div class="row align-items-start g-3">
 
                                 <!-- Coluna esquerda: input + resultados -->
-                                <div class="col-md-8">
+                                <div class="col-md-6">
                                     <div class="mb-3">
                                         <label for="custo_fixo_total" class="form-label">Total Custos Fixos (R$)</label>
                                         <input type="number" class="form-control" id="custo_fixo_total" placeholder="0,00" step="0.01" readonly required>
-                                        <small class="text-muted">Soma dos custos cadastrados. Clique na Ana para adicionar ou editar.</small>
+                                        <small class="text-muted">Clique na Ana para adicionar ou editar os custos fixos.</small>
                                     </div>
 
                                     <span id="custo-success-msg" class="text-success" style="display: none;"></span>
@@ -855,18 +920,11 @@
                                     </div>
                                 </div>
 
-                                <!-- Coluna direita: Ana abre modal de custos fixos -->
-                                <div class="col-md-4 d-flex flex-column align-items-center text-center">
-                                    <img src="/static/images/ana-sem-fundo.png"
-                                         alt="Ana — cadastrar custos fixos"
-                                         class="persona-img mb-2 ana-custos-fixos-trigger"
-                                         role="button"
-                                         tabindex="0"
-                                         title="Cadastrar ou editar custos fixos"
-                                         onclick="abrirModalGerenciarCustosFixos()"
-                                         onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); abrirModalGerenciarCustosFixos(); }">
-                                    <div class="persona-balloon text-start">
-                                        <p class="mb-0">Este valor é chamado de <strong>Custo Fixo</strong> porque ele será o mesmo tanto em um mês bom, quanto num mês fraco de vendas.</p>
+                                <!-- Coluna direita: gráfico Custos s/Faturamento -->
+                                <div class="col-md-6 d-flex flex-column align-items-center">
+                                    <p class="text-muted small mb-2 text-center fw-semibold">Custos s/Faturamento</p>
+                                    <div style="max-width:260px; width:100%;">
+                                        <canvas id="chart-fixos-pizza"></canvas>
                                     </div>
                                 </div>
 
@@ -881,121 +939,79 @@
                             </div>
                         </div>
 
-                        <!-- ==================== STEP 8: RESULTADOS (Slides 7–9) — F6+F7+F8+F9 ==================== -->
+                        <!-- ==================== STEP 8: RESULTADOS — layout conversacional (slide 10) ==================== -->
                         <div class="wizard-step" id="step-8">
 
-                            <div class="slide-persona-row mb-4">
+                            <!-- Persona + nome -->
+                            <div class="slide-persona-row mb-3">
                                 <img src="{{ img_joao_escrevendo }}" alt="João" class="persona-img persona-img-escrevendo">
                                 <div class="persona-balloon">
-                                    <p class="mb-0">Veja como o faturamento do mês se divide e o que suas informações estão mostrando.</p>
+                                    {% if user and user.name %}
+                                    <p class="mb-0 fw-semibold">{{ user.name.split()[0] }},</p>
+                                    {% endif %}
+                                    <p class="mb-0">Veja o que os números estão revelando sobre o seu mês.</p>
                                 </div>
                             </div>
 
-                            <!-- Linha superior: cards de resultado + gráfico lado a lado -->
-                            <div class="row align-items-start g-4">
+                            <!-- Textos das fórmulas — ordem slide 10: F9 → F6 → F7 → F8 → F10 → F11 -->
+                            <div class="resultado-texto-container">
 
-                                <!-- Coluna esquerda: cards das fórmulas -->
-                                <div class="col-md-6">
-                                    <div class="result-card primary mb-3" id="card-f6-pe">
-                                        <div class="result-title">Ponto de Equilíbrio</div>
-                                        <div class="result-value" id="f6-pe-valor">R$ 0,00</div>
-                                        <div class="result-description" id="f6-pe-desc"></div>
+                                <!-- F9: Avaliação final (primeiro) -->
+                                <div id="card-f9-avaliacao" class="resultado-texto-bloco resultado-destaque" style="display:none;">
+                                    <p id="f9-desc" class="mb-0"></p>
+                                    <!-- Campos ocultos para compatibilidade JS -->
+                                    <span id="f9-percentual" style="display:none;"></span>
+                                </div>
+
+                                <!-- F6: Ponto de Equilíbrio (texto) -->
+                                <div id="card-f6-pe" class="resultado-texto-bloco" style="display:none;">
+                                    <p id="f6-pe-desc" class="mb-0"></p>
+                                    <span id="f6-pe-valor" style="display:none;"></span>
+                                </div>
+
+                                <!-- F7: Margem de Segurança (texto) -->
+                                <div id="card-f7-margem-seg" class="resultado-texto-bloco" style="display:none;">
+                                    <p id="f7-desc" class="mb-0"></p>
+                                    <span id="f7-margem-seg" style="display:none;"></span>
+                                </div>
+
+                                <!-- F8: Resultado do mês (texto) -->
+                                <div id="card-f8-resultado" class="resultado-texto-bloco" style="display:none;">
+                                    <p id="f8-desc" class="mb-0"></p>
+                                    <span id="f8-custo-total" style="display:none;"></span>
+                                </div>
+
+                                <!-- F10 + F11: Conferência do caixa -->
+                                <div id="card-f10-caixa" class="resultado-texto-bloco" style="display: none;">
+                                    <p id="f10-pergunta" class="mb-2 fw-semibold"></p>
+                                    <div class="d-flex flex-wrap gap-3 mb-2">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input me-1" type="radio" name="corresponde_caixa_visivel" id="corresponde_sim_visivel" value="true">
+                                            Sim, corresponde
+                                        </label>
+                                        <label class="form-check-label">
+                                            <input class="form-check-input me-1" type="radio" name="corresponde_caixa_visivel" id="corresponde_nao_visivel" value="false">
+                                            Não corresponde
+                                        </label>
                                     </div>
-                                    <div class="result-card primary mb-3" id="card-f7-margem-seg">
-                                        <div class="result-title">Margem de Segurança</div>
-                                        <div class="result-value" id="f7-margem-seg">0%</div>
-                                        <div class="result-description" id="f7-desc"></div>
-                                    </div>
-                                    <div class="result-card mb-3" id="card-f8-resultado">
-                                        <div class="result-title">Resultado do Mês</div>
-                                        <div class="result-value" id="f8-custo-total">R$ 0,00</div>
-                                        <div class="result-description" id="f8-desc"></div>
-                                    </div>
-                                    <div class="result-card mb-3" id="card-f9-avaliacao">
-                                        <div class="result-title">Avaliação Final</div>
-                                        <div class="result-value" id="f9-percentual">0%</div>
-                                        <div class="result-description" id="f9-desc"></div>
-                                    </div>
-                                    <div class="result-card mb-3" id="card-f10-caixa" style="display: none;">
-                                        <div class="result-title">Conferência do Caixa</div>
-                                        <p id="f10-pergunta" class="result-description mb-3"></p>
-                                        <div class="d-flex flex-wrap gap-3 mb-2">
-                                            <label class="form-check-label">
-                                                <input class="form-check-input me-1" type="radio" name="corresponde_caixa_visivel" id="corresponde_sim_visivel" value="true">
-                                                Sim, corresponde
-                                            </label>
-                                            <label class="form-check-label">
-                                                <input class="form-check-input me-1" type="radio" name="corresponde_caixa_visivel" id="corresponde_nao_visivel" value="false">
-                                                Não corresponde
-                                            </label>
-                                        </div>
-                                        <div id="f11-resposta" class="conditional-text mt-2" style="display: none;">
-                                            <p id="f11-texto-sim" class="mb-0" style="display: none;"></p>
-                                            <div id="f11-ana-row" class="d-flex align-items-start gap-3" style="display: none;">
-                                                <img src="/static/images/ana-sem-fundo.png"
-                                                     alt="Ana — orientação sobre o caixa"
-                                                     class="persona-img ana-caixa-trigger flex-shrink-0"
-                                                     role="button"
-                                                     tabindex="0"
-                                                     title="Clique para ver a orientação da Ana"
-                                                     onclick="abrirModalAna()"
-                                                     onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); abrirModalAna(); }">
-                                                <div>
-                                                    <p id="f11-texto-nao" class="mb-1 fw-semibold">Recomendo que você veja o que a Ana tem a dizer.</p>
-                                                    <small class="text-muted">Clique na Ana para abrir a orientação.</small>
-                                                </div>
-                                            </div>
+                                    <!-- F11: resposta -->
+                                    <div id="f11-resposta" style="display: none;">
+                                        <p id="f11-texto-sim" class="mb-0 text-success fw-semibold" style="display: none;"></p>
+                                        <div id="f11-ana-row" class="d-flex align-items-center gap-2 mt-2" style="display: none;">
+                                            <img src="/static/images/ana-sem-fundo.png"
+                                                 alt="Ana — orientação sobre o caixa"
+                                                 class="persona-img-pequena ana-caixa-trigger"
+                                                 role="button"
+                                                 tabindex="0"
+                                                 style="max-width:48px; cursor:pointer;"
+                                                 title="Clique na Ana para ver a orientação"
+                                                 onclick="abrirModalAna()"
+                                                 onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); abrirModalAna(); }">
+                                            <p id="f11-texto-nao" class="mb-0 fw-semibold text-warning">Recomendo que você veja o que a Ana tem a dizer. <small class="text-muted fw-normal">(clique na Ana)</small></p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Coluna direita: gráfico pizza -->
-                                <div class="col-md-6 d-flex flex-column align-items-center justify-content-center">
-                                    <p class="text-muted small mb-2 text-center">Como o faturamento se divide</p>
-                                    <div style="max-width:280px; width:100%;">
-                                        <canvas id="chart-resultado-pizza"></canvas>
-                                    </div>
-                                    <div id="chart-resultado-legenda" class="mt-2 text-center" style="display:none;">
-                                        <small class="d-flex flex-wrap justify-content-center gap-2">
-                                            <span><span class="badge" style="background:#d4bc5a;">■</span> Custo das Vendas</span>
-                                            <span><span class="badge" style="background:#8B6914;">■</span> Custo Mercadorias</span>
-                                            <span><span class="badge" style="background:#5c4a1e;">■</span> Custos Fixos</span>
-                                            <span><span class="badge" style="background:#2e7d32;">■</span> Margem</span>
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Linha inferior: resumos abaixo do gráfico -->
-                            <div class="row mt-3 g-2">
-                                <div class="col-12">
-                                    <div class="results-summary results-summary-3col">
-                                        <div class="summary-item">
-                                            <div class="label">Faturamento</div>
-                                            <div class="value" id="res7-fat">-</div>
-                                        </div>
-                                        <div class="summary-item">
-                                            <div class="label">Margem Bruta</div>
-                                            <div class="value" id="res7-mb">-</div>
-                                        </div>
-                                        <div class="summary-item">
-                                            <div class="label">Custos Fixos</div>
-                                            <div class="value" id="res7-cf">-</div>
-                                        </div>
-                                        <div class="summary-item">
-                                            <div class="label">Lucro Ideal</div>
-                                            <div class="value" id="comp-lucro-ideal">20%</div>
-                                        </div>
-                                        <div class="summary-item">
-                                            <div class="label">Resultado Obtido</div>
-                                            <div class="value" id="comp-resultado">0%</div>
-                                        </div>
-                                        <div class="summary-item">
-                                            <div class="label">Diferença</div>
-                                            <div class="value" id="comp-diferenca">-</div>
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
 
                             <!-- Campos ocultos por compatibilidade JS -->
@@ -1005,6 +1021,14 @@
                             <span id="f8-margem-bruta" style="display:none;"></span>
                             <span id="f8-mb-desc" style="display:none;"></span>
                             <span id="resultado-mes-7" style="display:none;"></span>
+                            <span id="res7-fat" style="display:none;"></span>
+                            <span id="res7-mb" style="display:none;"></span>
+                            <span id="res7-cf" style="display:none;"></span>
+                            <span id="comp-lucro-ideal" style="display:none;"></span>
+                            <span id="comp-resultado" style="display:none;"></span>
+                            <span id="comp-diferenca" style="display:none;"></span>
+                            <canvas id="chart-resultado-pizza" style="display:none;"></canvas>
+                            <div id="chart-resultado-legenda" style="display:none;"></div>
 
                             <div class="wizard-nav mt-4">
                                 <button class="btn btn-secondary" onclick="prevStep()">&#171; Voltar</button>
@@ -1019,7 +1043,11 @@
                             <div class="slide-persona-row mb-4">
                                 <img src="{{ img_joao_apresentando }}" alt="João" class="persona-img persona-img-escrevendo">
                                 <div class="persona-balloon">
-                                    <p class="mb-2">Concluímos assim nossas análises do mês de <span id="label-mes-step9" class="text-primary fw-semibold">______</span>.</p>
+                                    {% if user and user.name %}
+                                    <p class="mb-1"><strong>{{ user.name.split()[0] }}</strong>, concluímos nossas análises do mês de <span id="label-mes-step9" class="text-primary fw-semibold">______</span>.</p>
+                                    {% else %}
+                                    <p class="mb-1">Concluímos nossas análises do mês de <span id="label-mes-step9" class="text-primary fw-semibold">______</span>.</p>
+                                    {% endif %}
                                     <p class="mb-0">Agora é hora de usar o que esses números nos mostraram, para melhorar os próximos resultados e buscar ainda mais lucro.</p>
                                 </div>
                             </div>
@@ -1027,7 +1055,7 @@
                             <div class="text-center mt-4">
                                 <p class="fw-semibold mb-3">Vamos em frente?</p>
                                 <button type="button" class="btn btn-success btn-lg" id="btn-step9-confirmar" onclick="confirmarESalvarAnalise()">
-                                    Sim. Vamos!
+                                    Sim. Vamos! <i class="bi bi-arrow-right-circle-fill"></i>
                                 </button>
                             </div>
 
@@ -1288,6 +1316,10 @@ function aplicarModoDetalheUI() {
 document.addEventListener('DOMContentLoaded', function() {
     modoDetalhe = document.getElementById('modo-detalhe')?.value === '1';
     initCustosFixosModais();
+    // Atualizar gráfico de fixos sempre que o total de custos fixos mudar
+    window.onCustoFixoTotalAtualizado = function() {
+        if (currentStep === 7) setTimeout(() => atualizarGraficoFixos(), 50);
+    };
     const modalAnaEl = document.getElementById('modalAna');
     if (modalAnaEl) modalAna = new bootstrap.Modal(modalAnaEl);
 
@@ -1365,6 +1397,7 @@ function showStep(step) {
         setTimeout(() => atualizarGraficoMercadorias(), 80);
     } else if (step === 7) {
         carregarCustosFixos();
+        setTimeout(() => atualizarGraficoFixos(), 80);
     } else if (step === 8) {
         calcularResultadosF7();
         setTimeout(() => atualizarGraficoResultado(), 80);
@@ -1571,7 +1604,8 @@ function atualizarCalculosParciais() {
         if (f4MargemBruta) {
             f4MargemBruta.classList.add('show', 'info');
             const f4Texto = document.getElementById('f4-texto');
-            if (f4Texto) f4Texto.textContent = `A margem bruta no mês foi de ${formatCurrency(margemBruta)}.`;
+            const tmTexto = ticketMedio > 0 ? ` Cada venda realizada (${formatCurrency(ticketMedio)}), gerou em média ${formatCurrency(margemBruta / quant_clientes)} de margem de contribuição.` : '';
+            if (f4Texto) f4Texto.textContent = `A margem de contribuição no mês foi de ${formatCurrency(margemBruta)}.${tmTexto}`;
         }
     }
     
@@ -1752,19 +1786,16 @@ function calcularResultadosF7() {
     if (elMb)  elMb.textContent  = formatCurrency(formData.margem_bruta);
     if (elCf)  elCf.textContent  = formatCurrency(cf);
 
-    // Fórmula 5 / card Ponto de Equilíbrio (P24 / H36)
+    // F6: Ponto de Equilíbrio (P24 / H36)
     const elPe   = document.getElementById('f6-pe-valor');
     const descPe = document.getElementById('f6-pe-desc');
     const cardPe = document.getElementById('card-f6-pe');
     const peOk = formData.margem_bruta > cf && peFaturamento > 0;
     if (elPe) elPe.textContent = peOk ? formatCurrency(peFaturamento) : '—';
     if (descPe) descPe.textContent = textoPontoEquilibrioExcel(formData.margem_bruta, cf, peFaturamento || 0, peClientes || 0);
-    if (cardPe) {
-        if (!peOk) cardPe.className = 'result-card danger mb-3';
-        else cardPe.className = fat >= peFaturamento ? 'result-card success mb-3' : 'result-card warning mb-3';
-    }
+    if (cardPe) cardPe.style.display = 'block';
 
-    // Fórmula 6 + 7 / Margem de Segurança (P29 + P31 / H42 + H44)
+    // F7: Margem de Segurança (P29 + P31 / H42 + H44)
     const elF7   = document.getElementById('f7-margem-seg');
     const descF7 = document.getElementById('f7-desc');
     const cardF7 = document.getElementById('card-f7-margem-seg');
@@ -1772,31 +1803,21 @@ function calcularResultadosF7() {
     const msValida = ms != null && formData.margem_bruta > 0 && formData.margem_bruta >= cf;
     if (elF7) elF7.textContent = msValida ? ms.toFixed(1).replace('.', ',') + '%' : '—';
 
-    let f7Class = 'primary';
-    if (msValida) {
-        if (ms < 10) f7Class = 'danger';
-        else if (ms < 25) f7Class = 'warning';
-        else f7Class = 'success';
-    } else if (formData.margem_bruta <= 0 || formData.margem_bruta < cf) {
-        f7Class = 'danger';
-    }
-
     const introMs = textoMargemSegurancaIntroExcel(formData.margem_bruta, cf, ms);
     const detalheMs = textoMargemSegurancaDetalheExcel(ms);
     const partesMs = [introMs, detalheMs].filter(Boolean);
     if (descF7) descF7.textContent = partesMs.join(' ');
-    if (cardF7) cardF7.className = `result-card ${f7Class} mb-3`;
+    if (cardF7) cardF7.style.display = 'block';
 
-    // Fórmula 8 / Resultado do mês (P38 / H40)
+    // F8: Resultado do mês (P38 / H40)
     const cardF8 = document.getElementById('card-f8-resultado');
     const elRes  = document.getElementById('f8-custo-total');
     const descF8 = document.getElementById('f8-desc');
-    const f8Class = formData.resultado > 0 ? 'success' : (formData.resultado < 0 ? 'danger' : 'warning');
-    if (cardF8) cardF8.className = `result-card ${f8Class} mb-3`;
     if (elRes) elRes.textContent = formatCurrency(formData.resultado);
     if (descF8) descF8.textContent = textoResultadoMesExcel(formData.custo_total, formData.resultado, formData.percentual_margem);
+    if (cardF8) cardF8.style.display = 'block';
 
-    // Fórmula 9 / Avaliação final (P42 / H47)
+    // F9: Avaliação final (P42 / H47)
     const cardF9 = document.getElementById('card-f9-avaliacao');
     const elF9   = document.getElementById('f9-percentual');
     const descF9 = document.getElementById('f9-desc');
@@ -1810,13 +1831,7 @@ function calcularResultadosF7() {
     if (elCompResult) elCompResult.textContent = formData.percentual_margem.toFixed(1).replace('.', ',') + '%';
     if (elCompDiff)   elCompDiff.textContent   = (diferenca >= 0 ? '+' : '') + diferenca.toFixed(1).replace('.', ',') + '%';
 
-    let f9Class = 'primary';
-    if (formData.percentual_margem <= 0) f9Class = 'danger';
-    else if (formData.percentual_margem >= idealPct * 1.05) f9Class = 'success';
-    else if (formData.percentual_margem >= idealPct * 0.95) f9Class = 'success';
-    else f9Class = 'warning';
-
-    if (cardF9) cardF9.className = `result-card ${f9Class} mb-3`;
+    if (cardF9) cardF9.style.display = 'block';
     if (descF9) descF9.textContent = textoAvaliacaoFinalExcel(formData.percentual_margem, lucroIdeal);
 
     // Fórmulas 10 e 11 / Caixa (P48 / H50 + P51 / H53)
@@ -2175,6 +2190,12 @@ function mascaraMonetaria(input) {
 }
 let gastosVariaveis = [];
 
+function abrirModalGerenciarGastosVendas() {
+    atualizarTabelaGastos();
+    const modal = new bootstrap.Modal(document.getElementById('modalGerenciarGastosVendas'));
+    modal.show();
+}
+
 function abrirModalGastoVariavel() {
     // Limpar campos
     document.getElementById('gasto_nome').value = '';
@@ -2272,6 +2293,11 @@ function atualizarTabelaGastos() {
             </td>
         </tr>
     `).join('');
+
+    // Atualizar total no modal
+    const total = gastosVariaveis.reduce((s, g) => s + g.valor, 0);
+    const elTotal = document.getElementById('modal-gastos-total');
+    if (elTotal) elTotal.textContent = formatCurrency(total);
 }
 
 function calcularTotalGastos() {
@@ -2404,6 +2430,47 @@ function verificarDiferencaCaixa() {
     </div>
 </div>
 
+<!-- Modal: Gerenciar Gastos com Vendas -->
+<div class="modal fade" id="modalGerenciarGastosVendas" tabindex="-1" aria-labelledby="modalGerenciarGastosVendasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title" id="modalGerenciarGastosVendasLabel">
+                    <i class="bi bi-cart"></i> Gastos com Vendas
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-muted small mb-3">São todos os custos que ocorrem (ou podem ocorrer) <strong>quando uma venda acontece</strong>: impostos sobre faturamento, taxas bancárias, comissões, descontos, embalagens etc.</p>
+                <button type="button" class="btn btn-secondary btn-sm mb-3" onclick="abrirModalGastoVariavel()">
+                    <i class="bi bi-plus-circle"></i> Adicionar gasto
+                </button>
+                <div class="table-responsive">
+                    <table class="table table-striped table-custos mb-0">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Categoria</th>
+                                <th>Valor</th>
+                                <th style="width: 100px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gastos-cadastrados"></tbody>
+                    </table>
+                </div>
+                <p id="sem-gastos" class="text-muted mt-3 mb-0">Nenhum gasto cadastrado. Clique em "Adicionar gasto".</p>
+                <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold">Total Gastos com Vendas</span>
+                    <span class="fs-5 fw-bold text-primary" id="modal-gastos-total">R$ 0,00</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Concluir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal: Cadastro de Gasto Variável -->
 <div class="modal fade" id="modalGastoVariavel" tabindex="-1" aria-labelledby="modalGastoVariavelLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -2452,6 +2519,7 @@ function verificarDiferencaCaixa() {
 let chartGastos = null;
 let chartMercadorias = null;
 let chartResultado = null;
+let chartFixos = null;
 
 const COR_GASTOS   = '#c8a84b';
 const COR_CUSTO    = '#8B6914';
@@ -2493,7 +2561,25 @@ function criarOuAtualizarPizza(canvasId, chart, labels, dados, cores) {
                     }
                 }
             }
-        }
+        },
+        plugins: [{
+            id: 'pctLabels',
+            afterDatasetsDraw(chart) {
+                const { ctx, data } = chart;
+                chart.getDatasetMeta(0).data.forEach((arc, i) => {
+                    const val = data.datasets[0].data[i];
+                    if (!val || val < 2) return;
+                    const { x, y } = arc.tooltipPosition();
+                    ctx.save();
+                    ctx.font = 'bold 11px sans-serif';
+                    ctx.fillStyle = '#fff';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(val.toFixed(1) + '%', x, y);
+                    ctx.restore();
+                });
+            }
+        }]
     });
 }
 
@@ -2533,13 +2619,34 @@ function atualizarBarraCapacidade() {
     const comp = document.getElementById('cap-comparacao');
     if (!comp) return;
     if (clientes > 0 && cap > 0) {
-        const pct = Math.min(100, Math.round((clientes / cap) * 100));
+        const pct = Math.round((clientes / cap) * 100);
+        const pctBar = Math.min(100, pct);
         comp.style.display = 'block';
         document.getElementById('cap-pct-vendas').textContent = pct + '%';
-        document.getElementById('cap-bar-vendas').style.width = pct + '%';
+        document.getElementById('cap-bar-vendas').style.width = pctBar + '%';
     } else {
         comp.style.display = 'none';
     }
+}
+
+function atualizarGraficoFixos() {
+    const fat = formData.faturamento || 0;
+    const gv  = formData.gastos_vendas || 0;
+    const cm  = formData.custo_mercadorias || 0;
+    const cf  = formData.custo_fixo_total || parseFloat(document.getElementById('custo_fixo_total').value) || 0;
+    if (fat <= 0) return;
+
+    const gvPct = Math.min(100, Math.max(0, (gv / fat) * 100));
+    const cmPct = Math.min(100, Math.max(0, (cm / fat) * 100));
+    const cfPct = Math.min(100, Math.max(0, (cf / fat) * 100));
+    const mPct  = Math.max(0, 100 - gvPct - cmPct - cfPct);
+
+    chartFixos = criarOuAtualizarPizza(
+        'chart-fixos-pizza', chartFixos,
+        ['Custo das Vendas', 'Custo Mercadorias', 'Custos Fixos', 'Margem de Contribuição'],
+        [gvPct, cmPct, cfPct, mPct],
+        [COR_GASTOS, COR_CUSTO, COR_FIXO, COR_MARGEM]
+    );
 }
 
 function atualizarGraficoGastos() {
@@ -2557,11 +2664,7 @@ function atualizarGraficoGastos() {
         [COR_GASTOS, COR_RESTANTE]
     );
 
-    const leg = document.getElementById('chart-gastos-legenda');
-    if (leg) leg.style.display = gv > 0 ? 'block' : 'none';
-
-    const lbl = document.getElementById('gastos_vendas_pct_label');
-    if (lbl && gv > 0) lbl.textContent = `${gvPct.toFixed(1)}% do faturamento`;
+    // legenda removida (% já aparece no gráfico)
 }
 
 function atualizarGraficoMercadorias() {
@@ -2570,30 +2673,19 @@ function atualizarGraficoMercadorias() {
     const cm  = formData.custo_mercadorias || parseFloat(document.getElementById('custo_mercadorias').value) || 0;
     if (fat <= 0) return;
 
-    const gvPct = Math.max(0, (gv / fat) * 100);
-    const cmPct = Math.max(0, (cm / fat) * 100);
-    const mbPct = Math.max(0, 100 - gvPct - cmPct);
+    const gvPct  = Math.min(100, Math.max(0, (gv / fat) * 100));
+    const cmPct  = Math.min(100, Math.max(0, (cm / fat) * 100))
+    const cmPct  = Math.min(100, Math.max(0, (cm / fat) * 100));
+    const mbPct  = Math.max(0, 100 - gvPct - cmPct);
 
     chartMercadorias = criarOuAtualizarPizza(
         'chart-mercadorias-pizza', chartMercadorias,
-        ['Gastos com Vendas', 'Custo das Mercadorias', 'Margem Bruta'],
+        ['Gastos com Vendas', 'Custo Mercadorias', 'Margem de Contribuição'],
         [gvPct, cmPct, mbPct],
         [COR_GASTOS, COR_CUSTO, COR_RESTANTE]
     );
 
-    const leg = document.getElementById('chart-merc-legenda');
-    if (leg) leg.style.display = cm > 0 ? 'block' : 'none';
-
-    // Texto de margem de contribuição por cliente (Slide 5)
-    const mc  = (formData.margem_contribuicao_por_cliente > 0)
-        ? formData.margem_contribuicao_por_cliente
-        : (cm > 0 && formData.quant_clientes > 0 ? (fat - gv - cm) / formData.quant_clientes : 0);
-    const el  = document.getElementById('f4-margem-contrib');
-    const txt = document.getElementById('f4-contrib-texto');
-    if (el && txt && mc > 0) {
-        el.style.display = 'block';
-        txt.innerHTML = `Cada venda realizada gerou em média <strong>${formatCurrency(mc)}</strong> de margem de contribuição.`;
-    }
+    // legenda removida (% já aparece no gráfico)
 }
 
 function atualizarGraficoResultado() {
@@ -2601,23 +2693,21 @@ function atualizarGraficoResultado() {
     const gv  = formData.gastos_vendas || 0;
     const cm  = formData.custo_mercadorias || 0;
     const cf  = formData.custo_fixo_total || 0;
-    const res = formData.resultado || 0;
     if (fat <= 0) return;
 
-    const gvPct  = Math.max(0, (gv  / fat) * 100);
-    const cmPct  = Math.max(0, (cm  / fat) * 100);
-    const cfPct  = Math.max(0, (cf  / fat) * 100);
-    const resPct = Math.max(0, (res / fat) * 100);
+    const gvPct  = Math.min(100, Math.max(0, (gv / fat) * 100));
+    const cmPct  = Math.min(100, Math.max(0, (cm / fat) * 100));
+    const cfPct  = Math.min(100, Math.max(0, (cf / fat) * 100));
+    const mPct   = Math.max(0, 100 - gvPct - cmPct - cfPct);
 
     chartResultado = criarOuAtualizarPizza(
         'chart-resultado-pizza', chartResultado,
-        ['Custo das Vendas', 'Custo das Mercadorias', 'Custos Fixos', 'Margem'],
-        [gvPct, cmPct, cfPct, resPct],
+        ['Custo das Vendas', 'Custo Mercadorias', 'Custos Fixos', 'Margem'],
+        [gvPct, cmPct, cfPct, mPct],
         [COR_GASTOS, COR_CUSTO, COR_FIXO, COR_MARGEM]
     );
 
-    const leg = document.getElementById('chart-resultado-legenda');
-    if (leg) leg.style.display = 'block';
+    // legenda removida (% já aparece no gráfico)
 }
 </script>
 {% endblock %}

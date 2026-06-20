@@ -540,12 +540,57 @@
 	                                    <!-- Quarta linha: Dados do onboarding -->
 	                                    <div class="col-md-6 mb-3">
 	                                        <label for="ideal_profit_margin" class="form-label">Margem de lucro ideal (%)</label>
-	                                        <input type="number" class="form-control" id="ideal_profit_margin" name="ideal_profit_margin" min="0" max="100" step="0.01" value="{{ user.ideal_profit_margin if user.ideal_profit_margin is not none else '' }}">
+	                                        <div class="input-group">
+	                                            <input type="number" class="form-control" id="ideal_profit_margin" name="ideal_profit_margin" min="0" max="100" step="0.01" value="{{ user.ideal_profit_margin if user.ideal_profit_margin is not none else '' }}">
+	                                            <span class="input-group-text">%</span>
+	                                        </div>
 	                                    </div>
 	                                    <div class="col-md-6 mb-3">
-	                                        <label for="service_capacity" class="form-label">Capacidade de atendimento mensal</label>
-	                                        <input type="number" class="form-control" id="service_capacity" name="service_capacity" min="0" step="0.01" value="{{ user.service_capacity if user.service_capacity is not none else '' }}">
+	                                        <label for="service_capacity" class="form-label">Clientes/pedidos que atende por mês</label>
+	                                        <input type="number" class="form-control" id="service_capacity" name="service_capacity" min="0" step="1" value="{{ user.service_capacity if user.service_capacity is not none else '' }}">
 	                                    </div>
+	                                </div>
+
+	                                <!-- Linha: Estimativas de análise -->
+	                                <div class="row">
+	                                    <div class="col-12 mb-2">
+	                                        <p class="text-muted small mb-1"><strong>Estimativas para análise</strong></p>
+	                                    </div>
+	                                    {% set tipo = (user.activity_type or '') | lower %}
+	                                    {% set eh_comercio = ('comerc' in tipo) or ('atacado e varejo' in tipo) %}
+	                                    {% set eh_servicos = 'servi' in tipo %}
+	                                    {% set eh_industria = ('indústria' in tipo) or ('industria' in tipo) or ('alimenta' in tipo) %}
+	                                    {% if not eh_comercio %}
+	                                    <div class="col-md-6 mb-3">
+	                                        <label for="production_hours" class="form-label">Horas de produção (equipe) por mês</label>
+	                                        <div class="input-group">
+	                                            <input type="number" class="form-control" id="production_hours" name="production_hours" min="0" step="0.5" value="{{ user.production_hours if user.production_hours is not none else '' }}">
+	                                            <span class="input-group-text">hs.</span>
+	                                        </div>
+	                                    </div>
+	                                    {% endif %}
+	                                    <div class="col-md-6 mb-3">
+	                                        <label for="estimated_loss_percentage" class="form-label">Percentual estimado de perdas</label>
+	                                        <div class="input-group">
+	                                            <input type="number" class="form-control" id="estimated_loss_percentage" name="estimated_loss_percentage" min="0" max="100" step="0.1" value="{{ user.estimated_loss_percentage if user.estimated_loss_percentage is not none else '' }}">
+	                                            <span class="input-group-text">%</span>
+	                                        </div>
+	                                    </div>
+	                                    {% if eh_industria and not eh_comercio and not eh_servicos %}
+	                                    <div class="col-md-6 mb-3">
+	                                        <label class="form-label">Possui ficha técnica dos produtos?</label>
+	                                        <div class="d-flex gap-4 mt-1">
+	                                            <div class="form-check">
+	                                                <input class="form-check-input" type="radio" name="has_product_sheet" id="ficha_sim" value="Sim" {% if user.has_product_sheet == 'Sim' %}checked{% endif %}>
+	                                                <label class="form-check-label" for="ficha_sim">Sim</label>
+	                                            </div>
+	                                            <div class="form-check">
+	                                                <input class="form-check-input" type="radio" name="has_product_sheet" id="ficha_nao" value="Não" {% if user.has_product_sheet == 'Não' %}checked{% endif %}>
+	                                                <label class="form-check-label" for="ficha_nao">Não</label>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                    {% endif %}
 	                                </div>
 
 	                                <div class="row">
@@ -553,28 +598,28 @@
 	                                    <div class="col-md-6 mb-3">
 	                                        <label for="activation_key" class="form-label">Chave de Ativação</label>
 	                                        <div class="input-group">
-                                            <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" value="{{ user.activation_key if user.activation_key else '' }}">
-                                            <button type="button" class="btn btn-secondary" id="activateBtn">Ativar Licença</button>
-                                        </div>
-                                    </div>
-                                </div>
+	                                            <input type="text" class="form-control" id="activation_key" name="activation_key" placeholder="Digite sua chave de ativação" value="{{ user.activation_key if user.activation_key else '' }}">
+	                                            <button type="button" class="btn btn-secondary" id="activateBtn">Ativar Licença</button>
+	                                        </div>
+	                                    </div>
+	                                </div>
 
-                                <!-- Botões -->
-                                <div class="row">
-                                    <div class="col-md-12 text-end">
-                                        <button type="submit" class="btn btn-secondary">
-                                            <i class="bi bi-save"></i> Salvar Alterações
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+	                                <!-- Botões -->
+	                                <div class="row">
+	                                    <div class="col-md-12 text-end">
+	                                        <button type="submit" class="btn btn-secondary">
+	                                            <i class="bi bi-save"></i> Salvar Alterações
+	                                        </button>
+	                                    </div>
+	                                </div>
+	                            </form>
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
 {% endblock %}
 
 {% block extra_js %}
