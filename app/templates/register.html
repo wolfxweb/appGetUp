@@ -123,6 +123,11 @@ function showStep(step) {
             } else {
                 sidebarImg.src = "{{ url_for('static', path='images/Rosto João sem fundo.png') }}";
             }
+            sidebarImg.classList.toggle('sidebar-joao-img-large', step === 0);
+        }
+        const sidebarRow = document.getElementById('sidebar-row');
+        if (sidebarRow) {
+            sidebarRow.classList.toggle('sidebar-row-tight', step === 0);
         }
         const progressEl = document.getElementById('progress-indicator');
         if (progressEl) {
@@ -496,9 +501,9 @@ function showStep(step) {
                         </div>
                     </div>
 
-                    <div class="row g-4 align-items-start">
+                    <div class="row g-4 align-items-start sidebar-row-tight" id="sidebar-row">
                         <div class="col-auto">
-                            <img id="sidebar-joao-img" src="{{ url_for('static', path='images/Rosto João sem fundo.png') }}" alt="João" class="img-fluid rounded" style="max-width: 150px;">
+                            <img id="sidebar-joao-img" src="{{ url_for('static', path='images/Rosto João sem fundo.png') }}" alt="João" class="img-fluid rounded sidebar-joao-img-large" style="max-width: 150px;">
                         </div>
                         <div class="col">
                             <div id="step-error" class="alert alert-danger d-none" role="alert"></div>
@@ -645,6 +650,10 @@ function showStep(step) {
 <style>
     body { background-color: #F5F5F5 !important; }
     .wizard-step { animation: fadeIn 0.3s ease; }
+    #sidebar-joao-img.sidebar-joao-img-large { max-width: 260px !important; }
+    #sidebar-row.sidebar-row-tight { --bs-gutter-x: 0.5rem; }
+    #sidebar-row.sidebar-row-tight > .col-auto { padding-right: 0.25rem !important; }
+    #sidebar-row.sidebar-row-tight > .col { padding-left: 0.25rem !important; }
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     #register-page .form-control,
     #register-page .form-select {
@@ -652,11 +661,6 @@ function showStep(step) {
         width: 50%;
     }
     .register-subtle { color: #8a8a8a !important; font-size: 0.95rem; }
-    .register-start-step {
-        max-width: 70%;
-        margin-left: auto;
-        margin-right: auto;
-    }
     .register-intro { width: 100%; }
     .register-intro-title { font-size: 1.25rem; line-height: 1.5; }
     .register-intro-subtitle { color: #8a8a8a !important; }
