@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, Request, status, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 from typing import Optional
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -72,24 +72,23 @@ async def dashboard_page(
         })
         return templates.TemplateResponse("dashboard.html", template_context)
 
-    # Se o usuário não tiver uma chave de ativação, mostrar apenas a mensagem de ativação
-    if not current_user.activation_key:
+    # Admin e parceiro não precisam de chave de ativação no dashboard
+    if not current_user.activation_key and current_user.access_level not in ("Administrador", "Parceiro"):
         return templates.TemplateResponse("dashboard.html", template_context)
 
-    if current_user.access_level in ["Administrador", "Administrador"]:
-        total_users = await db.execute(select(User).count())
-        active_licenses = await db.execute(select(License).filter(License.status == "Utilizada").count())
-        available_licenses = await db.execute(select(License).filter(License.status == "Disponível").count())
-
-        # Logs de depuração
-        logger.warning(f"Dashboard Statistics - Total Users: {total_users.scalar()}")
-        logger.warning(f"Dashboard Statistics - Active Licenses: {active_licenses.scalar()}")
-        logger.warning(f"Dashboard Statistics - Available Licenses: {available_licenses.scalar()}")
+    if current_user.access_level == "Administrador":
+        total_users = await db.execute(select(func.count()).select_from(User))
+        active_licenses = await db.execute(
+            select(func.count()).select_from(License).where(License.status == "Utilizada")
+        )
+        available_licenses = await db.execute(
+            select(func.count()).select_from(License).where(License.status == "Disponível")
+        )
 
         template_context.update({
             "total_users": total_users.scalar(),
             "active_licenses": active_licenses.scalar(),
-            "available_licenses": available_licenses.scalar()
+            "available_licenses": available_licenses.scalar(),
         })
 
     return templates.TemplateResponse(

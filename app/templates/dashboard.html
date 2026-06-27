@@ -45,6 +45,23 @@
                                     </div>
                                 </div>
                             </div>
+                            {% elif user.access_level == "Administrador" %}
+                            <div class="row justify-content-center">
+                                <div class="col-12 col-md-2-4 mb-3">
+                                    <div class="d-grid gap-2">
+                                        <a href="/dashboard" class="btn btn-secondary">Índice</a>
+                                        <a href="/profile" class="btn btn-secondary">
+                                            <i class="bi bi-person-circle"></i> Meus Dados
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-2-4 mb-3">
+                                    <div class="d-grid gap-2">
+                                        <a href="/admin/users" class="btn btn-secondary">Usuários</a>
+                                        <a href="/admin/licenses" class="btn btn-secondary">Licenças</a>
+                                    </div>
+                                </div>
+                            </div>
                             {% else %}
                             <div class="row">
                                 <!-- Índice -->
@@ -110,15 +127,6 @@
                                         <button class="btn btn-secondary">Histórico</button>
                                     </div>
                                 </div>
-
-                                {% if user.access_level == "Administrador" %}
-                                <div class="col-12 col-md-2-4 mb-3">
-                                    <div class="d-grid gap-2">
-                                        <a href="/admin/users" class="btn btn-secondary">Administração</a>
-                                        <a href="/admin/licenses" class="btn btn-secondary">Licenças</a>
-                                    </div>
-                                </div>
-                                {% endif %}
                             </div>
                             {% endif %}
                         </div>
