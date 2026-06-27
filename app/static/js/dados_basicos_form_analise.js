@@ -99,6 +99,25 @@
         return base;
     }
 
+    function getPartnerLicenseId() {
+        const pathMatch = window.location.pathname.match(/\/parceiro\/licencas\/(\d+)/);
+        if (pathMatch) {
+            return parseInt(pathMatch[1], 10);
+        }
+        if (window.PARTNER_LICENSE_ID != null && window.PARTNER_LICENSE_ID !== 'null') {
+            return parseInt(window.PARTNER_LICENSE_ID, 10);
+        }
+        const form = document.getElementById('basicDataForm');
+        if (form && form.dataset.partnerLicenseId) {
+            return parseInt(form.dataset.partnerLicenseId, 10);
+        }
+        return null;
+    }
+
+    function isPartnerFormContext() {
+        return window.location.pathname.startsWith('/parceiro/licencas/');
+    }
+
     async function verificarDuplicataAnalise() {
         if (window.EDIT_MODE_ANALISE) return;
         const aviso = document.getElementById('aviso-duplicata');
@@ -110,13 +129,19 @@
             return;
         }
         try {
-            const response = await fetch(`/analise-mensal/api/existe?mes=${mes}&ano=${ano}`, {
+            let url = `/analise-mensal/api/existe?mes=${mes}&ano=${ano}`;
+            const partnerLicenseId = getPartnerLicenseId();
+            if (partnerLicenseId) {
+                url = `/parceiro/licencas/${partnerLicenseId}/api/existe?mes=${mes}&ano=${ano}`;
+            }
+            const response = await fetch(url, {
                 credentials: 'include',
             });
             if (!response.ok) return;
             const data = await response.json();
             if (data.existe) {
-                aviso.innerHTML = `Já existe um registro para este mês/ano. <a href="/analise-mensal/cadastro/${data.analise_id}">Editar registro existente</a>.`;
+                const editHref = data.edit_url || `/analise-mensal/cadastro/${data.analise_id}`;
+                aviso.innerHTML = `Já existe um registro para este mês/ano. <a href="${editHref}">Editar registro existente</a>.`;
                 aviso.style.display = 'block';
             } else {
                 aviso.style.display = 'none';
@@ -141,7 +166,20 @@
 
         try {
             const payload = montarPayloadAnalise();
-            const response = await fetch('/analise-mensal/api/salvar', {
+            const partnerLicenseId = getPartnerLicenseId();
+
+            if (isPartnerFormContext() && !partnerLicenseId) {
+                alert('Não foi possível identificar a licença do cliente. Volte pelo dashboard e abra Dados Básicos novamente.');
+                return;
+            }
+
+            let saveUrl = '/analise-mensal/api/salvar';
+            let redirectUrl = '/analise-mensal/lista?saved=1';
+            if (partnerLicenseId) {
+                saveUrl = `/parceiro/licencas/${partnerLicenseId}/api/salvar`;
+                redirectUrl = `/parceiro/licencas/${partnerLicenseId}/dados-basicos/lista?success_message=Dados+básicos+salvos+com+sucesso`;
+            }
+            const response = await fetch(saveUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 credentials: 'include',
@@ -155,7 +193,7 @@
 
             const data = await response.json();
             if (data.success) {
-                window.location.href = '/analise-mensal/lista?saved=1';
+                window.location.href = redirectUrl;
             } else {
                 alert(data.message || 'Erro ao salvar dados básicos.');
             }

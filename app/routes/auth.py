@@ -16,6 +16,7 @@ from app.utils.email import send_password_reset_email
 from app.models.basic_data import BasicData
 from app.models.basic_data_log import BasicDataLog
 from app.utils.converters import safe_float
+from app.utils.license_activation import activate_license_for_user, LicenseActivationError
 import bcrypt
 
 router = APIRouter()
@@ -118,6 +119,25 @@ async def register(
                 status_code=400,
                 content={"detail": "Você deve aceitar os termos para continuar"}
             )
+
+        activation_key_normalized = (activation_key or "").strip().upper()
+        if activation_key_normalized:
+            from app.models.license import License
+            from sqlalchemy import select as sa_select
+            lic_check = await db.execute(
+                sa_select(License).filter(
+                    License.activation_key == activation_key_normalized,
+                    License.status == "Disponível",
+                )
+            )
+            if not lic_check.scalar_one_or_none():
+                return JSONResponse(
+                    status_code=400,
+                    content={
+                        "detail": "Chave de ativação inválida ou já utilizada",
+                        "error": "invalid_activation_key",
+                    },
+                )
         
         # Criar novo usuário
         hashed_password = get_password_hash(password)
@@ -127,7 +147,7 @@ async def register(
             whatsapp=whatsapp,
             activity_type=activity_type,
             password=hashed_password,
-            activation_key=activation_key,
+            activation_key=activation_key_normalized or None,
             registration_date=datetime.now(),
             terms_accepted=terms_accepted,
             # Novos campos
@@ -149,6 +169,20 @@ async def register(
         )
         
         db.add(new_user)
+        await db.flush()
+
+        if activation_key_normalized:
+            try:
+                await activate_license_for_user(
+                    db, activation_key_normalized, new_user, commit=False
+                )
+            except LicenseActivationError as e:
+                await db.rollback()
+                return JSONResponse(
+                    status_code=400,
+                    content={"detail": e.message, "error": "invalid_activation_key"},
+                )
+
         await db.commit()
         await db.refresh(new_user)
         
@@ -424,15 +458,3 @@ async def edit_basic_data_page(
         "user": current_user
     })
 
-@router.get("/dashboard", response_class=HTMLResponse)
-async def dashboard_page(request: Request, current_user = Depends(get_current_user)):
-    if not current_user:
-        return RedirectResponse(url="/login")
-    if getattr(current_user, "onboarding_completed", None) is False:
-        return RedirectResponse(url="/onboarding")
-    now = datetime.now(ZoneInfo("America/Sao_Paulo"))
-    return templates.TemplateResponse("dashboard.html", {
-        "request": request,
-        "user": current_user,
-        "now": now
-    })

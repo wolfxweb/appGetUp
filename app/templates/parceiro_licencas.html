@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Minhas Licenças - GetUp Gestão{% endblock %}
+
+{% block extra_css %}
+<style>
+    body { background-color: #F5F5F5 !important; }
+    .container-fluid, .container { background-color: #F5F5F5 !important; }
+    .card, .card-body { background-color: #F0F0F0 !important; }
+    .card-header.bg-secondary { background-color: #6c757d !important; color: white !important; }
+    .btn-secondary { background-color: #6c757d !important; border-color: #6c757d !important; color: white !important; }
+    .form-control, .form-select { background-color: #F5F5F5 !important; }
+    .table-responsive { max-height: 600px; overflow-y: auto; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-5" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div class="row mb-4">
+        <div class="col-md-12 d-flex justify-content-between align-items-center">
+            <img src="/static/images/Logo.png" alt="Logo" height="40">
+            <span class="text-muted">Parceiro: {{ user.name }}</span>
+        </div>
+    </div>
+
+    <div class="row mb-4 justify-content-center">
+        <div class="col-6 col-md-2 mb-2 mb-md-0">
+            <a href="/parceiro/licencas" class="btn btn-secondary w-100">Minhas Licenças</a>
+        </div>
+        <div class="col-6 col-md-2 mb-2 mb-md-0">
+            <a href="/logout" class="btn btn-secondary w-100">Sair</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm" style="background-color: #F0F0F0;">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Minhas Licenças</h5>
+                </div>
+                <div class="card-body">
+                    {% include 'components/parceiro_licencas_table.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

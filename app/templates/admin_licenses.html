@@ -2,18 +2,59 @@
 
 {% block title %}Gerenciar Licenças{% endblock %}
 
-{% block content %}
-{% with active_page='admin_licenses' %}
-{% include 'components/navbar.html' %}
-{% endwith %}
-<!-- Espaçador para a navbar -->
-<div style="height: 70px;"></div>
+{% block extra_css %}
+<style>
+    body {
+        background-color: #F5F5F5 !important;
+    }
+    .container-fluid, .container {
+        background-color: #F5F5F5 !important;
+    }
+    .card, .card-body {
+        background-color: #F0F0F0 !important;
+    }
+    .card-header.bg-secondary {
+        background-color: #6c757d !important;
+        color: white !important;
+    }
+    .btn-primary i, .btn-danger i, .btn-secondary i {
+        color: white !important;
+    }
+    .btn-secondary {
+        background-color: #6c757d !important;
+        border-color: #6c757d !important;
+        color: white !important;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268 !important;
+        border-color: #545b62 !important;
+        color: white !important;
+    }
+    .form-control, .form-select {
+        background-color: #F5F5F5 !important;
+    }
+    .table-responsive {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+</style>
+{% endblock %}
 
-<div class="container-fluid p-5">
+{% block content %}
+<div class="container-fluid p-5" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div class="row mb-4">
+        <div class="col-md-12 d-flex justify-content-between align-items-center">
+            <img src="/static/images/Logo.png" alt="Logo" height="40">
+            <span class="text-muted">Bem-vindo, {{ user.name }}</span>
+        </div>
+    </div>
+
+    {% include 'components/admin_page_nav.html' %}
+
     <div class="row mb-4">
         <div class="col-md-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <div class="card shadow-sm" style="background-color: #F0F0F0;">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
                     <h5 class="card-title mb-0">Gerenciamento de Licenças</h5>
                 </div>
                 <div class="card-body">
@@ -34,12 +75,21 @@
                     <!-- Formulário de Geração de Licenças -->
                     <form method="post" action="/admin/licenses/generate" class="mb-4">
                         <div class="row g-3 align-items-end">
-                            <div class="col-md-6">
-                                <label for="quantity" class="form-label">Quantidade de Licenças</label>
+                            <div class="col-md-4">
+                                <label for="partner_id" class="form-label">Parceiro</label>
+                                <select class="form-select" id="partner_id" name="partner_id" required>
+                                    <option value="">Selecione o parceiro...</option>
+                                    {% for partner in partners %}
+                                    <option value="{{ partner.id }}">{{ partner.name }} ({{ partner.email }})</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="quantity" class="form-label">Quantidade</label>
                                 <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="100" required>
                             </div>
-                            <div class="col-md-4">
-                                <button type="submit" class="btn btn-primary w-100">
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-secondary w-100">
                                     <i class="bi bi-plus-circle"></i> Gerar Licenças
                                 </button>
                             </div>
@@ -71,7 +121,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary w-100">
+                                <button type="submit" class="btn btn-secondary w-100">
                                     <i class="bi bi-search"></i> Filtrar
                                 </button>
                             </div>
@@ -84,9 +134,10 @@
                             <thead>
                                 <tr>
                                     <th>Chave de Ativação</th>
+                                    <th>Parceiro</th>
                                     <th>Status</th>
+                                    <th>Cliente</th>
                                     <th>Data de Ativação</th>
-                                    <th>Email de Ativação</th>
                                     <th>Data de Criação</th>
                                 </tr>
                             </thead>
@@ -95,14 +146,29 @@
                                 <tr>
                                     <td><code>{{ license.activation_key }}</code></td>
                                     <td>
+                                        {% if license.partner_id and partners_by_id.get(license.partner_id) %}
+                                        {{ partners_by_id[license.partner_id].name }}
+                                        {% else %}
+                                        —
+                                        {% endif %}
+                                    </td>
+                                    <td>
                                         {% if license.status == "Disponível" %}
                                         <span class="badge bg-success">Disponível</span>
                                         {% else %}
                                         <span class="badge bg-secondary">Utilizada</span>
                                         {% endif %}
                                     </td>
-                                    <td>{{ license.activation_date.strftime('%d/%m/%Y %H:%M') if license.activation_date else '-' }}</td>
-                                    <td>{{ license.activation_email or '-' }}</td>
+                                    <td>
+                                        {% if license.client_user_id and clients_by_id.get(license.client_user_id) %}
+                                        {{ clients_by_id[license.client_user_id].email }}
+                                        {% elif license.activation_email %}
+                                        {{ license.activation_email }}
+                                        {% else %}
+                                        —
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ license.activation_date.strftime('%d/%m/%Y %H:%M') if license.activation_date else '—' }}</td>
                                     <td>{{ license.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
                                 </tr>
                                 {% endfor %}
@@ -115,14 +181,3 @@
     </div>
 </div>
 {% endblock %}
-
-{% block extra_css %}
-<style>
-    /* Estilos adicionais para garantir visibilidade da navbar */
-    .navbar {
-        z-index: 1000;
-        display: flex !important;
-        visibility: visible !important;
-    }
-</style>
-{% endblock %} 

@@ -2,21 +2,72 @@
 
 {% block title %}Gerenciar Usuários{% endblock %}
 
+{% block extra_css %}
+<style>
+    body {
+        background-color: #F5F5F5 !important;
+    }
+    .container-fluid, .container {
+        background-color: #F5F5F5 !important;
+    }
+    .card, .card-body {
+        background-color: #F0F0F0 !important;
+    }
+    .card-header.bg-secondary {
+        background-color: #6c757d !important;
+        color: white !important;
+    }
+    .btn-primary i, .btn-danger i, .btn-secondary i {
+        color: white !important;
+    }
+    .btn-secondary {
+        background-color: #6c757d !important;
+        border-color: #6c757d !important;
+        color: white !important;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268 !important;
+        border-color: #545b62 !important;
+        color: white !important;
+    }
+    .form-control, .form-select {
+        background-color: #F5F5F5 !important;
+    }
+    .table-responsive {
+        max-height: 600px;
+        overflow-y: auto;
+    }
+    .pagination .page-item.active .page-link {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+    .modal-content {
+        background-color: #F0F0F0 !important;
+    }
+    .modal-header.bg-secondary {
+        background-color: #6c757d !important;
+        color: white !important;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-{% with active_page='admin_users' %}
-{% include 'components/navbar.html' %}
-{% endwith %}
+<div class="container-fluid p-5" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div class="row mb-4">
+        <div class="col-md-12 d-flex justify-content-between align-items-center">
+            <img src="/static/images/Logo.png" alt="Logo" height="40">
+            <span class="text-muted">Bem-vindo, {{ user.name }}</span>
+        </div>
+    </div>
 
-<!-- Espaçador para a navbar -->
-<div style="height: 70px;"></div>
+    {% include 'components/admin_page_nav.html' %}
 
-<div class="container-fluid p-5">
     <div class="row mb-4">
         <div class="col-md-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <div class="card shadow-sm" style="background-color: #F0F0F0;">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
                     <h5 class="mb-0">Gerenciamento de Usuários</h5>
-                    <button type="button" class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#addUserModal">
                         <i class="bi bi-plus-circle"></i> Adicionar Usuário
                     </button>
                 </div>
@@ -43,7 +94,7 @@
                                 </select>
                             </div>
                             <div class="col-md-2">
-                                <button type="submit" class="btn btn-primary w-100">
+                                <button type="submit" class="btn btn-secondary w-100">
                                     <i class="bi bi-search"></i> Buscar
                                 </button>
                             </div>
@@ -101,7 +152,7 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-outline-primary edit-user-btn" 
+                                        <button class="btn btn-sm btn-outline-secondary edit-user-btn"
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#editUserModal"
                                                 data-user-id="{{ user.id }}"
@@ -163,10 +214,10 @@
 <!-- Modal para Adicionar Usuário -->
 <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content" style="background-color: #F0F0F0;">
+            <div class="modal-header bg-secondary text-white">
                 <h5 class="modal-title" id="addUserModalLabel">Adicionar Novo Usuário</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
                 <form action="/admin/users/add" method="post" id="addUserForm">
@@ -201,6 +252,7 @@
                         <label for="access_level" class="form-label">Nível de Acesso</label>
                         <select class="form-select" id="access_level" name="access_level" required>
                             <option value="Cliente">Cliente</option>
+                            <option value="Parceiro">Parceiro</option>
                             <option value="Administrador">Administrador</option>
                         </select>
                     </div>
@@ -208,7 +260,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" form="addUserForm" class="btn btn-primary">Adicionar</button>
+                <button type="submit" form="addUserForm" class="btn btn-secondary">Adicionar</button>
             </div>
         </div>
     </div>
@@ -217,10 +269,10 @@
 <!-- Modal para Editar Usuário -->
 <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content" style="background-color: #F0F0F0;">
+            <div class="modal-header bg-secondary text-white">
                 <h5 class="modal-title" id="editUserModalLabel">Editar Usuário</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
                 <form action="/admin/users/edit" method="post" id="editUserForm">
@@ -256,6 +308,7 @@
                         <label for="edit_access_level" class="form-label">Nível de Acesso</label>
                         <select class="form-select" id="edit_access_level" name="access_level" required>
                             <option value="Cliente">Cliente</option>
+                            <option value="Parceiro">Parceiro</option>
                             <option value="Administrador">Administrador</option>
                         </select>
                     </div>
@@ -263,7 +316,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" form="editUserForm" class="btn btn-primary">Salvar Alterações</button>
+                <button type="submit" form="editUserForm" class="btn btn-secondary">Salvar Alterações</button>
             </div>
         </div>
     </div>
@@ -272,10 +325,10 @@
 <!-- Modal para Excluir Usuário -->
 <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+        <div class="modal-content" style="background-color: #F0F0F0;">
+            <div class="modal-header bg-secondary text-white">
                 <h5 class="modal-title" id="deleteUserModalLabel">Confirmar Exclusão</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
                 <p>Tem certeza que deseja excluir o usuário <strong id="delete_user_email"></strong>?</p>
@@ -291,17 +344,6 @@
         </div>
     </div>
 </div>
-{% endblock %}
-
-{% block extra_css %}
-<style>
-    /* Estilos adicionais para garantir visibilidade da navbar */
-    .navbar {
-        z-index: 1000;
-        display: flex !important;
-        visibility: visible !important;
-    }
-</style>
 {% endblock %}
 
 {% block extra_js %}

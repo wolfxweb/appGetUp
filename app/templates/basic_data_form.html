@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% set persist_target = persist_target|default('basic_data') %}
 {% set is_analise = persist_target == 'analise_mensal' %}
+{% set form_user = client_user if partner_mode|default(false) else user %}
 {% set cp = cadastro_prefill|default({}) %}
 {% set cp_sources = cp.get('sources', {}) %}
 {% set source_labels = {
@@ -201,6 +202,21 @@
                         <div class="col-md-9">
                             {% if is_analise %}
                             <div class="row mb-4 justify-content-center">
+                                {% if partner_mode|default(false) %}
+                                <div class="col-12 mb-2">
+                                    <div class="alert alert-secondary py-2 mb-0">
+                                        Dados básicos do cliente: <strong>{{ client_user.name }}</strong> ({{ client_user.email }})
+                                    </div>
+                                </div>
+                                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                                    <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
+                                </div>
+                                {% if partner_license_id is defined %}
+                                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                                    <a href="/parceiro/licencas/{{ partner_license_id }}/dados-basicos/lista" class="btn btn-secondary w-100">Voltar à Lista</a>
+                                </div>
+                                {% endif %}
+                                {% else %}
                                 <div class="col-6 col-md-2 mb-2 mb-md-0">
                                     <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
                                 </div>
@@ -210,6 +226,8 @@
                                 <div class="col-6 col-md-2 mb-2 mb-md-0">
                                     <a href="/analise-mensal/lista" class="btn btn-secondary w-100">Histórico</a>
                                 </div>
+                                {% include 'components/admin_nav_button.html' %}
+                                {% endif %}
                             </div>
                             {% else %}
                             <div class="row mb-4">
@@ -240,8 +258,8 @@
                                     {% if is_analise and not edit_mode %}
                                     <div id="aviso-duplicata" class="alert alert-warning" style="display: none;"></div>
                                     {% endif %}
-                                    {% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
-                                    <form method="post" action="{% if is_analise %}#{% elif edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
+                                    {% if form_user.activity_type != 'Comércio atacadista' and form_user.activity_type != 'Comércio varejista' %}
+                                    <form method="post" action="{% if is_analise %}#{% elif edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm"{% if partner_mode|default(false) %} data-partner-license-id="{{ partner_license_id }}"{% endif %}>
                                         {% if show_confirm %}
                                         <input type="hidden" name="confirm_update" value="true">
                                         {% endif %}
@@ -484,7 +502,7 @@
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12 text-center">
-                                                <a href="{% if is_analise %}/analise-mensal/lista{% else %}/basic-data/{% endif %}" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
+                                                <a href="{% if partner_mode|default(false) %}/parceiro/licencas/{{ partner_license_id }}/dados-basicos/lista{% elif is_analise %}/analise-mensal/lista{% else %}/basic-data/{% endif %}" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
                                                     Histórico
                                                 </a>
                                             </div>
@@ -492,7 +510,7 @@
                                     </form>
                                     {% else %}
                                     <!-- Formulario dados basicos  comercio e industria-->
-                                    <form method="post" action="{% if is_analise %}#{% elif edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm">
+                                    <form method="post" action="{% if is_analise %}#{% elif edit_mode %}/basic-data/update/{{ basic_data.id }}{% else %}/basic-data/save{% endif %}" id="basicDataForm"{% if partner_mode|default(false) %} data-partner-license-id="{{ partner_license_id }}"{% endif %}>
                                         {% if show_confirm %}
                                         <input type="hidden" name="confirm_update" value="true">
                                         {% endif %}
@@ -696,7 +714,7 @@
                                         </div>
                                         <div class="row mt-2">
                                             <div class="col-12 text-center">
-                                                <a href="{% if is_analise %}/analise-mensal/lista{% else %}/basic-data/{% endif %}" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
+                                                <a href="{% if partner_mode|default(false) %}/parceiro/licencas/{{ partner_license_id }}/dados-basicos/lista{% elif is_analise %}/analise-mensal/lista{% else %}/basic-data/{% endif %}" class="btn btn-secondary" style="background-color: #6c757d; border-color: #6c757d;">
                                                     Histórico
                                                 </a>
                                             </div>
@@ -946,7 +964,7 @@
     </div>
 </div>
 
-{% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
+{% if form_user.activity_type != 'Comércio atacadista' and form_user.activity_type != 'Comércio varejista' %}
 <div class="modal fade" id="fixedCostsHelpModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -990,7 +1008,7 @@
 </div>
 {% endif %}
 
-{% if user.activity_type != 'Comércio atacadista' and user.activity_type != 'Comércio varejista' %}
+{% if form_user.activity_type != 'Comércio atacadista' and form_user.activity_type != 'Comércio varejista' %}
 <div class="modal fade" id="proLaboreHelpModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -1049,11 +1067,12 @@
 
 {% if is_analise %}
 <script src="{{ url_for('static', path='js/analise_mensal_calculos.js') }}"></script>
-<script src="{{ url_for('static', path='js/dados_basicos_form_analise.js') }}"></script>
+<script src="{{ url_for('static', path='js/dados_basicos_form_analise.js') }}?v=2"></script>
 {% endif %}
 <script>
     const PERSIST_TARGET = '{{ persist_target }}';
     window.EDIT_MODE_ANALISE = {{ 'true' if edit_mode and is_analise else 'false' }};
+    window.PARTNER_LICENSE_ID = {{ partner_license_id if partner_mode|default(false) else 'null' }};
 
     // Função para formatar valores monetários
     function formatarMoeda(valor) {

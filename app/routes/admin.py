@@ -12,7 +12,7 @@ import string
 from app.database.db import get_db
 from app.models.user import User
 from app.models.license import License
-from app.routes.dashboard import get_current_user
+from app.routes.auth import get_current_user
 from app.utils.auth import get_password_hash
 
 router = APIRouter(prefix="/admin")
@@ -99,7 +99,7 @@ async def add_user(
     whatsapp: str = Form(...),
     activity_type: str = Form(...),
     password: str = Form(...),
-    status: str = Form(...),
+    user_status: str = Form(..., alias="status"),
     access_level: str = Form(...),
     current_user = Depends(admin_required),
     db: AsyncSession = Depends(get_db)
@@ -118,11 +118,12 @@ async def add_user(
     # Criar novo usuário
     hashed_password = get_password_hash(password)
     new_user = User(
+        name=email.split("@")[0],
         email=email,
         whatsapp=whatsapp,
         activity_type=activity_type,
         password=hashed_password,
-        status=status,
+        status=user_status,
         access_level=access_level,
         registration_date=datetime.now(),
         terms_accepted=True  # Admins podem criar contas sem aceitar os termos
@@ -154,7 +155,7 @@ async def edit_user(
     whatsapp: str = Form(...),
     activity_type: str = Form(...),
     password: str = Form(None),
-    status: str = Form(...),
+    user_status: str = Form(..., alias="status"),
     access_level: str = Form(...),
     current_user = Depends(admin_required),
     db: AsyncSession = Depends(get_db)
@@ -186,7 +187,7 @@ async def edit_user(
     user_to_edit.email = email
     user_to_edit.whatsapp = whatsapp
     user_to_edit.activity_type = activity_type
-    user_to_edit.status = status
+    user_to_edit.status = user_status
     user_to_edit.access_level = access_level
     
     # Atualizar senha apenas se fornecida
@@ -286,12 +287,24 @@ async def list_licenses(
     result = await db.execute(query)
     licenses = result.scalars().all()
 
+    partners_result = await db.execute(
+        select(User).filter(User.access_level == "Parceiro").order_by(User.name)
+    )
+    partners = partners_result.scalars().all()
+    partners_by_id = {p.id: p for p in partners}
+
+    clients_result = await db.execute(select(User))
+    clients_by_id = {u.id: u for u in clients_result.scalars().all()}
+
     return templates.TemplateResponse(
         "admin_licenses.html",
         {
             "request": request,
             "user": current_user,
             "licenses": licenses,
+            "partners": partners,
+            "partners_by_id": partners_by_id,
+            "clients_by_id": clients_by_id,
             "search_key": search_key,
             "status_filter": status_filter,
             "date_filter": date_filter,
@@ -305,20 +318,30 @@ async def list_licenses(
 async def generate_licenses(
     request: Request,
     quantity: int = Form(...),
+    partner_id: int = Form(...),
     current_user = Depends(admin_required),
     db: AsyncSession = Depends(get_db)
 ):
     try:
-        generated_keys = []
+        partner_result = await db.execute(
+            select(User).filter(User.id == partner_id, User.access_level == "Parceiro")
+        )
+        partner = partner_result.scalar_one_or_none()
+        if not partner:
+            return RedirectResponse(
+                url="/admin/licenses?error_message=Parceiro inválido",
+                status_code=status.HTTP_303_SEE_OTHER,
+            )
+
         for _ in range(quantity):
             key = await generate_activation_key(db)
             license = License(
                 activation_key=key,
                 status="Disponível",
-                created_at=datetime.now()
+                created_at=datetime.now(),
+                partner_id=partner_id,
             )
             db.add(license)
-            generated_keys.append(key)
         
         await db.commit()
         return RedirectResponse(

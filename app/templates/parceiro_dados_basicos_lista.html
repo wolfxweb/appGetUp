@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+
+{% block title %}Histórico de Dados Básicos - GetUp Gestão{% endblock %}
+
+{% block extra_css %}
+<style>
+    body { background-color: #F5F5F5 !important; }
+    .container-fluid, .container { background-color: #F5F5F5 !important; }
+    .card, .card-body { background-color: #F0F0F0 !important; }
+    .card-header.bg-secondary { background-color: #6c757d !important; color: white !important; }
+    .btn-secondary { background-color: #6c757d !important; border-color: #6c757d !important; color: white !important; }
+    .table-responsive { max-height: 600px; overflow-y: auto; }
+    .metric-summary {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #dee2e6;
+    }
+    .metric-summary .value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: rgb(1, 57, 44);
+    }
+    .metric-summary .label {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-5" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div class="row mb-4">
+        <div class="col-md-12 d-flex justify-content-between align-items-center">
+            <img src="/static/images/Logo.png" alt="Logo" height="40">
+            <span class="text-muted">Parceiro: {{ user.name }}</span>
+        </div>
+    </div>
+
+    <div class="row mb-4 justify-content-center">
+        <div class="col-6 col-md-2 mb-2 mb-md-0">
+            <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
+        </div>
+        <div class="col-6 col-md-2 mb-2 mb-md-0">
+            <a href="/parceiro/licencas/{{ license.id }}/dados-basicos" class="btn btn-secondary w-100">Novo Registro</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow-sm" style="background-color: #F0F0F0;">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-1">Histórico de Dados Básicos</h5>
+                    <small>Cliente: {{ client_user.name }} ({{ client_user.email }}) · Licença <code>{{ license.activation_key }}</code></small>
+                </div>
+                <div class="card-body">
+                    {% if success_message %}
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ success_message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+                    </div>
+                    {% endif %}
+
+                    {% if available_years %}
+                    <form method="get" class="row mb-4 align-items-end">
+                        <div class="col-md-4">
+                            <label for="ano" class="form-label">Selecione o Ano:</label>
+                            <select class="form-select" id="ano" name="ano" onchange="this.form.submit()">
+                                {% for y in available_years %}
+                                <option value="{{ y }}" {% if selected_year == y %}selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </form>
+
+                    {% if analises %}
+                    <div class="metric-summary">
+                        <div class="row text-center">
+                            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                                <div class="value">{{ total_analises }}</div>
+                                <div class="label">Total de Registros</div>
+                            </div>
+                            <div class="col-6 col-md-3 mb-3 mb-md-0">
+                                <div class="value">R$ {{ ('%.2f'|format(total_faturamento))|replace('.', ',') }}</div>
+                                <div class="label">Faturamento Total</div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="value">R$ {{ ('%.2f'|format(ticket_medio))|replace('.', ',') }}</div>
+                                <div class="label">Ticket Médio</div>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <div class="value">{{ '%.1f'|format(margem_media) }}%</div>
+                                <div class="label">Margem Média</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Mês</th>
+                                    <th>Ano</th>
+                                    <th>Faturamento</th>
+                                    <th>Clientes</th>
+                                    <th>Gastos Vendas</th>
+                                    <th>Custo Mercadorias</th>
+                                    <th>Custos Fixos</th>
+                                    <th>Resultado</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% set meses_short = ['', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ'] %}
+                                {% for analise in analises %}
+                                <tr>
+                                    <td>{{ meses_short[analise.mes] }}</td>
+                                    <td>{{ analise.ano }}</td>
+                                    <td>R$ {{ ('%.2f'|format(analise.faturamento or 0))|replace('.', ',') }}</td>
+                                    <td>{{ analise.quant_clientes or '—' }}</td>
+                                    <td>R$ {{ ('%.2f'|format(analise.gastos_vendas or 0))|replace('.', ',') }}</td>
+                                    <td>R$ {{ ('%.2f'|format(analise.custo_mercadorias or 0))|replace('.', ',') }}</td>
+                                    <td>R$ {{ ('%.2f'|format(analise.custo_fixo_total or 0))|replace('.', ',') }}</td>
+                                    <td>R$ {{ ('%.2f'|format(analise.resultado or 0))|replace('.', ',') }}</td>
+                                    <td>
+                                        <a href="/parceiro/licencas/{{ license.id }}/dados-basicos/{{ analise.id }}" class="btn btn-sm btn-secondary">
+                                            Editar
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info mb-0">
+                        Nenhum registro para o ano {{ selected_year }}.
+                        <a href="/parceiro/licencas/{{ license.id }}/dados-basicos" class="alert-link">Adicionar registro</a>.
+                    </div>
+                    {% endif %}
+
+                    {% else %}
+                    <div class="alert alert-info mb-0">
+                        Nenhum dado básico cadastrado para este cliente.
+                        <a href="/parceiro/licencas/{{ license.id }}/dados-basicos" class="alert-link">Adicionar o primeiro registro</a>.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

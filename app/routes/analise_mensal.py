@@ -17,6 +17,7 @@ from app.routes.auth import get_current_user
 from app.utils.analise_form_adapter import form_context_for_analise_cadastro
 from app.utils.sync_basic_data_analise import sync_basic_data_to_analise_mensal
 from app.utils.cadastro_prefill import build_cadastro_prefill
+from app.utils.analise_save import save_analise_for_user
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -140,8 +141,9 @@ async def analise_mensal_lista(
 ):
     """Tela de listagem/historico de analises mensais"""
     if not current_user:
-        from fastapi.responses import RedirectResponse
         return RedirectResponse(url="/login")
+    if current_user.access_level == "Parceiro":
+        return RedirectResponse(url="/dashboard", status_code=303)
         
     return templates.TemplateResponse("analise_mensal_lista.html", {
         "request": request,
@@ -535,83 +537,19 @@ async def salvar_analise(
     if not current_user:
         raise HTTPException(status_code=401, detail="Não autorizado")
 
+    if current_user.access_level == "Parceiro":
+        return JSONResponse(
+            status_code=403,
+            content={
+                "success": False,
+                "message": "Parceiros devem salvar dados básicos pela tela de licenças do cliente.",
+            },
+        )
+
     data = _aplicar_campos_calculados(data)
 
     try:
-        # Verificar se ja existe analise para este mes/ano
-        result = await db.execute(
-            select(AnaliseMensal).filter(
-                AnaliseMensal.user_id == current_user.id,
-                AnaliseMensal.mes == data.mes,
-                AnaliseMensal.ano == data.ano
-            )
-        )
-        analise_existente = result.scalar_one_or_none()
-        
-        if analise_existente:
-            # ATUALIZAR registro existente
-            analise_existente.quant_clientes = data.quant_clientes
-            analise_existente.capacidade_atendimento = data.capacidade_atendimento
-            analise_existente.faturamento = data.faturamento
-            analise_existente.gastos_vendas = data.gastos_vendas
-            analise_existente.custo_mercadorias = data.custo_mercadorias
-            analise_existente.custo_fixo_total = data.custo_fixo_total
-            analise_existente.corresponde_caixa = data.corresponde_caixa
-            # Campos calculados
-            analise_existente.ticket_medio = data.ticket_medio
-            analise_existente.margem_bruta = data.margem_bruta
-            analise_existente.margem_contribuicao_por_cliente = data.margem_contribuicao_por_cliente
-            analise_existente.ponto_equilibrio = data.ponto_equilibrio
-            analise_existente.margem_seguranca = data.margem_seguranca
-            analise_existente.custo_total = data.custo_total
-            analise_existente.resultado = data.resultado
-            analise_existente.percentual_margem = data.percentual_margem
-            analise_existente.updated_at = datetime.now()
-            
-            await db.commit()
-            await db.refresh(analise_existente)
-            
-            return {
-                "success": True,
-                "message": "Análise atualizada com sucesso",
-                "is_new": False,
-                "id": analise_existente.id
-            }
-        
-        else:
-            # CRIAR novo registro
-            nova_analise = AnaliseMensal(
-                user_id=current_user.id,
-                mes=data.mes,
-                ano=data.ano,
-                quant_clientes=data.quant_clientes,
-                capacidade_atendimento=data.capacidade_atendimento,
-                faturamento=data.faturamento,
-                gastos_vendas=data.gastos_vendas,
-                custo_mercadorias=data.custo_mercadorias,
-                custo_fixo_total=data.custo_fixo_total,
-                corresponde_caixa=data.corresponde_caixa,
-                ticket_medio=data.ticket_medio,
-                margem_bruta=data.margem_bruta,
-                margem_contribuicao_por_cliente=data.margem_contribuicao_por_cliente,
-                ponto_equilibrio=data.ponto_equilibrio,
-                margem_seguranca=data.margem_seguranca,
-                custo_total=data.custo_total,
-                resultado=data.resultado,
-                percentual_margem=data.percentual_margem,
-                created_at=datetime.now()
-            )
-            
-            db.add(nova_analise)
-            await db.commit()
-            await db.refresh(nova_analise)
-            
-            return {
-                "success": True,
-                "message": "Análise criada com sucesso",
-                "is_new": True,
-                "id": nova_analise.id
-            }
+        return await save_analise_for_user(db, current_user.id, data)
     except Exception as e:
         logger.error(f"Erro ao salvar análise: {str(e)}")
         await db.rollback()

@@ -112,6 +112,19 @@ def migrate_database():
                     print(f"Adicionando coluna {col} em analise_mensal...")
                     cursor.execute(f"ALTER TABLE analise_mensal ADD COLUMN {col} {col_type}")
 
+        # --- licenses ---
+        print("Verificando tabela licenses...")
+        cursor.execute("PRAGMA table_info(licenses)")
+        license_columns = [col[1] for col in cursor.fetchall()]
+
+        for col_name, col_type in [
+            ("partner_id", "INTEGER"),
+            ("client_user_id", "INTEGER"),
+        ]:
+            if col_name not in license_columns:
+                print(f"Adicionando coluna {col_name} em licenses...")
+                cursor.execute(f"ALTER TABLE licenses ADD COLUMN {col_name} {col_type}")
+
         # --- custo_fixo ---
         print("Verificando tabela custo_fixo...")
         cursor.execute("""

@@ -10,6 +10,7 @@ from app.models.user import User
 from app.models.license import License
 from app.routes.auth import get_current_user
 from app.utils.converters import safe_float
+from app.utils.license_activation import activate_license_for_user, LicenseActivationError
 
 router = APIRouter()
 
@@ -77,39 +78,23 @@ async def update_profile(
             current_user.registration_date = datetime.now()
 
         if action == "activate" and activation_key:
-            # Verificar se a chave existe e está disponível
-            result = await db.execute(select(License).filter(
-                License.activation_key == activation_key,
-                License.status == "Disponível"
-            ))
-            license = result.scalar_one_or_none()
-
-            if not license:
-                return templates.TemplateResponse(
-                    "profile.html",
-                    {
-                        "request": request,
-                        "user": current_user,
-                        "error": "Chave de ativação não encontrada ou já utilizada"
-                    }
-                )
-
-            # Atualizar apenas o status e a data de ativação da licença
-            license.status = "Utilizada"
-            license.activation_date = datetime.now()
-            license.activation_email = email
-
-            # Atualizar o usuário com a chave de ativação
-            current_user.activation_key = activation_key
-
             try:
-                await db.commit()
+                await activate_license_for_user(db, activation_key, current_user)
                 return templates.TemplateResponse(
                     "profile.html",
                     {
                         "request": request,
                         "user": current_user,
                         "success": "Licença ativada com sucesso!"
+                    }
+                )
+            except LicenseActivationError as e:
+                return templates.TemplateResponse(
+                    "profile.html",
+                    {
+                        "request": request,
+                        "user": current_user,
+                        "error": e.message,
                     }
                 )
             except Exception as e:

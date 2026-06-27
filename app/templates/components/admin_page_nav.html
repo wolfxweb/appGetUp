@@ -1,0 +1,16 @@
+<div class="row mb-4 justify-content-center">
+    <div class="col-6 col-md-2 mb-2 mb-md-0">
+        <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
+    </div>
+    {% if user is defined and user.access_level == "Administrador" %}
+    <div class="col-6 col-md-2 mb-2 mb-md-0">
+        <a href="/admin/users" class="btn btn-secondary w-100">Usuários</a>
+    </div>
+    <div class="col-6 col-md-2 mb-2 mb-md-0">
+        <a href="/admin/licenses" class="btn btn-secondary w-100">Licenças</a>
+    </div>
+    {% endif %}
+    <div class="col-6 col-md-2 mb-2 mb-md-0">
+        <a href="/logout" class="btn btn-secondary w-100">Sair</a>
+    </div>
+</div>
