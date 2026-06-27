@@ -142,8 +142,9 @@
                     </div>
 
                     <!-- Empty State Message -->
-                    <div id="mensagemSemDados" class="alert alert-info" style="display: none;">
-                        Nenhuma análise mensal cadastrada. Use <strong>Análise Mensal</strong> para começar.
+                    <div id="mensagemSemDados" class="alert alert-info text-center" style="display: none;">
+                        <p class="mb-3" id="mensagemSemDadosTexto">Nenhuma análise mensal cadastrada ainda. Preencha os dados básicos do mês para começar a acompanhar seus resultados.</p>
+                        <a href="/analise-mensal" class="btn btn-primary">Ir para Análise Mensal</a>
                     </div>
 
                     <!-- Analysis List Table -->
@@ -244,7 +245,7 @@ async function popularAnos() {
                 console.log('[popularAnos] Nenhum ano encontrado');
                 select.style.display = 'none';
                 mensagemSemDados.style.display = 'block';
-                mensagemSemDados.textContent = 'Nenhum registro cadastrado. Use Análise Mensal para começar.';
+                document.getElementById('mensagemSemDadosTexto').textContent = 'Nenhuma análise mensal cadastrada ainda. Preencha os dados básicos do mês para começar a acompanhar seus resultados.';
                 document.getElementById('tabelaAnalisesContainer').style.display = 'none';
                 document.getElementById('metricSummary').style.display = 'none';
                 return;
@@ -273,13 +274,13 @@ async function popularAnos() {
             console.error('[popularAnos] Erro detalhado:', errorText);
             select.style.display = 'none';
             mensagemSemDados.style.display = 'block';
-            mensagemSemDados.textContent = 'Erro ao carregar dados. Tente novamente.';
+            document.getElementById('mensagemSemDadosTexto').textContent = 'Erro ao carregar dados. Tente novamente.';
         }
     } catch (error) {
         console.error('[popularAnos] Erro ao carregar anos:', error);
         select.style.display = 'none';
         mensagemSemDados.style.display = 'block';
-        mensagemSemDados.textContent = 'Erro ao carregar dados. Tente novamente.';
+        document.getElementById('mensagemSemDadosTexto').textContent = 'Erro ao carregar dados. Tente novamente.';
     }
     
     if (!select.hasAttribute('data-listener-added')) {
@@ -318,21 +319,22 @@ async function carregarAnalises() {
         if (analises.length === 0) {
             console.log('Nenhuma análise encontrada para o ano:', ano);
             document.getElementById('mensagemSemDados').style.display = 'block';
+            document.getElementById('mensagemSemDadosTexto').textContent = `Nenhuma análise mensal cadastrada para ${ano}. Preencha os dados básicos do mês para começar a acompanhar seus resultados.`;
             document.getElementById('tabelaAnalisesContainer').style.display = 'none';
             document.getElementById('metricSummary').style.display = 'none';
             return;
         }
-        
+
         document.getElementById('mensagemSemDados').style.display = 'none';
         document.getElementById('tabelaAnalisesContainer').style.display = 'block';
         document.getElementById('metricSummary').style.display = 'block';
-        
+
         preencherTabelaAnalises(analises);
         atualizarMetricas(analises);
     } catch (error) {
         console.error('Erro ao carregar dados:', error);
         document.getElementById('mensagemSemDados').style.display = 'block';
-        document.getElementById('mensagemSemDados').textContent = 'Erro ao carregar dados. Tente novamente.';
+        document.getElementById('mensagemSemDadosTexto').textContent = 'Erro ao carregar dados. Tente novamente.';
     }
 }
 

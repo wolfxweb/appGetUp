@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block title %}Resultado da Análise Mensal - GetUp Gestão{% endblock %}
+
+{% block extra_css %}
+<style>
+    body { background-color: #F5F5F5 !important; }
+    .container-fluid, .container { background-color: #F5F5F5 !important; }
+    .card, .card-body { background-color: #F0F0F0 !important; }
+    .card-header.bg-secondary { background-color: #6c757d !important; color: white !important; }
+    .btn-primary { background-color: rgb(1, 57, 44) !important; border-color: rgb(1, 57, 44) !important; }
+    .btn-primary:hover { background-color: rgb(2, 70, 54) !important; border-color: rgb(2, 70, 54) !important; }
+    .btn-secondary { background-color: #6c757d; border-color: #6c757d; color: white; }
+    .btn-secondary:hover { background-color: #5a6268; border-color: #545b62; color: white; }
+    .persona-row { display: flex; gap: 1rem; align-items: flex-start; margin-bottom: 1.25rem; }
+    .persona-row img { width: 64px; height: 64px; object-fit: cover; border-radius: 50%; flex-shrink: 0; }
+    #narrativa p { margin-bottom: 0.95rem; line-height: 1.5; }
+    #narrativa .destaque { font-weight: 600; }
+    .tabela-resumo th, .tabela-resumo td { font-size: 0.92rem; }
+    .badge-aviso { background-color: #fff3cd; color: #856404; }
+    #carregando { padding: 3rem 0; text-align: center; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="background-color: #F5F5F5; min-height: 100vh;">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <div class="col-md-12 mb-4 d-flex justify-content-between align-items-center">
+                <img src="/static/images/Logo.png" alt="Logo" height="40">
+            </div>
+
+            <div class="row mb-4 justify-content-center">
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
+                </div>
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/analise-mensal" class="btn btn-secondary w-100">Análise Mensal</a>
+                </div>
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/analise-mensal/lista" class="btn btn-secondary w-100">Histórico</a>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="card-title mb-0">Resultado da Análise — <span id="titulo-mes-ano">...</span></h4>
+                    <div>
+                        <a href="#" id="btn-editar" class="btn btn-sm btn-primary">Editar dados</a>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div id="carregando">
+                        <div class="spinner-border" role="status"></div>
+                        <p class="mt-2 text-muted">Carregando análise...</p>
+                    </div>
+
+                    <div id="conteudo" style="display:none;">
+                        <div class="persona-row">
+                            <img src="/static/images/joao-sem-fundo.png" alt="João">
+                            <div>
+                                <p class="mb-0 fw-semibold">{{ (user.name.split()[0] + ',') if user and user.name else '' }} aqui está a análise completa do mês.</p>
+                            </div>
+                        </div>
+
+                        <div id="narrativa"></div>
+
+                        <div class="card mt-4">
+                            <div class="card-header bg-secondary text-white">
+                                <h6 class="mb-0">Resumindo</h6>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-bordered tabela-resumo mb-0">
+                                    <thead class="table-light">
+                                        <tr><th>Item</th><th class="text-end">Valor</th><th class="text-end">% do faturamento</th></tr>
+                                    </thead>
+                                    <tbody id="tabela-resumo-body"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <p class="fw-semibold mb-2">Vamos?</p>
+                            <a href="/dashboard" class="btn btn-primary px-5">Sim, vamos!</a>
+                        </div>
+                    </div>
+
+                    <div id="erro" class="alert alert-danger" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const ANALISE_ID = {{ analise_id }};
+const CADASTRO_IDEAL_MARGIN = {{ (user.ideal_profit_margin / 100) if user and user.ideal_profit_margin is not none else 'null' }};
+const CADASTRO_CAPACIDADE = {{ user.service_capacity if user and user.service_capacity is not none else 'null' }};
+const ACTIVITY_TYPE = "{{ user.activity_type | default('') }}".toLowerCase();
+const USER_NAME = "{{ user.name.split()[0] if user and user.name else '' }}";
+
+const mesesNomes = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+function formatCurrency(valor) {
+    if (valor === null || valor === undefined || isNaN(valor)) return 'R$ 0,00';
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+}
+
+function pctBr(valor) {
+    if (valor === null || valor === undefined || isNaN(valor)) return '0,0%';
+    return Math.abs(valor).toFixed(1).replace('.', ',') + '%';
+}
+
+// ---- Textos condicionais (mesma redação usada no wizard de Análise Mensal) ----
+function textoPontoEquilibrio(margemBruta, custoFixo, peFaturamento, peClientes, e4) {
+    if (margemBruta > custoFixo && peFaturamento > 0 && peClientes > 0) {
+        return `Assim, para começar a ter lucro foi preciso alcançar ${formatCurrency(peFaturamento)} de faturamento o que equivale a ${e4.toLocaleString('pt-BR')} vendas.`;
+    }
+    return 'A loja está trabalhando com preços baixos e/ou custos elevados. Precisamos melhorar este resultado!';
+}
+
+function textoMargemSegurancaDetalhe(margemSegPct) {
+    if (margemSegPct == null) return '';
+    if (margemSegPct <= 0) return 'O que significa que o negócio não tem nenhuma proteção contra reduções nas vendas e já opera no limite ou abaixo dele.';
+    if (margemSegPct < 10) return 'O que significa que o seu negócio poderá registrar prejuízo com uma pequena queda nas vendas.';
+    if (margemSegPct < 25) return 'O que significa que o negócio tem alguma proteção contra reduções nas vendas, porém, é preciso fortalecer os resultados.';
+    if (margemSegPct < 40) return 'O que significa que o seu negócio conta com boa margem para enfrentar quedas nas vendas.';
+    return 'O que significa que o seu negócio está bem preparado para enfrentar quedas nas vendas.';
+}
+
+function textoAvaliacaoFinal(pctMargem, lucroIdealDecimal, nome) {
+    const ideal = lucroIdealDecimal * 100;
+    const quem = nome ? nome + ', ' : '';
+    if (pctMargem >= ideal * 1.05) {
+        return `${quem}você tem motivo para comemorar! Os números mostram que seu negócio está no caminho certo!`;
+    }
+    if (pctMargem >= ideal * 0.95) {
+        return `${quem}você deve estar satisfeito com o resultado alcançado. Com alguns ajustes será possível conseguir mais!`;
+    }
+    if (pctMargem > 0) {
+        return `${quem}o resultado ficou abaixo do que você gostaria. Vamos ajustar isso juntos!`;
+    }
+    return `${quem}é natural que esteja preocupado! A boa notícia é que esse resultado pode ser ajustado, e vamos trabalhar juntos para melhorar isso!`;
+}
+
+function labelCusto() {
+    const t = ACTIVITY_TYPE;
+    if (t.includes('indústria') || t.includes('industria') || t.includes('alimenta')) {
+        return 'A compra dos insumos, produtos de terceiros e custos de produção para fabricar os itens vendidos';
+    }
+    if (t.includes('servi')) {
+        return 'A compra dos insumos e produtos de terceiros adquiridos, e a mão de obra direta e contratada, para executar os serviços realizados';
+    }
+    return 'O custo das mercadorias necessárias para as vendas realizadas';
+}
+
+function montarNarrativa(d) {
+    const fat = d.faturamento || 0;
+    const gv = d.gastos_vendas || 0;
+    const cm = d.custo_mercadorias || 0;
+    const cf = d.custo_fixo_total || 0;
+    const qc = d.quant_clientes || 0;
+    const ticketMedio = d.ticket_medio || 0;
+    const margemBruta = d.margem_bruta || 0;
+    const margemContribCliente = d.margem_contribuicao_por_cliente || 0;
+    const pontoEquilibrio = d.ponto_equilibrio || 0;
+    const margemSeg = d.margem_seguranca;
+    const resultado = d.resultado || 0;
+    const pctMargem = d.percentual_margem || 0;
+    const capacidade = CADASTRO_CAPACIDADE != null ? CADASTRO_CAPACIDADE : (d.capacidade_atendimento || 0);
+    const mesNome = mesesNomes[d.mes] || '';
+
+    const partes = [];
+
+    // H6 — abertura
+    let a1, a4;
+    if (resultado > 0) { a1 = 'lucro de ' + formatCurrency(resultado); a4 = 'lucrou'; }
+    else if (resultado < 0) { a1 = 'prejuízo de ' + formatCurrency(Math.abs(resultado)); a4 = 'perdeu'; }
+    else { a1 = 'margem zero'; a4 = 'não lucrou nem perdeu'; }
+    partes.push(`<p><span class="destaque">${USER_NAME ? USER_NAME + ', sua' : 'Sua'}</span> empresa encerrou o mês de <strong>${mesNome}</strong> com ${a1}. A cada R$100,00 de venda seu negócio ${a4} ${formatCurrency(Math.abs(pctMargem))}.</p>`);
+
+    // H9 — clientes / ticket medio
+    partes.push(`<p>${qc} clientes compraram, gerando um faturamento de ${formatCurrency(fat)}. Ou seja: em média, o valor de cada venda (ticket médio) foi de ${formatCurrency(ticketMedio)}.</p>`);
+
+    // H12 — capacidade (condicional)
+    if (capacidade > 0 && qc > capacidade) {
+        partes.push(`<p class="badge-aviso p-2 rounded">Suas vendas (${qc}) superaram a capacidade de atendimento cadastrada (${capacidade}). Isso pode prejudicar a qualidade do atendimento, estressar a equipe e prejudicar a imagem da empresa.</p>`);
+    }
+
+    // H15 — gastos com vendas
+    const c1pct = fat > 0 ? (gv / fat) * 100 : 0;
+    partes.push(`<p>Os gastos com vendas (${formatCurrency(gv)}) representaram ${pctBr(c1pct)} do faturamento, o que significa que do total faturado, ${formatCurrency(fat - gv)} ficaram disponíveis para o negócio.</p>`);
+
+    // H18 — custo mercadorias/insumos (dinamico por setor)
+    const d2pct = fat > 0 ? (cm / fat) * 100 : 0;
+    partes.push(`<p>${labelCusto()} somaram ${formatCurrency(cm)}, correspondendo a ${pctBr(d2pct)} do faturamento. É sempre oportuno lembrar que o sucesso começa com a qualidade das compras.</p>`);
+
+    // K21 — margem de contribuicao total
+    partes.push(`<p>Até aqui restaram ${formatCurrency(margemBruta)} para cobrir os custos de funcionamento e gestão da empresa e gerar resultado.</p>`);
+
+    // H25 — contribuicao por cliente / custos fixos
+    partes.push(`<p>Em média cada venda contribuiu com ${formatCurrency(margemContribCliente)} para cobrir os custos fixos, que em ${mesNome} foram de ${formatCurrency(cf)}.</p>`);
+
+    // H28 — ponto de equilibrio
+    const peClientes = ticketMedio > 0 ? pontoEquilibrio / ticketMedio : 0;
+    const e4 = margemContribCliente > 0 ? Math.round(cf / margemContribCliente) : 0;
+    partes.push(`<p>${textoPontoEquilibrio(margemBruta, cf, pontoEquilibrio, peClientes, e4)}</p>`);
+
+    // H31 — eficiencia do custo fixo
+    if (cf > 0) {
+        const e6 = fat / cf;
+        partes.push(`<p>Cada R$1,00 gasto com o funcionamento da empresa resultou em ${formatCurrency(e6)} de faturamento.</p>`);
+    }
+
+    // H42/H43 — margem de seguranca
+    if (margemSeg != null) {
+        partes.push(`<p>A margem de segurança foi de ${pctBr(margemSeg)}. ${textoMargemSegurancaDetalhe(margemSeg)}</p>`);
+    }
+
+    // H46 — avaliacao final (comparada a margem ideal do cadastro)
+    const idealDecimal = CADASTRO_IDEAL_MARGIN != null ? CADASTRO_IDEAL_MARGIN : 0.20;
+    partes.push(`<p>${textoAvaliacaoFinal(pctMargem, idealDecimal, USER_NAME)}</p>`);
+
+    // H48 / H51 — encerramento
+    partes.push(`<p>A análise mensal mostra o que aconteceu. Agora vamos identificar oportunidades e seguir avançando no caminho para o sucesso.</p>`);
+
+    document.getElementById('narrativa').innerHTML = partes.join('\n');
+
+    // Tabela "Resumindo"
+    const custosVariaveis = gv + cm;
+    const custoTotal = d.custo_total || (custosVariaveis + cf);
+    const linhas = [
+        ['Faturamento', fat, 100],
+        ['Gastos com vendas', gv, c1pct],
+        ['Compras', cm, d2pct],
+        ['Custos variáveis', custosVariaveis, fat > 0 ? (custosVariaveis / fat) * 100 : 0],
+        ['Custos fixos', cf, fat > 0 ? (cf / fat) * 100 : 0],
+        ['Custo total', custoTotal, fat > 0 ? (custoTotal / fat) * 100 : 0],
+        ['Margem bruta', resultado, pctMargem],
+    ];
+    const tbody = document.getElementById('tabela-resumo-body');
+    tbody.innerHTML = linhas.map(l => `<tr><td>${l[0]}</td><td class="text-end">${formatCurrency(l[1])}</td><td class="text-end">${pctBr(l[2])}</td></tr>`).join('');
+}
+
+async function carregar() {
+    try {
+        const response = await fetch(`/analise-mensal/api/${ANALISE_ID}`, { credentials: 'include' });
+        if (!response.ok) throw new Error('Análise não encontrada');
+        const data = await response.json();
+
+        document.getElementById('titulo-mes-ano').textContent = `${mesesNomes[data.mes]}/${data.ano}`;
+        document.getElementById('btn-editar').href = `/analise-mensal/cadastro/${ANALISE_ID}`;
+        montarNarrativa(data);
+
+        document.getElementById('carregando').style.display = 'none';
+        document.getElementById('conteudo').style.display = 'block';
+    } catch (error) {
+        console.error(error);
+        document.getElementById('carregando').style.display = 'none';
+        const erroEl = document.getElementById('erro');
+        erroEl.style.display = 'block';
+        erroEl.textContent = 'Não foi possível carregar esta análise. Ela pode não existir ou ter sido removida.';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', carregar);
+</script>
+{% endblock %}

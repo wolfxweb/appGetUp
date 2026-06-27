@@ -102,24 +102,33 @@ def _aplicar_campos_calculados(data: AnaliseMensalSchema) -> AnaliseMensalSchema
     return data
 
 
-# ==================== TELA PRINCIPAL (WIZARD) ====================
+# ==================== TELA PRINCIPAL ====================
 @router.get("/analise-mensal", response_class=HTMLResponse)
 async def analise_mensal(
     request: Request,
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db)
 ):
-    """Tela principal do wizard de analise mensal"""
+    """Redireciona para a análise mais recente ou para o cadastro se não houver nenhuma."""
     if not current_user:
-        from fastapi.responses import RedirectResponse
         return RedirectResponse(url="/login")
-        
-    return templates.TemplateResponse("analise_mensal.html", {
-        "request": request,
-        "user": current_user,
-        "active_page": "analise_mensal",
-        "modo_detalhe": False,
-    })
+
+    try:
+        await sync_basic_data_to_analise_mensal(current_user.id, db)
+    except Exception as e:
+        logger.warning(f"Sync basic_data -> analise_mensal: {e}")
+
+    result = await db.execute(
+        select(AnaliseMensal)
+        .filter(AnaliseMensal.user_id == current_user.id)
+        .order_by(AnaliseMensal.ano.desc(), AnaliseMensal.mes.desc())
+        .limit(1)
+    )
+    analise = result.scalar_one_or_none()
+
+    if analise:
+        return RedirectResponse(url=f"/analise-mensal/ver/{analise.id}", status_code=302)
+    return RedirectResponse(url="/analise-mensal/cadastro", status_code=302)
 
 
 # ==================== TELA DE LISTA/HISTORICO ====================
@@ -227,12 +236,11 @@ async def ver_analise_mensal(
     if not analise:
         raise HTTPException(status_code=404, detail="Análise não encontrada")
 
-    return templates.TemplateResponse("analise_mensal.html", {
+    return templates.TemplateResponse("analise_mensal_resultado.html", {
         "request": request,
         "user": current_user,
         "active_page": "analise_mensal",
         "analise_id": analise_id,
-        "modo_detalhe": True,
     })
 
 

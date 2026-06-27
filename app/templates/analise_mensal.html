@@ -10,6 +10,16 @@
         -webkit-appearance: none;
         margin: 0;
     }
+    .campo-cadastro-readonly {
+        background-color: #e9ecef !important;
+        cursor: not-allowed;
+    }
+    .cadastro-hint {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+    #narrativa-final p { margin-bottom: 0.85rem; }
+    #narrativa-final table { font-size: 0.92rem; }
     input[type=number] {
         -moz-appearance: textfield;
     }
@@ -68,16 +78,26 @@
     }
     
     
-    /* Step Content */
+    /* Tela fixa: todos os passos ficam visíveis ao mesmo tempo (exceto os de compatibilidade/confirmação pós-salvar) */
     .wizard-step {
         display: none;
-        animation: fadeIn 0.3s ease;
     }
-    
     .wizard-step.active {
         display: block;
     }
-    
+    #step-0, #step-2, #step-3, #step-5, #step-6, #step-7, #step-8, #step-9 {
+        display: block !important;
+    }
+    .wizard-step + .wizard-step {
+        border-top: 1px solid #dee2e6;
+        padding-top: 1.75rem;
+        margin-top: 1.75rem;
+    }
+    /* Botões de navegação Próximo/Voltar não fazem sentido em tela fixa */
+    [onclick="nextStep()"], [onclick="prevStep()"] {
+        display: none !important;
+    }
+
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
@@ -494,7 +514,7 @@
             <!-- Wizard Card -->
             <div class="card shadow mb-4" style="background-color: #F0F0F0;">
                 <div class="card-header bg-secondary text-white">
-                    <h4 class="card-title mb-0">Análise Mensal — guiada</h4>
+                    <h4 class="card-title mb-0">Análise Mensal</h4>
                 </div>
                 <div class="card-body">
                     {% set img_joao_escrevendo = url_for('static', path='images/João definitivo escrevendo.jpg') %}
@@ -595,7 +615,12 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="capacidade" class="form-label">Capacidade de atendimento (máximo no mês)</label>
-                                    <input type="number" class="form-control" id="capacidade" placeholder="Ex: 2300" step="1" min="0">
+                                    <input type="number" class="form-control{% if user and user.service_capacity %} campo-cadastro-readonly{% endif %}" id="capacidade" placeholder="Ex: 2300" step="1" min="0"
+                                        value="{{ user.service_capacity|int if user and user.service_capacity else '' }}"
+                                        {% if user and user.service_capacity %}readonly data-from-cadastro="1"{% endif %}>
+                                    {% if user and user.service_capacity %}
+                                    <div class="cadastro-hint">Obtido do cadastro</div>
+                                    {% endif %}
                                 </div>
                             </div>
 
@@ -953,33 +978,8 @@
                                 </div>
                             </div>
 
-                            <!-- Textos das fórmulas — ordem slide 10: F9 → F6 → F7 → F8 → F10 → F11 -->
-                            <div class="resultado-texto-container">
-
-                                <!-- F9: Avaliação final (primeiro) -->
-                                <div id="card-f9-avaliacao" class="resultado-texto-bloco resultado-destaque" style="display:none;">
-                                    <p id="f9-desc" class="mb-0"></p>
-                                    <!-- Campos ocultos para compatibilidade JS -->
-                                    <span id="f9-percentual" style="display:none;"></span>
-                                </div>
-
-                                <!-- F6: Ponto de Equilíbrio (texto) -->
-                                <div id="card-f6-pe" class="resultado-texto-bloco" style="display:none;">
-                                    <p id="f6-pe-desc" class="mb-0"></p>
-                                    <span id="f6-pe-valor" style="display:none;"></span>
-                                </div>
-
-                                <!-- F7: Margem de Segurança (texto) -->
-                                <div id="card-f7-margem-seg" class="resultado-texto-bloco" style="display:none;">
-                                    <p id="f7-desc" class="mb-0"></p>
-                                    <span id="f7-margem-seg" style="display:none;"></span>
-                                </div>
-
-                                <!-- F8: Resultado do mês (texto) -->
-                                <div id="card-f8-resultado" class="resultado-texto-bloco" style="display:none;">
-                                    <p id="f8-desc" class="mb-0"></p>
-                                    <span id="f8-custo-total" style="display:none;"></span>
-                                </div>
+                            <!-- Narrativa dinâmica — H6 a H48 (planilha SuccessWay) -->
+                            <div id="narrativa-analise" class="mt-2 mb-3"></div>
 
                                 <!-- F10 + F11: Conferência do caixa -->
                                 <div id="card-f10-caixa" class="resultado-texto-bloco" style="display: none;">
@@ -1012,9 +1012,11 @@
                                     </div>
                                 </div>
 
-                            </div>
-
                             <!-- Campos ocultos por compatibilidade JS -->
+                            <span id="card-f9-avaliacao" style="display:none;"><span id="f9-desc"></span><span id="f9-percentual"></span></span>
+                            <span id="card-f6-pe" style="display:none;"><span id="f6-pe-desc"></span><span id="f6-pe-valor"></span></span>
+                            <span id="card-f7-margem-seg" style="display:none;"><span id="f7-desc"></span><span id="f7-margem-seg"></span></span>
+                            <span id="card-f8-resultado" style="display:none;"><span id="f8-desc"></span><span id="f8-custo-total"></span></span>
                             <span id="lucro-ideal-info" style="display:none;"></span>
                             <span id="f8-ticket-medio" style="display:none;"></span>
                             <span id="f8-tm-desc" style="display:none;"></span>
@@ -1158,8 +1160,13 @@
 let currentStep = 0;
 let modalAna = null;
 let modoDetalhe = false;
-let lucroIdeal = 0.20; // Valor padrão decimal (20%). buscarLucroIdeal() atualiza com o valor real
+// Margem de lucro ideal e capacidade de atendimento vem do cadastro do usuário (migrado do antigo basic_data)
+const cadastroIdealMargin = {{ (user.ideal_profit_margin / 100) if user and user.ideal_profit_margin is not none else 'null' }};
+const cadastroCapacidade = {{ user.service_capacity if user and user.service_capacity is not none else 'null' }};
+const cadastroActivityType = "{{ user.activity_type | default('') }}";
+let lucroIdeal = cadastroIdealMargin !== null ? cadastroIdealMargin : 0.20; // Valor padrão decimal (20%). buscarLucroIdeal() é fallback se o cadastro não tiver o valor
 let editingAnaliseId = null; // ID da análise sendo editada (null = nova análise)
+const nomeUsuario = "{{ user.name.split()[0] if user and user.name else '' }}";
 
 const formData = {
     mes: null,
@@ -1316,19 +1323,29 @@ function aplicarModoDetalheUI() {
 document.addEventListener('DOMContentLoaded', function() {
     modoDetalhe = document.getElementById('modo-detalhe')?.value === '1';
     initCustosFixosModais();
-    // Atualizar gráfico de fixos sempre que o total de custos fixos mudar
+    // Atualizar gráfico de fixos e resultado sempre que o total de custos fixos mudar (tela fixa: sempre visível)
     window.onCustoFixoTotalAtualizado = function() {
-        if (currentStep === 7) setTimeout(() => atualizarGraficoFixos(), 50);
+        setTimeout(() => {
+            atualizarGraficoFixos();
+            atualizarCalculosParciais();
+            calcularResultadosF7();
+            atualizarGraficoResultado();
+        }, 50);
     };
     const modalAnaEl = document.getElementById('modalAna');
     if (modalAnaEl) modalAna = new bootstrap.Modal(modalAnaEl);
 
-    // Event listeners para calculo automatico
-    document.getElementById('faturamento').addEventListener('input', atualizarCalculosParciais);
-    document.getElementById('quant_clientes').addEventListener('input', () => { atualizarBarraCapacidade(); atualizarCalculosParciais(); });
-    document.getElementById('capacidade').addEventListener('input', () => { atualizarBarraCapacidade(); atualizarCalculosParciais(); });
-    document.getElementById('gastos_vendas').addEventListener('input', atualizarCalculosParciais);
-    document.getElementById('custo_mercadorias').addEventListener('input', atualizarCalculosParciais);
+    // Event listeners para calculo automatico (tela fixa: tudo recalcula a qualquer alteração)
+    function recalcularTudo() {
+        atualizarCalculosParciais();
+        calcularResultadosF7();
+        setTimeout(() => atualizarGraficoResultado(), 50);
+    }
+    document.getElementById('faturamento').addEventListener('input', recalcularTudo);
+    document.getElementById('quant_clientes').addEventListener('input', () => { atualizarBarraCapacidade(); recalcularTudo(); });
+    document.getElementById('capacidade').addEventListener('input', () => { atualizarBarraCapacidade(); recalcularTudo(); });
+    document.getElementById('gastos_vendas').addEventListener('input', recalcularTudo);
+    document.getElementById('custo_mercadorias').addEventListener('input', recalcularTudo);
 
     const analiseIdInput = document.getElementById('edit-analise-id');
     if (modoDetalhe && analiseIdInput && analiseIdInput.value) {
@@ -1337,6 +1354,11 @@ document.addEventListener('DOMContentLoaded', function() {
     } else {
         showStep(0);
         carregarCustosFixos();
+        atualizarBalaoBalloonStep5();
+        setTimeout(() => {
+            atualizarBarraCapacidade();
+            recalcularTudo();
+        }, 100);
     }
 
     // Atualizar labels de mês nos steps quando mês/ano mudar
@@ -1762,23 +1784,18 @@ function sincronizarRadiosCaixaOcultos(origem) {
 // ==================== CALCULAR RESULTADOS FINAIS ====================
 function calcularResultadosF7() {
     capturarDados();
-
     const step8 = document.getElementById('step-8');
-    if (!step8 || !step8.classList.contains('active')) return;
+    if (!step8) return;
 
     const fat = formData.faturamento || 0;
-    const cf = formData.custo_fixo_total || 0;
+    const gv  = formData.gastos_vendas || 0;
+    const cm  = formData.custo_mercadorias || 0;
+    const cf  = formData.custo_fixo_total || 0;
+    const qc  = formData.quant_clientes || 0;
 
     Object.assign(formData, calcularCamposAnalise(formData));
 
-    const margemPorCliente = formData.quant_clientes > 0 ? formData.margem_bruta / formData.quant_clientes : 0;
-    const peClientes = (formData.margem_bruta > 0 && margemPorCliente > 0)
-        ? cf / margemPorCliente
-        : null;
-    const peFaturamento = (peClientes != null && formData.ticket_medio > 0)
-        ? peClientes * formData.ticket_medio
-        : null;
-
+    // Manter campos ocultos de compatibilidade atualizados
     const elFat = document.getElementById('res7-fat');
     const elMb  = document.getElementById('res7-mb');
     const elCf  = document.getElementById('res7-cf');
@@ -1786,61 +1803,133 @@ function calcularResultadosF7() {
     if (elMb)  elMb.textContent  = formatCurrency(formData.margem_bruta);
     if (elCf)  elCf.textContent  = formatCurrency(cf);
 
-    // F6: Ponto de Equilíbrio (P24 / H36)
-    const elPe   = document.getElementById('f6-pe-valor');
-    const descPe = document.getElementById('f6-pe-desc');
-    const cardPe = document.getElementById('card-f6-pe');
-    const peOk = formData.margem_bruta > cf && peFaturamento > 0;
-    if (elPe) elPe.textContent = peOk ? formatCurrency(peFaturamento) : '—';
-    if (descPe) descPe.textContent = textoPontoEquilibrioExcel(formData.margem_bruta, cf, peFaturamento || 0, peClientes || 0);
-    if (cardPe) cardPe.style.display = 'block';
+    const narEl = document.getElementById('narrativa-analise');
+    if (!narEl) return;
 
-    // F7: Margem de Segurança (P29 + P31 / H42 + H44)
-    const elF7   = document.getElementById('f7-margem-seg');
-    const descF7 = document.getElementById('f7-desc');
-    const cardF7 = document.getElementById('card-f7-margem-seg');
-    const ms = formData.margem_seguranca;
-    const msValida = ms != null && formData.margem_bruta > 0 && formData.margem_bruta >= cf;
-    if (elF7) elF7.textContent = msValida ? ms.toFixed(1).replace('.', ',') + '%' : '—';
+    // Só renderizar quando todos os campos principais estiverem preenchidos
+    if (!fat || !qc || !gv || !cm || !cf) {
+        narEl.innerHTML = '';
+        const cardF10b = document.getElementById('card-f10-caixa');
+        if (cardF10b) cardF10b.style.display = 'none';
+        return;
+    }
 
-    const introMs = textoMargemSegurancaIntroExcel(formData.margem_bruta, cf, ms);
-    const detalheMs = textoMargemSegurancaDetalheExcel(ms);
-    const partesMs = [introMs, detalheMs].filter(Boolean);
-    if (descF7) descF7.textContent = partesMs.join(' ');
-    if (cardF7) cardF7.style.display = 'block';
+    const mesNome = getMonthName(formData.mes);
+    const ticket  = formData.ticket_medio;
+    const margemBruta   = formData.margem_bruta;
+    const mcPerCliente  = formData.margem_contribuicao_por_cliente;
+    const resultado     = formData.resultado;
+    const pctMargem     = formData.percentual_margem;
+    const custo_total   = formData.custo_total;
+    const capacidade    = cadastroCapacidade;
+    const ms            = formData.margem_seguranca;
 
-    // F8: Resultado do mês (P38 / H40)
-    const cardF8 = document.getElementById('card-f8-resultado');
-    const elRes  = document.getElementById('f8-custo-total');
-    const descF8 = document.getElementById('f8-desc');
-    if (elRes) elRes.textContent = formatCurrency(formData.resultado);
-    if (descF8) descF8.textContent = textoResultadoMesExcel(formData.custo_total, formData.resultado, formData.percentual_margem);
-    if (cardF8) cardF8.style.display = 'block';
+    const margemPorCliente = qc > 0 ? margemBruta / qc : 0;
+    const peClientes   = (margemBruta > 0 && margemPorCliente > 0) ? cf / margemPorCliente : null;
+    const peFaturamento = (peClientes != null && ticket > 0) ? peClientes * ticket : null;
 
-    // F9: Avaliação final (P42 / H47)
-    const cardF9 = document.getElementById('card-f9-avaliacao');
-    const elF9   = document.getElementById('f9-percentual');
-    const descF9 = document.getElementById('f9-desc');
-    const elCompIdeal  = document.getElementById('comp-lucro-ideal');
-    const elCompResult = document.getElementById('comp-resultado');
-    const elCompDiff   = document.getElementById('comp-diferenca');
-    const idealPct = lucroIdeal * 100;
-    const diferenca = formData.percentual_margem - idealPct;
-    if (elF9) elF9.textContent = formData.percentual_margem.toFixed(1).replace('.', ',') + '%';
-    if (elCompIdeal)  elCompIdeal.textContent  = idealPct.toFixed(0) + '%';
-    if (elCompResult) elCompResult.textContent = formData.percentual_margem.toFixed(1).replace('.', ',') + '%';
-    if (elCompDiff)   elCompDiff.textContent   = (diferenca >= 0 ? '+' : '') + diferenca.toFixed(1).replace('.', ',') + '%';
+    const partes = [];
 
-    if (cardF9) cardF9.style.display = 'block';
-    if (descF9) descF9.textContent = textoAvaliacaoFinalExcel(formData.percentual_margem, lucroIdeal);
+    // H6: "Sua empresa encerrou o mês de (A) com (A1) (R$A2). A cada R$100,00 de venda seu negócio (A4) (R$A5)."
+    let a1, a4;
+    if (resultado > 0)      { a1 = 'lucro de'; a4 = 'lucrou'; }
+    else if (resultado < 0) { a1 = 'prejuízo de'; a4 = 'perdeu'; }
+    else                    { a1 = 'margem zero'; a4 = 'não lucrou nem perdeu'; }
+    const a2Text = resultado !== 0 ? ' ' + formatCurrency(Math.abs(resultado)) : '';
+    const a5Val  = fat > 0 ? Math.abs(pctMargem).toFixed(2).replace('.', ',') : '0,00';
+    const nomeP  = nomeUsuario ? `<strong>${nomeUsuario}, sua</strong>` : '<strong>Sua</strong>';
+    partes.push(`<p class="resultado-texto-bloco resultado-destaque">${nomeP} empresa encerrou o mês de <strong>${mesNome}</strong> com ${a1}${a2Text}. A cada R$100,00 de venda seu negócio ${a4} R$${a5Val}.</p>`);
 
-    // Fórmulas 10 e 11 / Caixa (P48 / H50 + P51 / H53)
+    // H9: clientes + faturamento + ticket médio
+    partes.push(`<p class="resultado-texto-bloco">${qc} clientes compraram, gerando um faturamento de ${formatCurrency(fat)}. Ou seja: em média o valor de cada venda (ticket médio), foi de ${formatCurrency(ticket)}.</p>`);
+
+    // H12: capacidade (condicional)
+    if (capacidade > 0 && qc > capacidade) {
+        partes.push(`<p class="resultado-texto-bloco" style="background:#fff3e0;border-left-color:#ff9800;">Suas vendas superaram a capacidade de atendimento. Isso pode prejudicar a qualidade do atendimento, estressar a equipe e prejudicar a imagem da empresa.</p>`);
+    }
+
+    // H15: gastos com vendas
+    const c1pct = fat > 0 ? (gv / fat * 100) : 0;
+    const c2    = fat - gv;
+    partes.push(`<p class="resultado-texto-bloco">Os gastos com vendas (${formatCurrency(gv)}) representaram ${pctBr(c1pct)} do faturamento, o que significa que do total faturado, ${formatCurrency(c2)} ficaram disponíveis para o negócio.</p>`);
+
+    // H18: custo mercadorias/insumos — label dinâmico por tipo de atividade
+    const tipo = cadastroActivityType.toLowerCase();
+    let dLabel;
+    if (tipo.includes('indústria') || tipo.includes('industria') || tipo.includes('alimenta')) {
+        dLabel = 'A compra dos insumos, produtos de terceiros e custos de produção para fabricar os itens vendidos';
+    } else if (tipo.includes('servi')) {
+        dLabel = 'A compra dos insumos e produtos de terceiros adquiridos, e a mão de obra direta e contratada, para executar os serviços realizados';
+    } else {
+        dLabel = 'O custo das mercadorias necessárias para as vendas realizadas';
+    }
+    const d2pct = fat > 0 ? (cm / fat * 100) : 0;
+    partes.push(`<p class="resultado-texto-bloco">${dLabel} somaram ${formatCurrency(cm)}, correspondendo a ${pctBr(d2pct)} do faturamento. É sempre oportuno lembrar que o sucesso começa com a qualidade das compras.</p>`);
+
+    // K21: margem de contribuição total
+    partes.push(`<p class="resultado-texto-bloco">Até aqui restaram ${formatCurrency(margemBruta)} para cobrir os custos de funcionamento e gestão da empresa e gerar resultado.</p>`);
+
+    // H25: contribuição por cliente + custos fixos
+    partes.push(`<p class="resultado-texto-bloco">Em média cada venda contribuiu com ${formatCurrency(mcPerCliente)} para cobrir os custos fixos, que em ${mesNome} foram de ${formatCurrency(cf)}.</p>`);
+
+    // H28: ponto de equilíbrio
+    if (margemBruta > cf && peFaturamento != null && peClientes != null) {
+        partes.push(`<p class="resultado-texto-bloco">Assim, para começar a ter lucro foi preciso alcançar ${formatCurrency(peFaturamento)} de faturamento o que equivale a ${Math.ceil(peClientes)} vendas.</p>`);
+    } else {
+        partes.push(`<p class="resultado-texto-bloco" style="background:#fff3e0;border-left-color:#ff9800;">A loja está trabalhando com preços baixos e/ou custos elevados. Precisamos melhorar este resultado!</p>`);
+    }
+
+    // H31: eficiência do custo fixo
+    if (cf > 0) {
+        const e6 = fat / cf;
+        partes.push(`<p class="resultado-texto-bloco">Cada R$1,00 gasto com o funcionamento da empresa resultou em ${formatCurrency(e6)} de faturamento.</p>`);
+    }
+
+    // H33: tabela "Resumindo"
+    const custosVar = gv + cm;
+    const pctFn = v => fat > 0 ? pctBr((v / fat) * 100) : '0,0%';
+    partes.push(`<div class="card mt-3 mb-3">
+  <div class="card-header bg-secondary text-white py-2"><h6 class="mb-0">Resumindo</h6></div>
+  <div class="card-body p-0">
+    <table class="table table-bordered mb-0" style="font-size:0.9rem;">
+      <thead class="table-light"><tr><th>Item</th><th class="text-end">Valor</th><th class="text-end">% faturamento</th></tr></thead>
+      <tbody>
+        <tr><td>Faturamento</td><td class="text-end">${formatCurrency(fat)}</td><td class="text-end">100%</td></tr>
+        <tr><td>Gastos c/vendas</td><td class="text-end">${formatCurrency(gv)}</td><td class="text-end">${pctFn(gv)}</td></tr>
+        <tr><td>Compras</td><td class="text-end">${formatCurrency(cm)}</td><td class="text-end">${pctFn(cm)}</td></tr>
+        <tr><td>Custos variáveis</td><td class="text-end">${formatCurrency(custosVar)}</td><td class="text-end">${pctFn(custosVar)}</td></tr>
+        <tr><td>Custos fixos</td><td class="text-end">${formatCurrency(cf)}</td><td class="text-end">${pctFn(cf)}</td></tr>
+        <tr><td>Custo total</td><td class="text-end">${formatCurrency(custo_total)}</td><td class="text-end">${pctFn(custo_total)}</td></tr>
+        <tr><td><strong>Margem bruta</strong></td><td class="text-end"><strong>${formatCurrency(resultado)}</strong></td><td class="text-end"><strong>${pctFn(resultado)}</strong></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>`);
+
+    // H42 + H43: margem de segurança
+    if (ms != null && margemBruta >= cf) {
+        let msDetalhe;
+        if      (ms <= 0)  msDetalhe = 'O que significa que o negócio não tem nenhuma proteção contra reduções nas vendas e já opera no limite ou abaixo dele.';
+        else if (ms < 10)  msDetalhe = 'O que significa que o seu negócio poderá registrar prejuízo com uma pequena queda nas vendas.';
+        else if (ms < 25)  msDetalhe = 'O que significa que o negócio tem alguma proteção contra reduções nas vendas, porém, é preciso fortalecer os resultados.';
+        else if (ms < 40)  msDetalhe = 'O que significa que o seu negócio conta com boa margem para enfrentar quedas nas vendas.';
+        else               msDetalhe = 'O que significa que o seu negócio está bem preparado para enfrentar quedas nas vendas.';
+        partes.push(`<p class="resultado-texto-bloco">A margem de segurança foi de ${pctBr(ms)}. ${msDetalhe}</p>`);
+    }
+
+    // H46: avaliação final vs margem ideal do cadastro
+    partes.push(`<p class="resultado-texto-bloco resultado-destaque">${textoAvaliacaoFinalExcel(pctMargem, lucroIdeal)}</p>`);
+
+    // H48: fechamento
+    partes.push(`<p class="resultado-texto-bloco">A análise mensal mostra o que aconteceu. Agora vamos identificar oportunidades e seguir avançando no caminho para o sucesso.</p>`);
+
+    narEl.innerHTML = partes.join('\n');
+
+    // F10 + F11: conferência do caixa
     const cardF10 = document.getElementById('card-f10-caixa');
     const f10Pergunta = document.getElementById('f10-pergunta');
-    const temResultadoF8 = textoResultadoMesExcel(formData.custo_total, formData.resultado, formData.percentual_margem);
-    if (cardF10) cardF10.style.display = temResultadoF8 ? 'block' : 'none';
-    if (f10Pergunta && temResultadoF8) f10Pergunta.textContent = textoF10CaixaExcel();
-
+    if (cardF10) cardF10.style.display = 'block';
+    if (f10Pergunta) f10Pergunta.textContent = textoF10CaixaExcel();
     sincronizarRadiosCaixaVisiveis();
     atualizarF11();
 }
@@ -1848,8 +1937,8 @@ function calcularResultadosF7() {
 function calcularResultadosF8() {
     // Verificar se step 9 esta ativo (resultado do mes)
     const step9 = document.getElementById('step-9');
-    if (!step9 || !step9.classList.contains('active')) return;
-    
+    if (!step9) return;
+
     capturarDados();
     
     formData.ticket_medio = formData.quant_clientes > 0 ? formData.faturamento / formData.quant_clientes : 0;
@@ -2077,8 +2166,10 @@ function atualizarResumoFinal() {
 
 // ==================== BUSCAR LUCRO IDEAL ====================
 async function buscarLucroIdeal() {
+    // Já vem do cadastro do usuário (cadastroIdealMargin); só usa fallback se não estiver cadastrado
+    if (cadastroIdealMargin !== null) return;
     try {
-        // Tentar buscar do BasicData do usuario
+        // Fallback: tentar buscar do BasicData do usuario (cadastros antigos)
         const response = await fetch('/basic-data/api/latest');
         if (response.ok) {
             const data = await response.json();
@@ -2111,7 +2202,8 @@ async function verificarAnaliseExistente() {
             avisoEl.style.display = 'block';
             avisoTexto.textContent = `Já existe análise para ${getMonthName(mes)}/${ano}. Os dados serão atualizados.`;
         } else {
-            avisoEl.style.display = 'none';
+            avisoEl.style.display = 'block';
+            avisoTexto.textContent = `Ainda não há dados básicos cadastrados para ${getMonthName(mes)}/${ano}. Vamos preencher agora.`;
         }
     } catch (error) {
         console.error('Erro ao verificar análise existente:', error);
