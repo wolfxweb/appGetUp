@@ -1,0 +1,615 @@
+{% extends "base.html" %}
+
+{% block title %}Lucrar Mais - GetUp Gestão{% endblock %}
+
+{% block extra_css %}
+<style>
+    body, .container { background-color: #F5F5F5 !important; }
+    .card, .card-body { background-color: #F0F0F0 !important; }
+    .card-header.bg-secondary { background-color: #6c757d !important; color: #fff !important; }
+    .btn-primary { background-color: rgb(1, 57, 44) !important; border-color: rgb(1, 57, 44) !important; color: #fff !important; }
+    .btn-secondary { background-color: #6c757d; border-color: #6c757d; color: #fff; }
+    .form-control, .form-select { background-color: #F5F5F5 !important; }
+    .txt-bloco {
+        background: #f8f9fa;
+        border-left: 4px solid #6c757d;
+        border-radius: 0 8px 8px 0;
+        padding: 14px 18px;
+        margin-bottom: 14px;
+        line-height: 1.55;
+    }
+    .txt-destaque { background: #e8f5e9; border-left-color: rgb(1, 57, 44); font-weight: 500; }
+    .txt-aviso { background: #fff3e0; border-left-color: #ff9800; }
+    .ajuste-row { display: none; }
+    .ajuste-row.ativo { display: table-row; }
+    #bloco-ajustes { display: none; }
+    #bloco-ajustes.visible { display: block; }
+    table.ajustes td, table.ajustes th { vertical-align: middle; font-size: 0.9rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container" style="min-height:100vh;">
+    <div class="row">
+        <div class="col-md-12 mt-5">
+            <div class="mb-4"><img src="/static/images/Logo.png" alt="Logo" height="40"></div>
+
+            <div class="row mb-4 justify-content-center">
+                <div class="col-6 col-md-2 mb-2"><a href="/dashboard" class="btn btn-secondary w-100">Home</a></div>
+                <div class="col-6 col-md-2 mb-2"><a href="/analise-mensal" class="btn btn-secondary w-100">Análise Mensal</a></div>
+                <div class="col-6 col-md-2 mb-2"><a href="/analise-mensal/cadastro" class="btn btn-secondary w-100">Dados Básicos</a></div>
+                {% include 'components/admin_nav_button.html' %}
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h4 class="card-title mb-0">Lucrar Mais</h4>
+                </div>
+                <div class="card-body">
+                    <!-- J8 -->
+                    <div class="txt-bloco mb-4" id="j8">
+                        Aqui você poderá fazer simulações, seja para analisar qual teria sido o resultado do passado com números diferentes, seja para definir as melhores providências em função do que está por vir.
+                    </div>
+
+                    <div id="aviso-sem-dados" class="alert alert-warning d-none">
+                        Nenhum dado básico encontrado. Cadastre um mês em
+                        <a href="/analise-mensal/cadastro" class="alert-link">Dados Básicos</a> primeiro.
+                    </div>
+
+                    <div id="conteudo" class="d-none">
+                        <!-- J12: mês a analisar (A) -->
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold" id="j12">Informe o mês que você quer analisar:</label>
+                                <div class="row g-2">
+                                    <div class="col-7">
+                                        <select id="mes-alvo" class="form-select">
+                                            <option value="1">Janeiro</option>
+                                            <option value="2">Fevereiro</option>
+                                            <option value="3">Março</option>
+                                            <option value="4">Abril</option>
+                                            <option value="5">Maio</option>
+                                            <option value="6">Junho</option>
+                                            <option value="7">Julho</option>
+                                            <option value="8">Agosto</option>
+                                            <option value="9">Setembro</option>
+                                            <option value="10">Outubro</option>
+                                            <option value="11">Novembro</option>
+                                            <option value="12">Dezembro</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-5">
+                                        <select id="ano-alvo" class="form-select"></select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Dados Básicos de referência (B)</label>
+                                <select id="periodo-b" class="form-select"></select>
+                                <small class="text-muted">Último período cadastrado é carregado automaticamente.</small>
+                            </div>
+                        </div>
+
+                        <!-- J15 aviso -->
+                        <div id="j15" class="txt-bloco txt-aviso d-none"></div>
+
+                        <!-- Resumo B -->
+                        <div class="card mb-4" style="background:#fff !important;">
+                            <div class="card-header bg-secondary text-white py-2">
+                                <h6 class="mb-0">Dados Básicos de <span id="label-mes-b">—</span></h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row small">
+                                    <div class="col-md-4 mb-2"><strong>Clientes:</strong> <span id="b-clientes">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Faturamento:</strong> <span id="b-fat">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Ticket médio:</strong> <span id="b-ticket">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Gastos c/ vendas:</strong> <span id="b-gv">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong id="label-insumos">Insumos/compras:</strong> <span id="b-insumos">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Custos fixos:</strong> <span id="b-cf">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Margem (B):</strong> <span id="b-margem">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Capacidade (cadastro):</strong> <span id="b-cap">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Margem ideal (cadastro):</strong> <span id="b-ideal">—</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- J19: previsão de clientes -->
+                        <div class="mb-3">
+                            <p class="fw-semibold" id="j19">—</p>
+                            <input type="number" class="form-control" id="prev-clientes" min="0" step="1" style="max-width:220px;" placeholder="Ex: 900">
+                        </div>
+
+                        <!-- J22 / J47 -->
+                        <div id="j22" class="txt-bloco d-none"></div>
+
+                        <!-- J24 + SIM/NÃO -->
+                        <div class="mb-3">
+                            <p class="fw-semibold" id="j24">—</p>
+                            <div class="d-flex gap-4">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input me-1" name="altera-valores" id="altera-sim" value="sim">
+                                    Sim
+                                </label>
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input me-1" name="altera-valores" id="altera-nao" value="nao" checked>
+                                    Não
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- J29 -->
+                        <div id="j29" class="txt-bloco txt-aviso d-none"></div>
+
+                        <!-- Tabela de ajustes (J31–J36) — só se SIM -->
+                        <div id="bloco-ajustes" class="card mb-4" style="background:#fff !important;">
+                            <div class="card-header bg-secondary text-white py-2"><h6 class="mb-0">Alterações de valores</h6></div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered mb-0 ajustes">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Item</th>
+                                                <th class="text-center">+</th>
+                                                <th class="text-center">−</th>
+                                                <th style="width:100px;">%</th>
+                                                <th>De</th>
+                                                <th>Para</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr data-key="preco">
+                                                <td id="j31">Seus preços de vendas</td>
+                                                <td class="text-center"><input type="radio" name="dir-preco" value="mais"></td>
+                                                <td class="text-center"><input type="radio" name="dir-preco" value="menos"></td>
+                                                <td><input type="number" class="form-control form-control-sm pct" id="pct-preco" min="0" max="100" step="0.1" placeholder="%"></td>
+                                                <td class="de" id="de-preco">—</td>
+                                                <td class="para fw-semibold" id="para-preco">—</td>
+                                            </tr>
+                                            <tr data-key="ticket">
+                                                <td id="j32">Valor médio das vendas por cliente</td>
+                                                <td class="text-center"><input type="radio" name="dir-ticket" value="mais"></td>
+                                                <td class="text-center"><input type="radio" name="dir-ticket" value="menos"></td>
+                                                <td><input type="number" class="form-control form-control-sm pct" id="pct-ticket" min="0" max="100" step="0.1" placeholder="%"></td>
+                                                <td class="de" id="de-ticket">—</td>
+                                                <td class="para fw-semibold" id="para-ticket">—</td>
+                                            </tr>
+                                            <tr data-key="gv">
+                                                <td id="j33">Gastos com vendas</td>
+                                                <td class="text-center"><input type="radio" name="dir-gv" value="mais"></td>
+                                                <td class="text-center"><input type="radio" name="dir-gv" value="menos"></td>
+                                                <td><input type="number" class="form-control form-control-sm pct" id="pct-gv" min="0" max="100" step="0.1" placeholder="%"></td>
+                                                <td class="de" id="de-gv">—</td>
+                                                <td class="para fw-semibold" id="para-gv">—</td>
+                                            </tr>
+                                            <tr data-key="insumos">
+                                                <td id="j34">Custo insumos e Prod. Terc. (*1)</td>
+                                                <td class="text-center"><input type="radio" name="dir-insumos" value="mais"></td>
+                                                <td class="text-center"><input type="radio" name="dir-insumos" value="menos"></td>
+                                                <td><input type="number" class="form-control form-control-sm pct" id="pct-insumos" min="0" max="100" step="0.1" placeholder="%"></td>
+                                                <td class="de" id="de-insumos">—</td>
+                                                <td class="para fw-semibold" id="para-insumos">—</td>
+                                            </tr>
+                                            <tr data-key="mobra" id="row-mobra">
+                                                <td id="j35">Custo mão de obra direta (*2)</td>
+                                                <td class="text-center"><input type="radio" name="dir-mobra" value="mais"></td>
+                                                <td class="text-center"><input type="radio" name="dir-mobra" value="menos"></td>
+                                                <td><input type="number" class="form-control form-control-sm pct" id="pct-mobra" min="0" max="100" step="0.1" placeholder="%"></td>
+                                                <td class="de" id="de-mobra">—</td>
+                                                <td class="para fw-semibold" id="para-mobra">—</td>
+                                            </tr>
+                                            <tr data-key="cf">
+                                                <td id="j36">Custos operacionais e adm.</td>
+                                                <td class="text-center"><input type="radio" name="dir-cf" value="mais"></td>
+                                                <td class="text-center"><input type="radio" name="dir-cf" value="menos"></td>
+                                                <td><input type="number" class="form-control form-control-sm pct" id="pct-cf" min="0" max="100" step="0.1" placeholder="%"></td>
+                                                <td class="de" id="de-cf">—</td>
+                                                <td class="para fw-semibold" id="para-cf">—</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <p class="small text-muted p-2 mb-0">
+                                    (*1) Em comércio: gastos com compra de mercadorias.
+                                    (*2) Não se aplica para comércio.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- J38 / J65 estimativa -->
+                        <div id="j38" class="txt-bloco txt-destaque d-none"></div>
+
+                        <!-- Tabela resultado estimado -->
+                        <div class="card mb-4" style="background:#fff !important;">
+                            <div class="card-header bg-secondary text-white py-2">
+                                <h6 class="mb-0">Estimativa para <span id="label-mes-a">—</span></h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 mb-2"><strong>Clientes:</strong> <span id="a-clientes">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Faturamento:</strong> <span id="a-fat">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Ticket médio:</strong> <span id="a-ticket">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Gastos c/ vendas:</strong> <span id="a-gv">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Insumos/compras:</strong> <span id="a-insumos">—</span></div>
+                                    <div class="col-md-4 mb-2" id="wrap-a-mobra"><strong>Mão de obra:</strong> <span id="a-mobra">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Custos fixos:</strong> <span id="a-cf">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Margem (A):</strong> <span id="a-margem">—</span></div>
+                                    <div class="col-md-4 mb-2"><strong>Resultado:</strong> <span id="a-resultado">—</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- J42 / J70 -->
+                        <div id="j42" class="txt-bloco txt-destaque d-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const NOMES = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+let cadastro = {};
+let basicos = null; // mês B
+
+function money(v) {
+    if (v == null || isNaN(v)) return 'R$ 0,00';
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
+}
+function pct(v) {
+    return (Math.abs(v) * 100).toFixed(1).replace('.', ',') + '%';
+}
+function pctPts(v) { // already in percent points
+    return Math.abs(v).toFixed(1).replace('.', ',') + '%';
+}
+
+function aplicarPct(base, pctVal, direcao) {
+    const p = parseFloat(pctVal);
+    if (!p || p <= 0 || !direcao) return base;
+    if (direcao === 'mais') return base * (1 + p / 100);
+    if (direcao === 'menos') return base * (1 - p / 100);
+    return base;
+}
+
+function getDir(name) {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    return el ? el.value : '';
+}
+
+function textoJ22(prevCli, cliB, capacidade) {
+    if (!prevCli || !cliB) return '';
+    const cPct = ((prevCli - cliB) / cliB) * 100;
+    const cTxt = Math.abs(cPct).toFixed(1).replace('.', ',') + '%';
+    const aboveCap = capacidade > 0 && prevCli > capacidade * 1.05;
+    const nearCap = capacidade > 0 && prevCli >= capacidade * 0.95 && prevCli < capacidade * 1.05;
+    const belowCap = capacidade > 0 && prevCli < capacidade * 0.95;
+    const up = prevCli > cliB * 1.05;
+    const same = prevCli >= cliB * 0.95 && prevCli < cliB * 1.05;
+    const down = prevCli < cliB * 0.95;
+
+    if (up && aboveCap) return `OK. Você está prevendo um acréscimo de ${cTxt}, e vendas acima de sua capacidade de atendimento.`;
+    if (same && aboveCap) return 'OK. Você está prevendo continuar com vendas acima de sua capacidade de atendimento.';
+    if (down && aboveCap) return 'OK. Você está prevendo redução nas vendas, mas ainda assim, acima de sua capacidade de atendimento.';
+    if (down && belowCap) return 'OK. Você está prevendo redução nas vendas, devendo ficar abaixo de sua capacidade de atendimento.';
+    if (down && nearCap) return 'OK. Com esta previsão de vendas menores você ficará no limite de sua capacidade de atendimento.';
+    if (same && belowCap) return 'OK. Você está prevendo continuar com vendas abaixo de sua capacidade de atendimento.';
+    return '';
+}
+
+function textoJ42(margemB, margemA, margemIdeal, fatA, fatB, cliA, cliB, mesA, mesB) {
+    // Ordem das condições = J42 / J70 da planilha
+    if (margemB >= 0 && margemA >= 0 && margemA < margemB && margemB < margemIdeal) {
+        return `Esta previsão de um lucro menor em relação ao de ${mesB} torna ainda mais distante a meta que você considera ideal. Vamos analisar algumas providências?`;
+    }
+    if (margemB >= 0 && margemA >= 0 && margemA > margemB && margemA < margemIdeal) {
+        return 'Esta previsão de um lucro maior não é suficiente para alcançar a meta que você considera ideal. Vamos analisar algumas providências?';
+    }
+    if (margemB >= 0 && margemA >= 0 && margemA > margemB && margemA >= margemIdeal) {
+        return 'Esta previsão de lucro atende a meta que você considera ideal. Vamos ver se dá para melhorar?';
+    }
+    if (margemB < 0 && margemA < 0 && margemA > margemB) {
+        return `A perspectiva para ${mesA} é de piora em relação a ${mesB}. Vamos analisar algumas providências?`;
+    }
+    if (margemB < 0 && margemA < 0 && margemA < margemB) {
+        return `A perspectiva para ${mesA} é de continuar no prejuízo. Vamos analisar algumas providências?`;
+    }
+    if (fatA === fatB && cliA === cliB && Math.abs(margemA - margemB) < 1e-9) {
+        return `Em princípio ${mesA} tende a ser uma repetição de ${mesB}. Vamos ver se dá para melhorar?`;
+    }
+    if (margemB >= 0 && margemA < 0) {
+        return 'Sem dúvida será possível reverter esta perspectiva. Vamos analisar algumas providências?';
+    }
+    return `Em princípio ${mesA} tende a ser uma repetição de ${mesB}. Vamos ver se dá para melhorar?`;
+}
+
+function calcular() {
+    if (!basicos) return;
+
+    const mesA = parseInt(document.getElementById('mes-alvo').value, 10);
+    const anoA = parseInt(document.getElementById('ano-alvo').value, 10);
+    const nomeMesA = NOMES[mesA];
+    const nomeMesB = NOMES[basicos.mes];
+    document.getElementById('label-mes-a').textContent = `${nomeMesA}/${anoA}`;
+    document.getElementById('label-mes-b').textContent = `${nomeMesB}/${basicos.ano}`;
+
+    const capacidade = parseFloat(cadastro.capacidade) || 0;
+    // cadastro pode vir em % (20) ou decimal (0.2)
+    let margemIdeal = cadastro.margem_ideal != null ? Number(cadastro.margem_ideal) : 0.20;
+    if (margemIdeal > 1) margemIdeal = margemIdeal / 100;
+
+    // Margem B
+    const fatB = basicos.faturamento;
+    const cliB = basicos.quant_clientes;
+    const gvB = basicos.gastos_vendas;
+    const insB = basicos.custo_insumos;
+    const mobB = basicos.custo_mao_obra || 0;
+    const cfB = basicos.custo_fixo;
+    const ticketB = basicos.ticket_medio || (cliB ? fatB / cliB : 0);
+    const margemB = fatB > 0 ? (fatB - (gvB + insB + mobB + cfB)) / fatB : 0;
+
+    // Previsão clientes (M21)
+    const prevCli = parseFloat(document.getElementById('prev-clientes').value) || 0;
+
+    // J19
+    document.getElementById('j19').textContent =
+        `Em ${nomeMesB} sua empresa vendeu para ${cliB} clientes. Para quantos você estima que poderá vender em ${nomeMesA}?`;
+
+    // J22
+    const j22 = textoJ22(prevCli, cliB, capacidade);
+    const elJ22 = document.getElementById('j22');
+    if (j22) { elJ22.textContent = j22; elJ22.classList.remove('d-none'); }
+    else { elJ22.classList.add('d-none'); }
+
+    // J24
+    const agora = new Date();
+    const mesAtual = agora.getMonth() + 1;
+    const anoAtual = agora.getFullYear();
+    const alvoFuturo = (anoA > anoAtual) || (anoA === anoAtual && mesA > mesAtual);
+    const bAnterior = (basicos.ano < anoA) || (basicos.ano === anoA && basicos.mes < mesA);
+    let j24 = '';
+    if (bAnterior) j24 = `Em relação a ${nomeMesB} ocorreram alterações de valores?`;
+    else if (alvoFuturo) j24 = `Em relação a ${nomeMesB} estão previstas alterações de valores?`;
+    else j24 = `Em relação a ${nomeMesB} ocorreram alterações de valores?`;
+    document.getElementById('j24').textContent = j24;
+
+    const alteraSim = document.getElementById('altera-sim').checked;
+    const alteraNao = document.getElementById('altera-nao').checked;
+    const blocoAj = document.getElementById('bloco-ajustes');
+    const elJ29 = document.getElementById('j29');
+
+    if (alteraSim) {
+        blocoAj.classList.add('visible');
+        elJ29.textContent = 'Informe se para mais ou para menos, e o percentual correspondente:';
+        elJ29.classList.remove('d-none');
+    } else {
+        blocoAj.classList.remove('visible');
+        elJ29.classList.add('d-none');
+    }
+
+    // Incidências de B
+    const eGv = fatB > 0 ? gvB / fatB : 0;
+    const eIns = fatB > 0 ? insB / fatB : 0;
+
+    // Ticket / preço ajustado (R31 / R32): base preço = ticket B; ticket A parte de R31
+    let precoA = ticketB;
+    let ticketA = ticketB;
+    if (alteraSim) {
+        const dirPreco = getDir('dir-preco');
+        const pctPreco = document.getElementById('pct-preco').value;
+        precoA = aplicarPct(ticketB, pctPreco, dirPreco);
+
+        const dirTicket = getDir('dir-ticket');
+        const pctTicket = document.getElementById('pct-ticket').value;
+        ticketA = aplicarPct(precoA, pctTicket, dirTicket);
+    } else {
+        precoA = ticketB;
+        ticketA = ticketB;
+    }
+
+    document.getElementById('de-preco').textContent = money(ticketB);
+    document.getElementById('para-preco').textContent = money(precoA);
+    document.getElementById('de-ticket').textContent = money(ticketB);
+    document.getElementById('para-ticket').textContent = money(ticketA);
+
+    const cliA = prevCli || cliB;
+    const fatA = ticketA * cliA; // D33 = D35 * D32
+
+    // Gastos A (R33): fatA * incidência B (E20), com eventual %
+    let gvA = fatA * eGv;
+    if (alteraSim) {
+        const dir = getDir('dir-gv');
+        const p = document.getElementById('pct-gv').value;
+        if (p && dir) gvA = aplicarPct(gvA, p, dir);
+    }
+    document.getElementById('de-gv').textContent = money(gvB);
+    document.getElementById('para-gv').textContent = money(gvA);
+
+    // Insumos (R34): Q31(ticket B) * M21 * E21 — planilha usa ticket original
+    let insA = ticketB * cliA * eIns;
+    if (alteraSim) {
+        const dir = getDir('dir-insumos');
+        const p = document.getElementById('pct-insumos').value;
+        if (p && dir) insA = aplicarPct(insA, p, dir);
+    }
+    document.getElementById('de-insumos').textContent = money(insB);
+    document.getElementById('para-insumos').textContent = money(insA);
+
+    // Mão de obra
+    let mobA = mobB;
+    if (alteraSim && !basicos.eh_comercio) {
+        const dir = getDir('dir-mobra');
+        const p = document.getElementById('pct-mobra').value;
+        mobA = aplicarPct(mobB, p, dir);
+    }
+    document.getElementById('de-mobra').textContent = money(mobB);
+    document.getElementById('para-mobra').textContent = money(mobA);
+
+    // Custos fixos
+    let cfA = cfB;
+    if (alteraSim) {
+        const dir = getDir('dir-cf');
+        const p = document.getElementById('pct-cf').value;
+        cfA = aplicarPct(cfB, p, dir);
+    }
+    document.getElementById('de-cf').textContent = money(cfB);
+    document.getElementById('para-cf').textContent = money(cfA);
+
+    const resultadoA = fatA - (gvA + insA + mobA + cfA);
+    const margemA = fatA > 0 ? resultadoA / fatA : 0;
+
+    // Exibir estimativa A
+    document.getElementById('a-clientes').textContent = cliA;
+    document.getElementById('a-fat').textContent = money(fatA);
+    document.getElementById('a-ticket').textContent = money(ticketA);
+    document.getElementById('a-gv').textContent = money(gvA);
+    document.getElementById('a-insumos').textContent = money(insA);
+    document.getElementById('a-mobra').textContent = money(mobA);
+    document.getElementById('a-cf').textContent = money(cfA);
+    document.getElementById('a-margem').textContent = pct(margemA);
+    document.getElementById('a-resultado').textContent = money(resultadoA);
+
+    // J38 / J65
+    const yPct = Math.abs(margemA * 100).toFixed(1).replace('.', ',');
+    let y1 = 'lucro';
+    if (resultadoA < 0) y1 = 'prejuízo';
+    else if (resultadoA === 0) y1 = 'margem';
+    const elJ38 = document.getElementById('j38');
+    if (cliA > 0) {
+        let txt;
+        if (alteraNao) {
+            txt = `Com esta previsão de vendas, mantidos os valores e incidência dos custos de ${nomeMesB}, em princípio podemos estimar que ${nomeMesA} resultará em ${yPct}% de ${y1} de um faturamento de ${money(fatA)}.`;
+        } else {
+            txt = `Com esta previsão de vendas e alteração dos valores de ${nomeMesB}, em princípio podemos estimar que ${nomeMesA} resultará em ${yPct}% de ${y1} de um faturamento de ${money(fatA)}.`;
+        }
+        elJ38.textContent = txt;
+        elJ38.classList.remove('d-none');
+    } else {
+        elJ38.classList.add('d-none');
+    }
+
+    // J42 / J70
+    const elJ42 = document.getElementById('j42');
+    if (cliA > 0 && fatA > 0) {
+        elJ42.textContent = textoJ42(margemB, margemA, margemIdeal, fatA, fatB, cliA, cliB, nomeMesA, nomeMesB);
+        elJ42.classList.remove('d-none');
+    } else {
+        elJ42.classList.add('d-none');
+    }
+
+    // J15 — alerta se faltou mês anterior
+    const dia = agora.getDate();
+    let mesAnt = mesAtual - 1, anoAnt = anoAtual;
+    if (mesAnt < 1) { mesAnt = 12; anoAnt -= 1; }
+    const elJ15 = document.getElementById('j15');
+    if (dia > 6 && !(basicos.mes === mesAnt && basicos.ano === anoAnt)) {
+        elJ15.textContent = 'Para uma análise mais precisa recomendamos anotar em Dados Básicos os valores do mês passado.';
+        elJ15.classList.remove('d-none');
+    } else {
+        elJ15.classList.add('d-none');
+    }
+}
+
+function preencherResumoB() {
+    if (!basicos) return;
+    document.getElementById('b-clientes').textContent = basicos.quant_clientes;
+    document.getElementById('b-fat').textContent = money(basicos.faturamento);
+    document.getElementById('b-ticket').textContent = money(basicos.ticket_medio);
+    document.getElementById('b-gv').textContent = money(basicos.gastos_vendas);
+    document.getElementById('b-insumos').textContent = money(basicos.custo_insumos);
+    document.getElementById('b-cf').textContent = money(basicos.custo_fixo);
+    const margemB = basicos.faturamento > 0
+        ? (basicos.faturamento - (basicos.gastos_vendas + basicos.custo_insumos + (basicos.custo_mao_obra || 0) + basicos.custo_fixo)) / basicos.faturamento
+        : 0;
+    document.getElementById('b-margem').textContent = pct(margemB);
+    document.getElementById('b-cap').textContent = cadastro.capacidade != null ? cadastro.capacidade : '—';
+    document.getElementById('b-ideal').textContent = cadastro.margem_ideal != null ? (cadastro.margem_ideal + '%') : '—';
+
+    const rowMobra = document.getElementById('row-mobra');
+    const wrapA = document.getElementById('wrap-a-mobra');
+    if (basicos.eh_comercio) {
+        rowMobra.style.display = 'none';
+        wrapA.style.display = 'none';
+        document.getElementById('label-insumos').textContent = 'Compras de mercadorias:';
+        document.getElementById('j34').textContent = 'Gastos com compra de mercadorias (*1)';
+    } else {
+        rowMobra.style.display = '';
+        wrapA.style.display = '';
+    }
+
+    // default previsão = mesmos clientes
+    const prev = document.getElementById('prev-clientes');
+    if (!prev.value) prev.value = basicos.quant_clientes || '';
+}
+
+async function carregarBase() {
+    const res = await fetch('/lucrar-mais/api/base', { credentials: 'include' });
+    const data = await res.json();
+    cadastro = data.cadastro || {};
+    basicos = data.basicos;
+
+    const sel = document.getElementById('periodo-b');
+    sel.innerHTML = '';
+    (data.periodos || []).forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `${NOMES[p.mes]}/${p.ano}`;
+        sel.appendChild(opt);
+    });
+
+    const aviso = document.getElementById('aviso-sem-dados');
+    const conteudo = document.getElementById('conteudo');
+    if (!basicos) {
+        aviso.classList.remove('d-none');
+        conteudo.classList.add('d-none');
+        return;
+    }
+    aviso.classList.add('d-none');
+    conteudo.classList.remove('d-none');
+
+    // Ano alvo: ano atual ± 1
+    const anoSel = document.getElementById('ano-alvo');
+    const yNow = new Date().getFullYear();
+    anoSel.innerHTML = '';
+    for (let y = yNow - 2; y <= yNow + 2; y++) {
+        const o = document.createElement('option');
+        o.value = y;
+        o.textContent = y;
+        if (y === yNow) o.selected = true;
+        anoSel.appendChild(o);
+    }
+    // Mês alvo: próximo ao atual
+    const mNow = new Date().getMonth() + 1;
+    document.getElementById('mes-alvo').value = String(Math.min(12, mNow + 1 > 12 ? 1 : mNow + 1));
+    if (mNow === 12) document.getElementById('ano-alvo').value = String(yNow + 1);
+
+    preencherResumoB();
+    calcular();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    carregarBase();
+
+    document.getElementById('periodo-b').addEventListener('change', async (e) => {
+        const id = e.target.value;
+        if (!id) return;
+        const res = await fetch(`/lucrar-mais/api/periodo/${id}`, { credentials: 'include' });
+        basicos = await res.json();
+        preencherResumoB();
+        calcular();
+    });
+
+    ['mes-alvo', 'ano-alvo', 'prev-clientes', 'altera-sim', 'altera-nao'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('change', calcular);
+        if (el && el.tagName === 'INPUT' && el.type === 'number') el.addEventListener('input', calcular);
+    });
+    document.querySelectorAll('#bloco-ajustes input').forEach(el => {
+        el.addEventListener('change', calcular);
+        el.addEventListener('input', calcular);
+    });
+});
+</script>
+{% endblock %}

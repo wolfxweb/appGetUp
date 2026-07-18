@@ -21,6 +21,7 @@ from app.routes.categoria import router as categoria_router
 from app.routes.produto_operations import router as produto_operations_router
 from app.routes.analise_mensal import router as analise_mensal_router
 from app.routes.parceiro import router as parceiro_router
+from app.routes.lucrar_mais import router as lucrar_mais_router
 
 router = APIRouter()
 
@@ -40,3 +41,4 @@ router.include_router(categoria_router)
 router.include_router(produto_operations_router) 
 router.include_router(analise_mensal_router)
 router.include_router(parceiro_router)
+router.include_router(lucrar_mais_router)
