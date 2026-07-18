@@ -4,170 +4,13 @@
 
 {% block extra_css %}
 <style>
-    /* Ocultar spin buttons (setas) dos inputs numéricos */
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-    .campo-cadastro-readonly {
-        background-color: #e9ecef !important;
-        cursor: not-allowed;
-    }
-    .cadastro-hint {
-        font-size: 0.85rem;
-        color: #6c757d;
-    }
-    #narrativa-final p { margin-bottom: 0.85rem; }
-    #narrativa-final table { font-size: 0.92rem; }
-    input[type=number] {
-        -moz-appearance: textfield;
-    }
-
-    body {
-        background-color: #F5F5F5 !important;
-    }
-    .container-fluid, .container {
-        background-color: #F5F5F5 !important;
-    }
-    .card, .card-body {
-        background-color: #F0F0F0 !important;
-    }
-    .card-header.bg-secondary {
-        background-color: #6c757d !important;
-        color: white !important;
-    }
-    .btn-secondary {
-        background-color: #6c757d;
-        border-color: #6c757d;
-        color: white;
-    }
-    .btn-secondary:hover {
-        background-color: #5a6268;
-        border-color: #545b62;
-        color: white;
-    }
-    .btn-primary {
-        background-color: rgb(1, 57, 44) !important;
-        border-color: rgb(1, 57, 44) !important;
-    }
-    .btn-primary:hover {
-        background-color: rgb(2, 70, 54) !important;
-        border-color: rgb(2, 70, 54) !important;
-    }
-    .btn-primary, .btn-danger {
-        color: white !important;
-    }
-    .btn-primary i, .btn-danger i {
-        color: white !important;
-    }
-    .btn-secondary i {
-        color: white !important;
-    }
-    .form-control, .form-select {
-        background-color: #F5F5F5 !important;
-    }
-    
-    /* Wizard Styles */
-    .wizard-container {
-        background-color: white;
-        padding: 30px;
-        border-radius: 8px;
-        margin-top: 20px;
-        border: 1px solid #dee2e6;
-    }
-    
-    
-    /* Tela fixa: todos os passos ficam visíveis ao mesmo tempo (exceto os de compatibilidade/confirmação pós-salvar) */
-    .wizard-step {
-        display: none;
-    }
-    .wizard-step.active {
-        display: block;
-    }
-    #step-0, #step-2, #step-3, #step-5, #step-6, #step-7, #step-8, #step-9 {
-        display: block !important;
-    }
-    .wizard-step + .wizard-step {
-        border-top: 1px solid #dee2e6;
-        padding-top: 1.75rem;
-        margin-top: 1.75rem;
-    }
-    /* Botões de navegação Próximo/Voltar não fazem sentido em tela fixa */
-    [onclick="nextStep()"], [onclick="prevStep()"] {
-        display: none !important;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* Navigation Buttons */
-    .wizard-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 30px;
-        padding-top: 20px;
-        border-top: 1px solid #dee2e6;
-    }
-    
-    /* Conditional Text Box */
-    .conditional-text {
-        background-color: #e8f5e9;
-        border-left: 4px solid #28a745;
-        padding: 15px 20px;
-        margin-top: 20px;
-        border-radius: 0 8px 8px 0;
-        display: none;
-    }
-    
-    .conditional-text.warning {
-        background-color: #fff3e0;
-        border-left-color: #ff9800;
-    }
-    
-    .conditional-text.danger {
-        background-color: #ffebee;
-        border-left-color: #f44336;
-    }
-    
-    .conditional-text.info {
-        background-color: #e3f2fd;
-        border-left-color: #2196f3;
-    }
-    
-    .conditional-text.show {
-        display: block;
-    }
-    
-    .conditional-text p {
-        margin: 0;
-        color: #333;
-        font-size: 0.95rem;
-    }
-    
-    .conditional-text .highlight {
-        font-weight: bold;
-        color: rgb(1, 57, 44);
-    }
-    
-    /* Input hint */
-    .input-hint {
-        background-color: #f8f9fa;
-        border: 1px solid #dee2e6;
-        padding: 12px 15px;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        font-size: 0.9rem;
-        color: #6c757d;
-    }
-    
-    /* Resultado conversacional (step 8) */
-    .resultado-texto-container {
-        max-width: 680px;
-    }
+    body, .container { background-color: #F5F5F5 !important; }
+    .card, .card-body { background-color: #F0F0F0 !important; }
+    .card-header.bg-secondary { background-color: #6c757d !important; color: #fff !important; }
+    .btn-primary { background-color: rgb(1, 57, 44) !important; border-color: rgb(1, 57, 44) !important; color: #fff !important; }
+    .btn-primary:hover { background-color: rgb(2, 70, 54) !important; border-color: rgb(2, 70, 54) !important; }
+    .btn-secondary { background-color: #6c757d; border-color: #6c757d; color: #fff; }
+    .form-select { background-color: #F5F5F5 !important; }
     .resultado-texto-bloco {
         background: #f8f9fa;
         border-left: 4px solid #6c757d;
@@ -181,324 +24,20 @@
     .resultado-texto-bloco.resultado-destaque {
         background: #e8f5e9;
         border-left-color: rgb(1, 57, 44);
-        font-size: 1.08rem;
         font-weight: 500;
     }
-
-    /* Result Card */
-    .result-card {
-        background-color: #f8f9fa;
-        padding: 20px;
-        border-radius: 8px;
-        margin-bottom: 15px;
-        border-left: 4px solid #6c757d;
-    }
-    
-    .result-card.success {
-        border-left-color: #28a745;
-    }
-    
-    .result-card.warning {
-        border-left-color: #ffc107;
-    }
-    
-    .result-card.danger {
-        border-left-color: #dc3545;
-    }
-    
-    .result-card.primary {
-        border-left-color: rgb(1, 57, 44);
-    }
-    
-    .result-title {
-        font-weight: bold;
-        color: #495057;
-        margin-bottom: 10px;
-    }
-    
-    .result-value {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: rgb(1, 57, 44);
-    }
-    
-    .result-description {
-        color: #6c757d;
-        margin-top: 8px;
-    }
-    
-    /* Table */
-    .table-custos {
-        background-color: white;
-        border-radius: 8px;
-    }
-    
-    .table-custos th {
-        background-color: #6c757d;
-        color: white;
-    }
-
-    .ana-custos-fixos-trigger {
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
-    .ana-custos-fixos-trigger:hover {
-        transform: scale(1.05);
-    }
-    .ana-caixa-trigger {
-        cursor: pointer;
-        transition: transform 0.2s;
-    }
-    .ana-caixa-trigger:hover {
-        transform: scale(1.05);
-    }
-    #custo_fixo_total[readonly] {
-        background-color: #e9ecef !important;
-        cursor: default;
-    }
-    
-    /* Modal — verde padrão; modais de ajuda usam bg-secondary */
-    .modal-header:not(.bg-secondary) {
-        background-color: rgb(1, 57, 44);
-        color: white;
-    }
-    
-    .modal-header:not(.bg-secondary) .btn-close {
-        filter: invert(1);
-    }
-
-    .modal-header.bg-secondary {
-        background-color: #6c757d !important;
-    }
-
-    .modal-header.bg-secondary .btn-close {
-        filter: none;
-    }
-    
-    /* Conditional text (F11 messages) */
-    .conditional-text {
-        padding: 15px;
-        border-radius: 8px;
-        margin-top: 10px;
-    }
-    .conditional-text.show {
-        display: block !important;
-    }
-    .conditional-text.success {
-        background-color: #d1e7dd;
-        border: 1px solid #198754;
-        color: #0a3622;
-    }
-    .conditional-text.warning {
-        background-color: #fff3cd;
-        border: 1px solid #ffc107;
-        color: #664d03;
-    }
-    .conditional-text.danger {
-        background-color: #f8d7da;
-        border: 1px solid #dc3545;
-        color: #58151c;
-    }
-    
-    /* Intro Step */
-    .intro-content {
-        text-align: center;
-        padding: 40px 20px;
-    }
-    
-    .intro-content h4 {
-        color: #495057;
-        margin-bottom: 15px;
-    }
-    
-    .intro-content p {
-        color: #6c757d;
-        font-size: 1.1rem;
-    }
-    
-    /* Aviso atualizacao */
-    #aviso-atualizacao {
-        background-color: #fff3cd;
-        border: 1px solid #ffc107;
-        border-radius: 8px;
-        padding: 15px;
-        margin-top: 15px;
-        display: none;
-    }
-    
-    /* Progress indicator */
-    #progress-indicator {
-        background-color: #6c757d;
-        color: white;
-        padding: 5px 15px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-    }
-    
-    /* Results summary row */
-    .results-summary {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-        margin-bottom: 20px;
-    }
-
-    .results-summary.results-summary-3col {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    @media (max-width: 767.98px) {
-        .results-summary.results-summary-3col {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-        }
-    }
-
-    @media (max-width: 479.98px) {
-        .results-summary.results-summary-3col {
-            grid-template-columns: 1fr;
-        }
-    }
-    
-    .summary-item {
-        background-color: #f8f9fa;
-        padding: 15px;
-        border-radius: 8px;
-        text-align: center;
-        border: 1px solid #dee2e6;
-    }
-    
-    .summary-item .label {
-        font-size: 0.8rem;
-        color: #6c757d;
-        margin-bottom: 5px;
-    }
-    
-    .summary-item .value {
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: #495057;
-    }
-    
-    /* Final message */
-    .final-message {
-        text-align: center;
-        padding: 30px;
-        background-color: #e8f5e9;
-        border-radius: 12px;
-        margin-top: 20px;
-    }
-    
-    .final-message.success {
-        background-color: #e8f5e9;
-    }
-    
-    .final-message.danger {
-        background-color: #ffebee;
-    }
-
-    /* Persona (Ana) com balão — layout dos slides */
-    .slide-persona-row {
-        display: flex;
-        align-items: flex-start;
-        gap: 16px;
-    }
-    .persona-img {
-        width: 90px;
-        height: auto;
-        flex-shrink: 0;
-        object-fit: contain;
-    }
-    .persona-img-escrevendo {
-        width: 140px;
-        max-height: 200px;
-        border-radius: 8px;
-    }
-    .help-lamp-icon {
-        width: 28px;
-        height: 28px;
-        cursor: pointer;
-        flex-shrink: 0;
-    }
-    .ana-persona-with-help {
-        display: flex;
-        align-items: flex-end;
-        justify-content: center;
-        gap: 8px;
-    }
-    .persona-balloon {
-        background: #fff;
-        border: 1px solid #dee2e6;
-        border-radius: 12px;
-        padding: 12px 16px;
-        position: relative;
-        flex: 1;
-        font-size: 0.95rem;
-    }
-    .persona-balloon::before {
-        content: '';
-        position: absolute;
-        left: -12px;
-        top: 20px;
-        border: 6px solid transparent;
-        border-right-color: #dee2e6;
-    }
-    .persona-balloon::after {
-        content: '';
-        position: absolute;
-        left: -10px;
-        top: 21px;
-        border: 5px solid transparent;
-        border-right-color: #fff;
-    }
-
-    /* Mobile: João (e persona) acima do balão */
-    @media (max-width: 767.98px) {
-        .slide-persona-row:not(.flex-column) {
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-        }
-        .slide-persona-row:not(.flex-column) .persona-img,
-        .slide-persona-row:not(.flex-column) .persona-img-escrevendo {
-            order: -1;
-            width: min(140px, 45vw);
-            max-height: 180px;
-            margin: 0 auto 4px;
-        }
-        .slide-persona-row:not(.flex-column) .persona-balloon {
-            width: 100%;
-            text-align: left;
-        }
-        .slide-persona-row:not(.flex-column) .persona-balloon::before {
-            left: 50%;
-            top: -12px;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-bottom-color: #dee2e6;
-            border-right-color: transparent;
-        }
-        .slide-persona-row:not(.flex-column) .persona-balloon::after {
-            left: 50%;
-            top: -10px;
-            transform: translateX(-50%);
-            border: 5px solid transparent;
-            border-bottom-color: #fff;
-            border-right-color: transparent;
-        }
-    }
+    #narrativa-analise p { margin-bottom: 0.85rem; }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container" style="background-color: #F5F5F5; min-height: 100vh;">
+<div class="container" style="min-height: 100vh;">
     <div class="row">
         <div class="col-md-12 mt-5">
-            <div class="col-md-12 mb-4 d-flex justify-content-between align-items-center">
+            <div class="col-md-12 mb-4">
                 <img src="/static/images/Logo.png" alt="Logo" height="40">
-                <div id="progress-indicator" class="d-none">Passo 1 de 12</div>
             </div>
-            
-            <!-- Navigation Buttons -->
+
             <div class="row mb-4 justify-content-center">
                 <div class="col-6 col-md-2 mb-2 mb-md-0">
                     <a href="/dashboard" class="btn btn-secondary w-100">Índice</a>
@@ -509,1388 +48,219 @@
                 <div class="col-6 col-md-2 mb-2 mb-md-0">
                     <a href="/analise-mensal/lista" class="btn btn-secondary w-100">Histórico</a>
                 </div>
+                <div class="col-6 col-md-2 mb-2 mb-md-0">
+                    <a href="/analise-mensal/cadastro" class="btn btn-secondary w-100">Dados Básicos</a>
+                </div>
                 {% include 'components/admin_nav_button.html' %}
             </div>
 
-            <!-- Wizard Card -->
-            <div class="card shadow mb-4" style="background-color: #F0F0F0;">
+            <div class="card shadow mb-4">
                 <div class="card-header bg-secondary text-white">
                     <h4 class="card-title mb-0">Análise Mensal</h4>
                 </div>
                 <div class="card-body">
-                    {% set img_joao_escrevendo = url_for('static', path='images/João definitivo escrevendo.jpg') %}
-                    {% set img_joao_apresentando = url_for('static', path='images/João definitivo apresentando.jpg') %}
+                    <p class="text-muted mb-3">
+                        A análise usa os <strong>Dados Básicos</strong> do período e as informações do seu <strong>cadastro</strong>
+                        (capacidade de atendimento e margem de lucro ideal).
+                    </p>
 
-                    <!-- Wizard Container -->
-                    <div class="wizard-container">
-                        <!-- Hidden input for editing mode -->
-                        {% if analise_id %}
-                        <input type="hidden" id="edit-analise-id" value="{{ analise_id }}">
-                        {% else %}
-                        <input type="hidden" id="edit-analise-id" value="">
-                        {% endif %}
-                        <input type="hidden" id="modo-detalhe" value="{{ '1' if modo_detalhe else '' }}">
-                        {% if modo_detalhe and analise_id %}
-                        <div class="alert alert-info d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3" id="banner-modo-detalhe">
-                            <span>Você está visualizando a análise guiada com os dados já cadastrados.</span>
-                            <a href="/analise-mensal/cadastro/{{ analise_id }}" class="btn btn-sm btn-outline-primary">Editar valores</a>
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <label for="periodo" class="form-label fw-semibold">Selecione o período já cadastrado</label>
+                            <select class="form-select form-select-lg" id="periodo">
+                                <option value="">Carregando períodos...</option>
+                            </select>
                         </div>
-                        {% endif %}
-                        
+                    </div>
 
-                        <!-- ==================== STEP 0: INTRODUCAO + MES/ANO (Slide 1) ==================== -->
-                        <div class="wizard-step active" id="step-0">
-                            <div class="slide-persona-row mb-4">
-                                <img src="/static/images/joao-sem-fundo.png" alt="João" class="persona-img">
-                                <div class="persona-balloon">
-                                    <p class="mb-2"><strong>Análise mensal</strong></p>
-                                    <p class="mb-1">Agora vamos iniciar nosso trabalho conjunto. Como esta é a primeira vez, quero destacar que será muito útil que:</p>
-                                    <ul class="mb-2 ps-3">
-                                        <li>anote os dados de alguns meses anteriores;</li>
-                                        <li>mantenha as informações atualizadas.</li>
-                                    </ul>
-                                    <p class="mb-0">São apenas 5 informações simples porém indispensáveis para entender como sua loja está funcionando.</p>
-                                </div>
+                    <div id="aviso-sem-dados" class="alert alert-warning d-none">
+                        Nenhum dado básico encontrado. Cadastre o mês em
+                        <a href="/analise-mensal/cadastro" class="alert-link">Dados Básicos</a>
+                        para ver a análise.
+                    </div>
+
+                    <div id="conteudo-analise" class="d-none">
+                        <div class="card mb-3" style="background:#fff !important;">
+                            <div class="card-header bg-secondary text-white py-2">
+                                <h6 class="mb-0">Análise — <span id="titulo-mes-ano"></span></h6>
                             </div>
-
-                            <p class="fw-semibold mb-2">Indique o mês cujos dados você irá informar</p>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="mes" class="form-label">Mês</label>
-                                    <select class="form-select" id="mes" required>
-                                        <option value="">Selecione o mês...</option>
-                                        <option value="1">Janeiro</option>
-                                        <option value="2">Fevereiro</option>
-                                        <option value="3">Março</option>
-                                        <option value="4">Abril</option>
-                                        <option value="5">Maio</option>
-                                        <option value="6">Junho</option>
-                                        <option value="7">Julho</option>
-                                        <option value="8">Agosto</option>
-                                        <option value="9">Setembro</option>
-                                        <option value="10">Outubro</option>
-                                        <option value="11">Novembro</option>
-                                        <option value="12">Dezembro</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="ano" class="form-label">Ano</label>
-                                    <select class="form-select" id="ano" required>
-                                        <option value="">Selecione o ano...</option>
-                                        {% for y in range(2005, 2036) %}
-                                        <option value="{{ y }}" {% if y == 2026 %}selected{% endif %}>{{ y }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div id="aviso-atualizacao" class="mt-1 mb-3">
-                                <i class="bi bi-info-circle"></i>
-                                <span id="aviso-texto"></span>
-                            </div>
-
-                            <div class="text-center mt-3">
-                                <p class="fw-semibold mb-2">Podemos começar?</p>
-                                <button class="btn btn-primary" onclick="nextStep()">Sim, vamos!</button>
+                            <div class="card-body">
+                                <div id="narrativa-analise"></div>
                             </div>
                         </div>
+                    </div>
 
-                        <!-- step-1 mantido vazio para não quebrar navegação numérica -->
-                        <div class="wizard-step" id="step-1" style="display:none!important;"></div>
-
-                        <!-- ==================== STEP 2: CAPACIDADE + CLIENTES (Slide 2) ==================== -->
-                        <div class="wizard-step" id="step-2">
-                            <div class="slide-persona-row mb-4">
-                                <img src="/static/images/joao-sem-fundo.png" alt="João" class="persona-img">
-                                <div class="persona-balloon">
-                                    <p class="mb-1"><strong>Para começar, me conta:</strong></p>
-                                    <p class="mb-0">Para quantos <strong>clientes</strong> a loja vendeu em <span id="label-mes-step2" class="text-primary fw-semibold">______</span>?</p>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="quant_clientes" class="form-label">Vendas realizadas (clientes atendidos)</label>
-                                    <input type="number" class="form-control" id="quant_clientes" placeholder="Ex: 2000" required>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="capacidade" class="form-label">Capacidade de atendimento (máximo no mês)</label>
-                                    <input type="number" class="form-control{% if user and user.service_capacity %} campo-cadastro-readonly{% endif %}" id="capacidade" placeholder="Ex: 2300" step="1" min="0"
-                                        value="{{ user.service_capacity|int if user and user.service_capacity else '' }}"
-                                        {% if user and user.service_capacity %}readonly data-from-cadastro="1"{% endif %}>
-                                    {% if user and user.service_capacity %}
-                                    <div class="cadastro-hint">Obtido do cadastro</div>
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            <!-- Comparação visual Vendas x Capacidade -->
-                            <div id="cap-comparacao" class="mt-2 mb-3" style="display:none; max-width:420px;">
-                                <div class="mb-2">
-                                    <div class="d-flex justify-content-between small mb-1">
-                                        <span>Vendas realizadas</span>
-                                        <span id="cap-pct-vendas" class="fw-bold"></span>
-                                    </div>
-                                    <div class="progress" style="height:14px;">
-                                        <div id="cap-bar-vendas" class="progress-bar" style="background:rgb(1,57,44); width:0%;"></div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="d-flex justify-content-between small mb-1">
-                                        <span>Capacidade de atendimento</span>
-                                        <span class="fw-bold">100%</span>
-                                    </div>
-                                    <div class="progress" style="height:14px;">
-                                        <div class="progress-bar w-100" style="background:#adb5bd;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- F1: comentário de capacidade -->
-                            <div class="conditional-text" id="f1-capacidade">
-                                <p id="f1-texto"></p>
-                            </div>
-
-                            <!-- Resultado ticket médio (move para cá do step-4) -->
-                            <div id="resumo-faturamento" class="results-summary mt-4" style="display: none;">
-                                <div class="summary-item">
-                                    <div class="label">Faturamento</div>
-                                    <div class="value" id="resumo-fat">-</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="label">Clientes</div>
-                                    <div class="value" id="resumo-cli">-</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="label">Ticket Médio</div>
-                                    <div class="value" id="resumo-tm">-</div>
-                                </div>
-                            </div>
-                            <div class="conditional-text info" id="f2-ticket-medio">
-                                <p id="f2-texto"></p>
-                            </div>
-
-                            <div class="wizard-nav">
-                                <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <div class="text-center">
-                                    <p class="fw-semibold mb-1 small">Vamos continuar?</p>
-                                    <button class="btn btn-primary" onclick="nextStep()">Sim, vamos!</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ==================== STEP 3: FATURAMENTO (Slide 3) ==================== -->
-                        <div class="wizard-step" id="step-3">
-                            <div class="slide-persona-row mb-4">
-                                <img src="{{ img_joao_escrevendo }}" alt="João" class="persona-img persona-img-escrevendo">
-                                <div class="persona-balloon">
-                                    <p class="mb-0">Em <span id="label-mes-step3" class="text-primary fw-semibold">______</span>, quanto a loja <strong>faturou</strong> com as vendas?</p>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label for="faturamento" class="form-label">Faturamento (R$)</label>
-                                    <input type="number" class="form-control" id="faturamento" placeholder="Ex: 65000.00" step="0.01" required>
-                                </div>
-                            </div>
-
-                            <!-- F2: Ticket Médio (fórmula 2 do Excel) -->
-                            <div id="resumo-faturamento-f3" class="results-summary mt-3" style="display:none;">
-                                <div class="summary-item">
-                                    <div class="label">Faturamento</div>
-                                    <div class="value" id="resumo-fat-f3">-</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="label">Clientes</div>
-                                    <div class="value" id="resumo-cli-f3">-</div>
-                                </div>
-                                <div class="summary-item">
-                                    <div class="label">Ticket Médio</div>
-                                    <div class="value" id="resumo-tm-f3">-</div>
-                                </div>
-                            </div>
-                            <div class="conditional-text info" id="f2-ticket-medio-f3">
-                                <p id="f2-texto-f3"></p>
-                            </div>
-
-                            <div class="wizard-nav">
-                                <button class="btn btn-secondary" onclick="prevStep()"><<< Voltar</button>
-                                <div class="text-center">
-                                    <p class="fw-semibold mb-1 small">Agora vamos verificar os custos. OK?</p>
-                                    <button class="btn btn-primary" onclick="nextStep()">Vamos!</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- step-4 fundido com step-2 -->
-                        <div class="wizard-step" id="step-4" style="display:none!important;"></div>
-
-                        <!-- ==================== STEP 5: GASTOS COM VENDAS (Slide 4) ==================== -->
-                        <div class="wizard-step" id="step-5">
-
-                            <div class="slide-persona-row mb-4">
-                                <img src="{{ img_joao_escrevendo }}" alt="João" class="persona-img persona-img-escrevendo">
-                                <div class="persona-balloon">
-                                    <p class="mb-2">Até aqui vimos que <strong id="s5-clientes">—</strong> clientes gastaram em média <strong id="s5-ticket">—</strong>, gerando um faturamento de <strong id="s5-fat">—</strong>.</p>
-                                    <p class="mb-0">Aproximadamente, quanto somaram os <strong>gastos com vendas</strong>?</p>
-                                </div>
-                            </div>
-
-                            <div class="row align-items-start">
-                                <!-- Coluna esquerda: input + tabela -->
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="gastos_vendas" class="form-label fw-semibold">
-                                            Total Gastos com Vendas (R$)
-                                        </label>
-                                        <input type="number" class="form-control" id="gastos_vendas" placeholder="Ex: 6900.00" step="0.01" required>
-                                        <small class="text-muted" id="gastos_vendas_pct_label"></small>
-                                        <input type="hidden" id="gastos_vendas_pct">
-                                    </div>
-
-                                    <!-- F3: comentário contextual -->
-                                    <div class="conditional-text" id="f3-sobra">
-                                        <p id="f3-texto"></p>
-                                    </div>
-                                    <div class="conditional-text" id="f3-sobram">
-                                        <p id="f3-sobram-texto"></p>
-                                    </div>
-                                </div>
-
-                                <!-- Coluna direita: Ana + gráfico de pizza (slide 4) -->
-                                <div class="col-md-6 d-flex flex-column align-items-center">
-                                    <!-- Ana com link para Gastos com Vendas -->
-                                    <div class="d-flex align-items-center gap-2 mb-2 justify-content-center">
-                                        <img src="/static/images/ana-sem-fundo.png"
-                                             alt="Ana — detalhar gastos com vendas"
-                                             class="persona-img persona-img-pequena"
-                                             role="button"
-                                             tabindex="0"
-                                             style="max-width:60px; cursor:pointer; transition:transform .2s;"
-                                             title="Clique para ver o detalhamento dos Gastos com Vendas"
-                                             onclick="abrirModalGerenciarGastosVendas()"
-                                             onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();abrirModalGerenciarGastosVendas();}">
-                                        <small class="text-muted">Clique na Ana para<br>detalhar os gastos</small>
-                                    </div>
-                                    <p class="text-muted small mb-2 text-center fw-semibold">Custos s/Faturamento</p>
-                                    <div style="max-width:260px; width:100%;">
-                                        <canvas id="chart-gastos-pizza"></canvas>
-                                    </div>
-                                    <div id="chart-gastos-legenda" class="mt-2 text-center" style="display:none;">
-                                        <small><span class="badge" style="background:#c8a84b;">■</span> Gastos com Vendas &nbsp;
-                                        <span class="badge" style="background:#aaa;">■</span> Restante</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Resumo (oculto, mantido por compatibilidade com JS existente) -->
-                            <div id="resumo-vendas" class="results-summary mt-3" style="display: none;">
-                                <div class="summary-item"><div class="label">Faturamento</div><div class="value" id="resumo-fat2">-</div></div>
-                                <div class="summary-item"><div class="label">Gastos</div><div class="value" id="resumo-gv">-</div></div>
-                                <div class="summary-item"><div class="label">Sobram</div><div class="value" id="resumo-sobram">-</div></div>
-                            </div>
-                            <div id="resumo-margem-gastos" class="results-summary mt-2" style="display: none;">
-                                <div class="summary-item"><div class="label">Margem de Contribuição</div><div class="value" id="resumo-mb-gastos">-</div></div>
-                            </div>
-
-                            <div class="wizard-nav mt-4">
-                                <button class="btn btn-secondary" onclick="prevStep()">&#171; Voltar</button>
-                                <div class="text-center">
-                                    <p class="fw-semibold mb-1 small">Vamos verificar o custo das mercadorias</p>
-                                    <button class="btn btn-primary" onclick="nextStep()">Vamos!</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ==================== STEP 6: CUSTO DAS MERCADORIAS ==================== -->
-                        <div class="wizard-step" id="step-6">
-
-                            <!-- João: pergunta (varia conforme o setor do usuário) -->
-                            {% set tipo_custo = (user.activity_type or '') | lower %}
-                            {% if 'indústria' in tipo_custo or 'industria' in tipo_custo or 'alimenta' in tipo_custo %}
-                                {% set custo_label = 'Custo dos Insumos e Produção (R$)' %}
-                                {% set custo_pergunta = 'Aproximadamente, quanto custaram os <strong>insumos, produtos de terceiros, mão de obra direta e demais despesas relativas à produção</strong> necessária para atender as vendas do mês?' %}
-                            {% elif 'serviç' in tipo_custo or 'servic' in tipo_custo %}
-                                {% set custo_label = 'Custo dos Insumos e Serviços (R$)' %}
-                                {% set custo_pergunta = 'Aproximadamente, quanto custaram os <strong>insumos, produtos de terceiros, mão de obra direta e demais despesas relativas aos serviços</strong> realizados no mês?' %}
-                            {% else %}
-                                {% set custo_label = 'Custo das Mercadorias (R$)' %}
-                                {% set custo_pergunta = 'Aproximadamente, quanto custaram as <strong>mercadorias vendidas</strong> no mês?' %}
-                            {% endif %}
-                            <div class="slide-persona-row mb-3">
-                                <img src="{{ img_joao_escrevendo }}" alt="João" class="persona-img persona-img-escrevendo">
-                                <div class="persona-balloon">
-                                    <p class="mb-0">{{ custo_pergunta | safe }}</p>
-                                </div>
-                            </div>
-
-                            <!-- 3 colunas: input+resultados | gráfico | Ana+balão -->
-                            <div class="row align-items-start g-3">
-
-                                <!-- Coluna 1: input + resultados -->
-                                <div class="col-md-4">
-                                    <div class="mb-3">
-                                        <label for="custo_mercadorias" class="form-label fw-semibold">{{ custo_label }}</label>
-                                        <input type="number" class="form-control" id="custo_mercadorias" placeholder="Ex: 20000.00" step="0.01" required>
-                                    </div>
-
-                                    <div id="resumo-margem" class="results-summary mt-3" style="display: none;">
-                                        <div class="summary-item">
-                                            <div class="label">Margem de Contribuição</div>
-                                            <div class="value" id="resumo-mb">-</div>
-                                        </div>
-                                    </div>
-
-                                    <div id="f4-margem-contrib" class="conditional-text info mt-3" style="display:none;">
-                                        <p id="f4-contrib-texto"></p>
-                                    </div>
-
-                                    <div class="conditional-text" id="f4-margem-bruta">
-                                        <p id="f4-texto"></p>
-                                    </div>
-
-                                    <div class="conditional-text" id="f5-margem-custo">
-                                        <p id="f5-texto"></p>
-                                    </div>
-                                </div>
-
-                                <!-- Coluna 2: gráfico pizza -->
-                                <div class="col-md-4 d-flex flex-column align-items-center">
-                                    <p class="text-muted small mb-2 text-center fw-semibold">Custos s/Faturamento</p>
-                                    <div style="max-width:220px; width:100%;">
-                                        <canvas id="chart-mercadorias-pizza"></canvas>
-                                    </div>
-                                    <div id="chart-merc-legenda" class="mt-2 text-center" style="display:none;">
-                                        <small>
-                                            <span class="badge" style="background:#c8a84b;">■</span> Gastos com Vendas<br>
-                                            <span class="badge" style="background:#8B6914;">■</span> Custo Mercadorias<br>
-                                            <span class="badge" style="background:#aaa;">■</span> Margem de Contribuição
-                                        </small>
-                                    </div>
-                                </div>
-
-                                <!-- Coluna 3: Ana + lâmpada de ajuda -->
-                                <div class="col-md-4 d-flex flex-column align-items-center justify-content-center text-center">
-                                    <div class="ana-persona-with-help mb-2">
-                                        <img src="/static/images/ana-sem-fundo.png" alt="Ana" class="persona-img">
-                                        <img src="{{ url_for('static', path='images/icone_lampada.png') }}"
-                                             alt="Ajuda sobre margem bruta"
-                                             class="help-lamp-icon"
-                                             role="button"
-                                             tabindex="0"
-                                             data-bs-toggle="modal"
-                                             data-bs-target="#anaMargemBrutaHelpModal"
-                                             title="Saiba mais sobre margem bruta">
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="wizard-nav mt-4">
-                                <button class="btn btn-secondary" onclick="prevStep()">&#171; Voltar</button>
-                                <div class="text-center">
-                                    <p class="fw-semibold mb-1 small">Para concluir, vamos ver quanto a loja demanda para funcionar</p>
-                                    <button class="btn btn-primary" onclick="nextStep()">Vamos!</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ==================== STEP 7: CUSTOS FIXOS (Slide 8) ==================== -->
-                        <div class="wizard-step" id="step-7">
-
-                            <!-- João + balão + Ana pequena inline -->
-                            <div class="slide-persona-row mb-3">
-                                <img src="{{ img_joao_escrevendo }}" alt="João" class="persona-img persona-img-escrevendo">
-                                <div class="persona-balloon">
-                                    <p class="mb-1"><strong>Agora uma última informação:</strong></p>
-                                    <p class="mb-0">Qual o <strong>custo de funcionamento e administração</strong> da loja?</p>
-                                </div>
-                                <!-- Ana pequena ao lado da pergunta do João -->
-                                <img src="/static/images/ana-sem-fundo.png"
-                                     alt="Ana — saiba mais sobre Custos Fixos"
-                                     class="persona-img persona-img-pequena ms-2 ana-custos-fixos-trigger"
-                                     role="button"
-                                     tabindex="0"
-                                     style="max-width:56px; cursor:pointer;"
-                                     title="Clique para entender e cadastrar os Custos Fixos"
-                                     onclick="abrirModalGerenciarCustosFixos()"
-                                     onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); abrirModalGerenciarCustosFixos(); }">
-                            </div>
-
-                            <!-- Layout: input + resultados | gráfico -->
-                            <div class="row align-items-start g-3">
-
-                                <!-- Coluna esquerda: input + resultados -->
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="custo_fixo_total" class="form-label">Total Custos Fixos (R$)</label>
-                                        <input type="number" class="form-control" id="custo_fixo_total" placeholder="0,00" step="0.01" readonly required>
-                                        <small class="text-muted">Clique na Ana para adicionar ou editar os custos fixos.</small>
-                                    </div>
-
-                                    <span id="custo-success-msg" class="text-success" style="display: none;"></span>
-
-                                    <!-- Resultado Ponto de Equilíbrio -->
-                                    <div id="resumo-ponto" class="results-summary mt-3" style="display: none;">
-                                        <div class="summary-item">
-                                            <div class="label">Ponto de Equilíbrio</div>
-                                            <div class="value" id="resumo-pe">-</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- F6: comentário fórmula 5 -->
-                                    <div class="conditional-text info" id="f6-margem-seg">
-                                        <p id="f6-texto"></p>
-                                    </div>
-                                </div>
-
-                                <!-- Coluna direita: gráfico Custos s/Faturamento -->
-                                <div class="col-md-6 d-flex flex-column align-items-center">
-                                    <p class="text-muted small mb-2 text-center fw-semibold">Custos s/Faturamento</p>
-                                    <div style="max-width:260px; width:100%;">
-                                        <canvas id="chart-fixos-pizza"></canvas>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="wizard-nav mt-4">
-                                <button class="btn btn-secondary" onclick="prevStep()">&#171; Voltar</button>
-                                <div class="text-center">
-                                    <p class="fw-semibold mb-1 small">Vamos ver o que mais suas informações estão nos mostrando?</p>
-                                    <button class="btn btn-primary" onclick="nextStep()">Vamos!</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ==================== STEP 8: RESULTADOS — layout conversacional (slide 10) ==================== -->
-                        <div class="wizard-step" id="step-8">
-
-                            <!-- Persona + nome -->
-                            <div class="slide-persona-row mb-3">
-                                <img src="{{ img_joao_escrevendo }}" alt="João" class="persona-img persona-img-escrevendo">
-                                <div class="persona-balloon">
-                                    {% if user and user.name %}
-                                    <p class="mb-0 fw-semibold">{{ user.name.split()[0] }},</p>
-                                    {% endif %}
-                                    <p class="mb-0">Veja o que os números estão revelando sobre o seu mês.</p>
-                                </div>
-                            </div>
-
-                            <!-- Narrativa dinâmica — H6 a H48 (planilha SuccessWay) -->
-                            <div id="narrativa-analise" class="mt-2 mb-3"></div>
-
-                                <!-- F10 + F11: Conferência do caixa -->
-                                <div id="card-f10-caixa" class="resultado-texto-bloco" style="display: none;">
-                                    <p id="f10-pergunta" class="mb-2 fw-semibold"></p>
-                                    <div class="d-flex flex-wrap gap-3 mb-2">
-                                        <label class="form-check-label">
-                                            <input class="form-check-input me-1" type="radio" name="corresponde_caixa_visivel" id="corresponde_sim_visivel" value="true">
-                                            Sim, corresponde
-                                        </label>
-                                        <label class="form-check-label">
-                                            <input class="form-check-input me-1" type="radio" name="corresponde_caixa_visivel" id="corresponde_nao_visivel" value="false">
-                                            Não corresponde
-                                        </label>
-                                    </div>
-                                    <!-- F11: resposta -->
-                                    <div id="f11-resposta" style="display: none;">
-                                        <p id="f11-texto-sim" class="mb-0 text-success fw-semibold" style="display: none;"></p>
-                                        <div id="f11-ana-row" class="d-flex align-items-center gap-2 mt-2" style="display: none;">
-                                            <img src="/static/images/ana-sem-fundo.png"
-                                                 alt="Ana — orientação sobre o caixa"
-                                                 class="persona-img-pequena ana-caixa-trigger"
-                                                 role="button"
-                                                 tabindex="0"
-                                                 style="max-width:48px; cursor:pointer;"
-                                                 title="Clique na Ana para ver a orientação"
-                                                 onclick="abrirModalAna()"
-                                                 onkeydown="if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); abrirModalAna(); }">
-                                            <p id="f11-texto-nao" class="mb-0 fw-semibold text-warning">Recomendo que você veja o que a Ana tem a dizer. <small class="text-muted fw-normal">(clique na Ana)</small></p>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            <!-- Campos ocultos por compatibilidade JS -->
-                            <span id="card-f9-avaliacao" style="display:none;"><span id="f9-desc"></span><span id="f9-percentual"></span></span>
-                            <span id="card-f6-pe" style="display:none;"><span id="f6-pe-desc"></span><span id="f6-pe-valor"></span></span>
-                            <span id="card-f7-margem-seg" style="display:none;"><span id="f7-desc"></span><span id="f7-margem-seg"></span></span>
-                            <span id="card-f8-resultado" style="display:none;"><span id="f8-desc"></span><span id="f8-custo-total"></span></span>
-                            <span id="lucro-ideal-info" style="display:none;"></span>
-                            <span id="f8-ticket-medio" style="display:none;"></span>
-                            <span id="f8-tm-desc" style="display:none;"></span>
-                            <span id="f8-margem-bruta" style="display:none;"></span>
-                            <span id="f8-mb-desc" style="display:none;"></span>
-                            <span id="resultado-mes-7" style="display:none;"></span>
-                            <span id="res7-fat" style="display:none;"></span>
-                            <span id="res7-mb" style="display:none;"></span>
-                            <span id="res7-cf" style="display:none;"></span>
-                            <span id="comp-lucro-ideal" style="display:none;"></span>
-                            <span id="comp-resultado" style="display:none;"></span>
-                            <span id="comp-diferenca" style="display:none;"></span>
-                            <canvas id="chart-resultado-pizza" style="display:none;"></canvas>
-                            <div id="chart-resultado-legenda" style="display:none;"></div>
-
-                            <div class="wizard-nav mt-4">
-                                <button class="btn btn-secondary" onclick="prevStep()">&#171; Voltar</button>
-                                <button class="btn btn-primary" onclick="nextStep()">
-                                    Continuar &#187;
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- ==================== STEP 9: ENCERRAMENTO — antes de salvar ==================== -->
-                        <div class="wizard-step" id="step-9">
-                            <div class="slide-persona-row mb-4">
-                                <img src="{{ img_joao_apresentando }}" alt="João" class="persona-img persona-img-escrevendo">
-                                <div class="persona-balloon">
-                                    {% if user and user.name %}
-                                    <p class="mb-1"><strong>{{ user.name.split()[0] }}</strong>, concluímos nossas análises do mês de <span id="label-mes-step9" class="text-primary fw-semibold">______</span>.</p>
-                                    {% else %}
-                                    <p class="mb-1">Concluímos nossas análises do mês de <span id="label-mes-step9" class="text-primary fw-semibold">______</span>.</p>
-                                    {% endif %}
-                                    <p class="mb-0">Agora é hora de usar o que esses números nos mostraram, para melhorar os próximos resultados e buscar ainda mais lucro.</p>
-                                </div>
-                            </div>
-
-                            <div class="text-center mt-4">
-                                <p class="fw-semibold mb-3">Vamos em frente?</p>
-                                <button type="button" class="btn btn-success btn-lg" id="btn-step9-confirmar" onclick="confirmarESalvarAnalise()">
-                                    Sim. Vamos! <i class="bi bi-arrow-right-circle-fill"></i>
-                                </button>
-                            </div>
-
-                            <div class="wizard-nav mt-4">
-                                <button class="btn btn-secondary" onclick="prevStep()">&#171; Voltar</button>
-                            </div>
-                        </div>
-
-                        <!-- ==================== STEP 10: oculto — campos mantidos para compatibilidade JS ==================== -->
-                        <!-- step-10 removido — inputs ocultos mantidos para compatibilidade JS -->
-                        <div class="wizard-step" id="step-10" style="display:none!important;">
-                            <input type="radio" name="corresponde_caixa" id="corresponde_sim" value="true" style="display:none;">
-                            <input type="radio" name="corresponde_caixa" id="corresponde_nao" value="false" style="display:none;">
-                            <span id="resumo-final-mes" style="display:none;"></span>
-                            <span id="resumo-final-fat" style="display:none;"></span>
-                            <span id="resumo-final-res" style="display:none;"></span>
-                        </div>
-
-                        <!-- ==================== STEP 11: CONFIRMAÇÃO (Slide 9) ==================== -->
-                        <div class="wizard-step" id="step-11">
-                            <div class="slide-persona-row mb-4 justify-content-center">
-                                <img src="{{ img_joao_escrevendo }}" alt="João" class="persona-img persona-img-escrevendo">
-                                <div class="persona-balloon">
-                                    <p class="mb-0">Análise concluída! Confira o resumo abaixo.</p>
-                                </div>
-                            </div>
-                            <div class="final-message success" id="final-message">
-                                <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
-                                <h4 class="mt-3">Parabéns! Análise salva com sucesso!</h4>
-                                <p id="final-texto" class="mt-3"></p>
-                            </div>
-                            
-                            <div class="card mt-4">
-                                <div class="card-header bg-secondary text-white">
-                                    <h5 class="mb-0">Resumo da Análise - <span id="final-mes"></span></h5>
-                                </div>
-                                <div class="card-body">
-                                    <table class="table">
-                                        <tr>
-                                            <th>Mês:</th>
-                                            <td id="conf-mes"></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Faturamento:</th>
-                                            <td id="conf-faturamento"></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Clientes:</th>
-                                            <td id="conf-clientes"></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Margem de Segurança:</th>
-                                            <td id="conf-margem-seg"></td>
-                                        </tr>
-                                        <tr>
-                                            <th>Resultado:</th>
-                                            <td id="conf-resultado"></td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                            
-                            <div class="wizard-nav justify-content-center">
-                                <a href="/analise-mensal" class="btn btn-secondary me-2">Nova Análise</a>
-                                <a href="/analise-mensal/lista" class="btn btn-primary">Ver Histórico</a>
-                            </div>
-                        </div>
-
+                    <div id="carregando" class="text-center py-4 d-none">
+                        <div class="spinner-border" role="status"></div>
+                        <p class="text-muted mt-2 mb-0">Carregando análise...</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- MODAL: Ana — Margem Bruta / Margem de Contribuição -->
-<div class="modal fade" id="anaMargemBrutaHelpModal" tabindex="-1" aria-labelledby="anaMargemBrutaHelpModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-secondary text-white">
-                <h5 class="modal-title" id="anaMargemBrutaHelpModalLabel">Margem Bruta</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <p class="mb-0">A margem bruta é o quanto sobra do faturamento para cobrir os custos administrativos e operacionais da loja e gerar lucro. Por isso também é chamada de <strong>Margem de Contribuição</strong>.</p>
-            </div>
-        </div>
-    </div>
-</div>
-
-{% include "partials/analise_mensal_custos_fixos_modals.html" %}
 {% endblock %}
 
 {% block scripts %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <script src="{{ url_for('static', path='js/analise_mensal_calculos.js') }}"></script>
 <script src="{{ url_for('static', path='js/analise_mensal_custos_fixos.js') }}"></script>
 <script>
-// ==================== VARIAVEIS GLOBAIS ====================
-let currentStep = 0;
-let modalAna = null;
-let modoDetalhe = false;
-// Margem de lucro ideal e capacidade de atendimento vem do cadastro do usuário (migrado do antigo basic_data)
 const cadastroIdealMargin = {{ (user.ideal_profit_margin / 100) if user and user.ideal_profit_margin is not none else 'null' }};
 const cadastroCapacidade = {{ user.service_capacity if user and user.service_capacity is not none else 'null' }};
 const cadastroActivityType = "{{ user.activity_type | default('') }}";
-let lucroIdeal = cadastroIdealMargin !== null ? cadastroIdealMargin : 0.20; // Valor padrão decimal (20%). buscarLucroIdeal() é fallback se o cadastro não tiver o valor
-let editingAnaliseId = null; // ID da análise sendo editada (null = nova análise)
 const nomeUsuario = "{{ user.name.split()[0] if user and user.name else '' }}";
+const lucroIdeal = cadastroIdealMargin !== null ? cadastroIdealMargin : 0.20;
 
-const formData = {
-    mes: null,
-    ano: null,
-    capacidade_atendimento: 0,
-    faturamento: 0,
-    quant_clientes: 0,
-    gastos_vendas: 0,
-    custo_mercadorias: 0,
-    custo_fixo_total: 0,
-    corresponde_caixa: null,
-    // Campos calculados
-    ticket_medio: 0,
-    margem_bruta: 0,
-    margem_contribuicao_por_cliente: 0,
-    ponto_equilibrio: 0,
-    margem_seguranca: 0,
-    custo_total: 0,
-    resultado: 0,
-    percentual_margem: 0
-};
+const NOMES_MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
 
-// ==================== CARREGAR ANALISE EXISTENTE (EDICAO) ====================
-async function carregarAnaliseExistente(analiseId) {
-    try {
-        const response = await fetch(`/analise-mensal/api/${analiseId}`, {
-            credentials: 'include'
-        });
-        
-        if (!response.ok) {
-            throw new Error('Análise não encontrada');
-        }
-        
-        const data = await response.json();
-        
-        // Preencher o formData
-        formData.mes = data.mes;
-        formData.ano = data.ano;
-        formData.capacidade_atendimento = data.capacidade_atendimento || 0;
-        formData.faturamento = data.faturamento || 0;
-        formData.quant_clientes = data.quant_clientes || 0;
-        formData.gastos_vendas = data.gastos_vendas || 0;
-        formData.custo_mercadorias = data.custo_mercadorias || 0;
-        formData.custo_fixo_total = data.custo_fixo_total || 0;
-        formData.corresponde_caixa = data.corresponde_caixa;
-        formData.ticket_medio = data.ticket_medio || 0;
-        formData.margem_bruta = data.margem_bruta || 0;
-        formData.margem_contribuicao_por_cliente = data.margem_contribuicao_por_cliente || 0;
-        formData.ponto_equilibrio = data.ponto_equilibrio || 0;
-        formData.margem_seguranca = data.margem_seguranca || 0;
-        formData.custo_total = data.custo_total || 0;
-        formData.resultado = data.resultado || 0;
-        formData.percentual_margem = data.percentual_margem || 0;
-        
-        // Preencher os campos do formulário
-        document.getElementById('mes').value = data.mes;
-        document.getElementById('ano').value = data.ano;
-        document.getElementById('capacidade').value = data.capacidade_atendimento || '';
-        document.getElementById('faturamento').value = data.faturamento || '';
-        document.getElementById('quant_clientes').value = data.quant_clientes || '';
-        document.getElementById('gastos_vendas').value = data.gastos_vendas || '';
-        document.getElementById('custo_mercadorias').value = data.custo_mercadorias || '';
-        document.getElementById('custo_fixo_total').value = data.custo_fixo_total || '';
-        
-        // Correspondência do caixa
-        if (data.corresponde_caixa !== null && data.corresponde_caixa !== undefined) {
-            const correspondeRadio = document.querySelector(`input[name="corresponde_caixa"][value="${data.corresponde_caixa}"]`);
-            if (correspondeRadio) correspondeRadio.checked = true;
-        }
-        
-        // Ir para o step de capacidade/clientes para revisar e editar
-        showStep(2);
-
-        // Atualizar label de mês e barra de capacidade
-        atualizarLabelMesStep2();
-        atualizarBarraCapacidade();
-        
-        // Atualizar cálculos
-        await carregarCustosFixos(data.custo_fixo_total);
-        sincronizarRadiosCaixaVisiveis();
-        atualizarCalculosParciais();
-        atualizarF11();
-        atualizarResumoFinal();
-        
-    } catch (error) {
-        console.error('Erro ao carregar análise:', error);
-        alert('Erro ao carregar dados da análise. Tente novamente.');
-    }
+function pctBr(v) {
+    return Math.abs(v).toFixed(1).replace('.', ',') + '%';
+}
+function getMonthName(mes) {
+    const m = parseInt(mes, 10);
+    return (m >= 1 && m <= 12) ? NOMES_MESES[m - 1] : '';
 }
 
-async function carregarAnaliseParaDetalhe(analiseId) {
-    try {
-        const response = await fetch(`/analise-mensal/api/${analiseId}`, {
-            credentials: 'include'
-        });
-        if (!response.ok) throw new Error('Análise não encontrada');
-        const data = await response.json();
-
-        formData.mes = data.mes;
-        formData.ano = data.ano;
-        formData.capacidade_atendimento = data.capacidade_atendimento || 0;
-        formData.faturamento = data.faturamento || 0;
-        formData.quant_clientes = data.quant_clientes || 0;
-        formData.gastos_vendas = data.gastos_vendas || 0;
-        formData.custo_mercadorias = data.custo_mercadorias || 0;
-        formData.custo_fixo_total = data.custo_fixo_total || 0;
-        formData.corresponde_caixa = data.corresponde_caixa;
-        Object.assign(formData, calcularCamposAnalise(formData));
-
-        document.getElementById('mes').value = data.mes;
-        document.getElementById('ano').value = data.ano;
-        document.getElementById('capacidade').value = data.capacidade_atendimento || '';
-        document.getElementById('faturamento').value = data.faturamento || '';
-        document.getElementById('quant_clientes').value = data.quant_clientes || '';
-        document.getElementById('gastos_vendas').value = data.gastos_vendas || '';
-        document.getElementById('custo_mercadorias').value = data.custo_mercadorias || '';
-        document.getElementById('custo_fixo_total').value = data.custo_fixo_total || '';
-
-        if (data.corresponde_caixa !== null && data.corresponde_caixa !== undefined) {
-            const correspondeRadio = document.querySelector(`input[name="corresponde_caixa"][value="${data.corresponde_caixa}"]`);
-            if (correspondeRadio) correspondeRadio.checked = true;
-        }
-
-        await carregarCustosFixos(data.custo_fixo_total);
-        const salvo = parseFloat(data.custo_fixo_total) || 0;
-        if (salvo > 0) atualizarTotalCustosFixos(salvo);
-
-        aplicarModoDetalheUI();
-        atualizarLabelMes();
-        atualizarBarraCapacidade();
-        sincronizarRadiosCaixaVisiveis();
-        atualizarCalculosParciais();
-        atualizarF11();
-        showStep(8);
-        calcularResultadosF7();
-    } catch (error) {
-        console.error('Erro ao carregar análise para detalhe:', error);
-        alert('Erro ao carregar dados da análise. Tente novamente.');
+function textoCapacidadeH12Excel(capacidade, clientes) {
+    if (!capacidade || !clientes) return '';
+    const low = clientes * 0.98;
+    const high = clientes * 1.02;
+    if (capacidade >= low && capacidade < high) return '';
+    if (capacidade > high) {
+        return 'É bom saber que a estrutura disponível permitiria realizar mais vendas sem aumentar os custos de funcionamento da loja.';
     }
-}
-
-function aplicarModoDetalheUI() {
-    document.querySelectorAll('.wizard-step input:not([type="hidden"]), .wizard-step select, .wizard-step textarea').forEach(el => {
-        el.disabled = true;
-    });
-    document.querySelectorAll('.wizard-nav .btn-success, #btn-step9-confirmar').forEach(el => {
-        el.style.display = 'none';
-    });
-    const step8Next = document.querySelector('#step-8 .wizard-nav .btn-primary');
-    if (step8Next) step8Next.style.display = 'none';
-}
-
-// ==================== INICIALIZACAO ====================
-document.addEventListener('DOMContentLoaded', function() {
-    modoDetalhe = document.getElementById('modo-detalhe')?.value === '1';
-    initCustosFixosModais();
-    // Atualizar gráfico de fixos e resultado sempre que o total de custos fixos mudar (tela fixa: sempre visível)
-    window.onCustoFixoTotalAtualizado = function() {
-        setTimeout(() => {
-            atualizarGraficoFixos();
-            atualizarCalculosParciais();
-            calcularResultadosF7();
-            atualizarGraficoResultado();
-        }, 50);
-    };
-    const modalAnaEl = document.getElementById('modalAna');
-    if (modalAnaEl) modalAna = new bootstrap.Modal(modalAnaEl);
-
-    // Event listeners para calculo automatico (tela fixa: tudo recalcula a qualquer alteração)
-    function recalcularTudo() {
-        atualizarCalculosParciais();
-        calcularResultadosF7();
-        setTimeout(() => atualizarGraficoResultado(), 50);
-    }
-    document.getElementById('faturamento').addEventListener('input', recalcularTudo);
-    document.getElementById('quant_clientes').addEventListener('input', () => { atualizarBarraCapacidade(); recalcularTudo(); });
-    document.getElementById('capacidade').addEventListener('input', () => { atualizarBarraCapacidade(); recalcularTudo(); });
-    document.getElementById('gastos_vendas').addEventListener('input', recalcularTudo);
-    document.getElementById('custo_mercadorias').addEventListener('input', recalcularTudo);
-
-    const analiseIdInput = document.getElementById('edit-analise-id');
-    if (modoDetalhe && analiseIdInput && analiseIdInput.value) {
-        editingAnaliseId = parseInt(analiseIdInput.value);
-        carregarAnaliseParaDetalhe(editingAnaliseId);
-    } else {
-        showStep(0);
-        carregarCustosFixos();
-        atualizarBalaoBalloonStep5();
-        setTimeout(() => {
-            atualizarBarraCapacidade();
-            recalcularTudo();
-        }, 100);
-    }
-
-    // Atualizar labels de mês nos steps quando mês/ano mudar
-    ['mes', 'ano'].forEach(id => {
-        document.getElementById(id).addEventListener('change', atualizarLabelMes);
-    });
-    atualizarLabelMes();
-    
-    // Listener para correspondencia ao caixa (campos ocultos + visíveis no step 8)
-    document.querySelectorAll('input[name="corresponde_caixa"]').forEach(el => {
-        el.addEventListener('change', function() {
-            sincronizarRadiosCaixaVisiveis();
-            atualizarF11();
-            atualizarResumoFinal();
-        });
-    });
-    const simVis = document.getElementById('corresponde_sim_visivel');
-    const naoVis = document.getElementById('corresponde_nao_visivel');
-    if (simVis) simVis.addEventListener('change', () => { sincronizarRadiosCaixaOcultos('sim'); atualizarF11(); });
-    if (naoVis) naoVis.addEventListener('change', () => { sincronizarRadiosCaixaOcultos('nao'); atualizarF11(); });
-    
-    // Quando mudar mes/ano, verificar se ja existe analise
-    document.getElementById('mes').addEventListener('change', verificarAnaliseExistente);
-    document.getElementById('ano').addEventListener('change', verificarAnaliseExistente);
-    
-    // Buscar lucro ideal do usuario
-    buscarLucroIdeal();
-});
-
-// ==================== NAVEGACAO DO WIZARD ====================
-function showStep(step) {
-    document.querySelectorAll('.wizard-step').forEach(el => {
-        el.classList.remove('active');
-    });
-    
-    const stepEl = document.getElementById('step-' + step);
-    if (stepEl) stepEl.classList.add('active');
-    
-    // Atualizar indicador de progresso
-    const progressEl = document.getElementById('progress-indicator');
-    if (progressEl) {
-        if (step === 0) {
-            progressEl.classList.add('d-none');
-        } else {
-            progressEl.textContent = `Passo ${step} de 11`;
-            progressEl.classList.remove('d-none');
-        }
-    }
-    
-    currentStep = step;
-    
-    // Accoes por step (graficos e resultados ao ENTRAR no step correto)
-    capturarDados();
-    if (step === 5) {
-        atualizarBalaoBalloonStep5();
-        setTimeout(() => atualizarGraficoGastos(), 80);
-    } else if (step === 6) {
-        setTimeout(() => atualizarGraficoMercadorias(), 80);
-    } else if (step === 7) {
-        carregarCustosFixos();
-        setTimeout(() => atualizarGraficoFixos(), 80);
-    } else if (step === 8) {
-        calcularResultadosF7();
-        setTimeout(() => atualizarGraficoResultado(), 80);
-    } else if (step === 9) {
-        atualizarLabelMes();
-    } else if (step === 10) {
-        calcularResultadosF9();
-    }
-}
-
-const SKIPPED_STEPS = new Set([1, 4, 10]);
-
-function nextStep() {
-    if (!validateStep(currentStep)) return;
-    capturarDados();
-    let next = currentStep + 1;
-    while (SKIPPED_STEPS.has(next)) next++;
-    showStep(next);
-}
-
-function prevStep() {
-    if (currentStep > 0) {
-        let prev = currentStep - 1;
-        while (prev > 0 && SKIPPED_STEPS.has(prev)) prev--;
-        showStep(prev);
-    }
-}
-
-// ==================== VALIDACAO ====================
-function validateStep(step) {
-    if (step === 0 || step === 1) {
-        const mes = document.getElementById('mes').value;
-        const ano = document.getElementById('ano').value;
-        if (!mes || !ano) {
-            alert('Selecione o mês e o ano.');
-            return false;
-        }
-        formData.mes = parseInt(mes);
-        formData.ano = parseInt(ano);
-    }
-    else if (step === 2) {
-        const capacidade = document.getElementById('capacidade').value;
-        if (!capacidade || parseFloat(capacidade) <= 0) {
-            alert('Informe a capacidade de atendimento.');
-            return false;
-        }
-    }
-    else if (step === 3) {
-        const faturamento = document.getElementById('faturamento').value;
-        if (!faturamento || parseFloat(faturamento) <= 0) {
-            alert('Informe o faturamento.');
-            return false;
-        }
-    }
-    else if (step === 4) {
-        const quant_clientes = document.getElementById('quant_clientes').value;
-        if (!quant_clientes || parseInt(quant_clientes) <= 0) {
-            alert('Informe a quantidade de clientes.');
-            return false;
-        }
-    }
-    else if (step === 5) {
-        const gastos = document.getElementById('gastos_vendas').value;
-        if (!gastos) {
-            alert('Informe os gastos com vendas.');
-            return false;
-        }
-    }
-    else if (step === 6) {
-        const custo_merc = document.getElementById('custo_mercadorias').value;
-        if (!custo_merc) {
-            alert('Informe o custo das mercadorias.');
-            return false;
-        }
-    }
-    else if (step === 7) {
-        const custo_fixo = parseFloat(document.getElementById('custo_fixo_total').value) || 0;
-        if (custo_fixo <= 0) {
-            alert('Cadastre pelo menos um custo fixo clicando na Ana.');
-            return false;
-        }
-    }
-    return true;
-}
-
-// ==================== CAPTURAR DADOS ====================
-function capturarDados() {
-    formData.capacidade_atendimento = parseFloat(document.getElementById('capacidade').value) || 0;
-    formData.faturamento = parseFloat(document.getElementById('faturamento').value) || 0;
-    formData.quant_clientes = parseInt(document.getElementById('quant_clientes').value) || 0;
-    formData.gastos_vendas = parseFloat(document.getElementById('gastos_vendas').value) || 0;
-    formData.custo_mercadorias = parseFloat(document.getElementById('custo_mercadorias').value) || 0;
-    formData.custo_fixo_total = parseFloat(document.getElementById('custo_fixo_total').value) || 0;
-    
-    if (document.getElementById('corresponde_sim').checked) {
-        formData.corresponde_caixa = true;
-    } else if (document.getElementById('corresponde_nao').checked) {
-        formData.corresponde_caixa = false;
-    }
-}
-
-// ==================== CALCULOS PARCIAIS (exibidos durante preenchimento) ====================
-function atualizarCalculosParciais() {
-    const capacidade = parseFloat(document.getElementById('capacidade').value) || 0;
-    const faturamento = parseFloat(document.getElementById('faturamento').value) || 0;
-    const quant_clientes = parseInt(document.getElementById('quant_clientes').value) || 0;
-    const gastos_vendas = parseFloat(document.getElementById('gastos_vendas').value) || 0;
-    const custo_mercadorias = parseFloat(document.getElementById('custo_mercadorias').value) || 0;
-    const custo_fixo_total = parseFloat(document.getElementById('custo_fixo_total').value) || 0;
-    
-    // Calculos basicos
-    const ticketMedio = (faturamento > 0 && quant_clientes > 0) ? faturamento / quant_clientes : 0;
-    const sobraFaturamento = faturamento - gastos_vendas;
-    const margemBruta = faturamento - gastos_vendas - custo_mercadorias;
-    const margemContribPorCliente = (quant_clientes > 0 && margemBruta > 0) ? margemBruta / quant_clientes : 0;
-    // ponto_equilibrio em R$ de faturamento: custo_fixo / (margem_bruta / faturamento)
-    const pontoEquilibrio = (margemBruta > 0 && faturamento > 0) ? custo_fixo_total * faturamento / margemBruta : 0;
-    
-    // F2: Ticket Medio — exibe nos dois lugares (step-2 e step-3)
-    const resumoFaturamento = document.getElementById('resumo-faturamento');
-    const f2TicketMedio = document.getElementById('f2-ticket-medio');
-    const resumoFatF3 = document.getElementById('resumo-faturamento-f3');
-    const f2TicketMedioF3 = document.getElementById('f2-ticket-medio-f3');
-    if (quant_clientes > 0 && faturamento > 0) {
-        // step-2 (resumo-faturamento)
-        if (resumoFaturamento) resumoFaturamento.style.display = 'grid';
-        const resumoFat = document.getElementById('resumo-fat');
-        const resumoCli = document.getElementById('resumo-cli');
-        const resumoTm  = document.getElementById('resumo-tm');
-        if (resumoFat) resumoFat.textContent = formatCurrency(faturamento);
-        if (resumoCli) resumoCli.textContent = quant_clientes;
-        if (resumoTm)  resumoTm.textContent  = formatCurrency(ticketMedio);
-        if (f2TicketMedio) {
-            f2TicketMedio.classList.add('show', 'info');
-            const f2Texto = document.getElementById('f2-texto');
-            if (f2Texto) f2Texto.textContent = `Ou seja, cada cliente gerou em média ${formatCurrency(ticketMedio)} de faturamento.`;
-        }
-        // step-3 (resumo-faturamento-f3)
-        if (resumoFatF3) resumoFatF3.style.display = 'grid';
-        const resumoFatF3El = document.getElementById('resumo-fat-f3');
-        const resumoCliF3   = document.getElementById('resumo-cli-f3');
-        const resumoTmF3    = document.getElementById('resumo-tm-f3');
-        if (resumoFatF3El) resumoFatF3El.textContent = formatCurrency(faturamento);
-        if (resumoCliF3)   resumoCliF3.textContent   = quant_clientes;
-        if (resumoTmF3)    resumoTmF3.textContent    = formatCurrency(ticketMedio);
-        if (f2TicketMedioF3) {
-            f2TicketMedioF3.classList.add('show', 'info');
-            const f2TextoF3 = document.getElementById('f2-texto-f3');
-            if (f2TextoF3) f2TextoF3.textContent = `Ou seja, cada cliente gerou em média ${formatCurrency(ticketMedio)} de faturamento.`;
-        }
-    } else {
-        if (f2TicketMedio) f2TicketMedio.classList.remove('show');
-        if (resumoFatF3) resumoFatF3.style.display = 'none';
-        if (f2TicketMedioF3) f2TicketMedioF3.classList.remove('show');
-    }
-    
-    // F1: Capacidade vs Clientes
-    const f1El = document.getElementById('f1-capacidade');
-    if (f1El && capacidade > 0 && quant_clientes > 0) {
-        const pctClientes = (quant_clientes / capacidade) * 100;
-        
-        if (quant_clientes < capacidade * 0.98) {
-            f1El.classList.add('show', 'info');
-            const f1Texto = document.getElementById('f1-texto');
-            if (f1Texto) f1Texto.textContent = 'É bom saber que a estrutura disponível permitiria realizar mais vendas sem aumentar os custos de funcionamento da loja.';
-        } else if (quant_clientes > capacidade * 1.02) {
-            f1El.classList.add('show', 'warning');
-            const f1Texto = document.getElementById('f1-texto');
-            if (f1Texto) f1Texto.textContent = 'A loja existe para vender. OK! Mas, quando a capacidade instalada é superada a qualidade do atendimento pode ficar prejudicada, a equipe estressada e a imagem da loja prejudicada. Fique atento!';
-        } else {
-            f1El.classList.remove('show');
-        }
-    }
-    
-    // F3: Sobram do faturamento
-    const resumoVendas = document.getElementById('resumo-vendas');
-    const f3Sobram = document.getElementById('f3-sobram');
-    if (resumoVendas && gastos_vendas > 0 && faturamento > 0) {
-        resumoVendas.style.display = 'grid';
-        const resumoFat2 = document.getElementById('resumo-fat2');
-        const resumoGv = document.getElementById('resumo-gv');
-        const resumoSobram = document.getElementById('resumo-sobram');
-        const gastosVendasPct = document.getElementById('gastos_vendas_pct');
-        if (resumoFat2) resumoFat2.textContent = formatCurrency(faturamento);
-        if (resumoGv) resumoGv.textContent = formatCurrency(gastos_vendas);
-        if (resumoSobram) resumoSobram.textContent = formatCurrency(sobraFaturamento);
-        if (gastosVendasPct) gastosVendasPct.value = (gastos_vendas / faturamento * 100).toFixed(1) + '%';
-        
-        if (f3Sobram) {
-            f3Sobram.classList.add('show', 'info');
-            const f3Texto = document.getElementById('f3-texto');
-            if (f3Texto) f3Texto.textContent = `Por tanto, do montante faturado (${formatCurrency(faturamento)}), sobram ${formatCurrency(sobraFaturamento)} para a loja.`;
-        }
-    }
-    
-    // F4: Margem Bruta
-    const resumoMargem = document.getElementById('resumo-margem');
-    const f4MargemBruta = document.getElementById('f4-margem-bruta');
-    if (resumoMargem && custo_mercadorias > 0 && faturamento > 0 && gastos_vendas > 0) {
-        resumoMargem.style.display = 'grid';
-        const resumoMb = document.getElementById('resumo-mb');
-        if (resumoMb) resumoMb.textContent = formatCurrency(margemBruta);
-        
-        if (f4MargemBruta) {
-            f4MargemBruta.classList.add('show', 'info');
-            const f4Texto = document.getElementById('f4-texto');
-            const tmTexto = ticketMedio > 0 ? ` Cada venda realizada (${formatCurrency(ticketMedio)}), gerou em média ${formatCurrency(margemBruta / quant_clientes)} de margem de contribuição.` : '';
-            if (f4Texto) f4Texto.textContent = `A margem de contribuição no mês foi de ${formatCurrency(margemBruta)}.${tmTexto}`;
-        }
-    }
-    
-    // F5: Margem Bruta vs Custo Fixo
-    const f5El = document.getElementById('f5-margem-custo');
-    if (f5El && margemBruta > 0 && custo_fixo_total > 0 && quant_clientes > 0 && ticketMedio > 0) {
-        if (margemBruta > custo_fixo_total) {
-            const clientesPE = Math.round(pontoEquilibrio / ticketMedio);
-            f5El.classList.add('show', 'success');
-            const f5Texto = document.getElementById('f5-texto');
-            if (f5Texto) f5Texto.textContent = `Agora já podemos dizer que a loja precisa de aproximadamente ${formatCurrency(pontoEquilibrio)} de faturamento para pagar suas contas, o que corresponde a vender para ${clientesPE} clientes.`;
-        } else {
-            f5El.classList.add('show', 'danger');
-            const f5Texto = document.getElementById('f5-texto');
-            if (f5Texto) f5Texto.textContent = 'A loja está trabalhando com preços baixos e/ou custos elevados. Precisamos melhorar este resultado!';
-        }
-    }
-    
-    // Atualizar gráficos de pizza conforme step ativo
-    atualizarGraficoGastos();
-    atualizarGraficoMercadorias();
-
-    // F6: Margem de Seguranca
-    const resumoPonto = document.getElementById('resumo-ponto');
-    const f6MargemSeg = document.getElementById('f6-margem-seg');
-    if (custo_fixo_total > 0 && margemBruta > 0 && quant_clientes > 0 && ticketMedio > 0 && faturamento > 0) {
-        const pe = faturamento > 0 && margemBruta > 0 ? custo_fixo_total * faturamento / margemBruta : 0;
-        const margemSeg = ((faturamento - pe) / faturamento) * 100;
-        
-        if (margemSeg > 0) {
-            if (resumoPonto) resumoPonto.style.display = 'grid';
-            const resumoPe = document.getElementById('resumo-pe');
-            if (resumoPe) resumoPe.textContent = formatCurrency(pe);
-            
-            if (f6MargemSeg) {
-                f6MargemSeg.classList.add('show', 'info');
-                const f6Texto = document.getElementById('f6-texto');
-                if (f6Texto) f6Texto.textContent = `O faturamento da loja poderia cair ${margemSeg.toFixed(1)}% antes de começar a registrar prejuízo.`;
-            }
-        }
-    }
-}
-
-// ==================== TEXTOS DAS FÓRMULAS (planilha Análise Mensal SuccessWay) ====================
-function pctBr(valor) {
-    return Math.abs(valor).toFixed(1).replace('.', ',') + '%';
-}
-
-function textoPontoEquilibrioExcel(margemBruta, custoFixo, peFaturamento, peClientes) {
-    if (margemBruta > custoFixo && peFaturamento > 0 && peClientes > 0) {
-        const clientes = Math.ceil(peClientes);
-        return `Agora já podemos dizer que a loja precisa de aproximadamente ${formatCurrency(peFaturamento)} de faturamento para pagar suas contas, o que corresponde a vender para ${clientes} clientes.`;
-    }
-    if (margemBruta <= 0 || margemBruta < custoFixo) {
-        return 'A loja está trabalhando com preços baixos e/ou custos elevados. Precisamos melhorar este resultado!';
+    if (capacidade < low) {
+        return 'Suas vendas superaram a capacidade de atendimento. Isso pode prejudicar a qualidade do atendimento, estressar a equipe e prejudicar a imagem da empresa.';
     }
     return '';
 }
 
-function textoMargemSegurancaIntroExcel(margemBruta, custoFixo, margemSegPct) {
-    if (margemBruta <= 0 || margemBruta < custoFixo || margemSegPct == null) return '';
-    return `O faturamento da loja poderia cair ${pctBr(margemSegPct)} antes de começar a registrar prejuízo.`;
+function textoMargemSegurancaH42Excel(ms) {
+    if (ms == null || ms <= 0) {
+        return 'Nossa meta prioritária é sair do prejuízo e alcançar segurança operacional!';
+    }
+    return `A margem de segurança foi de ${pctBr(ms)}.`;
 }
 
-function textoMargemSegurancaDetalheExcel(margemSegPct) {
-    if (margemSegPct == null || margemSegPct <= 0) return '';
-    if (margemSegPct < 10) {
-        return 'Esse indicador mostra que o seu negócio poderá registrar prejuízo com pequena queda nas vendas.';
-    }
-    if (margemSegPct < 25) {
-        return 'Esse indicador mostra que o seu negócio conta com pouca margem para enfrentar quedas nas vendas.';
-    }
-    if (margemSegPct < 40) {
-        return 'Esse indicador mostra que o seu negócio conta com boa margem para enfrentar quedas nas vendas.';
-    }
-    return 'Esse indicador mostra que o seu negócio está bem preparado para enfrentar quedas nas vendas.';
+function textoMargemSegurancaH43Excel(ms) {
+    if (ms == null || ms <= 0) return '';
+    if (ms <= 10) return 'O que significa que uma eventual pequena redução nas vendas poderá levar a empresa ao prejuízo.';
+    if (ms <= 25) return 'O que significa que o negócio tem alguma proteção contra reduções nas vendas, porém, é preciso fortalecer os resultados.';
+    if (ms <= 40) return 'O que significa que existe reserva de faturamento para proteger a empresa contra eventuais quedas nas vendas.';
+    return 'O que significa que a empresa apresenta uma posição bastante confortável, com boa capacidade para suportar quedas nas vendas sem comprometer o resultado.';
 }
 
-function fragmentoResultadoHExcel(resultado, pctMargem) {
-    const pct = pctBr(pctMargem);
-    if (resultado > 0) {
-        return `lucro de ${pct} o que corresponde a ${formatCurrency(resultado)}`;
-    }
-    if (resultado < 0) {
-        return `prejuízo de ${pct} o que corresponde a ${formatCurrency(Math.abs(resultado))}`;
-    }
-    return 'margem zero (nem lucro, nem prejuízo.)';
-}
-
-function textoResultadoMesExcel(custoTotal, resultado, pctMargem) {
-    if (!(formData.gastos_vendas > 0 && formData.custo_mercadorias > 0 && formData.custo_fixo_total > 0)) {
-        return '';
-    }
-    const h = fragmentoResultadoHExcel(resultado, pctMargem);
-    return `Com um custo total de ${formatCurrency(custoTotal)}, resultado do mês: ${h}.`;
-}
-
-function textoAvaliacaoFinalExcel(pctMargem, lucroIdealDecimal) {
-    const ideal = lucroIdealDecimal * 100;
+function textoAvaliacaoFinalExcel(pctMargem, lucroIdealDecimal, nome) {
+    const ideal = (lucroIdealDecimal != null ? lucroIdealDecimal : 0.20) * 100;
+    const pref = nome ? `${nome}, ` : '';
     if (pctMargem >= ideal * 1.05) {
-        return 'Você tem motivo para comemorar! Os números mostram que sua loja está no caminho certo!';
+        return `${pref}você tem motivo para comemorar! Os números mostram que sua loja está no caminho certo!`;
     }
     if (pctMargem >= ideal * 0.95) {
-        return 'Você deve estar satisfeito com o resultado alcançado. Com alguns ajustes será possível conseguir mais!';
+        return `${pref}você deve estar satisfeito com o resultado alcançado. Com alguns ajustes será possível conseguir mais!`;
     }
     if (pctMargem > 0) {
-        return 'O resultado ficou abaixo do que você gostaria. Vamos ajustar isso juntos!';
+        return `${pref}resultado ficou abaixo do que você gostaria. Vamos ajustar isso juntos!`;
     }
-    return 'É natural que esteja preocupado! A boa notícia é que esse resultado pode ser ajustado, e vamos trabalhar juntos para melhorar isso!';
+    return `${pref}é natural que esteja preocupado! A boa notícia é que esse resultado pode ser ajustado, e vamos trabalhar juntos para melhorar isso!`;
 }
 
-function textoF10CaixaExcel() {
-    return 'Indique se este valor corresponde ao que apurou no caixa, no fechamento do mês:';
+function labelCustoD() {
+    const tipo = cadastroActivityType.toLowerCase();
+    if (tipo.includes('indústria') || tipo.includes('industria') || tipo.includes('alimenta')) {
+        return 'A compra dos insumos, produtos de terceiros e custos de produção para fabricar os itens vendidos';
+    }
+    if (tipo.includes('servi')) {
+        return 'A compra dos insumos e produtos de terceiros adquiridos, a mão de obra direta e contratada, para executar os serviços realizados';
+    }
+    return 'O custo das mercadorias necessárias para as vendas realizadas';
 }
 
-function textoF11CaixaExcel(correspondeSim, correspondeNao) {
-    if (correspondeSim && !correspondeNao) {
-        return 'Ótimo! É sinal de que as finanças estão bem acompanhadas.';
-    }
-    if (!correspondeSim && correspondeNao) {
-        return 'Recomendo que você veja o que a Ana tem a dizer.';
-    }
-    if (correspondeSim && correspondeNao) {
-        return 'Escolha apenas uma alternativa de resposta.';
-    }
-    return '';
-}
+/** Narrativa H5–H51 com dados básicos + cadastro do usuário */
+function montarNarrativa(d) {
+    const fat = d.faturamento || 0;
+    const gv = d.gastos_vendas || 0;
+    const cm = d.custo_mercadorias || 0;
+    const cf = d.custo_fixo_total || 0;
+    const qc = d.quant_clientes || 0;
 
-function sincronizarRadiosCaixaVisiveis() {
-    const simV = document.getElementById('corresponde_sim_visivel');
-    const naoV = document.getElementById('corresponde_nao_visivel');
-    const simH = document.getElementById('corresponde_sim');
-    const naoH = document.getElementById('corresponde_nao');
-    if (simH && simV) simV.checked = simH.checked;
-    if (naoH && naoV) naoV.checked = naoH.checked;
-}
+    // Capacidade e margem ideal vêm do CADASTRO do usuário
+    const capacidade = cadastroCapacidade != null ? cadastroCapacidade : (d.capacidade_atendimento || 0);
 
-function sincronizarRadiosCaixaOcultos(origem) {
-    const simV = document.getElementById('corresponde_sim_visivel');
-    const naoV = document.getElementById('corresponde_nao_visivel');
-    const simH = document.getElementById('corresponde_sim');
-    const naoH = document.getElementById('corresponde_nao');
-    if (origem === 'sim' && simH && simV) {
-        simH.checked = simV.checked;
-        if (simV.checked && naoH) naoH.checked = false;
-    }
-    if (origem === 'nao' && naoH && naoV) {
-        naoH.checked = naoV.checked;
-        if (naoV.checked && simH) simH.checked = false;
-    }
-    capturarDados();
-}
+    const calc = calcularCamposAnalise({
+        faturamento: fat,
+        gastos_vendas: gv,
+        custo_mercadorias: cm,
+        custo_fixo_total: cf,
+        quant_clientes: qc
+    });
 
-// ==================== CALCULAR RESULTADOS FINAIS ====================
-function calcularResultadosF7() {
-    capturarDados();
-    const step8 = document.getElementById('step-8');
-    if (!step8) return;
-
-    const fat = formData.faturamento || 0;
-    const gv  = formData.gastos_vendas || 0;
-    const cm  = formData.custo_mercadorias || 0;
-    const cf  = formData.custo_fixo_total || 0;
-    const qc  = formData.quant_clientes || 0;
-
-    Object.assign(formData, calcularCamposAnalise(formData));
-
-    // Manter campos ocultos de compatibilidade atualizados
-    const elFat = document.getElementById('res7-fat');
-    const elMb  = document.getElementById('res7-mb');
-    const elCf  = document.getElementById('res7-cf');
-    if (elFat) elFat.textContent = formatCurrency(fat);
-    if (elMb)  elMb.textContent  = formatCurrency(formData.margem_bruta);
-    if (elCf)  elCf.textContent  = formatCurrency(cf);
-
-    const narEl = document.getElementById('narrativa-analise');
-    if (!narEl) return;
-
-    // Só renderizar quando todos os campos principais estiverem preenchidos
-    if (!fat || !qc || !gv || !cm || !cf) {
-        narEl.innerHTML = '';
-        const cardF10b = document.getElementById('card-f10-caixa');
-        if (cardF10b) cardF10b.style.display = 'none';
-        return;
-    }
-
-    const mesNome = getMonthName(formData.mes);
-    const ticket  = formData.ticket_medio;
-    const margemBruta   = formData.margem_bruta;
-    const mcPerCliente  = formData.margem_contribuicao_por_cliente;
-    const resultado     = formData.resultado;
-    const pctMargem     = formData.percentual_margem;
-    const custo_total   = formData.custo_total;
-    const capacidade    = cadastroCapacidade;
-    const ms            = formData.margem_seguranca;
-
-    const margemPorCliente = qc > 0 ? margemBruta / qc : 0;
-    const peClientes   = (margemBruta > 0 && margemPorCliente > 0) ? cf / margemPorCliente : null;
-    const peFaturamento = (peClientes != null && ticket > 0) ? peClientes * ticket : null;
+    const ticket = calc.ticket_medio;
+    const margemBruta = calc.margem_bruta;
+    const mcPerCliente = calc.margem_contribuicao_por_cliente;
+    const resultado = calc.resultado;
+    const pctMargem = calc.percentual_margem;
+    const custo_total = calc.custo_total;
+    const ms = calc.margem_seguranca;
+    const peFaturamento = calc.ponto_equilibrio;
+    const peClientes = mcPerCliente > 0 ? cf / mcPerCliente : null;
+    const mesNome = getMonthName(d.mes);
 
     const partes = [];
 
-    // H6: "Sua empresa encerrou o mês de (A) com (A1) (R$A2). A cada R$100,00 de venda seu negócio (A4) (R$A5)."
-    let a1, a4;
-    if (resultado > 0)      { a1 = 'lucro de'; a4 = 'lucrou'; }
-    else if (resultado < 0) { a1 = 'prejuízo de'; a4 = 'perdeu'; }
-    else                    { a1 = 'margem zero'; a4 = 'não lucrou nem perdeu'; }
-    const a2Text = resultado !== 0 ? ' ' + formatCurrency(Math.abs(resultado)) : '';
-    const a5Val  = fat > 0 ? Math.abs(pctMargem).toFixed(2).replace('.', ',') : '0,00';
-    const nomeP  = nomeUsuario ? `<strong>${nomeUsuario}, sua</strong>` : '<strong>Sua</strong>';
-    partes.push(`<p class="resultado-texto-bloco resultado-destaque">${nomeP} empresa encerrou o mês de <strong>${mesNome}</strong> com ${a1}${a2Text}. A cada R$100,00 de venda seu negócio ${a4} R$${a5Val}.</p>`);
+    // H5
+    if (nomeUsuario) {
+        partes.push(`<p class="resultado-texto-bloco resultado-destaque"><strong>${nomeUsuario},</strong></p>`);
+    }
 
-    // H9: clientes + faturamento + ticket médio
+    // H6
+    let a1, a4;
+    if (resultado > 0) { a1 = 'lucro de'; a4 = 'lucrou'; }
+    else if (resultado < 0) { a1 = 'prejuízo de'; a4 = 'perdeu'; }
+    else { a1 = 'margem zero'; a4 = 'lucrou'; }
+    const a2Text = resultado !== 0 ? ' ' + formatCurrency(Math.abs(resultado)) : '';
+    const a5Val = fat > 0 ? Math.abs(pctMargem).toFixed(2).replace('.', ',') : '0,00';
+    partes.push(`<p class="resultado-texto-bloco resultado-destaque">Sua empresa encerrou o mês de <strong>${mesNome}</strong> com ${a1}${a2Text}. A cada R$100,00 de venda seu negócio ${a4} R$${a5Val}.</p>`);
+
+    // H9
     partes.push(`<p class="resultado-texto-bloco">${qc} clientes compraram, gerando um faturamento de ${formatCurrency(fat)}. Ou seja: em média o valor de cada venda (ticket médio), foi de ${formatCurrency(ticket)}.</p>`);
 
-    // H12: capacidade (condicional)
-    if (capacidade > 0 && qc > capacidade) {
-        partes.push(`<p class="resultado-texto-bloco" style="background:#fff3e0;border-left-color:#ff9800;">Suas vendas superaram a capacidade de atendimento. Isso pode prejudicar a qualidade do atendimento, estressar a equipe e prejudicar a imagem da empresa.</p>`);
+    // H12 — capacidade do CADASTRO
+    const txtH12 = textoCapacidadeH12Excel(capacidade, qc);
+    if (txtH12) {
+        const warn = txtH12.includes('superaram');
+        partes.push(`<p class="resultado-texto-bloco"${warn ? ' style="background:#fff3e0;border-left-color:#ff9800;"' : ''}>${txtH12}</p>`);
     }
 
-    // H15: gastos com vendas
+    // H15
     const c1pct = fat > 0 ? (gv / fat * 100) : 0;
-    const c2    = fat - gv;
-    partes.push(`<p class="resultado-texto-bloco">Os gastos com vendas (${formatCurrency(gv)}) representaram ${pctBr(c1pct)} do faturamento, o que significa que do total faturado, ${formatCurrency(c2)} ficaram disponíveis para o negócio.</p>`);
+    partes.push(`<p class="resultado-texto-bloco">Os gastos com vendas (${formatCurrency(gv)}) representaram ${pctBr(c1pct)} do faturamento, o que significa que do total faturado, ${formatCurrency(fat - gv)} ficaram disponíveis para o negócio.</p>`);
 
-    // H18: custo mercadorias/insumos — label dinâmico por tipo de atividade
-    const tipo = cadastroActivityType.toLowerCase();
-    let dLabel;
-    if (tipo.includes('indústria') || tipo.includes('industria') || tipo.includes('alimenta')) {
-        dLabel = 'A compra dos insumos, produtos de terceiros e custos de produção para fabricar os itens vendidos';
-    } else if (tipo.includes('servi')) {
-        dLabel = 'A compra dos insumos e produtos de terceiros adquiridos, e a mão de obra direta e contratada, para executar os serviços realizados';
-    } else {
-        dLabel = 'O custo das mercadorias necessárias para as vendas realizadas';
-    }
+    // H18
     const d2pct = fat > 0 ? (cm / fat * 100) : 0;
-    partes.push(`<p class="resultado-texto-bloco">${dLabel} somaram ${formatCurrency(cm)}, correspondendo a ${pctBr(d2pct)} do faturamento. É sempre oportuno lembrar que o sucesso começa com a qualidade das compras.</p>`);
+    partes.push(`<p class="resultado-texto-bloco">${labelCustoD()} somaram ${formatCurrency(cm)}, correspondendo a ${pctBr(d2pct)} do faturamento. É sempre oportuno lembrar que o sucesso começa com a qualidade das compras.</p>`);
 
-    // K21: margem de contribuição total
+    // K21
     partes.push(`<p class="resultado-texto-bloco">Até aqui restaram ${formatCurrency(margemBruta)} para cobrir os custos de funcionamento e gestão da empresa e gerar resultado.</p>`);
 
-    // H25: contribuição por cliente + custos fixos
+    // H25
     partes.push(`<p class="resultado-texto-bloco">Em média cada venda contribuiu com ${formatCurrency(mcPerCliente)} para cobrir os custos fixos, que em ${mesNome} foram de ${formatCurrency(cf)}.</p>`);
 
-    // H28: ponto de equilíbrio
-    if (margemBruta > cf && peFaturamento != null && peClientes != null) {
+    // H28
+    if (margemBruta > 0 && peFaturamento != null && peClientes != null && peClientes > 0) {
         partes.push(`<p class="resultado-texto-bloco">Assim, para começar a ter lucro foi preciso alcançar ${formatCurrency(peFaturamento)} de faturamento o que equivale a ${Math.ceil(peClientes)} vendas.</p>`);
-    } else {
-        partes.push(`<p class="resultado-texto-bloco" style="background:#fff3e0;border-left-color:#ff9800;">A loja está trabalhando com preços baixos e/ou custos elevados. Precisamos melhorar este resultado!</p>`);
     }
 
-    // H31: eficiência do custo fixo
+    // H31
     if (cf > 0) {
-        const e6 = fat / cf;
-        partes.push(`<p class="resultado-texto-bloco">Cada R$1,00 gasto com o funcionamento da empresa resultou em ${formatCurrency(e6)} de faturamento.</p>`);
+        partes.push(`<p class="resultado-texto-bloco">Cada R$1,00 gasto com o funcionamento da empresa resultou em ${formatCurrency(fat / cf)} de faturamento.</p>`);
     }
 
-    // H33: tabela "Resumindo"
+    // H33 Resumindo
     const custosVar = gv + cm;
     const pctFn = v => fat > 0 ? pctBr((v / fat) * 100) : '0,0%';
     partes.push(`<div class="card mt-3 mb-3">
-  <div class="card-header bg-secondary text-white py-2"><h6 class="mb-0">Resumindo</h6></div>
+  <div class="card-header bg-secondary text-white py-2"><h6 class="mb-0">Resumindo:</h6></div>
   <div class="card-body p-0">
     <table class="table table-bordered mb-0" style="font-size:0.9rem;">
       <thead class="table-light"><tr><th>Item</th><th class="text-end">Valor</th><th class="text-end">% faturamento</th></tr></thead>
@@ -1907,900 +277,110 @@ function calcularResultadosF7() {
   </div>
 </div>`);
 
-    // H42 + H43: margem de segurança
-    if (ms != null && margemBruta >= cf) {
-        let msDetalhe;
-        if      (ms <= 0)  msDetalhe = 'O que significa que o negócio não tem nenhuma proteção contra reduções nas vendas e já opera no limite ou abaixo dele.';
-        else if (ms < 10)  msDetalhe = 'O que significa que o seu negócio poderá registrar prejuízo com uma pequena queda nas vendas.';
-        else if (ms < 25)  msDetalhe = 'O que significa que o negócio tem alguma proteção contra reduções nas vendas, porém, é preciso fortalecer os resultados.';
-        else if (ms < 40)  msDetalhe = 'O que significa que o seu negócio conta com boa margem para enfrentar quedas nas vendas.';
-        else               msDetalhe = 'O que significa que o seu negócio está bem preparado para enfrentar quedas nas vendas.';
-        partes.push(`<p class="resultado-texto-bloco">A margem de segurança foi de ${pctBr(ms)}. ${msDetalhe}</p>`);
+    // H42 + H43
+    if (ms != null) {
+        const h42 = textoMargemSegurancaH42Excel(ms);
+        const h43 = textoMargemSegurancaH43Excel(ms);
+        partes.push(`<p class="resultado-texto-bloco">${h42}${h43 ? ' ' + h43 : ''}</p>`);
     }
 
-    // H46: avaliação final vs margem ideal do cadastro
-    partes.push(`<p class="resultado-texto-bloco resultado-destaque">${textoAvaliacaoFinalExcel(pctMargem, lucroIdeal)}</p>`);
+    // H46 — margem ideal do CADASTRO
+    partes.push(`<p class="resultado-texto-bloco resultado-destaque">${textoAvaliacaoFinalExcel(pctMargem, lucroIdeal, nomeUsuario)}</p>`);
 
-    // H48: fechamento
+    // H48
     partes.push(`<p class="resultado-texto-bloco">A análise mensal mostra o que aconteceu. Agora vamos identificar oportunidades e seguir avançando no caminho para o sucesso.</p>`);
 
-    narEl.innerHTML = partes.join('\n');
+    // H51
+    partes.push(`<p class="resultado-texto-bloco resultado-destaque"><strong>Vamos?</strong></p>`);
 
-    // F10 + F11: conferência do caixa
-    const cardF10 = document.getElementById('card-f10-caixa');
-    const f10Pergunta = document.getElementById('f10-pergunta');
-    if (cardF10) cardF10.style.display = 'block';
-    if (f10Pergunta) f10Pergunta.textContent = textoF10CaixaExcel();
-    sincronizarRadiosCaixaVisiveis();
-    atualizarF11();
+    document.getElementById('titulo-mes-ano').textContent = `${mesNome}/${d.ano}`;
+    document.getElementById('narrativa-analise').innerHTML = partes.join('\n');
 }
 
-function calcularResultadosF8() {
-    // Verificar se step 9 esta ativo (resultado do mes)
-    const step9 = document.getElementById('step-9');
-    if (!step9) return;
-
-    capturarDados();
-    
-    formData.ticket_medio = formData.quant_clientes > 0 ? formData.faturamento / formData.quant_clientes : 0;
-    formData.margem_bruta = formData.faturamento - formData.gastos_vendas - formData.custo_mercadorias;
-    formData.custo_total = formData.gastos_vendas + formData.custo_mercadorias + formData.custo_fixo_total;
-    formData.resultado = formData.faturamento - formData.custo_total;
-    formData.percentual_margem = (formData.resultado / formData.faturamento) * 100;
-    
-    // F8: Resultado do Mes
-    const resultadoClass = formData.resultado >= 0 ? 'success' : 'danger';
-    const cardF8 = document.getElementById('card-f8-resultado');
-    if (cardF8) cardF8.className = `result-card ${resultadoClass}`;
-    
-    let resultadoTexto = '';
-    if (formData.resultado > 0) {
-        resultadoTexto = `lucro de ${formatCurrency(formData.resultado)} (${formData.percentual_margem.toFixed(1)}%)`;
-    } else if (formData.resultado < 0) {
-        resultadoTexto = `prejuízo de ${formatCurrency(Math.abs(formData.resultado))} (${formData.percentual_margem.toFixed(1)}%)`;
-    } else {
-        resultadoTexto = 'margem zero (nem lucro, nem prejuízo)';
-    }
-    
-    const elCustoTotal = document.getElementById('f8-custo-total');
-    const elDesc = document.getElementById('f8-desc');
-    if (elCustoTotal) elCustoTotal.textContent = formatCurrency(formData.custo_total);
-    if (elDesc) elDesc.textContent = `Com um custo total de ${formatCurrency(formData.custo_total)}, resultado do mês: ${resultadoTexto}.`;
-    
-    // Ticket Medio
-    const elTm = document.getElementById('f8-ticket-medio');
-    const elTmDesc = document.getElementById('f8-tm-desc');
-    if (elTm) elTm.textContent = formatCurrency(formData.ticket_medio);
-    if (elTmDesc) elTmDesc.textContent = `Cada cliente gerou em média ${formatCurrency(formData.ticket_medio)} de faturamento.`;
-    
-    // Margem Bruta
-    const elMb = document.getElementById('f8-margem-bruta');
-    const elMbDesc = document.getElementById('f8-mb-desc');
-    if (elMb) elMb.textContent = formatCurrency(formData.margem_bruta);
-    if (elMbDesc) elMbDesc.textContent = `Do montante faturado (${formatCurrency(formData.faturamento)}), sobram ${formatCurrency(formData.margem_bruta)} para a loja.`;
-}
-
-function calcularResultadosF9() {
-    // Verificar se step 10 esta ativo (avaliacao)
-    const step10 = document.getElementById('step-10');
-    if (!step10 || !step10.classList.contains('active')) return;
-    
-    // Ja captura os dados
-    capturarDados();
-    
-    // Lucro ideal
-    const elLucroIdeal = document.getElementById('lucro-ideal-info');
-    const elCompIdeal = document.getElementById('comp-lucro-ideal');
-    const elCompResult = document.getElementById('comp-resultado');
-    const elCompDiff = document.getElementById('comp-diferenca');
-    const idealPctF9 = lucroIdeal * 100; // lucroIdeal é decimal (ex: 0.20 = 20%)
-    if (elLucroIdeal) elLucroIdeal.textContent = idealPctF9.toFixed(0) + '%';
-    if (elCompIdeal) elCompIdeal.textContent = idealPctF9.toFixed(0) + '%';
-    if (elCompResult) elCompResult.textContent = formData.percentual_margem.toFixed(1) + '%';
-    
-    const diferenca = formData.percentual_margem - idealPctF9;
-    if (elCompDiff) elCompDiff.textContent = (diferenca >= 0 ? '+' : '') + diferenca.toFixed(1) + '%';
-    
-    // F9: Avaliacao
-    const relacaoLucro = idealPctF9 > 0 ? (formData.percentual_margem / idealPctF9) * 100 : 0;
-    let avaliacaoFinal = '';
-    let avaliacaoClass = '';
-    
-    if (formData.percentual_margem <= 0) {
-        avaliacaoFinal = 'É natural que esteja preocupado! A boa notícia é que esse resultado pode ser ajustado, e vamos trabalhar juntos para melhorar isso!';
-        avaliacaoClass = 'danger';
-    } else if (relacaoLucro >= 105) {
-        avaliacaoFinal = 'Você tem motivo para comemorar! Os números mostram que sua loja está no caminho certo!';
-        avaliacaoClass = 'success';
-    } else if (relacaoLucro >= 95) {
-        avaliacaoFinal = 'Você deve estar satisfeito com o resultado alcançado. Com alguns ajustes será possível conseguir mais!';
-        avaliacaoClass = 'success';
-    } else {
-        avaliacaoFinal = 'O resultado ficou abaixo do que você gostaria. Vamos ajustar isso juntos!';
-        avaliacaoClass = 'warning';
-    }
-    
-    const cardF9 = document.getElementById('card-f9-avaliacao');
-    const elF9Pct = document.getElementById('f9-percentual');
-    const elF9Desc = document.getElementById('f9-desc');
-    if (cardF9) cardF9.className = `result-card ${avaliacaoClass}`;
-    if (elF9Pct) elF9Pct.textContent = formData.percentual_margem.toFixed(1) + '%';
-    if (elF9Desc) elF9Desc.textContent = textoAvaliacaoFinalExcel(formData.percentual_margem, lucroIdeal);
-    
-    // Atualizar F11 e Resumo Final (agora esto no mesmo step)
-    atualizarF11();
-    atualizarResumoFinal();
-}
-
-function atualizarF11() {
-    const correspondeSimEl = document.getElementById('corresponde_sim');
-    const correspondeNaoEl = document.getElementById('corresponde_nao');
-    if (!correspondeSimEl || !correspondeNaoEl) return;
-
-    const correspondeSim = correspondeSimEl.checked;
-    const correspondeNao = correspondeNaoEl.checked;
-    const f11El = document.getElementById('f11-resposta');
-    const textoSim = document.getElementById('f11-texto-sim');
-    const anaRow = document.getElementById('f11-ana-row');
-
-    if (!f11El) return;
-
-    if (correspondeSim && correspondeNao) {
-        f11El.style.display = 'block';
-        f11El.className = 'conditional-text show warning mt-2';
-        if (textoSim) {
-            textoSim.style.display = 'block';
-            textoSim.textContent = 'Escolha apenas uma alternativa de resposta.';
-        }
-        if (anaRow) anaRow.style.display = 'none';
-    } else if (correspondeSim) {
-        f11El.style.display = 'block';
-        f11El.className = 'conditional-text show success mt-2';
-        if (textoSim) {
-            textoSim.style.display = 'block';
-            textoSim.textContent = 'Ótimo! É sinal de que as finanças estão bem acompanhadas.';
-        }
-        if (anaRow) anaRow.style.display = 'none';
-    } else if (correspondeNao) {
-        f11El.style.display = 'block';
-        f11El.className = 'conditional-text show warning mt-2';
-        if (textoSim) textoSim.style.display = 'none';
-        if (anaRow) anaRow.style.display = 'flex';
-    } else {
-        f11El.style.display = 'none';
-        f11El.classList.remove('show', 'success', 'warning');
-        if (textoSim) textoSim.style.display = 'none';
-        if (anaRow) anaRow.style.display = 'none';
-    }
-}
-
-function abrirModalAna() {
-    prepararModalAna();
-    if (modalAna) {
-        modalAna.show();
-    } else {
-        const el = document.getElementById('modalAna');
-        if (el) {
-            modalAna = new bootstrap.Modal(el);
-            modalAna.show();
-        }
-    }
-}
-
-// Atualizar diferena do caixa e mensagem da Ana
-function atualizarDiferencaCaixa() {
-    const valorCaixaInput = document.getElementById('valor_caixa');
-    const correspondeNao = document.getElementById('corresponde_nao').checked;
-    
-    if (!valorCaixaInput || !correspondeNao) return;
-    
-    // Parse do valor do caixa (remover formatao)
-    let valorCaixaStr = valorCaixaInput.value.replace(/[R\$\.\s]/g, '').replace(',', '.');
-    let valorCaixa = parseFloat(valorCaixaStr);
-    
-    if (isNaN(valorCaixa) || valorCaixa === 0) {
-        const btnAnaError = document.getElementById('btn-ver-ana');
-        if (btnAnaError) btnAnaError.style.display = 'none';
-        return;
-    }
-    
-    // Mostrar boto da Ana
-    const btnAna = document.getElementById('btn-ver-ana');
-    if (btnAna) btnAna.style.display = 'inline-block';
-    
-    // Calcular diferena (caixa - resultado)
-    let diferenca = valorCaixa - formData.resultado;
-    
-    // Atualizar mensagem da Ana
-    atualizarMensagemAna(diferenca);
-}
-
-function atualizarMensagemAna(diferenca_caixa) {
-    const anaTexto = document.getElementById('ana-texto');
-    if (!anaTexto) return;
-    
-    if (diferenca_caixa > 0) {
-        // Valor do caixa MAIOR que o resultado calculado
-        anaTexto.innerHTML = `
-            <h6 class="text-secondary mb-3">O que pode explicar essa diferença?</h6>
-            <ul class="list-unstyled">
-                <li class="mb-2"><strong>Parte do dinheiro recebido neste mês é relativo a vendas realizadas anteriormente.</strong></li>
-                <li class="mb-2"><strong>Pagamentos não realizados.</strong></li>
-            </ul>
-            <p class="text-muted small">Neste caso, os respectivos valores não devem ser considerados como resultado do mês.</p>
-        `;
-    } else if (diferenca_caixa < 0) {
-        // Valor do caixa MENOR que o resultado calculado
-        anaTexto.innerHTML = `
-            <h6 class="text-secondary mb-3">O que pode ter ocorrido neste mês?</h6>
-            <ul class="list-unstyled">
-                <li class="mb-2"><strong>Algumas despesas não consideradas.</strong></li>
-                <li class="mb-2 text-muted small">Pequenas despesas não registradas, podem surpreender.</li>
-                <li class="mb-2 mt-3"><strong>Vendas com valores ainda por vencer.</strong></li>
-                <li class="mb-2 text-muted small">Parte das vendas podem estar por vencer (vendas parceladas).</li>
-                <li class="mb-2 mt-3"><strong>Pagamentos antecipados.</strong></li>
-                <li class="mb-2 text-muted small">Muito embora impactem o caixa neste mês, não devem ser considerados na análise do desempenho financeiro da loja.</li>
-                <li class="mb-2 mt-3"><strong>Perdas.</strong></li>
-                <li class="mb-2 text-muted small">Reposição de mercadorias danificadas ou extraviadas acima da incidência prevista. Esse é um dinheiro que não retorna.</li>
-                <li class="mb-2 mt-3"><strong>Retiradas.</strong></li>
-                <li class="mb-2 text-muted small">Retiradas não previstas diminuem o dinheiro disponível no negócio.</li>
-            </ul>
-            <p class="text-muted small mt-3"><em>Identificar as causas dessas diferenças ajuda a entender melhor o comportamento do dinheiro no negócio.</em></p>
-        `;
-    } else {
-        anaTexto.innerHTML = `<p class="text-muted">O valor do caixa está muito próximo do resultado calculado.</p>`;
-    }
-}
-
-function atualizarResumoFinal() {
-    document.getElementById('resumo-final-mes').textContent = `${getMonthName(formData.mes)}/${formData.ano}`;
-    document.getElementById('resumo-final-fat').textContent = formatCurrency(formData.faturamento);
-    
-    let resultadoTexto = '';
-    if (formData.resultado >= 0) {
-        resultadoTexto = `Lucro ${formatCurrency(formData.resultado)}`;
-    } else {
-        resultadoTexto = `Prejuízo ${formatCurrency(Math.abs(formData.resultado))}`;
-    }
-    document.getElementById('resumo-final-res').textContent = resultadoTexto;
-}
-
-// ==================== BUSCAR LUCRO IDEAL ====================
-async function buscarLucroIdeal() {
-    // Já vem do cadastro do usuário (cadastroIdealMargin); só usa fallback se não estiver cadastrado
-    if (cadastroIdealMargin !== null) return;
+async function carregarPeriodos() {
+    const sel = document.getElementById('periodo');
+    const aviso = document.getElementById('aviso-sem-dados');
     try {
-        // Fallback: tentar buscar do BasicData do usuario (cadastros antigos)
-        const response = await fetch('/basic-data/api/latest');
-        if (response.ok) {
-            const data = await response.json();
-            if (data.ideal_profit_margin) {
-                lucroIdeal = parseFloat(data.ideal_profit_margin) / 100;
-            }
-        }
-    } catch (error) {
-        console.log('Usando lucro ideal padrao:', lucroIdeal);
-    }
-}
+        // Busca anos e depois lista de cada ano
+        const yearsRes = await fetch('/analise-mensal/api/available-years', { credentials: 'include' });
+        const yearsData = await yearsRes.json();
+        const years = yearsData.years || [];
 
-// ==================== VERIFICAR SE JA EXISTE ANALISE ====================
-async function verificarAnaliseExistente() {
-    const mes = document.getElementById('mes').value;
-    const ano = document.getElementById('ano').value;
-    
-    if (!mes || !ano) return;
-    
-    try {
-        const response = await fetch(`/analise-mensal/api/existe?mes=${mes}&ano=${ano}`, {
-            credentials: 'include'
-        });
-        const data = await response.json();
-        
-        const avisoEl = document.getElementById('aviso-atualizacao');
-        const avisoTexto = document.getElementById('aviso-texto');
-        
-        if (data.existe) {
-            avisoEl.style.display = 'block';
-            avisoTexto.textContent = `Já existe análise para ${getMonthName(mes)}/${ano}. Os dados serão atualizados.`;
-        } else {
-            avisoEl.style.display = 'block';
-            avisoTexto.textContent = `Ainda não há dados básicos cadastrados para ${getMonthName(mes)}/${ano}. Vamos preencher agora.`;
-        }
-    } catch (error) {
-        console.error('Erro ao verificar análise existente:', error);
-    }
-}
-
-// ==================== SALVAR ANALISE ====================
-async function confirmarESalvarAnalise() {
-    const btn = document.getElementById('btn-step9-confirmar');
-    if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Salvando...';
-    }
-    try {
-        await salvarAnalise();
-    } finally {
-        if (btn) {
-            btn.disabled = false;
-            btn.textContent = 'Sim. Vamos!';
-        }
-    }
-}
-
-async function salvarAnalise() {
-    capturarDados();
-    
-    // Atualizar F11
-    atualizarF11();
-    
-    try {
-        const response = await fetch('/analise-mensal/api/salvar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify(formData)
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            // Mostrar step de confirmacao
-            document.getElementById('final-mes').textContent = `${getMonthName(formData.mes)}/${formData.ano}`;
-            document.getElementById('conf-mes').textContent = `${getMonthName(formData.mes)}/${formData.ano}`;
-            document.getElementById('conf-faturamento').textContent = formatCurrency(formData.faturamento);
-            document.getElementById('conf-clientes').textContent = formData.quant_clientes;
-            document.getElementById('conf-margem-seg').textContent = formData.margem_seguranca.toFixed(1) + '%';
-            
-            let resultadoTexto = formData.resultado >= 0 ? 
-                `Lucro ${formatCurrency(formData.resultado)} (${formData.percentual_margem.toFixed(1)}%)` :
-                `Prejuízo ${formatCurrency(Math.abs(formData.resultado))} (${formData.percentual_margem.toFixed(1)}%)`;
-            document.getElementById('conf-resultado').textContent = resultadoTexto;
-            
-            showStep(11);  // Step 11 é a tela de confirmação/sucesso
-        } else {
-            alert(data.message || 'Erro ao salvar análise.');
-        }
-    } catch (error) {
-        console.error('Erro ao salvar análise:', error);
-        alert('Erro ao salvar análise.');
-    }
-}
-
-// ==================== UTILIDADES ====================
-function getMonthName(mes) {
-    const meses = ['', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
-                   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
-    return meses[parseInt(mes)] || '';
-}
-
-function mascaraMonetaria(input) {
-    let valor = input.value.replace(/\D/g, '');
-    valor = (parseInt(valor) / 100).toFixed(2);
-    valor = valor.replace('.', ',');
-    valor = valor.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-    input.value = valor;
-}
-let gastosVariaveis = [];
-
-function abrirModalGerenciarGastosVendas() {
-    atualizarTabelaGastos();
-    const modal = new bootstrap.Modal(document.getElementById('modalGerenciarGastosVendas'));
-    modal.show();
-}
-
-function abrirModalGastoVariavel() {
-    // Limpar campos
-    document.getElementById('gasto_nome').value = '';
-    document.getElementById('gasto_categoria').value = 'Comissão';
-    document.getElementById('gasto_valor').value = '';
-    document.getElementById('gasto_editando').value = '';
-    
-    // Mostrar modal
-    const modal = new bootstrap.Modal(document.getElementById('modalGastoVariavel'));
-    modal.show();
-}
-
-function salvarGastoVariavel() {
-    const nome = document.getElementById('gasto_nome').value.trim();
-    const categoria = document.getElementById('gasto_categoria').value;
-    const valorStr = document.getElementById('gasto_valor').value.replace(/[R\$\.\s]/g, '').replace(',', '.');
-    const valor = parseFloat(valorStr);
-    const editando = document.getElementById('gasto_editando').value;
-    
-    if (!nome) {
-        alert('Informe o nome do gasto.');
-        return;
-    }
-    if (isNaN(valor) || valor <= 0) {
-        alert('Informe o valor do gasto.');
-        return;
-    }
-    
-    if (editando) {
-        // Editando existente
-        const idx = gastosVariaveis.findIndex(g => g.id === editando);
-        if (idx !== -1) {
-            gastosVariaveis[idx] = { id: editando, nome, categoria, valor };
-        }
-    } else {
-        // Novo gasto
-        gastosVariaveis.push({
-            id: Date.now().toString(),
-            nome,
-            categoria,
-            valor
-        });
-    }
-    
-    atualizarTabelaGastos();
-    calcularTotalGastos();
-    
-    // Fechar modal
-    bootstrap.Modal.getInstance(document.getElementById('modalGastoVariavel')).hide();
-}
-
-function editarGastoVariavel(id) {
-    const gasto = gastosVariaveis.find(g => g.id === id);
-    if (!gasto) return;
-    
-    document.getElementById('gasto_nome').value = gasto.nome;
-    document.getElementById('gasto_categoria').value = gasto.categoria;
-    document.getElementById('gasto_valor').value = gasto.valor.toFixed(2).replace('.', ',');
-    document.getElementById('gasto_editando').value = gasto.id;
-    
-    const modal = new bootstrap.Modal(document.getElementById('modalGastoVariavel'));
-    modal.show();
-}
-
-function excluirGastoVariavel(id) {
-    if (!confirm('Excluir este gasto?')) return;
-    gastosVariaveis = gastosVariaveis.filter(g => g.id !== id);
-    atualizarTabelaGastos();
-    calcularTotalGastos();
-}
-
-function atualizarTabelaGastos() {
-    const tbody = document.getElementById('gastos-cadastrados');
-    const semGastos = document.getElementById('sem-gastos');
-    
-    if (gastosVariaveis.length === 0) {
-        tbody.innerHTML = '';
-        semGastos.style.display = 'block';
-        return;
-    }
-    
-    semGastos.style.display = 'none';
-    tbody.innerHTML = gastosVariaveis.map(g => `
-        <tr>
-            <td>${g.nome}</td>
-            <td><span class="badge bg-secondary">${g.categoria}</span></td>
-            <td>${formatCurrency(g.valor)}</td>
-            <td>
-                <button class="btn btn-sm btn-secondary" onclick="editarGastoVariavel('${g.id}')">
-                    <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-danger" onclick="excluirGastoVariavel('${g.id}')">
-                    <i class="bi bi-trash"></i>
-                </button>
-            </td>
-        </tr>
-    `).join('');
-
-    // Atualizar total no modal
-    const total = gastosVariaveis.reduce((s, g) => s + g.valor, 0);
-    const elTotal = document.getElementById('modal-gastos-total');
-    if (elTotal) elTotal.textContent = formatCurrency(total);
-}
-
-function calcularTotalGastos() {
-    // Mantido para compatibilidade, mas a tabela de detalhamento foi removida do slide.
-    // O valor de gastos_vendas agora é sempre digitado manualmente.
-}
-
-// Modal da Ana
-function prepararModalAna() {
-    // Capturar dados atualizados
-    capturarDados();
-    
-    // Calcular resultado se ainda no foi feito
-    if (!formData.resultado) {
-        formData.custo_total = formData.gastos_vendas + formData.custo_mercadorias + formData.custo_fixo_total;
-        formData.resultado = formData.faturamento - formData.custo_total;
-        formData.percentual_margem = (formData.resultado / formData.faturamento) * 100;
-    }
-    
-    // Mostrar resultado calculado na modal
-    const resultadoEl = document.getElementById('resultado_calculado_modal');
-    if (resultadoEl) {
-        if (formData.resultado >= 0) {
-            resultadoEl.textContent = `Lucro ${formatCurrency(formData.resultado)}`;
-        } else {
-            resultadoEl.textContent = `Prejuízo ${formatCurrency(Math.abs(formData.resultado))}`;
-        }
-    }
-    
-    // Limpar campo e esconder mensagem
-    const valorCaixaInput = document.getElementById('valor_caixa_modal');
-    if (valorCaixaInput) valorCaixaInput.value = '';
-    
-    const anaMsg = document.getElementById('ana-mensagem');
-    if (anaMsg) anaMsg.style.display = 'none';
-}
-
-function verificarDiferencaCaixa() {
-    const valorCaixaInput = document.getElementById('valor_caixa_modal');
-    const anaMsg = document.getElementById('ana-mensagem');
-    
-    if (!valorCaixaInput || !anaMsg) return;
-    
-    // Parse do valor do caixa
-    let valorCaixaStr = valorCaixaInput.value.replace(/[R\$\.\s]/g, '').replace(',', '.');
-    let valorCaixa = parseFloat(valorCaixaStr);
-    
-    if (isNaN(valorCaixa) || valorCaixa === 0) {
-        anaMsg.style.display = 'none';
-        return;
-    }
-    
-    // Calcular diferena (caixa - resultado)
-    let diferenca = valorCaixa - formData.resultado;
-    
-    // Mostrar mensagem
-    anaMsg.style.display = 'block';
-    const anaTexto = document.getElementById('ana-texto');
-    
-    if (diferenca > 0) {
-        // Valor do caixa MAIOR que o resultado calculado
-        anaTexto.innerHTML = `
-            <h6 class="text-secondary mb-3">O que pode explicar essa diferença?</h6>
-            <ul class="list-unstyled">
-                <li class="mb-2"><strong>Parte do dinheiro recebido neste mês é relativo a vendas realizadas anteriormente.</strong></li>
-                <li class="mb-2"><strong>Pagamentos não realizados.</strong></li>
-            </ul>
-            <p class="text-muted small">Neste caso, os respectivos valores não devem ser considerados como resultado do mês.</p>
-        `;
-    } else if (diferenca < 0) {
-        // Valor do caixa MENOR que o resultado calculado
-        anaTexto.innerHTML = `
-            <h6 class="text-secondary mb-3">O que pode ter ocorrido neste mês?</h6>
-            <ul class="list-unstyled">
-                <li class="mb-2"><strong>Algumas despesas não consideradas.</strong></li>
-                <li class="mb-2 text-muted small">Pequenas despesas não registradas, podem surpreender.</li>
-                <li class="mb-2 mt-3"><strong>Vendas com valores ainda por vencer.</strong></li>
-                <li class="mb-2 text-muted small">Parte das vendas podem estar por vencer (vendas parceladas).</li>
-                <li class="mb-2 mt-3"><strong>Pagamentos antecipados.</strong></li>
-                <li class="mb-2 text-muted small">Muito embora impactem o caixa neste mês, não devem ser considerados na análise do desempenho financeiro da loja.</li>
-                <li class="mb-2 mt-3"><strong>Perdas.</strong></li>
-                <li class="mb-2 text-muted small">Reposição de mercadorias danificadas ou extraviadas acima da incidência prevista. Esse é um dinheiro que não retorna.</li>
-                <li class="mb-2 mt-3"><strong>Retiradas.</strong></li>
-                <li class="mb-2 text-muted small">Retiradas não previstas diminuem o dinheiro disponível no negócio.</li>
-            </ul>
-            <p class="text-muted small mt-3"><em>Identificar as causas dessas diferenças ajuda a entender melhor o comportamento do dinheiro no negócio.</em></p>
-        `;
-    } else {
-        anaTexto.innerHTML = `<p class="text-muted">O valor do caixa está muito próximo do resultado calculado.</p>`;
-    }
-}
-</script>
-
-<!-- Modal da Ana -->
-<div class="modal fade" id="modalAna" tabindex="-1" aria-labelledby="modalAnaLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-secondary text-white">
-                <h5 class="modal-title" id="modalAnaLabel">
-                    <i class="bi bi-person-circle"></i> Mensagem da Ana
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="text-center mb-3">
-                    <img src="/static/images/ana-sem-fundo.png"
-                         alt="Ana" class="mb-3" style="max-width: 120px; height: auto;">
-                </div>
-                
-                <!-- Campo para valor do caixa dentro da modal -->
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <label class="form-label fw-bold">Qual o valor que você apurou no caixa?</label>
-                        <div class="input-group">
-                            <span class="input-group-text">R$</span>
-                            <input type="text" class="form-control" id="valor_caixa_modal" placeholder="Digite o valor do caixa" oninput="mascaraMonetaria(this); verificarDiferencaCaixa()">
-                        </div>
-                        <small class="text-muted">Resultado calculado: <span id="resultado_calculado_modal">-</span></small>
-                    </div>
-                </div>
-                
-                <div id="ana-mensagem" class="ana-mensagem p-3 bg-light rounded" style="display: none;">
-                    <p class="mb-0" id="ana-texto"></p>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal: Gerenciar Gastos com Vendas -->
-<div class="modal fade" id="modalGerenciarGastosVendas" tabindex="-1" aria-labelledby="modalGerenciarGastosVendasLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header bg-secondary text-white">
-                <h5 class="modal-title" id="modalGerenciarGastosVendasLabel">
-                    <i class="bi bi-cart"></i> Gastos com Vendas
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-muted small mb-3">São todos os custos que ocorrem (ou podem ocorrer) <strong>quando uma venda acontece</strong>: impostos sobre faturamento, taxas bancárias, comissões, descontos, embalagens etc.</p>
-                <button type="button" class="btn btn-secondary btn-sm mb-3" onclick="abrirModalGastoVariavel()">
-                    <i class="bi bi-plus-circle"></i> Adicionar gasto
-                </button>
-                <div class="table-responsive">
-                    <table class="table table-striped table-custos mb-0">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Categoria</th>
-                                <th>Valor</th>
-                                <th style="width: 100px;">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="gastos-cadastrados"></tbody>
-                    </table>
-                </div>
-                <p id="sem-gastos" class="text-muted mt-3 mb-0">Nenhum gasto cadastrado. Clique em "Adicionar gasto".</p>
-                <div class="mt-3 pt-3 border-top d-flex justify-content-between align-items-center">
-                    <span class="fw-semibold">Total Gastos com Vendas</span>
-                    <span class="fs-5 fw-bold text-primary" id="modal-gastos-total">R$ 0,00</span>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Concluir</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal: Cadastro de Gasto Variável -->
-<div class="modal fade" id="modalGastoVariavel" tabindex="-1" aria-labelledby="modalGastoVariavelLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-secondary text-white">
-                <h5 class="modal-title" id="modalGastoVariavelLabel">
-                    <i class="bi bi-cart-plus"></i> Cadastrar Gasto com Venda
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="mb-3">
-                    <label for="gasto_nome" class="form-label">Nome do Gasto</label>
-                    <input type="text" class="form-control" id="gasto_nome" placeholder="Ex: Comissão de vendedores">
-                </div>
-                <div class="mb-3">
-                    <label for="gasto_categoria" class="form-label">Categoria</label>
-                    <select class="form-select" id="gasto_categoria">
-                        <option value="Comissão">Comissão</option>
-                        <option value="Marketing">Marketing/Publicidade</option>
-                        <option value="Embalagens">Embalagens</option>
-                        <option value="Fretes">Fretes</option>
-                        <option value="Descontos">Descontos Concedidos</option>
-                        <option value="Outros">Outros</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="gasto_valor" class="form-label">Valor (R$)</label>
-                    <input type="text" class="form-control" id="gasto_valor" placeholder="0,00" oninput="mascaraMonetaria(this)">
-                </div>
-                <input type="hidden" id="gasto_editando" value="">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" onclick="salvarGastoVariavel()">
-                    <i class="bi bi-check-circle"></i> Salvar
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-// ==================== GRÁFICOS DE PIZZA (Chart.js) ====================
-
-let chartGastos = null;
-let chartMercadorias = null;
-let chartResultado = null;
-let chartFixos = null;
-
-const COR_GASTOS   = '#c8a84b';
-const COR_CUSTO    = '#8B6914';
-const COR_FIXO     = '#5c4a1e';
-const COR_MARGEM   = '#2e7d32';
-const COR_RESTANTE = '#aaaaaa';
-
-function criarOuAtualizarPizza(canvasId, chart, labels, dados, cores) {
-    if (typeof Chart === 'undefined') return chart;
-    const ctx = document.getElementById(canvasId);
-    if (!ctx) return chart;
-
-    if (chart) {
-        chart.data.labels = labels;
-        chart.data.datasets[0].data = dados;
-        chart.data.datasets[0].backgroundColor = cores;
-        chart.update();
-        return chart;
-    }
-
-    return new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: dados,
-                backgroundColor: cores,
-                borderWidth: 1,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: (ctx) => ` ${ctx.label}: ${ctx.parsed.toFixed(1)}%`
-                    }
-                }
-            }
-        },
-        plugins: [{
-            id: 'pctLabels',
-            afterDatasetsDraw(chart) {
-                const { ctx, data } = chart;
-                chart.getDatasetMeta(0).data.forEach((arc, i) => {
-                    const val = data.datasets[0].data[i];
-                    if (!val || val < 2) return;
-                    const { x, y } = arc.tooltipPosition();
-                    ctx.save();
-                    ctx.font = 'bold 11px sans-serif';
-                    ctx.fillStyle = '#fff';
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillText(val.toFixed(1) + '%', x, y);
-                    ctx.restore();
+        const opcoes = [];
+        for (const ano of years) {
+            const listRes = await fetch(`/analise-mensal/api/listar?ano=${ano}&per_page=100`, { credentials: 'include' });
+            const listData = await listRes.json();
+            const items = listData.items || listData.analises || listData.data || [];
+            items.forEach(a => {
+                opcoes.push({
+                    id: a.id,
+                    mes: a.mes,
+                    ano: a.ano,
+                    label: `${getMonthName(a.mes)}/${a.ano}`
                 });
-            }
-        }]
-    });
-}
+            });
+        }
 
-const NOMES_MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+        // Ordenar mais recente primeiro
+        opcoes.sort((a, b) => (b.ano - a.ano) || (b.mes - a.mes));
 
-function atualizarLabelMes() {
-    const mes = parseInt(document.getElementById('mes').value);
-    const ano = document.getElementById('ano').value;
-    const texto = (mes && ano) ? NOMES_MESES[mes - 1] + '/' + ano : (mes ? NOMES_MESES[mes - 1] : '______');
-    const textoMesDe = (mes && ano) ? NOMES_MESES[mes - 1] + ' de ' + ano : (mes ? NOMES_MESES[mes - 1] : '______');
-    ['label-mes-step2', 'label-mes-step3'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = texto;
-    });
-    const elStep9 = document.getElementById('label-mes-step9');
-    if (elStep9) elStep9.textContent = textoMesDe;
-}
+        sel.innerHTML = '';
+        if (!opcoes.length) {
+            sel.innerHTML = '<option value="">Nenhum período cadastrado</option>';
+            aviso.classList.remove('d-none');
+            document.getElementById('conteudo-analise').classList.add('d-none');
+            return;
+        }
 
-function atualizarLabelMesStep2() { atualizarLabelMes(); }
+        aviso.classList.add('d-none');
+        sel.innerHTML = '<option value="">Selecione o período...</option>';
+        opcoes.forEach(o => {
+            const opt = document.createElement('option');
+            opt.value = o.id;
+            opt.textContent = o.label;
+            sel.appendChild(opt);
+        });
 
-function atualizarBalaoBalloonStep5() {
-    capturarDados();
-    const fat = formData.faturamento || 0;
-    const cli = formData.quant_clientes || 0;
-    const tm  = (cli > 0 && fat > 0) ? fat / cli : 0;
-    const s5c = document.getElementById('s5-clientes');
-    const s5t = document.getElementById('s5-ticket');
-    const s5f = document.getElementById('s5-fat');
-    if (s5c) s5c.textContent = cli > 0 ? cli : '—';
-    if (s5t) s5t.textContent = tm  > 0 ? formatCurrency(tm) : '—';
-    if (s5f) s5f.textContent = fat > 0 ? formatCurrency(fat) : '—';
-}
-
-function atualizarBarraCapacidade() {
-    const clientes = parseInt(document.getElementById('quant_clientes').value) || 0;
-    const cap = parseInt(document.getElementById('capacidade').value) || 0;
-    const comp = document.getElementById('cap-comparacao');
-    if (!comp) return;
-    if (clientes > 0 && cap > 0) {
-        const pct = Math.round((clientes / cap) * 100);
-        const pctBar = Math.min(100, pct);
-        comp.style.display = 'block';
-        document.getElementById('cap-pct-vendas').textContent = pct + '%';
-        document.getElementById('cap-bar-vendas').style.width = pctBar + '%';
-    } else {
-        comp.style.display = 'none';
+        // Auto-seleciona o mais recente
+        if (opcoes[0]) {
+            sel.value = opcoes[0].id;
+            await carregarAnalise(opcoes[0].id);
+        }
+    } catch (e) {
+        console.error(e);
+        sel.innerHTML = '<option value="">Erro ao carregar períodos</option>';
     }
 }
 
-function atualizarGraficoFixos() {
-    const fat = formData.faturamento || 0;
-    const gv  = formData.gastos_vendas || 0;
-    const cm  = formData.custo_mercadorias || 0;
-    const cf  = formData.custo_fixo_total || parseFloat(document.getElementById('custo_fixo_total').value) || 0;
-    if (fat <= 0) return;
-
-    const gvPct = Math.min(100, Math.max(0, (gv / fat) * 100));
-    const cmPct = Math.min(100, Math.max(0, (cm / fat) * 100));
-    const cfPct = Math.min(100, Math.max(0, (cf / fat) * 100));
-    const mPct  = Math.max(0, 100 - gvPct - cmPct - cfPct);
-
-    chartFixos = criarOuAtualizarPizza(
-        'chart-fixos-pizza', chartFixos,
-        ['Custo das Vendas', 'Custo Mercadorias', 'Custos Fixos', 'Margem de Contribuição'],
-        [gvPct, cmPct, cfPct, mPct],
-        [COR_GASTOS, COR_CUSTO, COR_FIXO, COR_MARGEM]
-    );
+async function carregarAnalise(analiseId) {
+    if (!analiseId) {
+        document.getElementById('conteudo-analise').classList.add('d-none');
+        return;
+    }
+    const carregando = document.getElementById('carregando');
+    const conteudo = document.getElementById('conteudo-analise');
+    carregando.classList.remove('d-none');
+    conteudo.classList.add('d-none');
+    try {
+        const response = await fetch(`/analise-mensal/api/${analiseId}`, { credentials: 'include' });
+        if (!response.ok) throw new Error('Não encontrado');
+        const data = await response.json();
+        montarNarrativa(data);
+        conteudo.classList.remove('d-none');
+    } catch (e) {
+        console.error(e);
+        document.getElementById('aviso-sem-dados').classList.remove('d-none');
+        document.getElementById('aviso-sem-dados').textContent = 'Não foi possível carregar os dados deste período.';
+    } finally {
+        carregando.classList.add('d-none');
+    }
 }
 
-function atualizarGraficoGastos() {
-    const fat = formData.faturamento || 0;
-    const gv  = formData.gastos_vendas || parseFloat(document.getElementById('gastos_vendas').value) || 0;
-    if (fat <= 0) return;
-
-    const gvPct    = Math.min(100, Math.max(0, (gv / fat) * 100));
-    const restoPct = Math.max(0, 100 - gvPct);
-
-    chartGastos = criarOuAtualizarPizza(
-        'chart-gastos-pizza', chartGastos,
-        ['Gastos com Vendas', 'Restante'],
-        [gvPct, restoPct],
-        [COR_GASTOS, COR_RESTANTE]
-    );
-
-    // legenda removida (% já aparece no gráfico)
-}
-
-function atualizarGraficoMercadorias() {
-    const fat = formData.faturamento || 0;
-    const gv  = formData.gastos_vendas || 0;
-    const cm  = formData.custo_mercadorias || parseFloat(document.getElementById('custo_mercadorias').value) || 0;
-    if (fat <= 0) return;
-
-    const gvPct  = Math.min(100, Math.max(0, (gv / fat) * 100));
-    const cmPct  = Math.min(100, Math.max(0, (cm / fat) * 100))
-    const cmPct  = Math.min(100, Math.max(0, (cm / fat) * 100));
-    const mbPct  = Math.max(0, 100 - gvPct - cmPct);
-
-    chartMercadorias = criarOuAtualizarPizza(
-        'chart-mercadorias-pizza', chartMercadorias,
-        ['Gastos com Vendas', 'Custo Mercadorias', 'Margem de Contribuição'],
-        [gvPct, cmPct, mbPct],
-        [COR_GASTOS, COR_CUSTO, COR_RESTANTE]
-    );
-
-    // legenda removida (% já aparece no gráfico)
-}
-
-function atualizarGraficoResultado() {
-    const fat = formData.faturamento || 0;
-    const gv  = formData.gastos_vendas || 0;
-    const cm  = formData.custo_mercadorias || 0;
-    const cf  = formData.custo_fixo_total || 0;
-    if (fat <= 0) return;
-
-    const gvPct  = Math.min(100, Math.max(0, (gv / fat) * 100));
-    const cmPct  = Math.min(100, Math.max(0, (cm / fat) * 100));
-    const cfPct  = Math.min(100, Math.max(0, (cf / fat) * 100));
-    const mPct   = Math.max(0, 100 - gvPct - cmPct - cfPct);
-
-    chartResultado = criarOuAtualizarPizza(
-        'chart-resultado-pizza', chartResultado,
-        ['Custo das Vendas', 'Custo Mercadorias', 'Custos Fixos', 'Margem'],
-        [gvPct, cmPct, cfPct, mPct],
-        [COR_GASTOS, COR_CUSTO, COR_FIXO, COR_MARGEM]
-    );
-
-    // legenda removida (% já aparece no gráfico)
-}
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('periodo').addEventListener('change', function() {
+        carregarAnalise(this.value);
+    });
+    carregarPeriodos();
+});
 </script>
 {% endblock %}
