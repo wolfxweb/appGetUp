@@ -7,13 +7,46 @@
     .onboarding-character { max-width: 150px; }
     .onboarding-character-joao { max-width: 150px; }
     .onboarding-character-ana { max-width: 170px; }
+    .onboarding-avatar-col {
+        width: 170px;
+        flex: 0 0 170px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .onboarding-joao-row {
+        align-items: center;
+    }
+    .onboarding-joao-text {
+        display: flex;
+        align-items: center;
+        min-height: 100%;
+    }
+    .onboarding-avatar-col-ana {
+        margin-left: 2.5rem; /* tab para dentro, deslocada em relação ao João */
+    }
     @media (max-width: 767.98px) {
         .onboarding-character,
         .onboarding-character-joao,
         .onboarding-character-ana { max-width: 130px; }
+        .onboarding-avatar-col {
+            width: 130px;
+            flex: 0 0 130px;
+        }
+        .onboarding-avatar-col-ana {
+            margin-left: 1.5rem;
+        }
     }
-    .campo-vermelho label.form-label { color: #dc3545; }
-    .campo-vermelho input.form-control { border-color: #dc3545; }
+    .campo-vermelho label.form-label { color: #000; }
+    .campo-vermelho input.form-control { border-color: #ced4da; }
+    #step-estimativas,
+    #step-estimativas p,
+    #step-estimativas label,
+    #step-estimativas .form-label,
+    #step-estimativas .form-check-label,
+    #step-estimativas .input-group-text {
+        color: #000;
+    }
     .nao-aplica-badge {
         display: inline-block;
         background: #1565C0;
@@ -71,23 +104,23 @@
 
                     <!-- STEP 1: João apresenta Ana -->
                     <div id="step-ana" class="onboarding-step">
-                        <div class="row g-4 align-items-start">
-                            <div class="col-md-3 d-flex justify-content-center align-items-start">
+                        <div class="row g-4 onboarding-joao-row mb-4">
+                            <div class="col-auto onboarding-avatar-col">
                                 <img src="{{ url_for('static', path='images/Rosto João sem fundo.png') }}" alt="João" class="img-fluid rounded onboarding-character onboarding-character-joao">
                             </div>
-                            <div class="col-md-9">
-                                <h5 class="mb-4">Agora que nos conhecemos, quero lhe apresentar a Ana</h5>
-                                <div class="row g-4 align-items-start">
-                                    <div class="col-md-8">
-                                        <p class="mb-2">Olá, {{ user.name }}.</p>
-                                        <p class="mb-4">Estou por aqui, se você precisar, para uma ajudinha rápida. Quando me avistar é só acionar.</p>
-                                        <p class="mb-4">Vamos trocar umas ideias sobre o que seus números estão dizendo?</p>
-                                        <button type="button" class="btn btn-primary btn-lg" onclick="goToEstimativas()">Sim, vamos</button>
-                                    </div>
-                                    <div class="col-md-4 d-flex justify-content-center align-items-start">
-                                        <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="img-fluid onboarding-character onboarding-character-ana">
-                                    </div>
-                                </div>
+                            <div class="col onboarding-joao-text">
+                                <h5 class="mb-0">Agora que nos conhecemos, quero lhe apresentar a Ana</h5>
+                            </div>
+                        </div>
+                        <div class="row g-4 align-items-start">
+                            <div class="col-auto onboarding-avatar-col onboarding-avatar-col-ana">
+                                <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="img-fluid onboarding-character onboarding-character-ana">
+                            </div>
+                            <div class="col">
+                                <p class="mb-2">Olá, {{ user.name }}.</p>
+                                <p class="mb-4">Estou por aqui, se você precisar, para uma ajudinha rápida. Quando me avistar é só acionar.</p>
+                                <p class="mb-4">Vamos trocar umas ideias sobre o que seus números estão dizendo?</p>
+                                <button type="button" class="btn btn-primary btn-lg" onclick="goToEstimativas()">Sim, vamos</button>
                             </div>
                         </div>
                     </div>
@@ -151,25 +184,25 @@
                                         </div>
                                     </div>
 
-                                    <!-- Q5: Ficha técnica (vermelho — não aplica para Comércio nem Serviços) -->
+                                    <!-- Q5: Ficha técnica (não aplica para Comércio nem Serviços) -->
                                     <div class="mb-4 campo-vermelho" id="campo-ficha">
                                         <label class="form-label fw-bold">Você utiliza/possui a ficha técnica de seus produtos?</label>
                                         <div class="d-flex align-items-center gap-4 mt-1 flex-wrap">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="has_product_sheet" id="ficha_sim" value="Sim">
+                                                <input class="form-check-input" type="radio" name="has_product_sheet" id="ficha_sim" value="Sim" onchange="toggleAnaFicha()">
                                                 <label class="form-check-label" for="ficha_sim">Sim</label>
                                             </div>
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="has_product_sheet" id="ficha_nao" value="Não">
+                                                <input class="form-check-input" type="radio" name="has_product_sheet" id="ficha_nao" value="Não" onchange="toggleAnaFicha()">
                                                 <label class="form-check-label" for="ficha_nao">Não</label>
                                             </div>
-                                            <div class="ana-trigger-wrap position-relative">
+                                            <div id="ana-ficha-trigger" class="ana-trigger-wrap position-relative d-none">
                                                 <img src="{{ url_for('static', path='images/Ana, sem fundo.png') }}" alt="Ana" class="ana-trigger" onclick="showOnboardingStep('step-ficha-tecnica')" title="Clique para explicação da Ana">
                                             </div>
                                         </div>
                                     </div>
 
-                                    <button type="submit" class="btn btn-primary btn-lg mt-2">Continuar para Dados Básicos</button>
+                                    <button type="submit" class="btn btn-primary btn-lg mt-2">Continuar</button>
                                 </form>
                             </div>
                         </div>
@@ -186,7 +219,7 @@
                                 <p class="mb-3">Nela você registra os insumos, materiais e componentes utilizados; suas quantidades, custos, rendimento, tempo de preparo e orientações de produção.</p>
                                 <p class="mb-3">Com uma ficha técnica atualizada fica muito mais fácil calcular preços, planejar compras, controlar desperdícios, manter a qualidade dos produtos e proteger sua lucratividade.</p>
                                 <p class="mb-4">Não importa o tamanho da empresa. Se você produz, vale a pena ter fichas técnicas.</p>
-                                <button type="button" class="btn btn-primary btn-lg" onclick="showOnboardingStep('step-estimativas')">Voltar</button>
+                                <button type="button" class="btn btn-primary btn-lg" onclick="showOnboardingStep('step-estimativas')">Continuar</button>
                             </div>
                         </div>
                     </div>
@@ -218,6 +251,17 @@
         document.querySelectorAll('.onboarding-step').forEach(el => el.classList.add('d-none'));
         const el = document.getElementById(stepId);
         if (el) el.classList.remove('d-none');
+    }
+
+    function toggleAnaFicha() {
+        const anaTrigger = document.getElementById('ana-ficha-trigger');
+        const selecionouNao = document.getElementById('ficha_nao')?.checked;
+        if (!anaTrigger) return;
+        if (selecionouNao) {
+            anaTrigger.classList.remove('d-none');
+        } else {
+            anaTrigger.classList.add('d-none');
+        }
     }
 
     function goToEstimativas() {

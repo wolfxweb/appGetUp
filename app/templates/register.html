@@ -512,7 +512,7 @@ function showStep(step) {
                                 <div class="register-intro">
                                     <p class="register-intro-title mb-1">Olá! Eu sou o João.</p>
                                     <p class="register-intro-subtitle mb-4">Especialista em gestão comercial.</p>
-                                    <p class="mb-4">Se você tem uma loja sabe o quanto é preciso trabalhar para vender bem.<br> Aqui no SuccessWay estarei ao seu lado para ajudar a transformar seus números em decisões que tragam mais lucro para sua loja.</p>
+                                    <p class="mb-4">Aqui no SuccessWay estarei ao seu lado para ajudar a transformar seus números em decisões que tragam mais lucro para o seu negócio.</p>
                                     <p class="register-intro-title mb-4">Vamos começar?</p>
                                 </div>
                                 <div class="text-center mb-2">
@@ -529,20 +529,19 @@ function showStep(step) {
                                 </div>
                                 <div id="prazer-block" class="d-none">
                                     <p class="fs-5 mb-2">Prazer, <span id="prazer-nome"></span>!</p>
-                                    <p class="mb-3">Você já leu o Termo de uso e confidencialidade do SuccessWay?</p>
+                                    <p class="mb-3">Você já leu o <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Termo de uso e confidencialidade</a> do SuccessWay?</p>
                                     <div class="form-check">
                                         <input class="form-check-input" type="checkbox" id="terms_accepted">
-                                        <label class="form-check-label" for="terms_accepted">
-                                            Li e aceito os <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">termos e condições</a>
-                                        </label>
+                                        <label class="form-check-label" for="terms_accepted">Li e aceito os</label>
+                                        <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal"> termos e condições</a>
                                     </div>
                                 </div>
                             </div>
 
                             <div id="step-2" class="wizard-step d-none">
                                 <p class="fs-5 mb-2">Ótimo<span id="nome-step2"></span>!</p>
-                                <p class="fs-5 text-muted mb-4">Como você viu, o SuccessWay não acessa dados pessoais nem a identidade da sua loja.</p>
-                                <p class="fs-5 mb-2">Em qual setor sua loja atua?</p>
+                                <p class="fs-5 text-muted mb-4">Como você viu, o SuccessWay não acessa dados pessoais nem a identidade da sua empresa.</p>
+                                <p class="fs-5 mb-2">Em qual setor sua empresa atua?</p>
                                 <div class="mb-3">
                                     <select class="form-select form-select-lg" id="activity_type" style="background-color: #F5F5F5;">
                                         <option value="" selected disabled>Selecione o setor</option>
@@ -560,7 +559,7 @@ function showStep(step) {
                                         <option value="" selected disabled>Selecione o ramo de atuação</option>
                                     </select>
                                 </div>
-                                <p class="fs-5 mb-2">Informe o CEP da loja</p>
+                                <p class="fs-5 mb-2">Informe o CEP da empresa</p>
                                 <p class="text-muted small mb-2">Utilizamos o CEP apenas para identificar sua região.</p>
                                 <div class="mb-3">
                                     <input type="text" class="form-control form-control-lg" id="cep" placeholder="00000-000" style="background-color: #F5F5F5;" maxlength="9">
